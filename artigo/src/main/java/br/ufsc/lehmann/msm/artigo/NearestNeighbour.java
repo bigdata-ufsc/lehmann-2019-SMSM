@@ -1,4 +1,4 @@
-package artigo;
+package br.ufsc.lehmann.msm.artigo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
