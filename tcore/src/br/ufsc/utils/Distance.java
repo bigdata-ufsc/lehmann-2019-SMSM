@@ -54,6 +54,15 @@ public class Distance {
 		System.out.println("# Triangular: "+triangular(p1,p2));
 	}
 
+	public static double euclidean(double[] p1, double[] p2){
+		double distX = Math.abs(p1[0]-p2[0]);
+		double distXSquare = distX*distX;
+		
+		double distY = Math.abs(p1[1]-p2[1]);
+		double distYSquare = distY*distY;
+		
+		return Math.sqrt(distXSquare+distYSquare);
+	}
 
 	public static double euclidean(Point p1,Point p2){
 		double distX = Math.abs(p1.getX()-p2.getX());

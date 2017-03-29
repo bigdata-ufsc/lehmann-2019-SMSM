@@ -59,8 +59,8 @@ public class BikeDataReader {
 
 	public List<SemanticTrajectory> read() throws IOException, InterruptedException {
 		CSVParser parser = CSVParser.parse(//
-				new File("C:/Users/André/workspace/artigo/src/main/resources/Bike_Data/NYC/Bike-NYC.csv"), Charset.defaultCharset(),//
-//				new File("C:/Users/André/workspace/artigo/src/main/resources/Bike_Data/NYC/teste.csv"), Charset.defaultCharset(),// 
+				new File("./src/main/resources/Bike_Data/NYC/Bike-NYC.csv"), Charset.defaultCharset(),//
+//				new File("./src/main/resources/Bike_Data/NYC/teste.csv"), Charset.defaultCharset(),// 
 				CSVFormat.EXCEL.withHeader("tripduration","starttime","stoptime","start station id","start station name","start station latitude","start station longitude","end station id","end station name","end station latitude","end station longitude","bikeid","usertype","birth year","gender"));
 		// Get a list of CSV file records
 		List<CSVRecord> csvRecords = parser.getRecords();

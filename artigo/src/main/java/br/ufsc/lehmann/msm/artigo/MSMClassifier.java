@@ -1,21 +1,17 @@
-package artigo;
+package br.ufsc.lehmann.msm.artigo;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import artigo.NearestNeighbour.DataEntry;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.related.MSM;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
-import br.ufsc.lehmann.msm.artigo.BikeDataReader;
-import br.ufsc.lehmann.msm.artigo.BirthYearSemantic;
-import br.ufsc.lehmann.msm.artigo.GenderSemantic;
-import br.ufsc.lehmann.msm.artigo.UserTypeSemantic;
+import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
 
 public class MSMClassifier {
 

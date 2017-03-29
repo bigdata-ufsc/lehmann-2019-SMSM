@@ -11,7 +11,12 @@ public abstract class Semantic<V, T> {
 
 		@Override
 		public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Double threshlod) {
-			return Distance.euclidean((TPoint) a.getDimensionData(index, i), (TPoint) b.getDimensionData(index, j)) <= threshlod;
+			return distance(a, i, b, j) <= threshlod;
+		}
+
+		@Override
+		public Double distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
+			return Distance.euclidean((TPoint) a.getDimensionData(index, i), (TPoint) b.getDimensionData(index, j));
 		}
 		
 	};
@@ -19,6 +24,11 @@ public abstract class Semantic<V, T> {
 
 		@Override
 		public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Long threshlod) {
+			return distance(a, i, b, j) <= threshlod;
+		}
+
+		@Override
+		public Long distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
 			TemporalDuration a1 = (TemporalDuration) a.getDimensionData(index, i);
 			TemporalDuration b1 = (TemporalDuration) b.getDimensionData(index, j);
 			long aStart = a1.getStart().toEpochMilli();
@@ -31,7 +41,7 @@ public abstract class Semantic<V, T> {
 			Instant lastEnd = a1.getEnd().isAfter(b1.getEnd()) ? a1.getEnd() : b1.getEnd();
 			Instant firstStart = a1.getStart().isBefore(b1.getStart()) ? a1.getStart() : b1.getStart();
 			long maxDuration = new Interval(firstStart.toEpochMilli(), lastEnd.toEpochMilli()).toDurationMillis();
-			return (1 - overlap / maxDuration) <= threshlod;
+			return (1 - overlap / maxDuration);
 		}
 		
 	};
@@ -44,6 +54,8 @@ public abstract class Semantic<V, T> {
 	public V getData(SemanticTrajectory p, int i) {
 		return (V) p.getDimensionData(index, i);
 	}
+
+	public abstract T distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j);
 
 	public abstract boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, T threshlod);
 }

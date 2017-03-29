@@ -5,7 +5,7 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 
-public class MSM extends TrajectorySimilarityCalculator<Trajectory> {
+public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 
 	private MSMSemanticParameter<?, ?>[] semantics;
 
@@ -17,7 +17,7 @@ public class MSM extends TrajectorySimilarityCalculator<Trajectory> {
 		return getDistance(new SemanticTrajectory(A), new SemanticTrajectory(B));
 	}
 
-	public <V, T> double getDistance(SemanticTrajectory A, SemanticTrajectory B) {
+	public double getDistance(SemanticTrajectory A, SemanticTrajectory B) {
 		int n = A.length();
 		int m = B.length();
 		double aScore[] = new double[n];
@@ -32,8 +32,8 @@ public class MSM extends TrajectorySimilarityCalculator<Trajectory> {
 			for (int j = 0; j < m; j++) {
 				double semanticScore = 0;
 				for (int k = 0; k < semantics.length; k++) {
-					Semantic<V, T> semantic = (Semantic<V, T>) semantics[k].semantic;
-					semanticScore += (semantic.match(A, i, B, j, (T) semantics[k].threshlod) ? 1 : 0) * semantics[k].weight;
+					Semantic semantic = semantics[k].semantic;
+					semanticScore += (semantic.match(A, i, B, j, (Object) semantics[k].threshlod) ? 1 : 0) * semantics[k].weight;
 				}
 				score = semanticScore;
 
