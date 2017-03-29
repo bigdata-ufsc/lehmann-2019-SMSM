@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/arturbr/!svn/ver/71/dbutils/src/br/ufsc/db/destination
+END
+DataStorer.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/arturbr/!svn/ver/67/dbutils/src/br/ufsc/db/destination/DataStorer.java
+END
+PGStorer.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/arturbr/!svn/ver/71/dbutils/src/br/ufsc/db/destination/PGStorer.java
+END
+DataStoreType.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/arturbr/!svn/ver/67/dbutils/src/br/ufsc/db/destination/DataStoreType.java
+END
+DataStorage.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/arturbr/!svn/ver/67/dbutils/src/br/ufsc/db/destination/DataStorage.java
+END

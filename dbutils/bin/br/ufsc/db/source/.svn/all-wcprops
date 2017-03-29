@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/arturbr/!svn/ver/74/dbutils/src/br/ufsc/db/source
+END
+DataSourceType.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/arturbr/!svn/ver/67/dbutils/src/br/ufsc/db/source/DataSourceType.java
+END
+PGRetriever.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/arturbr/!svn/ver/74/dbutils/src/br/ufsc/db/source/PGRetriever.java
+END
+DataRetriever.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/arturbr/!svn/ver/74/dbutils/src/br/ufsc/db/source/DataRetriever.java
+END
+DataSource.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/arturbr/!svn/ver/71/dbutils/src/br/ufsc/db/source/DataSource.java
+END

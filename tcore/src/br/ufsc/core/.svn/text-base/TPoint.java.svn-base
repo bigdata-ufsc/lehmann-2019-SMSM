@@ -1,0 +1,80 @@
+package br.ufsc.core;
+
+import java.sql.Timestamp;
+/**
+ * 
+ * @author André Salvaro Furtado
+ *
+ */
+public class TPoint {
+	
+	private double x,y;
+	private Timestamp t;
+	private Geom2D transformedGeom;
+	
+	public TPoint(double x, double y, Timestamp time, double transfX, double transfY) {
+		this.x = x;
+		this.y = y;
+		this.t = time;
+		this.transformedGeom = new Geom2D(transfX, transfY);
+	}
+	
+	public TPoint(double x, double y, Timestamp time, Geom2D transformedGeom) {
+		this.x = x;
+		this.y = y;
+		this.t = time;
+		this.transformedGeom = transformedGeom;
+	}
+
+	public double getX(){
+		return this.x;
+	}
+	
+	public double getY(){
+		return this.y;
+	}
+	
+	public long getTime(){
+		return this.t.getTime();
+	}
+	
+	public Timestamp getTimestamp(){
+		return this.t;
+	}
+	
+	public double[] getCoord(){
+		return new double[] {this.x, this.y};
+	}
+	
+	public String getWKT(){
+		StringBuilder wkt = new StringBuilder();
+		wkt.append("POINT (").append(this.x).append(" ").append(this.y).append(")");
+		return wkt.toString();
+		
+	}
+	
+	public Geom2D getTransformedGeom(){
+		return this.transformedGeom;
+	}
+	
+	@Override
+	public String toString() {
+		return this.x + " " + this.y;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this)
+            return true;
+        if(obj == null || obj.getClass() != this.getClass())
+            return false;
+		
+		TPoint p = (TPoint) obj;
+		return this.x == p.x && this.y == p.y && this.t.equals(p.t);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Double.valueOf(x).hashCode() ^ Double.valueOf(y).hashCode() ^ Double.valueOf(t.getTime()).hashCode();
+	}
+}

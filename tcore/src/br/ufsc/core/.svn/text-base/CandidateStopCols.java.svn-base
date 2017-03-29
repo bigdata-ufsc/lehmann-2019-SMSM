@@ -1,0 +1,25 @@
+package br.ufsc.core;
+
+public class CandidateStopCols {
+	private String name;
+	private String geom;
+	private long time;
+	
+	public CandidateStopCols(String name, String geom, long time){
+		this.name = name;
+		this.geom = geom;
+		this.time = time;
+	}
+
+	public String getName(){
+		return this.name;
+	}
+
+	public String getGeom() {
+		return this.geom;
+	}
+
+	public long getTime(){
+		return this.time;
+	}
+}

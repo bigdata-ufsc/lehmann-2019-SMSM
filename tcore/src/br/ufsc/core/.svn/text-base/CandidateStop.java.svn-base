@@ -1,0 +1,42 @@
+package br.ufsc.core;
+/**
+ * 
+ * @author André Salvaro Furtado
+ *
+ */
+public class CandidateStop {
+	
+	private int id;
+	private String table;
+	private String name;
+	private String geom;
+	private long time;
+	
+	public CandidateStop(int id, String table, String name, String geom, long time){
+		this.id = id;
+		this.table = table;
+		this.name = name;
+		this.geom = geom;
+		this.time = time;
+	}
+
+	public int getId() {
+		return this.id;
+	}
+	
+	public String getTable(){
+		return this.table;
+	}
+	
+	public String getName(){
+		return this.name;
+	}
+
+	public String getGeom() {
+		return this.geom;
+	}
+
+	public long getTime(){
+		return this.time;
+	}
+}

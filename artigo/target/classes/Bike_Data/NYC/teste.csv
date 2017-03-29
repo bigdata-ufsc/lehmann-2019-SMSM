@@ -1,0 +1,3 @@
+tripduration,starttime,stoptime,start station id,start station name,start station latitude,start station longitude,end station id,end station name,end station latitude,end station longitude,bikeid,usertype,birth year,gender
+691,8/15/2014 10:15,8/15/2014 10:26,305,E 58 St & 3 Ave,40.76095756,-73.96724467,519,E 42 St & Vanderbilt Ave,40.752416,-73.97837,16385,Subscriber,1967,1
+691,8/15/2014 10:16,8/15/2014 10:26,519,E 58 St & 3 Ave,40.76095756,-73.96724467,510,E 42 St & Vanderbilt Ave,40.752416,-73.97837,16385,Subscriber,1967,1

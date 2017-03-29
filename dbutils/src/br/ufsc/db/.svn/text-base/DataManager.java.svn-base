@@ -1,0 +1,44 @@
+package br.ufsc.db;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public abstract class DataManager {
+	protected Connection connection;
+
+	protected ResultSet executeStatement(String sql){
+		Statement statement = null;
+		ResultSet resultSet;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return resultSet;
+	}
+	
+	protected void execute(String sql){
+		Statement statement = null;
+		try {
+			statement = connection.createStatement();
+			statement.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// for older versions compatibility purposes
+	protected void executeNoErrorMsg(String sql){
+		Statement statement = null;
+		try {
+			statement = connection.createStatement();
+			statement.execute(sql);
+		} catch (SQLException e) {
+			//e.printStackTrace();
+		}
+	}
+}

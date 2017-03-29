@@ -1,0 +1,36 @@
+package br.ufsc.db.source;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Set;
+
+import br.ufsc.core.CandidateStop;
+import br.ufsc.core.CandidateStopCols;
+import br.ufsc.core.Move;
+import br.ufsc.core.Stop;
+import br.ufsc.core.Trajectory;
+import br.ufsc.db.DataManager;
+/**
+ * 
+ * @author André Salvaro Furtado
+ *
+ */
+public abstract class DataRetriever extends DataManager {
+	protected DataSource source;
+	
+	public abstract void connect(DataSource source) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException;
+	
+	public abstract List<Trajectory> fetchTrajectories(boolean convert) throws SQLException;
+	public abstract Trajectory fetchTrajectory(int tid, boolean convert) throws SQLException;
+	public abstract Set<Integer> fetchTIDs() throws SQLException;
+	public abstract ResultSet fetchData(String sql) throws SQLException;
+	
+	public abstract void setBufferInMeters();
+	
+	public abstract List<CandidateStop> fetchCandidates() throws SQLException;
+	public abstract Set<CandidateStop> fecthIntersectedFeatures(Integer trajectoryID, Hashtable<String, CandidateStopCols> candidateCols, double buffer) throws SQLException;
+	public abstract List<Stop> fetchStops() throws SQLException;
+	public abstract List<Move> fetchMoves() throws SQLException;
+}
