@@ -1,15 +1,16 @@
-package br.ufsc.lehmann.msm.artigo;
+package artigo;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import artigo.NearestNeighbour.DataEntry;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.related.DTW;
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.BikeDataReader;
 
 public class DTWClassifier {
 

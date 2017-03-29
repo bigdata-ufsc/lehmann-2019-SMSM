@@ -1,6 +1,6 @@
-package br.ufsc.lehmann.msm.artigo;
+package artigo;
 
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import artigo.NearestNeighbour.DataEntry;
 
 public interface IMeasureDistance<T> {
 
