@@ -2,6 +2,7 @@ package br.ufsc.lehmann.msm.artigo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 
@@ -44,8 +45,8 @@ public class NearestNeighbour<T> {
 	}
 
 	private int k;
-	private ArrayList<Object> classes;
-	private ArrayList<DataEntry<T>> dataSet;
+	private List<Object> classes;
+	private List<DataEntry<T>> dataSet;
 	private IMeasureDistance<T> measurer;
 
 	/**
@@ -55,7 +56,7 @@ public class NearestNeighbour<T> {
 	 * @param k
 	 *            The number of neighbours to use
 	 */
-	public NearestNeighbour(ArrayList<DataEntry<T>> dataSet, int k, IMeasureDistance<T> measurer) {
+	public NearestNeighbour(List<DataEntry<T>> dataSet, int k, IMeasureDistance<T> measurer) {
 		this.measurer = measurer;
 		this.classes = new ArrayList<Object>();
 		this.k = k;

@@ -7,6 +7,7 @@ import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.related.LCSS;
+import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.utils.Distance;
 
 public class LiuSchneider extends TrajectorySimilarityCalculator<SemanticTrajectory> {
@@ -30,17 +31,7 @@ public class LiuSchneider extends TrajectorySimilarityCalculator<SemanticTraject
 	}
 
 	public double sem(SemanticTrajectory t1, SemanticTrajectory t2) {
-		Trajectory a = new Trajectory(-1);
-		Trajectory b = new Trajectory(-1);
-		for (int i = 0; i < t1.length(); i++) {
-			TPoint data = Semantic.GEOGRAPHIC.getData(t1, i);
-			a.addPoint(data);
-		}
-		for (int i = 0; i < t2.length(); i++) {
-			TPoint data = Semantic.GEOGRAPHIC.getData(t2, i);
-			b.addPoint(data);
-		}
-		double distance = new LCSS(100).getDistance(a, b);
+		double distance = new LCSS(new LCSSSemanticParameter(Semantic.GEOGRAPHIC, 100)).getDistance(t1, t2);
 		return distance / Math.min(t1.length(), t2.length());
 	}
 

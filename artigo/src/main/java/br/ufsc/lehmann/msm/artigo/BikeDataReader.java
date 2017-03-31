@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -57,20 +59,36 @@ public class BikeDataReader {
 		}
 	}
 
+	private static final DateFormat CLIMATE_DATE_PARSER = new SimpleDateFormat("dd-MM-yyyy HH:mm Z", Locale.US);
+
 	public List<SemanticTrajectory> read() throws IOException, InterruptedException {
-		CSVParser parser = CSVParser.parse(//
+		CSVParser bikeParser = CSVParser.parse(//
 				new File("./src/main/resources/Bike_Data/NYC/Bike-NYC.csv"), Charset.defaultCharset(),//
-//				new File("./src/main/resources/Bike_Data/NYC/teste.csv"), Charset.defaultCharset(),// 
 				CSVFormat.EXCEL.withHeader("tripduration","starttime","stoptime","start station id","start station name","start station latitude","start station longitude","end station id","end station name","end station latitude","end station longitude","bikeid","usertype","birth year","gender"));
-		// Get a list of CSV file records
-		List<CSVRecord> csvRecords = parser.getRecords();
+		CSVParser climateParser = CSVParser.parse(//
+				new File("./src/main/resources/Bike_Data/NYC/Meteorology-NYC.csv"), Charset.defaultCharset(),//
+				CSVFormat.EXCEL.withHeader("Date","Temperature","Wind Speed mph","Weather"));
 
-		// Read the CSV file records starting from the second record to skip the
-		// header
+		List<CSVRecord> bikeCsvRecords = bikeParser.getRecords();
+		List<CSVRecord> climateCsvRecords = climateParser.getRecords();
+
+		ConcurrentHashMap<Date, CSVRecord> climates = new ConcurrentHashMap<>(climateCsvRecords.size());
+		List<Date> refDates = new ArrayList<>(climateCsvRecords.size());
+		for (int i = 1; i < climateCsvRecords.size(); i++) {
+			CSVRecord rec = climateCsvRecords.get(i);
+			try {
+				Date parsed = CLIMATE_DATE_PARSER.parse(rec.get("Date"));
+				refDates.add(parsed);
+				climates.put(parsed, rec);
+			} catch (ParseException e) {
+				throw new IOException(e);
+			}
+		}
+		Collections.sort(refDates);
+
 		MultiValuedMap<Integer, CSVRecord> multiMap = new ArrayListValuedHashMap<Integer, CSVRecord>();
-
-		for (int i = 1; i < csvRecords.size(); i++) {
-			CSVRecord record = csvRecords.get(i);
+		for (int i = 1; i < bikeCsvRecords.size(); i++) {
+			CSVRecord record = bikeCsvRecords.get(i);
 			Integer bikeid = Integer.parseInt(record.get("bikeid"));
 			multiMap.put(bikeid, record);
 		}
@@ -95,15 +113,12 @@ public class BikeDataReader {
 				}
 				
 				public void run() {
-//					final DateFormat BIKE_FORMAT = new SimpleDateFormat("MM/dd/YYYY HH:mm");
 					final DateFormat BIKE_FORMAT = getFormat();
 					System.out.println(((i / totalBikes) * 100) + "% de " + totalBikes);
 					Collections.sort(records, new CSVComparator(bikeid, BIKE_FORMAT));
-//					List<Object> orderedRecords = records.stream().sorted(new CSVCom;parator(bikeid, BIKE_FORMAT)).collect(Collectors.toList());
 					String previousStation = null;
 					int lastTrajectoryIdLocal = 0;
 					for (CSVRecord record : records) {
-//						CSVRecord record = (CSVRecord) rec;
 						if(previousStation == null || !record.get("start station id").equals(previousStation)) {
 							lastTrajectoryIdLocal = lastTrajectoryId.incrementAndGet();
 						}
@@ -119,9 +134,15 @@ public class BikeDataReader {
 		System.out.println("Trajectories: " + keySet.size());
 		List<SemanticTrajectory> ret = new ArrayList<>(keySet.size());
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.US);
+		UserTypeSemantic userSemantic = new UserTypeSemantic(2);
+		GenderSemantic genderSemantic = new GenderSemantic(3);
+		BirthYearSemantic birthSemantic = new BirthYearSemantic(4);
+		ClimateTemperatureSemantic tempSemantic = new ClimateTemperatureSemantic(5, .5);
+		ClimateWindSpeedSemantic windSemantic = new ClimateWindSpeedSemantic(6, .1);
+		ClimateWeatherSemantic weatherSemantic = new ClimateWeatherSemantic(7);
 		for (Integer trajectoryId : keySet) {
 			Collection<CSVRecord> records = trajectories.get(trajectoryId);
-			SemanticTrajectory t = new SemanticTrajectory(trajectoryId, 5);
+			SemanticTrajectory t = new SemanticTrajectory(trajectoryId, 8);
 			int elementId = 0;
 			CSVRecord lastRecord = null;
 			for (CSVRecord record : records) {
@@ -130,13 +151,19 @@ public class BikeDataReader {
 				lon = Double.parseDouble(record.get("start station longitude"));
 				t.addData(elementId, Semantic.GEOGRAPHIC, new TPoint(lat, lon));
 				try {
-					t.addData(elementId, Semantic.TEMPORAL, new TemporalDuration(dateFormat.parse(record.get("starttime")).toInstant(), dateFormat.parse(record.get("stoptime")).toInstant()));
+					Date start = dateFormat.parse(record.get("starttime"));
+					Date end = dateFormat.parse(record.get("stoptime"));
+					t.addData(elementId, Semantic.TEMPORAL, new TemporalDuration(start.toInstant(), end.toInstant()));
+					CSVRecord climateRecord = searchApproximatedClimateData(start, climates, refDates);
+					t.addData(elementId, tempSemantic, Double.parseDouble(climateRecord.get("Temperature")));
+					t.addData(elementId, windSemantic, Double.parseDouble(climateRecord.get("Wind Speed mph")));
+					t.addData(elementId, weatherSemantic, Climate.parseClimates(climateRecord.get("Weather")));
 				} catch (ParseException e) {
-					e.printStackTrace();
+					throw new IOException(e);
 				}
-				t.addData(elementId, new UserTypeSemantic(2), record.get("usertype"));
-				t.addData(elementId, new GenderSemantic(3), record.get("gender"));
-				t.addData(elementId, new BirthYearSemantic(4), record.get("birth year"));
+				t.addData(elementId, userSemantic, record.get("usertype"));
+				t.addData(elementId, genderSemantic, record.get("gender"));
+				t.addData(elementId, birthSemantic, record.get("birth year"));
 				lastRecord = record;
 				elementId++;
 			}
@@ -146,13 +173,19 @@ public class BikeDataReader {
 				lon = Double.parseDouble(lastRecord.get("end station longitude"));
 				t.addData(elementId, Semantic.GEOGRAPHIC, new TPoint(lat, lon));
 				try {
-					t.addData(elementId, Semantic.TEMPORAL, new TemporalDuration(dateFormat.parse(lastRecord.get("starttime")).toInstant(), dateFormat.parse(lastRecord.get("stoptime")).toInstant()));
+					Date start = dateFormat.parse(lastRecord.get("starttime"));
+					Date end = dateFormat.parse(lastRecord.get("stoptime"));
+					t.addData(elementId, Semantic.TEMPORAL, new TemporalDuration(start.toInstant(), end.toInstant()));
+					CSVRecord climateRecord = searchApproximatedClimateData(start, climates, refDates);
+					t.addData(elementId, tempSemantic, Double.parseDouble(climateRecord.get("Temperature")));
+					t.addData(elementId, windSemantic, Double.parseDouble(climateRecord.get("Wind Speed mph")));
+					t.addData(elementId, weatherSemantic, Climate.parseClimates(climateRecord.get("Weather")));
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
-				t.addData(elementId, new UserTypeSemantic(2), lastRecord.get("usertype"));
-				t.addData(elementId, new GenderSemantic(3), lastRecord.get("gender"));
-				t.addData(elementId, new BirthYearSemantic(4), lastRecord.get("birth year"));
+				t.addData(elementId, userSemantic, lastRecord.get("usertype"));
+				t.addData(elementId, genderSemantic, lastRecord.get("gender"));
+				t.addData(elementId, birthSemantic, lastRecord.get("birth year"));
 			}
 			ret.add(t);
 		}
@@ -160,6 +193,26 @@ public class BikeDataReader {
 		return ret;
 	}
 	
+	private CSVRecord searchApproximatedClimateData(Date start, ConcurrentHashMap<Date,CSVRecord> climates, List<Date> dateKeys) {
+		Date closest = searchClosestDate(start, dateKeys);
+		return climates.get(closest);
+	}
+
+	private Date searchClosestDate(Date start, List<Date> dateKeys) {
+		int indexEnd = dateKeys.size() - 1;
+		if(indexEnd == 0) {
+			return dateKeys.get(0);
+		}
+		Date middleTerm = dateKeys.get(indexEnd / 2);
+		int compareTo = start.compareTo(middleTerm);
+		if(compareTo == 0) {
+			return start;
+		} else if(compareTo > 0) {
+			return searchClosestDate(start, dateKeys.subList(indexEnd / 2, indexEnd));
+		}
+		return searchClosestDate(start, dateKeys.subList(0, indexEnd / 2));
+	}
+
 	public static void main(String[] args) throws IOException, InterruptedException, ParseException {
 		new BikeDataReader().read();
 	}

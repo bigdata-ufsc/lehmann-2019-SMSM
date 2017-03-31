@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Random;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.core.trajectory.TPoint;
-import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.related.DTW;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
 
@@ -23,14 +21,12 @@ public class DTWClassifier {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		List<SemanticTrajectory> trajectories = new BikeDataReader().read();
 		ArrayList<DataEntry<SemanticTrajectory>> entries = new ArrayList<DataEntry<SemanticTrajectory>>();
-		Random y = new Random();
+		Random y = new Random(trajectories.size());
 		for (SemanticTrajectory traj : trajectories) {
 			entries.add(new DataEntry<SemanticTrajectory>(traj, y.nextBoolean() ? "chuva" : "sol"));
 		}
 		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3), new DTWMeasurer());
-		Trajectory t1 = new Trajectory(1);
-		t1.addPoint(new TPoint(40.76095756,-73.96724467));
-		Object classified = nn.classify(new DataEntry<SemanticTrajectory>(new SemanticTrajectory(t1), "descubra"));
+		Object classified = nn.classify(new DataEntry<SemanticTrajectory>(trajectories.get(0), "descubra"));
 		System.out.println(classified);
 	}
 }

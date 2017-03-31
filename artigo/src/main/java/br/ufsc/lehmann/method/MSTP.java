@@ -39,7 +39,7 @@ public class MSTP extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		for (int i = 0; i < st.length(); i++) {
 			ComplexSemanticType complex = new ComplexSemanticType(semantics.length);
 			for (int j = 0; j < semantics.length; j++) {
-				Comparable<? extends Object> semanticData = semantics[j].getData(st, j);
+				Comparable<? extends Object> semanticData = semantics[j].getData(st, i);
 				complex.data[j] = semanticData;
 			}
 			ret.add(new Itemset<>(new ComplexSemanticTypeComparator(), complex));

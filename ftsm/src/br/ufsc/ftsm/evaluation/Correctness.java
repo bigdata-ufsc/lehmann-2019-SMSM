@@ -21,6 +21,7 @@ import br.ufsc.ftsm.method.ums.FTSMBUMS;
 import br.ufsc.ftsm.method.ums.FTSMBUMS3;
 import br.ufsc.ftsm.related.DTW;
 import br.ufsc.ftsm.related.LCSS;
+import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.ftsm.related.LCSSL;
 import br.ufsc.ftsm.related.MSM;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
@@ -54,7 +55,7 @@ public static void main(String[] args) throws InstantiationException, IllegalAcc
 	PDTW pdtw = new PDTW();
 	
 	//MSM-based measures
-	MSM msm = new MSM(new MSMSemanticParameter<TPoint, Double>(Semantic.GEOGRAPHIC, 100.0, 1));
+	MSM msm = new MSM(new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 100.0, 1));
 	FTSMBMSM ftsmbmsm = new FTSMBMSM(100);
 	FTSMBDMSM ftsmbdmsm = new FTSMBDMSM(100);
 	FTSMQMSM ftsmqmsm = new FTSMQMSM(100);
@@ -62,7 +63,7 @@ public static void main(String[] args) throws InstantiationException, IllegalAcc
 
 	
 	//LCSS-based measures
-	LCSS lcss = new LCSS(100);
+	LCSS lcss = new LCSS(new LCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 100.0));
 	LCSSL lcssl = new LCSSL(100);
 	FTSMBLCSS ftsmblcss = new FTSMBLCSS(100);
 	FTSMQLCSS ftsmqlcss = new FTSMQLCSS(100);

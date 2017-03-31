@@ -1,18 +1,24 @@
 package br.ufsc.ftsm.related;
 
+import br.ufsc.core.trajectory.Semantic;
+import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
-import br.ufsc.utils.Distance;
 
-public class LCSS extends TrajectorySimilarityCalculator<Trajectory> {
+public class LCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 
-	private double threshold;
+	private LCSSSemanticParameter[] parameters;
 
-	public LCSS(double spaceThreshold) {
-		this.threshold = spaceThreshold;
+	public LCSS(LCSSSemanticParameter<?, ?>... parameters) {
+		this.parameters = parameters;
 	}
 
-	public double getDistance(Trajectory R, Trajectory S) {
+	public double getDistance(Trajectory A, Trajectory B) {
+		return getDistance(new SemanticTrajectory(A), new SemanticTrajectory(B));
+	}
+
+	@Override
+	public double getDistance(SemanticTrajectory R, SemanticTrajectory S) {
 
 		int[][] LCSSMetric = new int[R.length() + 1][S.length() + 1];
 
@@ -26,19 +32,31 @@ public class LCSS extends TrajectorySimilarityCalculator<Trajectory> {
 		LCSSMetric[0][0] = 0;
 
 		for (int i = 1; i <= R.length(); i++) {
-			for (int j = 1; j <= S.length(); j++) {
-				if (Distance.euclidean(R.getPoint(i - 1), S.getPoint(j - 1)) < threshold) {
-					LCSSMetric[i][j] = LCSSMetric[i - 1][j - 1] + 1;
-				} else {
-					LCSSMetric[i][j] = Math.max(LCSSMetric[i][j - 1], LCSSMetric[i - 1][j]);
+			semantic: for (int j = 1; j <= S.length(); j++) {
+				for (int k = 0; k < parameters.length; k++) {
+					LCSSSemanticParameter p = parameters[k];
+					if (!p.semantic.match(R, i - 1, S, j - 1, p.threshlod)/* Distance.euclidean(R.getPoint(i - 1), S.getPoint(j - 1)) < threshold */) {
+						LCSSMetric[i][j] = Math.max(LCSSMetric[i][j - 1], LCSSMetric[i - 1][j]);
+						continue semantic;
+					}
 				}
-
+				LCSSMetric[i][j] = LCSSMetric[i - 1][j - 1] + 1;
 			}
 		}
-		
+
 		double result = ((double) LCSSMetric[R.length()][S.length()] / Math.min(R.length(), S.length()));
-		
+
 		return result;
 	}
 
+	public static class LCSSSemanticParameter<V, T> {
+		private Semantic<V, T> semantic;
+		private T threshlod;
+
+		public LCSSSemanticParameter(Semantic<V, T> semantic, T threshlod) {
+			super();
+			this.semantic = semantic;
+			this.threshlod = threshlod;
+		}
+	}
 }

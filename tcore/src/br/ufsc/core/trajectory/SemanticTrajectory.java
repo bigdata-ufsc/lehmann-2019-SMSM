@@ -30,11 +30,13 @@ public class SemanticTrajectory {
 	}
 
 	public Object getDimensionData(int index, int i) {
-		return elements.get(i).getData(index);
+		SemanticElement se = elements.get(i);
+		return se.getData(index);
 	}
 
 	public void setDimensionData(int i, int index, Object p) {
-		elements.get(i).setData(index, p);
+		SemanticElement se = elements.get(i);
+		se.setData(index, p);
 	}
 
 	public <V> void addData(int i, Semantic<V, ?> semantic, V ds) {
@@ -43,7 +45,8 @@ public class SemanticTrajectory {
 				elements.add(new SemanticElement(semantics));
 			}
 		}
-		elements.get(i).addData(semantic, ds);
+		SemanticElement se = elements.get(i);
+		se.addData(semantic, ds);
 	}
 
 	public int semanticsCount() {

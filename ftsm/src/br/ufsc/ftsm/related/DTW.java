@@ -43,7 +43,6 @@ public class DTW extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 
 		// Distance calculation
 		for (int i = 1; i <= q.length(); i++) {
-
 			int beg = Math.max(1,i-w);
 			int end = Math.min(i+w,p.length());
 
@@ -54,16 +53,11 @@ public class DTW extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 			dtwMatrix[i%2][beg-1] = Double.POSITIVE_INFINITY;
 
 			for (int j = beg; j <= end; j++) {
-
 				// DTW(i,j) = c(i-1,j-1) + min(DTW(i-1,j-1), DTW(i,j-1), DTW(i-1,j)).
 				dtwMatrix[i%2][j] = Distance.euclidean(Semantic.GEOGRAPHIC.getData(q, i-1),Semantic.GEOGRAPHIC.getData(p, j-1))
 					+ Math.min(dtwMatrix[thisI][j-1],Math.min(dtwMatrix[prevI][j], dtwMatrix[prevI][j-1]));
-
 			}
-
 		}
-
 		return dtwMatrix[q.length()%2][p.length()];
-
 	}
 }

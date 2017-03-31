@@ -106,6 +106,18 @@ public class TPoint extends Point {
 		return this.x == p.x && this.y == p.y && this.t.equals(p.t);
 	}
 	
+	@Override
+	public int compareTo(Point p) {
+		int compareTo = super.compareTo(p);
+		if(compareTo != 0) {
+			return compareTo;
+		}
+		if(!(p instanceof TPoint)) {
+			return -1;
+		}
+		return t.compareTo(((TPoint) p).t);
+	}
+	
 //	@Override
 //	public int hashCode() {
 //		return Double.valueOf(x).hashCode() ^ Double.valueOf(y).hashCode() ^ Double.valueOf(t.getTime()).hashCode();
