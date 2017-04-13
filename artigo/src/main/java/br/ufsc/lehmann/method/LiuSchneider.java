@@ -26,8 +26,10 @@ public class LiuSchneider extends TrajectorySimilarityCalculator<SemanticTraject
 	public double geoDist(SemanticTrajectory t1, SemanticTrajectory t2) {
 		double crtDist = centroidDistance(t1, t2);
 		double cosineSimilarity = cosineSimilarity(t1, t2);
-		return crtDist + (crtDist * (Math.abs(t1.length() - t2.length()) / Math.max((double) t1.length(), t2.length())))
-				- ((t1.length() + t2.length()) / 2.0) * cosineSimilarity;
+//		return crtDist + (crtDist * (Math.abs(t1.length() - t2.length()) / Math.max((double) t1.length(), t2.length())))
+//				- ((t1.length() + t2.length()) / 2.0) * cosineSimilarity;
+		return (crtDist * (1 + (Math.abs(t1.length() - t2.length()) / Math.max((double) t1.length(), t2.length()))))
+				- crtDist * cosineSimilarity;
 	}
 
 	public double sem(SemanticTrajectory t1, SemanticTrajectory t2) {
