@@ -19,4 +19,17 @@ public class UserTypeSemantic extends Semantic<String, Number>{
 		return match(a, i, b, j, null) ? 0.0 : 1.0;
 	}
 
+	public enum UserType {
+		Subscriber(0), Customer(1);
+		
+		private int id;
+
+		UserType(int id) {
+			this.id = id;
+		}
+
+		public int getId() {
+			return id;
+		}
+	}
 }
