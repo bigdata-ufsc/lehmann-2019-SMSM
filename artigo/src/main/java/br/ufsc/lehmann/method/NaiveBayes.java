@@ -13,7 +13,6 @@ import br.ufsc.lehmann.msm.artigo.ClimateTemperatureSemantic;
 import br.ufsc.lehmann.msm.artigo.ClimateWeatherSemantic;
 import br.ufsc.lehmann.msm.artigo.ClimateWindSpeedSemantic;
 import br.ufsc.lehmann.msm.artigo.Gender;
-import br.ufsc.lehmann.msm.artigo.GenderSemantic;
 import br.ufsc.lehmann.msm.artigo.UserType;
 import smile.classification.NaiveBayes.Model;
 import weka.classifiers.bayes.NaiveBayesMultinomialUpdateable;

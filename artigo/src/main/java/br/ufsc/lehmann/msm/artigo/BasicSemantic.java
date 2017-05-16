@@ -17,8 +17,8 @@ public class BasicSemantic<V> extends Semantic<V, Number> {
 	}
 
 	@Override
-	public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshlod) {
-		return distance(a, i, b, j).longValue() >= threshlod.longValue();
+	public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshold) {
+		return distance(a, i, b, j).longValue() >= (threshold == null ? Long.MAX_VALUE : threshold.longValue());
 	}
 
 }

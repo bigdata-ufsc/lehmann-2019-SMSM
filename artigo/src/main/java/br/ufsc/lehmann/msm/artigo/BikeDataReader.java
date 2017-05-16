@@ -142,6 +142,20 @@ public class BikeDataReader {
 		ClimateWeatherSemantic weatherSemantic = new ClimateWeatherSemantic(7);
 		for (Integer trajectoryId : keySet) {
 			Collection<CSVRecord> records = trajectories.get(trajectoryId);
+			records = new ArrayList<>(records);
+			Collections.sort((List<CSVRecord>) records, new Comparator<CSVRecord>() {
+
+				@Override
+				public int compare(CSVRecord o1, CSVRecord o2) {
+					try {
+						Date start1 = dateFormat.parse(o1.get("starttime"));
+						Date start2 = dateFormat.parse(o2.get("starttime"));
+						return start1.compareTo(start2);
+					} catch (ParseException e) {
+						throw new RuntimeException(e);
+					}
+				}
+			});
 			SemanticTrajectory t = new SemanticTrajectory(trajectoryId, 8);
 			int elementId = 0;
 			CSVRecord lastRecord = null;
@@ -151,11 +165,11 @@ public class BikeDataReader {
 				lon = Double.parseDouble(record.get("start station longitude"));
 				t.addData(elementId, Semantic.GEOGRAPHIC, new TPoint(lat, lon));
 				try {
-					Date start = dateFormat.parse(record.get("starttime"));
-					if(lastRecord == null) {
-						start.setSeconds(start.getSeconds() - 1);
-					}
-					Date end = dateFormat.parse(lastRecord == null ? record.get("starttime") : lastRecord.get("stoptime"));
+					String st = record.get("starttime");
+					Date start = dateFormat.parse(st);
+					String e = record.get("stoptime");
+					
+					Date end = dateFormat.parse(e);
 					t.addData(elementId, Semantic.TEMPORAL, new TemporalDuration(start.toInstant(), end.toInstant()));
 					CSVRecord climateRecord = searchApproximatedClimateData(start, climates, refDates);
 					t.addData(elementId, tempSemantic, Double.parseDouble(climateRecord.get("Temperature")));

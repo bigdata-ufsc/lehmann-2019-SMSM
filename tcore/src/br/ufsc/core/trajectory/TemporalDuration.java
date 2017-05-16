@@ -66,5 +66,10 @@ public class TemporalDuration implements Comparable<TemporalDuration> {
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		return "TemporalDuration [start=" + start + ", end=" + end + "]";
+	}
+	
 	
 }
