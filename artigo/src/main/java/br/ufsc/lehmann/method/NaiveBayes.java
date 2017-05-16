@@ -3,27 +3,26 @@ package br.ufsc.lehmann.method;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.lehmann.msm.artigo.BasicSemantic;
 import br.ufsc.lehmann.msm.artigo.BikeDataReader;
 import br.ufsc.lehmann.msm.artigo.BirthYearSemantic;
 import br.ufsc.lehmann.msm.artigo.Climate;
 import br.ufsc.lehmann.msm.artigo.ClimateTemperatureSemantic;
 import br.ufsc.lehmann.msm.artigo.ClimateWeatherSemantic;
 import br.ufsc.lehmann.msm.artigo.ClimateWindSpeedSemantic;
+import br.ufsc.lehmann.msm.artigo.Gender;
 import br.ufsc.lehmann.msm.artigo.GenderSemantic;
-import br.ufsc.lehmann.msm.artigo.GenderSemantic.Gender;
-import br.ufsc.lehmann.msm.artigo.UserTypeSemantic;
-import br.ufsc.lehmann.msm.artigo.UserTypeSemantic.UserType;
+import br.ufsc.lehmann.msm.artigo.UserType;
 import smile.classification.NaiveBayes.Model;
 import weka.classifiers.bayes.NaiveBayesMultinomialUpdateable;
 
 public class NaiveBayes {
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
-		UserTypeSemantic userSemantic = new UserTypeSemantic(2);
-		GenderSemantic genderSemantic = new GenderSemantic(3);
+		BasicSemantic<String> userSemantic = new BasicSemantic<>(2);
+		BasicSemantic<String> genderSemantic = new BasicSemantic<>(3);
 		BirthYearSemantic birthSemantic = new BirthYearSemantic(4);
 		ClimateTemperatureSemantic tempSemantic = new ClimateTemperatureSemantic(5, .5);
 		ClimateWindSpeedSemantic windSemantic = new ClimateWindSpeedSemantic(6, .1);

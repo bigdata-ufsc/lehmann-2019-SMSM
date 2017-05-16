@@ -1,53 +1,38 @@
 package br.ufsc.lehmann.msm.artigo;
 
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.Delayed;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 
  * @author Andreas Thiele
  *
  *
- *         An implementation of knn. Uses Euclidean distance weighted by
- *         1/distance
+ *         An implementation of knn. Uses Euclidean distance weighted by 1/distance
  * 
- *         Main method to classify if entry is male or female based on: Height,
- *         weight
+ *         Main method to classify if entry is male or female based on: Height, weight
  */
 public class NearestNeighbour<T> {
-	public static void main(String[] args) {
-		ArrayList<NearestNeighbour.DataEntry<double[]>> data = new ArrayList<NearestNeighbour.DataEntry<double[]>>();
-		data.add(new DataEntry<double[]>(new double[] { 175, 80 }, "Male"));
-		data.add(new DataEntry<double[]>(new double[] { 193.5, 110 }, "Male"));
-		data.add(new DataEntry<double[]>(new double[] { 183, 92.8 }, "Male"));
-		data.add(new DataEntry<double[]>(new double[] { 160, 60 }, "Male"));
-		data.add(new DataEntry<double[]>(new double[] { 177, 73.1 }, "Male"));
-		data.add(new DataEntry<double[]>(new double[] { 175, 80 }, "Female"));
-		data.add(new DataEntry<double[]>(new double[] { 150, 55 }, "Female"));
-		data.add(new DataEntry<double[]>(new double[] { 159, 63.2 }, "Female"));
-		data.add(new DataEntry<double[]>(new double[] { 180, 70 }, "Female"));
-		data.add(new DataEntry<double[]>(new double[] { 163, 110 }, "Female"));
-		NearestNeighbour<double[]> nn = new NearestNeighbour<double[]>(data, 3/*neighbours*/, new IMeasureDistance<double[]>() {
-			
-			@Override
-			public double distance(DataEntry<double[]> a, DataEntry<double[]> b) {
-				double distance = 0.0;
-				int length = a.getX().length;
-				for (int i = 0; i < length; i++) {
-					double t = a.getX()[i] - b.getX()[i];
-					distance = distance + t * t;
-				}
-				return Math.sqrt(distance);
-			}
-		});
-		System.out.println("Classified as: " + nn.classify(new DataEntry<double[]>(new double[] { 170, 60 }, "Ignore")));
-	}
 
 	private int k;
 	private List<Object> classes;
 	private List<DataEntry<T>> dataSet;
 	private IMeasureDistance<T> measurer;
+	private boolean multithread;
+	private ExecutorService executorService;
 
 	/**
 	 * 
@@ -57,7 +42,19 @@ public class NearestNeighbour<T> {
 	 *            The number of neighbours to use
 	 */
 	public NearestNeighbour(List<DataEntry<T>> dataSet, int k, IMeasureDistance<T> measurer) {
+		this(dataSet, k, measurer, false);
+	}
+
+	/**
+	 * 
+	 * @param dataSet
+	 *            The set
+	 * @param k
+	 *            The number of neighbours to use
+	 */
+	public NearestNeighbour(List<DataEntry<T>> dataSet, int k, IMeasureDistance<T> measurer, boolean multithread) {
 		this.measurer = measurer;
+		this.multithread = multithread;
 		this.classes = new ArrayList<Object>();
 		this.k = k;
 		this.dataSet = dataSet;
@@ -70,6 +67,19 @@ public class NearestNeighbour<T> {
 	}
 
 	private DataEntry<T>[] getNearestNeighbourType(DataEntry<T> x) {
+		if (multithread) {
+			try {
+				return getNearestNeighbourTypeMultithreaded(x);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		} else {
+			return getNearestNeighbourTypeSinglethreaded(x);
+		}
+	}
+
+	private DataEntry<T>[] getNearestNeighbourTypeSinglethreaded(DataEntry<T> x) {
+		executorService = Executors.newSingleThreadExecutor();
 		DataEntry<T>[] retur = new DataEntry[this.k];
 		double fjernest = Double.MIN_VALUE;
 		int index = 0;
@@ -106,6 +116,126 @@ public class NearestNeighbour<T> {
 			}
 		}
 		return retur;
+	}
+
+	private DataEntry<T>[] getNearestNeighbourTypeMultithreaded(DataEntry<T> x) throws InterruptedException {
+		executorService = new ThreadPoolExecutor(0, Runtime.getRuntime().availableProcessors() * 4, 60L, TimeUnit.SECONDS,
+				new LinkedBlockingQueue<Runnable>());
+		DataEntry<T>[] retur = new DataEntry[this.k];
+		DelayQueue<DelayedDistanceMeasure<T>> queueProcess = new DelayQueue<>();
+		Thread thread = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				while (!executorService.isTerminated()) {
+					DelayedDistanceMeasure<T> toProcess = queueProcess.poll();
+					if (toProcess == null) {
+						try {
+							Thread.sleep(50);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						continue;
+					}
+					Future<Double> fut = toProcess.distance;
+					if (!fut.isDone()) {
+						queueProcess.add(new DelayedDistanceMeasure<T>(toProcess.a, toProcess.b, toProcess.distance, 100/* ms */));
+					} else {
+						double fjernest = Double.MIN_VALUE;
+						int index = 0;
+						Double distance;
+						try {
+							distance = fut.get();
+							if (retur[retur.length - 1] == null) { // Hvis ikke fyldt
+								int j = 0;
+								while (j < retur.length) {
+									if (retur[j] == null) {
+										retur[j] = toProcess.b;
+										break;
+									}
+									j++;
+								}
+								if (distance > fjernest) {
+									index = j;
+									fjernest = distance;
+								}
+							} else {
+								if (distance < fjernest) {
+									retur[index] = toProcess.b;
+									double f = 0.0;
+									int ind = 0;
+									for (int j = 0; j < retur.length; j++) {
+										double dt = distance(retur[j], x);
+										if (dt > f) {
+											f = dt;
+											ind = j;
+										}
+									}
+									fjernest = f;
+									index = ind;
+								}
+							}
+						} catch (InterruptedException | ExecutionException e) {
+							throw new RuntimeException(e);
+						}
+					}
+				}
+			}
+		});
+		thread.start();
+		for (DataEntry<T> tse : this.dataSet) {
+			Future<Double> future = executorService.submit(new Callable<Double>() {
+
+				@Override
+				public Double call() throws Exception {
+					return distance(x, tse);
+				}
+			});
+			queueProcess.add(new DelayedDistanceMeasure<T>(x, tse, future, 0));
+		}
+		executorService.shutdown();
+		executorService.awaitTermination(1, TimeUnit.HOURS);
+		thread.join();
+		return retur;
+	}
+
+	static class DelayedDistanceMeasure<T> implements Delayed {
+
+		private DataEntry<T> a;
+		private DataEntry<T> b;
+		private Future<Double> distance;
+		private long delay;
+
+		DelayedDistanceMeasure(DataEntry<T> a, DataEntry<T> b, Future<Double> distance, int delay) {
+			this.a = a;
+			this.b = b;
+			this.distance = distance;
+			this.delay = TimeUnit.MILLISECONDS.toNanos(delay);
+		}
+
+		@Override
+		public int compareTo(Delayed other) {
+			if (other == this) // compare zero if same object
+				return 0;
+			if (other instanceof DelayedDistanceMeasure) {
+				DelayedDistanceMeasure<?> x = (DelayedDistanceMeasure<?>) other;
+				long diff = delay - x.delay;
+				if (diff < 0)
+					return -1;
+				else if (diff > 0)
+					return 1;
+				else
+					return 1;
+			}
+			long diff = getDelay(NANOSECONDS) - other.getDelay(NANOSECONDS);
+			return (diff < 0) ? -1 : (diff > 0) ? 1 : 0;
+		}
+
+		@Override
+		public long getDelay(TimeUnit unit) {
+			return unit.convert(delay - System.nanoTime(), TimeUnit.NANOSECONDS);
+		}
+
 	}
 
 	private double convertDistance(double d) {

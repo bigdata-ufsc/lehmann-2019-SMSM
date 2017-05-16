@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo;
+package br.ufsc.lehmann;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,27 +31,29 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.lehmann.msm.artigo.BikeDataReader;
+import br.ufsc.lehmann.msm.artigo.Climate;
+import br.ufsc.lehmann.msm.artigo.ClimateTemperatureSemantic;
+import br.ufsc.lehmann.msm.artigo.ClimateWeatherSemantic;
+import br.ufsc.lehmann.msm.artigo.ClimateWindSpeedSemantic;
 
-public class BikeDataReader {
-
-	public static final BasicSemantic<String> USER = new BasicSemantic<>(2);
-	public static final BasicSemantic<String> GENDER = new BasicSemantic<>(3);
-	public static final BasicSemantic<String> BIRTH_YEAR = new BasicSemantic<>(4);
+public class BikeTestDataReader {
 	
+
 	private final class CSVComparator implements Comparator<CSVRecord> {
 		private final Integer bikeid;
-		private final DateFormat BIKE_FORMAT;
+		private final DateFormat bIKE_FORMAT;
 
 		private CSVComparator(Integer bikeid, DateFormat bIKE_FORMAT) {
 			this.bikeid = bikeid;
-			this.BIKE_FORMAT = bIKE_FORMAT;
+			this.bIKE_FORMAT = bIKE_FORMAT;
 		}
 
 		public int compare(CSVRecord o1, CSVRecord o2) {
 			String o1Start = o1.get("starttime");
 			String o2Start = o2.get("starttime");
 			try {
-				return BIKE_FORMAT.parse(o1Start).compareTo(BIKE_FORMAT.parse(o2Start));
+				return bIKE_FORMAT.parse(o1Start).compareTo(bIKE_FORMAT.parse(o2Start));
 			} catch (ParseException | NumberFormatException e) {
 				String o1end = o1.get("stoptime");
 				String o2end = o2.get("stoptime");
@@ -66,10 +68,10 @@ public class BikeDataReader {
 
 	public List<SemanticTrajectory> read() throws IOException, InterruptedException {
 		CSVParser bikeParser = CSVParser.parse(//
-				new File("./src/main/resources/Bike_Data/NYC/Bike-NYC.csv"), Charset.defaultCharset(),//
+				new File("./src/test/resources/Bike-NYC_test.csv"), Charset.defaultCharset(),//
 				CSVFormat.EXCEL.withHeader("tripduration","starttime","stoptime","start station id","start station name","start station latitude","start station longitude","end station id","end station name","end station latitude","end station longitude","bikeid","usertype","birth year","gender"));
 		CSVParser climateParser = CSVParser.parse(//
-				new File("./src/main/resources/Bike_Data/NYC/Meteorology-NYC.csv"), Charset.defaultCharset(),//
+				new File("./src/test/resources/Meteorology-NYC_test.csv"), Charset.defaultCharset(),//
 				CSVFormat.EXCEL.withHeader("Date","Temperature","Wind Speed mph","Weather"));
 
 		List<CSVRecord> bikeCsvRecords = bikeParser.getRecords();
@@ -151,11 +153,11 @@ public class BikeDataReader {
 				lon = Double.parseDouble(record.get("start station longitude"));
 				t.addData(elementId, Semantic.GEOGRAPHIC, new TPoint(lat, lon));
 				try {
-					Date start = dateFormat.parse(record.get("starttime"));
+					Date start = dateFormat.parse(lastRecord == null ? record.get("starttime") : lastRecord.get("stoptime"));
 					if(lastRecord == null) {
 						start.setSeconds(start.getSeconds() - 1);
 					}
-					Date end = dateFormat.parse(lastRecord == null ? record.get("starttime") : lastRecord.get("stoptime"));
+					Date end = dateFormat.parse(record.get("starttime"));
 					t.addData(elementId, Semantic.TEMPORAL, new TemporalDuration(start.toInstant(), end.toInstant()));
 					CSVRecord climateRecord = searchApproximatedClimateData(start, climates, refDates);
 					t.addData(elementId, tempSemantic, Double.parseDouble(climateRecord.get("Temperature")));
@@ -164,9 +166,9 @@ public class BikeDataReader {
 				} catch (ParseException e) {
 					throw new IOException(e);
 				}
-				t.addData(elementId, USER, record.get("usertype"));
-				t.addData(elementId, GENDER, record.get("gender"));
-				t.addData(elementId, BIRTH_YEAR, record.get("birth year"));
+				t.addData(elementId, BikeDataReader.USER, record.get("usertype"));
+				t.addData(elementId, BikeDataReader.GENDER, record.get("gender"));
+				t.addData(elementId, BikeDataReader.BIRTH_YEAR, record.get("birth year"));
 				lastRecord = record;
 				elementId++;
 			}
@@ -187,9 +189,9 @@ public class BikeDataReader {
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
-				t.addData(elementId, USER, lastRecord.get("usertype"));
-				t.addData(elementId, GENDER, lastRecord.get("gender"));
-				t.addData(elementId, BIRTH_YEAR, lastRecord.get("birth year"));
+				t.addData(elementId, BikeDataReader.USER, lastRecord.get("usertype"));
+				t.addData(elementId, BikeDataReader.GENDER, lastRecord.get("gender"));
+				t.addData(elementId, BikeDataReader.BIRTH_YEAR, lastRecord.get("birth year"));
 			}
 			ret.add(t);
 		}
@@ -218,6 +220,6 @@ public class BikeDataReader {
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException, ParseException {
-		new BikeDataReader().read();
+		new BikeTestDataReader().read();
 	}
 }
