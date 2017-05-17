@@ -52,4 +52,8 @@ public class SemanticTrajectory {
 	public int semanticsCount() {
 		return semantics;
 	}
+
+	public Integer getTrajectoryId() {
+		return trajectoryId;
+	}
 }

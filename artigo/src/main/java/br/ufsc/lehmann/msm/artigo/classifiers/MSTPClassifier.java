@@ -26,6 +26,11 @@ public class MSTPClassifier {
 					BikeDataReader.BIRTH_YEAR//
 					}).getDistance(t1.getX(), t2.getX());
 		}
+
+		@Override
+		public String name() {
+			return "MSTP";
+		}
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {

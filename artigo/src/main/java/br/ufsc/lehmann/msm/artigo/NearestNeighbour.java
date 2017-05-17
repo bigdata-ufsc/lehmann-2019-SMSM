@@ -16,6 +16,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+
 /**
  * 
  * @author Andreas Thiele
@@ -32,7 +34,6 @@ public class NearestNeighbour<T> {
 	private List<DataEntry<T>> dataSet;
 	private IMeasureDistance<T> measurer;
 	private boolean multithread;
-	private ExecutorService executorService;
 
 	/**
 	 * 
@@ -79,7 +80,7 @@ public class NearestNeighbour<T> {
 	}
 
 	private DataEntry<T>[] getNearestNeighbourTypeSinglethreaded(DataEntry<T> x) {
-		executorService = Executors.newSingleThreadExecutor();
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		DataEntry<T>[] retur = new DataEntry[this.k];
 		double fjernest = Double.MIN_VALUE;
 		int index = 0;
@@ -119,71 +120,12 @@ public class NearestNeighbour<T> {
 	}
 
 	private DataEntry<T>[] getNearestNeighbourTypeMultithreaded(DataEntry<T> x) throws InterruptedException {
-		executorService = new ThreadPoolExecutor(0, Runtime.getRuntime().availableProcessors() * 4, 60L, TimeUnit.SECONDS,
-				new LinkedBlockingQueue<Runnable>());
+		ExecutorService executorService = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() / 8,
+				Runtime.getRuntime().availableProcessors() / 4, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+		List<DataEntry<T>> dataSet = new ArrayList<>(this.dataSet);
 		DataEntry<T>[] retur = new DataEntry[this.k];
 		DelayQueue<DelayedDistanceMeasure<T>> queueProcess = new DelayQueue<>();
-		Thread thread = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				while (!executorService.isTerminated()) {
-					DelayedDistanceMeasure<T> toProcess = queueProcess.poll();
-					if (toProcess == null) {
-						try {
-							Thread.sleep(50);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						continue;
-					}
-					Future<Double> fut = toProcess.distance;
-					if (!fut.isDone()) {
-						queueProcess.add(new DelayedDistanceMeasure<T>(toProcess.a, toProcess.b, toProcess.distance, 100/* ms */));
-					} else {
-						double fjernest = Double.MIN_VALUE;
-						int index = 0;
-						Double distance;
-						try {
-							distance = fut.get();
-							if (retur[retur.length - 1] == null) { // Hvis ikke fyldt
-								int j = 0;
-								while (j < retur.length) {
-									if (retur[j] == null) {
-										retur[j] = toProcess.b;
-										break;
-									}
-									j++;
-								}
-								if (distance > fjernest) {
-									index = j;
-									fjernest = distance;
-								}
-							} else {
-								if (distance < fjernest) {
-									retur[index] = toProcess.b;
-									double f = 0.0;
-									int ind = 0;
-									for (int j = 0; j < retur.length; j++) {
-										double dt = distance(retur[j], x);
-										if (dt > f) {
-											f = dt;
-											ind = j;
-										}
-									}
-									fjernest = f;
-									index = ind;
-								}
-							}
-						} catch (InterruptedException | ExecutionException e) {
-							throw new RuntimeException(e);
-						}
-					}
-				}
-			}
-		});
-		thread.start();
-		for (DataEntry<T> tse : this.dataSet) {
+		for (DataEntry<T> tse : dataSet) {
 			Future<Double> future = executorService.submit(new Callable<Double>() {
 
 				@Override
@@ -193,9 +135,61 @@ public class NearestNeighbour<T> {
 			});
 			queueProcess.add(new DelayedDistanceMeasure<T>(x, tse, future, 0));
 		}
+		while (!queueProcess.isEmpty()) {
+			DelayedDistanceMeasure<T> toProcess = queueProcess.poll();
+			if (toProcess == null) {
+				try {
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				continue;
+			}
+			Future<Double> fut = toProcess.distance;
+			if (!fut.isDone()) {
+				queueProcess.add(new DelayedDistanceMeasure<T>(toProcess.a, toProcess.b, toProcess.distance, 50/* ms */));
+			} else {
+				double fjernest = Double.MIN_VALUE;
+				int index = 0;
+				Double distance;
+				try {
+					distance = fut.get();
+					if (retur[retur.length - 1] == null) { // Hvis ikke fyldt
+						int j = 0;
+						while (j < retur.length) {
+							if (retur[j] == null) {
+								retur[j] = toProcess.b;
+								break;
+							}
+							j++;
+						}
+						if (distance > fjernest) {
+							index = j;
+							fjernest = distance;
+						}
+					} else {
+						if (distance < fjernest) {
+							retur[index] = toProcess.b;
+							double f = 0.0;
+							int ind = 0;
+							for (int j = 0; j < retur.length; j++) {
+								double dt = distance(retur[j], x);
+								if (dt > f) {
+									f = dt;
+									ind = j;
+								}
+							}
+							fjernest = f;
+							index = ind;
+						}
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}
 		executorService.shutdown();
 		executorService.awaitTermination(1, TimeUnit.HOURS);
-		thread.join();
 		return retur;
 	}
 

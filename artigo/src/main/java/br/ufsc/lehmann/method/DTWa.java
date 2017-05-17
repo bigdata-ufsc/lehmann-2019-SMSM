@@ -50,6 +50,11 @@ public class DTWa extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		public double distance(DataEntry<SemanticTrajectory> t1, DataEntry<SemanticTrajectory> t2) {
 			return new DTWi(semantics).getDistance(t1.getX(), t2.getX());
 		}
+
+		@Override
+		public String name() {
+			return "DTWi";
+		}
 	}
 
 	private static final class DTWdMeasurer implements IMeasureDistance<SemanticTrajectory> {
@@ -63,6 +68,11 @@ public class DTWa extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		@Override
 		public double distance(DataEntry<SemanticTrajectory> t1, DataEntry<SemanticTrajectory> t2) {
 			return new DTWd(semantics).getDistance(t1.getX(), t2.getX());
+		}
+
+		@Override
+		public String name() {
+			return "DTWd";
 		}
 	}
 }

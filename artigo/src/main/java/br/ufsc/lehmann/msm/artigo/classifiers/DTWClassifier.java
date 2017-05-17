@@ -19,6 +19,11 @@ public class DTWClassifier {
 		public double distance(DataEntry<SemanticTrajectory> t1, DataEntry<SemanticTrajectory> t2) {
 			return new DTW().getDistance(t1.getX(), t2.getX());
 		}
+
+		@Override
+		public String name() {
+			return "DTW";
+		}
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {

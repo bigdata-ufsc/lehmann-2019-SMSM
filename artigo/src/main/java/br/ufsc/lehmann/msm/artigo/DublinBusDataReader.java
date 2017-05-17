@@ -43,7 +43,7 @@ public class DublinBusDataReader {
 		ResultSet data = st.executeQuery(
 				"select to_timestamp(time_in_seconds / 1000000) as \"time\", line_id, journey_pattern, "
 				/**/+ "vehicle_journey, operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id "
-				+ "from bus.dublin_201301 where at_stop = true");
+				+ "from bus.dublin_201301 where date_frame between '2012-12-31' and '2013-01-07' and at_stop = true");
 		Multimap<Integer, DublinBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		System.out.println("Fetching...");
 		while(data.next()) {

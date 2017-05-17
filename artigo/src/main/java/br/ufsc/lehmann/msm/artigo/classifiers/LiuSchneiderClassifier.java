@@ -21,6 +21,11 @@ public class LiuSchneiderClassifier {
 		public double distance(DataEntry<SemanticTrajectory> t1, DataEntry<SemanticTrajectory> t2) {
 			return new LiuSchneider(1).getDistance(t1.getX(), t2.getX());
 		}
+
+		@Override
+		public String name() {
+			return "Liu&Schneider";
+		}
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -28,8 +33,8 @@ public class LiuSchneiderClassifier {
 		ClimateWeatherSemantic weatherSemantic = new ClimateWeatherSemantic(7);
 		ArrayList<DataEntry<SemanticTrajectory>> entries = new ArrayList<DataEntry<SemanticTrajectory>>();
 		for (SemanticTrajectory traj : trajectories.subList(trajectories.size() / 3, trajectories.size() - 1)) {
-			Climate[] data = weatherSemantic.getData(traj, 0);
-			entries.add(new DataEntry<SemanticTrajectory>(traj, data[0]));
+			List<Climate> data = weatherSemantic.getData(traj, 0);
+			entries.add(new DataEntry<SemanticTrajectory>(traj, data.get(0)));
 		}
 		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3), new LiuSchneiderMeasurer());
 		Object classified = nn.classify(new DataEntry<SemanticTrajectory>(trajectories.get(0), "descubra"));

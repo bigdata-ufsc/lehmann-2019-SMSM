@@ -25,6 +25,11 @@ public class MTMClassifier {
 		public double distance(DataEntry<SemanticTrajectory> t1, DataEntry<SemanticTrajectory> t2) {
 			return mtm.getDistance(t1.getX(), t2.getX());
 		}
+
+		@Override
+		public String name() {
+			return "MTM";
+		}
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {

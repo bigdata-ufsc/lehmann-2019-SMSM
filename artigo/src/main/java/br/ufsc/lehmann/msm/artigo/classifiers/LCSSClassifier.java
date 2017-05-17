@@ -25,6 +25,11 @@ public class LCSSClassifier {
 					new LCSSSemanticParameter(BikeDataReader.GENDER, null),//
 					new LCSSSemanticParameter(BikeDataReader.BIRTH_YEAR, null)).getDistance(t1.getX(), t2.getX());
 		}
+
+		@Override
+		public String name() {
+			return "LCSS";
+		}
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {

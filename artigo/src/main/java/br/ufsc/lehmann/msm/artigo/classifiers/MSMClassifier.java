@@ -26,6 +26,11 @@ public class MSMClassifier {
 					new MSMSemanticParameter(BikeDataReader.GENDER, null, .2),//
 					new MSMSemanticParameter(BikeDataReader.BIRTH_YEAR, null, .2)).getDistance(t1.getX(), t2.getX());
 		}
+
+		@Override
+		public String name() {
+			return "MSM";
+		}
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -33,8 +38,8 @@ public class MSMClassifier {
 		ClimateWeatherSemantic weatherSemantic = new ClimateWeatherSemantic(7);
 		ArrayList<DataEntry<SemanticTrajectory>> entries = new ArrayList<DataEntry<SemanticTrajectory>>();
 		for (SemanticTrajectory traj : trajectories) {
-			Climate[] data = weatherSemantic.getData(traj, 0);
-			entries.add(new DataEntry<SemanticTrajectory>(traj, data[0]));
+			List<Climate> data = weatherSemantic.getData(traj, 0);
+			entries.add(new DataEntry<SemanticTrajectory>(traj, data.get(0)));
 		}
 		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3), new MSMMeasurer(), true);
 		Object classified = nn.classify(new DataEntry<SemanticTrajectory>(trajectories.get(0), "descubra"));

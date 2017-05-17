@@ -31,15 +31,15 @@ public class NaiveBayes {
 		NaiveBayesMultinomialUpdateable naive = new NaiveBayesMultinomialUpdateable();
 		for (SemanticTrajectory traj : trajectories) {
 			for (int i = 0; i < traj.length() - 1; i++) {
-				Climate[] weathers = weatherSemantic.getData(traj, i);
-				for (int j = 0; j < weathers.length; j++) {
+				List<Climate> weathers = weatherSemantic.getData(traj, i);
+				for (int j = 0; j < weathers.size(); j++) {
 					String birthYear = birthSemantic.getData(traj, i);
 					bayes.learn(new double[] {
 							UserType.valueOf(userSemantic.getData(traj, i)).getId(),
 							Integer.parseInt(birthYear.equals("\\N") ? "0" : birthYear),
 							(tempSemantic.getData(traj, i)),
 							(windSemantic.getData(traj, i)),
-							weathers[j].ordinal()
+							weathers.get(j).ordinal()
 					}, Gender.fromId(genderSemantic.getData(traj, i)).getId());
 				}
 			}

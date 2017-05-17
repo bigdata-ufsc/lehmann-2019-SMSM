@@ -25,6 +25,11 @@ public class EDRClassifier {
 					new EDRSemanticParameter(BikeDataReader.GENDER, null),//
 					new EDRSemanticParameter(BikeDataReader.BIRTH_YEAR, null)).getDistance(t1.getX(), t2.getX());
 		}
+
+		@Override
+		public String name() {
+			return "EDR";
+		}
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {

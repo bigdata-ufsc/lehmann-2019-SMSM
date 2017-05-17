@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -162,7 +163,7 @@ public class BikeTestDataReader {
 					CSVRecord climateRecord = searchApproximatedClimateData(start, climates, refDates);
 					t.addData(elementId, tempSemantic, Double.parseDouble(climateRecord.get("Temperature")));
 					t.addData(elementId, windSemantic, Double.parseDouble(climateRecord.get("Wind Speed mph")));
-					t.addData(elementId, weatherSemantic, Climate.parseClimates(climateRecord.get("Weather")));
+					t.addData(elementId, weatherSemantic, Arrays.asList(Climate.parseClimates(climateRecord.get("Weather"))));
 				} catch (ParseException e) {
 					throw new IOException(e);
 				}
@@ -185,7 +186,7 @@ public class BikeTestDataReader {
 					CSVRecord climateRecord = searchApproximatedClimateData(start, climates, refDates);
 					t.addData(elementId, tempSemantic, Double.parseDouble(climateRecord.get("Temperature")));
 					t.addData(elementId, windSemantic, Double.parseDouble(climateRecord.get("Wind Speed mph")));
-					t.addData(elementId, weatherSemantic, Climate.parseClimates(climateRecord.get("Weather")));
+					t.addData(elementId, weatherSemantic, Arrays.asList(Climate.parseClimates(climateRecord.get("Weather"))));
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
