@@ -9,10 +9,10 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.related.LCSS;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
-import br.ufsc.lehmann.msm.artigo.BikeDataReader;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 
 public class LCSSClassifier {
 

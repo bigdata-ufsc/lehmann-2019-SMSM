@@ -8,12 +8,12 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.related.MSM;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
-import br.ufsc.lehmann.msm.artigo.BikeDataReader;
-import br.ufsc.lehmann.msm.artigo.Climate;
-import br.ufsc.lehmann.msm.artigo.ClimateWeatherSemantic;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.Climate;
+import br.ufsc.lehmann.msm.artigo.problems.ClimateWeatherSemantic;
 
 public class MSMClassifier {
 

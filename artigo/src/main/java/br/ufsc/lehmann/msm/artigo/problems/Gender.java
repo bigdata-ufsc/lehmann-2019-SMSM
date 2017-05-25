@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo;
+package br.ufsc.lehmann.msm.artigo.problems;
 
 public enum Gender {
 	NO_INF(0), MASC(1), FEM(2);

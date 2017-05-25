@@ -7,10 +7,10 @@ import java.util.Random;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.method.MTM;
-import br.ufsc.lehmann.msm.artigo.BikeDataReader;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 
 public class MTMClassifier {
 

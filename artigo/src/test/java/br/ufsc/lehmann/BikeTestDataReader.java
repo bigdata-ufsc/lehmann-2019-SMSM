@@ -32,11 +32,11 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
-import br.ufsc.lehmann.msm.artigo.BikeDataReader;
-import br.ufsc.lehmann.msm.artigo.Climate;
-import br.ufsc.lehmann.msm.artigo.ClimateTemperatureSemantic;
-import br.ufsc.lehmann.msm.artigo.ClimateWeatherSemantic;
-import br.ufsc.lehmann.msm.artigo.ClimateWindSpeedSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.Climate;
+import br.ufsc.lehmann.msm.artigo.problems.ClimateTemperatureSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.ClimateWeatherSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.ClimateWindSpeedSemantic;
 
 public class BikeTestDataReader {
 	

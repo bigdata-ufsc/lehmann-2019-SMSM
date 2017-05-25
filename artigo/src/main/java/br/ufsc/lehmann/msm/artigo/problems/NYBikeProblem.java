@@ -1,20 +1,20 @@
-package br.ufsc.lehmann.msm.artigo;
+package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.sql.SQLException;
+import java.io.IOException;
 import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.lehmann.msm.artigo.Problem;
 
-public class DublinBusProblem implements Problem {
+public class NYBikeProblem implements Problem {
 	
 	private List<SemanticTrajectory> data;
 	private List<SemanticTrajectory> trainingData;
 	private List<SemanticTrajectory> testingData;
 
-	public DublinBusProblem() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		data = new DublinBusDataReader().read();
-		data = data.subList(0, data.size() / 10);
+	public NYBikeProblem() throws IOException, InterruptedException {
+		data = new BikeDataReader().read();
 		this.trainingData = data.subList(0, (int) (data.size() * (2.0 / 3)));
 		this.testingData = data.subList((int) (data.size() * (2.0 / 3)), data.size() - 1);
 	}
@@ -22,10 +22,11 @@ public class DublinBusProblem implements Problem {
 	@Override
 	public Semantic[] semantics() {
 		return new Semantic[] {
-			// Semantic.GEOGRAPHIC, //
-			// Semantic.TEMPORAL,//
-			// DublinBusDataReader.OPERATOR,
-			DublinBusDataReader.STOP
+				Semantic.GEOGRAPHIC, //
+				Semantic.TEMPORAL,//
+				BikeDataReader.USER,//
+				BikeDataReader.GENDER,//
+				BikeDataReader.BIRTH_YEAR
 		};
 	}
 
@@ -36,7 +37,7 @@ public class DublinBusProblem implements Problem {
 
 	@Override
 	public Semantic discriminator() {
-		return DublinBusDataReader.LINE_INFO;
+		return new ClimateWeatherSemantic(7);
 	}
 
 	@Override
@@ -51,7 +52,7 @@ public class DublinBusProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "Dublin bus";
+		return "NYC Bike";
 	}
 
 }

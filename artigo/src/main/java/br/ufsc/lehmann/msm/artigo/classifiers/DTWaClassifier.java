@@ -9,9 +9,9 @@ import java.util.concurrent.ExecutionException;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.method.DTWa;
 import br.ufsc.lehmann.msm.artigo.ClassificationExecutor;
-import br.ufsc.lehmann.msm.artigo.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.Problem;
 
 public class DTWaClassifier {

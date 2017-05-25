@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo;
+package br.ufsc.lehmann.msm.artigo.problems;
 
 public enum UserType {
 	Subscriber(0), Customer(1);

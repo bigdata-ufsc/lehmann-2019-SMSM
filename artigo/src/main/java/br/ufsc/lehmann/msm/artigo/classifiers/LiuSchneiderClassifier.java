@@ -7,12 +7,12 @@ import java.util.Random;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.method.LiuSchneider;
-import br.ufsc.lehmann.msm.artigo.BikeDataReader;
-import br.ufsc.lehmann.msm.artigo.Climate;
-import br.ufsc.lehmann.msm.artigo.ClimateWeatherSemantic;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.Climate;
+import br.ufsc.lehmann.msm.artigo.problems.ClimateWeatherSemantic;
 
 public class LiuSchneiderClassifier {
 

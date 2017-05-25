@@ -5,15 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.msm.artigo.BasicSemantic;
-import br.ufsc.lehmann.msm.artigo.BikeDataReader;
-import br.ufsc.lehmann.msm.artigo.BirthYearSemantic;
-import br.ufsc.lehmann.msm.artigo.Climate;
-import br.ufsc.lehmann.msm.artigo.ClimateTemperatureSemantic;
-import br.ufsc.lehmann.msm.artigo.ClimateWeatherSemantic;
-import br.ufsc.lehmann.msm.artigo.ClimateWindSpeedSemantic;
-import br.ufsc.lehmann.msm.artigo.Gender;
-import br.ufsc.lehmann.msm.artigo.UserType;
+import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.BirthYearSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.Climate;
+import br.ufsc.lehmann.msm.artigo.problems.ClimateTemperatureSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.ClimateWeatherSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.ClimateWindSpeedSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.Gender;
+import br.ufsc.lehmann.msm.artigo.problems.UserType;
 import smile.classification.NaiveBayes.Model;
 import weka.classifiers.bayes.NaiveBayesMultinomialUpdateable;
 

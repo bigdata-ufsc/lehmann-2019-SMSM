@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo;
+package br.ufsc.lehmann.msm.artigo.problems;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
