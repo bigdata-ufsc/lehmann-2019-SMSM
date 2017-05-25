@@ -31,7 +31,7 @@ public class HCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		for (int i = 1; i <= R.length(); i++) {
 			for (int j = 1; j <= S.length(); j++) {
 				HCSSSemanticParameter p = parameter;
-				if (p.semantic.match(R, i - 1, S, j - 1, p.threshlod)) {
+				if (p.semantic.match(R, i - 1, S, j - 1, p.threshold)) {
 					HCSSMetric[i][j] = HCSSMetric[i - 1][j - 1] + weightSemantic.getData(R, i);
 				} else {
 					HCSSMetric[i][j] = Math.max(HCSSMetric[i][j - 1], HCSSMetric[i - 1][j]);
@@ -46,12 +46,12 @@ public class HCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 
 	public static class HCSSSemanticParameter<V, T> {
 		private Semantic<V, T> semantic;
-		private T threshlod;
+		private T threshold;
 
 		public HCSSSemanticParameter(Semantic<V, T> semantic, T threshlod) {
 			super();
 			this.semantic = semantic;
-			this.threshlod = threshlod;
+			this.threshold = threshlod;
 		}
 	}
 }

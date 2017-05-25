@@ -21,8 +21,8 @@ public class SemanticSelection {
 
 		attSelection.setSearch(rank);
 
-		attSelection.SelectAttributes( instancesTraining );
-
-		instancesTraining = attSelection.reduceDimensionality( instancesTraining );
+//		attSelection.SelectAttributes( instancesTraining );
+//
+//		instancesTraining = attSelection.reduceDimensionality( instancesTraining );
 	}
 }
