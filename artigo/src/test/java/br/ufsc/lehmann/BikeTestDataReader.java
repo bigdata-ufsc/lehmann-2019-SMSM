@@ -169,7 +169,7 @@ public class BikeTestDataReader {
 				}
 				t.addData(elementId, BikeDataReader.USER, record.get("usertype"));
 				t.addData(elementId, BikeDataReader.GENDER, record.get("gender"));
-				t.addData(elementId, BikeDataReader.BIRTH_YEAR, record.get("birth year"));
+				t.addData(elementId, BikeDataReader.BIRTH_YEAR, Integer.parseInt(record.get("birth year")));
 				lastRecord = record;
 				elementId++;
 			}
@@ -192,7 +192,7 @@ public class BikeTestDataReader {
 				}
 				t.addData(elementId, BikeDataReader.USER, lastRecord.get("usertype"));
 				t.addData(elementId, BikeDataReader.GENDER, lastRecord.get("gender"));
-				t.addData(elementId, BikeDataReader.BIRTH_YEAR, lastRecord.get("birth year"));
+				t.addData(elementId, BikeDataReader.BIRTH_YEAR, Integer.parseInt(lastRecord.get("birth year")));
 			}
 			ret.add(t);
 		}

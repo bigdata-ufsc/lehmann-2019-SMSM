@@ -37,7 +37,7 @@ public class BikeDataReader {
 
 	public static final BasicSemantic<String> USER = new BasicSemantic<>(2);
 	public static final BasicSemantic<String> GENDER = new BasicSemantic<>(3);
-	public static final BasicSemantic<String> BIRTH_YEAR = new BasicSemantic<>(4);
+	public static final BasicSemantic<Number> BIRTH_YEAR = new BasicSemantic<>(4);
 	
 	private final class CSVComparator implements Comparator<CSVRecord> {
 		private final Integer bikeid;
@@ -181,7 +181,7 @@ public class BikeDataReader {
 				}
 				t.addData(elementId, USER, record.get("usertype"));
 				t.addData(elementId, GENDER, record.get("gender"));
-				t.addData(elementId, BIRTH_YEAR, record.get("birth year"));
+				t.addData(elementId, BIRTH_YEAR, Integer.parseInt(record.get("birth year").equals("\\N") ? "-1" : record.get("birth year")));
 				lastRecord = record;
 				elementId++;
 			}
@@ -204,7 +204,7 @@ public class BikeDataReader {
 				}
 				t.addData(elementId, USER, lastRecord.get("usertype"));
 				t.addData(elementId, GENDER, lastRecord.get("gender"));
-				t.addData(elementId, BIRTH_YEAR, lastRecord.get("birth year"));
+				t.addData(elementId, BIRTH_YEAR, Integer.parseInt(lastRecord.get("birth year").equals("\\N") ? "-1" : lastRecord.get("birth year")));
 			}
 			ret.add(t);
 		}
