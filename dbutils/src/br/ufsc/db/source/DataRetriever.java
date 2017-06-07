@@ -61,4 +61,6 @@ public abstract class DataRetriever extends DataManager {
 
 	public abstract List<Integer> fetchListTIDs() throws SQLException ;
 
+	public abstract void prepareFechTrajectoryStatement() throws SQLException;
+
 }

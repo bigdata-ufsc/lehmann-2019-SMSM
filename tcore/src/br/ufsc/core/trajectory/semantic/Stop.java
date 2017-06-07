@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
+import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 
 /**
@@ -12,7 +13,7 @@ import br.ufsc.core.trajectory.TPoint;
  *
  */
 public class Stop {
-	
+
 	private int tid;
 	private int stopId;
 	private String stopName;
@@ -21,43 +22,42 @@ public class Stop {
 	private double avg;
 
 	private String geom;
-	// points interval - indexes
 	private int begin, end;
 	private Set<TPoint> points = new HashSet<TPoint>();
-	private int oid;
 	private TPoint centroid;
+	private SemanticTrajectory parent;
+
+	public Stop(SemanticTrajectory t, int stopId) {
+		parent = t;
+		this.stopId = stopId;
+	}
 	
-	
-	public Stop(int tid, int stopId, String stopName, Timestamp startTime, Timestamp endTime, double avg, int rfId, String rfTableName, int begin, int end, String geom) {
-		this.tid = tid;
+	public Stop(SemanticTrajectory t, int stopId, String stopName, Timestamp startTime, Timestamp endTime, double avg, int rfId, String rfTableName,
+			int begin, int end, String geom) {
+		this.parent = t;
+		this.tid = t.getTrajectoryId();
 		this.stopId = stopId;
 		this.stopName = stopName;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.avg = avg;
-		
+
 		this.begin = begin;
 		this.end = end;
 		this.geom = geom;
 	}
 
-	
-	public Stop(int tid,int oid,Timestamp startTime,Timestamp endTime) {
-		this.tid=tid;
-		this.oid=oid;
-		this.startTime=startTime;
-		this.endTime=endTime;
+	public Stop(SemanticTrajectory t, int stopId, Timestamp startTime, Timestamp endTime) {
+		this.parent = t;
+		this.tid = t.getTrajectoryId();
+		this.stopId = stopId;
+		this.startTime = startTime;
+		this.endTime = endTime;
 	}
-
-	public Stop() {
-		// TODO Auto-generated constructor stub
-	}
-
 
 	public void setTid(int tid) {
 		this.tid = tid;
 	}
-
 
 	public int getTid() {
 		return tid;
@@ -90,39 +90,45 @@ public class Stop {
 	public int getEnd() {
 		return end;
 	}
-	
-	public String getGeom(){
+
+	public String getGeom() {
 		return geom;
 	}
-
 
 	public Set<TPoint> getPoints() {
 		return points;
 	}
 
-
 	public void addPoint(TPoint point) {
 		points.add(point);
 	}
-	
-	public int getOid() {
-		return oid;
+
+	public void setCentroid(TPoint p) {
+		this.centroid = p;
 	}
-	
-	public void setCentroid(TPoint p){
-		this.centroid=p;
-	}
-	
-	public TPoint getCentroid(){
+
+	public TPoint getCentroid() {
 		return centroid;
 	}
-	
-	public void setEndTime(Timestamp endTime){
-		this.endTime=endTime;
+
+	public void setEndTime(Timestamp endTime) {
+		this.endTime = endTime;
 	}
-	
-	public void setStartTime(Timestamp startTime){
-		this.startTime=startTime;
+
+	public void setStartTime(Timestamp startTime) {
+		this.startTime = startTime;
 	}
-	
+
+	public SemanticTrajectory getParent() {
+		return parent;
+	}
+
+	public void setParent(SemanticTrajectory parent) {
+		this.parent = parent;
+	}
+
+	@Override
+	public int hashCode() {
+		return stopId;
+	}
 }

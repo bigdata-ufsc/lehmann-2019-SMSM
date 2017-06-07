@@ -27,7 +27,7 @@ import br.ufsc.db.DBConstants;
 public class PGRetriever extends DataRetriever {
 	
 	PreparedStatement fetchTrajectory;
-
+	
 	@Override
 	public void connect(DataSource source) throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException, SQLException {
@@ -337,7 +337,15 @@ public class PGRetriever extends DataRetriever {
 
 		return result;
 	}
-	
+
+	@Override
+	public void prepareFechTrajectoryStatement() throws SQLException {
+		String sql = //
+				"SELECT gid,tid,time,st_x(geom) as lon,st_y(geom) as lat from " + source.getTrajectoryTable() + //
+						" where tid = ? order by tid,time;";
+		fetchTrajectory = this.connection.prepareStatement(sql);
+	}
+
 	@Override
 	public Set<Integer> fetchTIDs(int number) throws SQLException {
 		//String sql = "SELECT DISTINCT tid from "+source.getTrajectoryTable()+" ORDER BY random() LIMIT 1000;";

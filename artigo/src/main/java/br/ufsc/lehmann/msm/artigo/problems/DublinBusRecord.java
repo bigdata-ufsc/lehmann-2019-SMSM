@@ -1,10 +1,11 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class DublinBusRecord {
 
-	private Date time;
+	private Timestamp time;
 	private int lineId;
 	private String journey_pattern;
 	private int vehicle_journey;
@@ -15,9 +16,12 @@ public class DublinBusRecord {
 	private int block_journey_id;
 	private int vehicle_id;
 	private int stop_id;
+	private int gid;
+	private Integer semanticStopId;
 
-	public DublinBusRecord(Date time, int lineId, String journey_pattern, int vehicle_journey, String operator, boolean congestion, double longitude, double latitude,
-			int block_journey_id, int vehicle_id, int stop_id) {
+	public DublinBusRecord(int gid, Timestamp time, int lineId, String journey_pattern, int vehicle_journey, String operator, boolean congestion, double longitude, double latitude,
+			int block_journey_id, int vehicle_id, int stop_id, Integer semanticStopId) {
+				this.gid = gid;
 				this.time = time;
 				this.lineId = lineId;
 				this.journey_pattern = journey_pattern;
@@ -29,9 +33,10 @@ public class DublinBusRecord {
 				this.block_journey_id = block_journey_id;
 				this.vehicle_id = vehicle_id;
 				this.stop_id = stop_id;
+				this.semanticStopId = semanticStopId;
 	}
 
-	public Date getTime() {
+	public Timestamp getTime() {
 		return time;
 	}
 
@@ -73,6 +78,14 @@ public class DublinBusRecord {
 
 	public int getStop_id() {
 		return stop_id;
+	}
+
+	public Integer getSemanticStopId() {
+		return semanticStopId;
+	}
+
+	public int getGid() {
+		return gid;
 	}
 
 }

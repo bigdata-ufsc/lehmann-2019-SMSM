@@ -7,14 +7,14 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.Problem;
 
-public class DublinBusProblem implements Problem {
+public class NewYorkBusProblem implements Problem {
 	
 	private List<SemanticTrajectory> data;
 	private List<SemanticTrajectory> trainingData;
 	private List<SemanticTrajectory> testingData;
 
-	public DublinBusProblem() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		data = new DublinBusDataReader().read();
+	public NewYorkBusProblem() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		data = new NewYorkBusDataReader().read();
 //		data = data.subList(0, data.size() / 10);
 //		this.trainingData = data.subList(0, (int) (data.size() * (2.0 / 3)));
 //		this.testingData = data.subList((int) (data.size() * (2.0 / 3)), data.size() - 1);
@@ -26,7 +26,7 @@ public class DublinBusProblem implements Problem {
 			// Semantic.GEOGRAPHIC, //
 			// Semantic.TEMPORAL,//
 			// DublinBusDataReader.OPERATOR,
-			DublinBusDataReader.STOP
+			NewYorkBusDataReader.STOP_SEMANTIC
 		};
 	}
 
@@ -37,7 +37,7 @@ public class DublinBusProblem implements Problem {
 
 	@Override
 	public Semantic discriminator() {
-		return DublinBusDataReader.LINE_INFO;
+		return NewYorkBusDataReader.ROUTE;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class DublinBusProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "Dublin bus";
+		return "New York bus";
 	}
 
 }

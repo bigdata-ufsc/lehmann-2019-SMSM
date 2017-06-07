@@ -74,6 +74,18 @@ public class Distance {
 		return Math.sqrt(distXSquare+distYSquare);
 	}
 	
+	public static float distFrom(Point p1,Point p2) {
+		double earthRadius = 6371000; // meters
+		double dLat = Math.toRadians(p2.getX() - p1.getX());
+		double dLng = Math.toRadians(p2.getY() - p2.getY());
+		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+				+ Math.cos(Math.toRadians(p1.getX())) * Math.cos(Math.toRadians(p2.getX())) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		float dist = (float) (earthRadius * c);
+
+		return dist;
+	}
+	
 	public static double sqEuclidean(Point p1,Point p2){
 		double distX = Math.abs(p1.getX()-p2.getX());
 		double distXSquare = distX*distX;

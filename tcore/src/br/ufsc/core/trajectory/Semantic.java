@@ -7,7 +7,20 @@ import org.joda.time.Interval;
 import br.ufsc.utils.Distance;
 
 public abstract class Semantic<V, T> {
-	public static final Semantic<TPoint, Number> GEOGRAPHIC = new Semantic<TPoint, Number>(0) {
+	public static final Semantic<Number, Number> GID = new Semantic<Number, Number>(0) {
+
+		@Override
+		public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshlod) {
+			return distance(a, i, b, j).doubleValue() <= threshlod.doubleValue();
+		}
+
+		@Override
+		public Number distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
+			return ((Comparable<Number>) a.getDimensionData(index, i)).compareTo((Number) b.getDimensionData(index, j));
+		}
+		
+	};
+	public static final Semantic<TPoint, Number> GEOGRAPHIC = new Semantic<TPoint, Number>(1) {
 
 		@Override
 		public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshlod) {
@@ -20,7 +33,7 @@ public abstract class Semantic<V, T> {
 		}
 		
 	};
-	public static final Semantic<TemporalDuration, Number> TEMPORAL = new Semantic<TemporalDuration, Number>(1) {
+	public static final Semantic<TemporalDuration, Number> TEMPORAL = new Semantic<TemporalDuration, Number>(2) {
 
 		@Override
 		public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshlod) {
