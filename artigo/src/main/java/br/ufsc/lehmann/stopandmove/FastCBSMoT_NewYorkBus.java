@@ -23,6 +23,7 @@ public class FastCBSMoT_NewYorkBus {
 	private static DataSource source;
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		FastCBSMoT fastCBSMoT = new FastCBSMoT(new LatLongDistanceFunction());
 		NewYorkBusProblem problem = new NewYorkBusProblem();
 		List<SemanticTrajectory> trajs = problem.data();
 		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.bus_nyc_20140927", null, "geom");
@@ -54,7 +55,7 @@ public class FastCBSMoT_NewYorkBus {
 			conn.setAutoCommit(false);
 			while (!trajs.isEmpty()) {
 				SemanticTrajectory t = trajs.remove(0);
-				StopAndMove stopAndMove = FastCBSMoT.findStops(t, maxDist, minTime, timeTolerance, mergeTolerance, ratio, sid);
+				StopAndMove stopAndMove = fastCBSMoT.findStops(t, maxDist, minTime, timeTolerance, mergeTolerance, ratio, sid);
 				List<Stop> stops = stopAndMove.getStops();
 				if(stops.size() > 0) {
 					System.out.println("Traj=" + t.getTrajectoryId() + ", stops=" + stops.size());
@@ -65,7 +66,7 @@ public class FastCBSMoT_NewYorkBus {
 						update.setInt(1, stop.getStopId());
 						update.setNull(2, Types.NUMERIC);
 						update.setArray(3, array);
-						update.executeUpdate();
+						update.addBatch();
 						
 						List<TPoint> points = new ArrayList<>(stop.getPoints());
 						insert.setInt(1, stop.getStopId());
@@ -77,8 +78,12 @@ public class FastCBSMoT_NewYorkBus {
 						insert.setDouble(7, points.get(points.size() - 1).getY());
 						insert.setDouble(8, stop.getCentroid().getX());
 						insert.setDouble(9, stop.getCentroid().getY());
-						insert.executeUpdate();
+						insert.addBatch();
 					}
+				}
+				if(sid.getValue() % 10 == 0) {
+					update.executeBatch();
+					insert.executeBatch();
 					conn.commit();
 				}
 			}

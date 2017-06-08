@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
+import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
@@ -16,6 +17,11 @@ public class StopAndMove {
 
 	private Multimap<Stop, Integer> stops = MultimapBuilder.linkedHashKeys().hashSetValues().build();
 	private Multimap<Move, Integer> moves = MultimapBuilder.linkedHashKeys().hashSetValues().build();
+	private SemanticTrajectory trajectory;
+
+	public StopAndMove(SemanticTrajectory trajectory) {
+		this.trajectory = trajectory;
+	}
 
 	public List<Stop> getStops() {
 		return new ArrayList<>(stops.keySet());
@@ -46,5 +52,9 @@ public class StopAndMove {
 
 	public List<Integer> getGids(Stop stop) {
 		return new ArrayList<>(stops.get(stop));
+	}
+
+	public SemanticTrajectory getTrajectory() {
+		return trajectory;
 	}
 }

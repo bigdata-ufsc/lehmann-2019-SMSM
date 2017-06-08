@@ -23,6 +23,7 @@ public class FastCBSMoT_DublinBus {
 	private static DataSource source;
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		FastCBSMoT fastCBSMoT = new FastCBSMoT(new LatLongDistanceFunction());
 		DublinBusProblem problem = new DublinBusProblem();
 		List<SemanticTrajectory> trajs = problem.data();
 		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops&moves.dublin_201301", null, "geom");
@@ -54,7 +55,7 @@ public class FastCBSMoT_DublinBus {
 			conn.setAutoCommit(false);
 			while (!trajs.isEmpty()) {
 				SemanticTrajectory t = trajs.remove(0);
-				StopAndMove stopAndMove = FastCBSMoT.findStops(t, maxDist, minTime, timeTolerance, mergeTolerance, ratio, sid);
+				StopAndMove stopAndMove = fastCBSMoT.findStops(t, maxDist, minTime, timeTolerance, mergeTolerance, ratio, sid);
 				List<Stop> stops = stopAndMove.getStops();
 				if(stops.size() > 0) {
 					System.out.println("Traj=" + t.getTrajectoryId() + ", stops=" + stops.size());

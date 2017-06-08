@@ -16,8 +16,14 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.utils.Distance;
 
 public class FastCBSMoT {
+	
+	private GeographicDistanceFunction distance;
 
-	public static StopAndMove findStops(SemanticTrajectory T, double maxDist, int minTime, int timeTolerance, int mergeTolerance, double ratio,
+	public FastCBSMoT(GeographicDistanceFunction distance) {
+		this.distance = distance;
+	}
+
+	public StopAndMove findStops(SemanticTrajectory T, double maxDist, int minTime, int timeTolerance, int mergeTolerance, double ratio,
 			MutableInt sid) {
 		int size = T.length();
 		int[] neighborhood = new int[size];
@@ -32,7 +38,7 @@ public class FastCBSMoT {
 			i += value;
 		}
 	
-		StopAndMove ret = new StopAndMove();
+		StopAndMove ret = new StopAndMove(T);
 		for (int i = 0; i < neighborhood.length; i++) {
 			if (neighborhood[i] > 0) {
 				Instant p1 = Semantic.TEMPORAL.getData(T, i).getStart();
@@ -59,7 +65,7 @@ public class FastCBSMoT {
 		ret = cleanStops(ret, minTime);
 		return ret;
 	}
-	static StopAndMove cleanStops(StopAndMove stopAndMove, int minTime) {
+	StopAndMove cleanStops(StopAndMove stopAndMove, int minTime) {
 		List<Stop> S = new ArrayList<>(stopAndMove.getStops());
 		for (int i = 0; i < S.size(); i++) {
 			Stop s = S.get(i);
@@ -73,7 +79,7 @@ public class FastCBSMoT {
 	}
 
 	// TODO: adicionar atividades na lista
-	static StopAndMove mergeStops(StopAndMove stopAndMove, double maxDist, int timeTolerance) {
+	StopAndMove mergeStops(StopAndMove stopAndMove, double maxDist, int timeTolerance) {
 		List<Stop> S = new ArrayList<>(stopAndMove.getStops());
 		for (int i = 0; i < S.size(); i++) {
 			if (i + 1 != S.size()) {
@@ -96,7 +102,7 @@ public class FastCBSMoT {
 		return stopAndMove;
 	}
 
-	static TPoint centroid(SemanticTrajectory T, int start, int end) {
+	TPoint centroid(SemanticTrajectory T, int start, int end) {
 		double x = 0;
 		double y = 0;
 
@@ -114,14 +120,14 @@ public class FastCBSMoT {
 		return p;
 	}
 
-	static int countNeighbors(int i, SemanticTrajectory T, double maxDist) {
+	int countNeighbors(int i, SemanticTrajectory T, double maxDist) {
 		int neighbors = 0;
 		boolean yet = true;
 		int j = i + 1;
 		while (j < T.length() && yet) {
 			TPoint p = Semantic.GEOGRAPHIC.getData(T, i);
 			TPoint d = Semantic.GEOGRAPHIC.getData(T, j);
-			if (Distance.distFrom(p, d) < maxDist) {
+			if (distance.distanceInMeters(p, d) < maxDist) {
 				neighbors++;
 			} else {
 				yet = false;
