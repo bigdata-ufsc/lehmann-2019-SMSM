@@ -27,7 +27,13 @@ import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 
-public class AnimalPatelDataReader {
+public class PatelDataReader {
+	
+	private String table;
+
+	public PatelDataReader(String table) {
+		this.table = table;
+	}
 
 	public static final BasicSemantic<Double> TEMPORAL = new BasicSemantic<>(2);
 	public static final BasicSemantic<String> TID = new BasicSemantic<>(3);
@@ -36,7 +42,7 @@ public class AnimalPatelDataReader {
 	public static final BasicSemantic<Integer> GID = new BasicSemantic<>(6);
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.nyc_20140927", null, null);
+		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "patel." + table, null, null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
 		Connection conn = retriever.getConnection();
@@ -46,16 +52,16 @@ public class AnimalPatelDataReader {
 		ResultSet data = st.executeQuery(
 				"SELECT tid, class, \"time\", latitude, longitude, gid, semantic_stop_id, " + //
 						"semantic_move_id " + //
-						"FROM patel.animal " + //
-						"order by \"time\"");
-		Multimap<String, AnimalPatelRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
+						"FROM patel." + table + //
+						" order by \"time\"");
+		Multimap<String, PatelRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		System.out.println("Fetching...");
 		while(data.next()) {
 			Integer stop = data.getInt("semantic_stop_id");
 			if(data.wasNull()) {
 				stop = null;
 			}
-			AnimalPatelRecord record = new AnimalPatelRecord(
+			PatelRecord record = new PatelRecord(
 					data.getString("tid"),
 				data.getInt("gid"),
 				data.getDouble("time"),
@@ -76,9 +82,9 @@ public class AnimalPatelDataReader {
 		int trajectoryId = 0;
 		for (String trajId : keys) {
 			SemanticTrajectory s = new SemanticTrajectory(trajectoryId++, 7);
-			Collection<AnimalPatelRecord> collection = records.get(trajId);
+			Collection<PatelRecord> collection = records.get(trajId);
 			int i = 0;
-			for (AnimalPatelRecord record : collection) {
+			for (PatelRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				s.addData(i, Semantic.GEOGRAPHIC, new TPoint(record.getLatitude(), record.getLongitude()));
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli((long) record.getTime()), Instant.ofEpochMilli((long) record.getTime())));

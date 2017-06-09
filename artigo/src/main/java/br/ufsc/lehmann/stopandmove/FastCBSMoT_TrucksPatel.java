@@ -8,8 +8,13 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import java.util.Optional;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -21,47 +26,52 @@ import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 
-public class FastCBSMoT_AnimalsPatel {
+public class FastCBSMoT_TrucksPatel {
 
 	private static DataSource source;
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		FastCBSMoT fastCBSMoT = new FastCBSMoT(new EuclideanDistanceFunction());
-		PatelProblem problem = new PatelProblem("animal");
+		PatelProblem problem = new PatelProblem("trucks");
 		List<SemanticTrajectory> trajs = problem.data();
-		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.patel_animals", null, "geom");
+		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.patel_vehicles", null, "geom");
 
 		// Trajectory t = retriever.fastFetchTrajectory(9543);
 		// FIND STOPS
+		//300-28-350-200-20
 		double ratio = 300; // distance in meters to find neighbors
-		int timeTolerance = 5; // time in ms dif do ponto final para o inicial deve ser maior que timeTolerance
+		int timeTolerance = 28; // time in ms dif do ponto final para o inicial deve ser maior que timeTolerance
 
 		// Merge - Será feito merge nos stops em que a distância dos centroid estiver há até maxDist de distância
 		// e em que o tempo do ponto inicial do primeiro stop e do ponto final do segundo stop
 		// seja menor ou igual a mergeTolerance
 		double maxDist = 350; // distance in meters to merge stops
-		int mergeTolerance = 400;// time in ms
+		int mergeTolerance = 200;// time in ms
 
 		// Clean - Os stops devem ter pelo menos o minTime
-		int minTime = 10; // time in ms
+		int minTime = 20; // time in ms
 
 		// System.out.println(T.size());
 		long start = System.currentTimeMillis();
 		Connection conn = source.getRetriever().getConnection();
 		
-		ResultSet executeQuery = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.patel_animals");
+		ResultSet executeQuery = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.patel_vehicles");
 		executeQuery.next();
 		MutableInt sid = new MutableInt(executeQuery.getInt(1));
-		PreparedStatement update = conn.prepareStatement("update patel.animal set semantic_stop_id = ?, semantic_move_id = ? where gid in (SELECT * FROM unnest(?))");
-		PreparedStatement insert = conn.prepareStatement("insert into stops_moves.patel_animals(stop_id, start_time, start_lat, start_lon, end_time, end_lat, end_lon, centroid_lat, centroid_lon) values (?,?,?,?,?,?,?,?,?)");
+		PreparedStatement update = conn.prepareStatement("update patel.trucks set semantic_stop_id = ?, semantic_move_id = ? where gid in (SELECT * FROM unnest(?))");
+		PreparedStatement insert = conn.prepareStatement("insert into stops_moves.patel_vehicles(stop_id, start_time, start_lat, start_lon, end_time, end_lat, end_lon, centroid_lat, centroid_lon) values (?,?,?,?,?,?,?,?,?)");
 		try {
 			conn.setAutoCommit(false);
 //			Map<String, Integer> bestCombinations = findBestCBSMoT(fastCBSMoT, trajs, sid);
+//			int maxStops = 0;
+//			String bestConfiguration = null;
 //			for (Map.Entry<String, Integer> e : bestCombinations.entrySet()) {
-//				if(e.getValue() > 400){
-//					System.out.println(e.getKey() + " ->" + e.getValue());
+//				if(e.getValue() > maxStops) {
+//					maxStops = e.getValue();
+//					bestConfiguration = e.getKey();
 //				}
 //			}
+//			System.out.println(bestConfiguration + " ->" + bestCombinations.get(bestConfiguration));
 			List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), ratio, timeTolerance, maxDist, mergeTolerance, minTime, sid);
 			for (StopAndMove stopAndMove : findBestCBSMoT) {
 				List<Stop> stops = stopAndMove.getStops();
@@ -107,11 +117,11 @@ public class FastCBSMoT_AnimalsPatel {
 
 	private static Map<String, Integer> findBestCBSMoT(FastCBSMoT fastCBSMoT, List<SemanticTrajectory> trajs, MutableInt sid) {
 		Map<String, Integer> bestCombinations = new HashMap<>();
-		for (int i = 100; i <= 300; i+=20) {//ratio
-			for (int j = 5; j <= 10; j+=1) {//timeTolerance
+		IntStream.iterate(20, i -> i + 4).limit(5).parallel().forEach((j) -> {//timeTolerance
+			for (int i = 100; i <= 300; i+=20) {//ratio
 				for (int k = 350; k <= 600; k+=25) {//maxDist
 					for (int l = 200; l <= 500; l+=25) {//mergeTolerance
-						for (int m = 10; m <= 20; m+=2) {//minTime
+						for (int m = 20; m <= 40; m+=4) {//minTime
 							List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), i, j, k, l, m, sid);
 							int stopsCount = 0;
 							for (StopAndMove stopAndMove : findBestCBSMoT) {
@@ -123,7 +133,7 @@ public class FastCBSMoT_AnimalsPatel {
 					}
 				}
 			}
-		}
+		});
 		return bestCombinations;
 	}
 

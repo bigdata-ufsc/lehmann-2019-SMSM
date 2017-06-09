@@ -7,14 +7,14 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.Problem;
 
-public class AnimalPatelProblem implements Problem {
+public class PatelProblem implements Problem {
 	
 	private List<SemanticTrajectory> data;
 	private List<SemanticTrajectory> trainingData;
 	private List<SemanticTrajectory> testingData;
 
-	public AnimalPatelProblem() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		data = new AnimalPatelDataReader().read();
+	public PatelProblem(String table) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		data = new PatelDataReader(table).read();
 //		data = data.subList(0, data.size() / 10);
 //		this.trainingData = data.subList(0, (int) (data.size() * (2.0 / 3)));
 //		this.testingData = data.subList((int) (data.size() * (2.0 / 3)), data.size() - 1);
@@ -26,7 +26,7 @@ public class AnimalPatelProblem implements Problem {
 			// Semantic.GEOGRAPHIC, //
 			// Semantic.TEMPORAL,//
 			// DublinBusDataReader.OPERATOR,
-				AnimalPatelDataReader.STOP_SEMANTIC
+				PatelDataReader.STOP_SEMANTIC
 		};
 	}
 
@@ -37,7 +37,7 @@ public class AnimalPatelProblem implements Problem {
 
 	@Override
 	public Semantic discriminator() {
-		return AnimalPatelDataReader.CLASS;
+		return PatelDataReader.CLASS;
 	}
 
 	@Override

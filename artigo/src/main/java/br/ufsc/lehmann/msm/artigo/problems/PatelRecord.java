@@ -2,7 +2,7 @@ package br.ufsc.lehmann.msm.artigo.problems;
 
 import java.sql.Timestamp;
 
-public class AnimalPatelRecord {
+public class PatelRecord {
 
 	private String tid;
 	private int gid;
@@ -12,7 +12,7 @@ public class AnimalPatelRecord {
 	private double latitude;
 	private Integer stop;
 
-	public AnimalPatelRecord(String tid, int gid, double time, String clazz, double longitude, double latitude, Integer stop) {
+	public PatelRecord(String tid, int gid, double time, String clazz, double longitude, double latitude, Integer stop) {
 		this.tid = tid;
 		this.gid = gid;
 		this.time = time;
