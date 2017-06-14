@@ -1,8 +1,8 @@
-package br.ufsc.lehmann.stopandmove;
-
-import br.ufsc.core.trajectory.TPoint;
+package br.ufsc.core.trajectory;
 
 public interface GeographicDistanceFunction {
 
 	double distanceInMeters(TPoint p, TPoint d);
+	
+	double length(SemanticTrajectory t);
 }

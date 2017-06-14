@@ -21,30 +21,20 @@ public class Stop {
 	private Timestamp endTime;
 	private double avg;
 
-	private String geom;
-	private int begin, end;
 	private Set<TPoint> points = new HashSet<TPoint>();
 	private TPoint centroid;
 	private SemanticTrajectory parent;
+	private TPoint startPoint;
+	private TPoint endPoint;
 
-	public Stop(SemanticTrajectory t, int stopId) {
-		parent = t;
-		this.stopId = stopId;
-	}
-	
-	public Stop(SemanticTrajectory t, int stopId, String stopName, Timestamp startTime, Timestamp endTime, double avg, int rfId, String rfTableName,
-			int begin, int end, String geom) {
-		this.parent = t;
-		this.tid = t.getTrajectoryId();
+	public Stop(int stopId, String stopName, Timestamp startTime, Timestamp endTime, TPoint startPoint, TPoint endPoint, TPoint centroid) {
 		this.stopId = stopId;
 		this.stopName = stopName;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.avg = avg;
-
-		this.begin = begin;
-		this.end = end;
-		this.geom = geom;
+		this.startPoint = startPoint;
+		this.endPoint = endPoint;
+		this.centroid = centroid;
 	}
 
 	public Stop(SemanticTrajectory t, int stopId, Timestamp startTime, Timestamp endTime) {
@@ -83,18 +73,6 @@ public class Stop {
 		return avg;
 	}
 
-	public int getBegin() {
-		return begin;
-	}
-
-	public int getEnd() {
-		return end;
-	}
-
-	public String getGeom() {
-		return geom;
-	}
-
 	public Set<TPoint> getPoints() {
 		return points;
 	}
@@ -130,5 +108,13 @@ public class Stop {
 	@Override
 	public int hashCode() {
 		return stopId;
+	}
+
+	public TPoint getStartPoint() {
+		return startPoint;
+	}
+
+	public TPoint getEndPoint() {
+		return endPoint;
 	}
 }

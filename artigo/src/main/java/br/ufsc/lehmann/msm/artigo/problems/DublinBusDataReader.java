@@ -26,6 +26,7 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
 public class DublinBusDataReader {
 	
@@ -35,7 +36,7 @@ public class DublinBusDataReader {
 	public static final BasicSemantic<Integer> VEHICLE = new BasicSemantic<>(6);
 	public static final BasicSemantic<Integer> STOP = new BasicSemantic<>(7);
 	public static final BasicSemantic<String> OPERATOR = new BasicSemantic<>(8);
-	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(9);
+	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(9, new LatLongDistanceFunction());
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.dublin201301", null, null);
@@ -45,12 +46,25 @@ public class DublinBusDataReader {
 		conn.setAutoCommit(false);
 		Statement st = conn.createStatement();
 		st.setFetchSize(1000);
+		ResultSet stopsData = st.executeQuery(
+				"SELECT stop_id, start_lat, start_lon, end_lat, end_lon, centroid_lat, " + //
+						"centroid_lon, start_time, end_time " + //
+						"FROM stops_moves.bus_dublin_201301");
+		Map<Integer, Stop> stops = new HashMap<>();
+		while(stopsData.next()) {
+			int stopId = stopsData.getInt("stop_id");
+			Stop stop = stops.get(stopId);
+			if(stop == null) {
+				stop = new Stop(stopId, null, stopsData.getTimestamp("start_time"), stopsData.getTimestamp("end_time"), new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")),
+						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")));
+				stops.put(stopId, stop);
+			}
+		}
 		ResultSet data = st.executeQuery(
 				"select gid, to_timestamp(time_in_seconds / 1000000) as \"time\", line_id, trim(journey_pattern) as journey_pattern, "
 				/**/+ "vehicle_journey, trim(operator) as operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id, semantic_stop_id "
 				+ "from bus.dublin_201301 "
 				+ "where date_frame between '2013-01-25' and '2013-01-31'"
-//				+ "where vehicle_id =33619 and vehicle_journey = 6393"
 				+ "order by time_in_seconds"
 				);
 		Multimap<Integer, DublinBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
@@ -83,7 +97,6 @@ public class DublinBusDataReader {
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
-		Map<Integer, Stop> stops = new HashMap<>();
 		for (Integer trajId : keys) {
 			SemanticTrajectory s = new SemanticTrajectory(trajId, 10);
 			Collection<DublinBusRecord> collection = records.get(trajId);
@@ -100,10 +113,6 @@ public class DublinBusDataReader {
 				s.addData(i, OPERATOR, record.getOperator());
 				if(record.getSemanticStopId() != null) {
 					Stop stop = stops.get(record.getSemanticStopId());
-					if(stop == null) {
-						stop = new Stop(s, record.getSemanticStopId());
-						stops.put(record.getSemanticStopId(), stop);
-					}
 					s.addData(i, STOP_SEMANTIC, stop);
 				}
 				i++;

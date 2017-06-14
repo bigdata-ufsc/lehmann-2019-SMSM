@@ -13,24 +13,22 @@ import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 
-public class MSTPClassifier {
+public class MSTPClassifier implements IMeasureDistance<SemanticTrajectory> {
 
-	private static final class MSTPMeasurer implements IMeasureDistance<SemanticTrajectory> {
-		@Override
-		public double distance(DataEntry<SemanticTrajectory> t1, DataEntry<SemanticTrajectory> t2) {
-			return new MSTP(new Semantic[] {
-					Semantic.GEOGRAPHIC,//
-					Semantic.TEMPORAL,//
-					BikeDataReader.USER,//
-					BikeDataReader.GENDER,//
-					BikeDataReader.BIRTH_YEAR//
-					}).getDistance(t1.getX(), t2.getX());
-		}
+	private MSTP mstp;
 
-		@Override
-		public String name() {
-			return "MSTP";
-		}
+	public MSTPClassifier(Semantic... semantics) {
+		this.mstp = new MSTP(semantics);
+	}
+
+	@Override
+	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+		return mstp.getSimilarity(t1, t2);
+	}
+
+	@Override
+	public String name() {
+		return "MSTP";
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -40,7 +38,13 @@ public class MSTPClassifier {
 		for (SemanticTrajectory traj : trajectories) {
 			entries.add(new DataEntry<SemanticTrajectory>(traj, y.nextBoolean() ? "chuva" : "sol"));
 		}
-		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3), new MSTPMeasurer());
+		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3),
+				new MSTPClassifier(new Semantic[] { Semantic.GEOGRAPHIC, //
+						Semantic.TEMPORAL, //
+						BikeDataReader.USER, //
+						BikeDataReader.GENDER, //
+						BikeDataReader.BIRTH_YEAR//
+				}));
 		Object classified = nn.classify(new DataEntry<SemanticTrajectory>(trajectories.get(0), "descubra"));
 		System.out.println(classified);
 	}

@@ -15,22 +15,22 @@ import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.Climate;
 import br.ufsc.lehmann.msm.artigo.problems.ClimateWeatherSemantic;
 
-public class MSMClassifier {
+public class MSMClassifier implements IMeasureDistance<SemanticTrajectory> {
 
-	public static final class MSMMeasurer implements IMeasureDistance<SemanticTrajectory> {
-		@Override
-		public double distance(DataEntry<SemanticTrajectory> t1, DataEntry<SemanticTrajectory> t2) {
-			return new MSM(new MSMSemanticParameter(Semantic.GEOGRAPHIC, 100.0, .2),//
-					new MSMSemanticParameter(Semantic.TEMPORAL, 30 * 60 * 1000L, .2),//
-					new MSMSemanticParameter(BikeDataReader.USER, null, .2),//
-					new MSMSemanticParameter(BikeDataReader.GENDER, null, .2),//
-					new MSMSemanticParameter(BikeDataReader.BIRTH_YEAR, null, .2)).getDistance(t1.getX(), t2.getX());
-		}
+	MSM msm;
+	
+	public MSMClassifier(MSMSemanticParameter... params) {
+		msm = new MSM(params);
+	}
 
-		@Override
-		public String name() {
-			return "MSM";
-		}
+	@Override
+	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+		return msm.distance(t1, t2);
+	}
+
+	@Override
+	public String name() {
+		return "MSM";
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -41,7 +41,14 @@ public class MSMClassifier {
 			List<Climate> data = weatherSemantic.getData(traj, 0);
 			entries.add(new DataEntry<SemanticTrajectory>(traj, data.get(0)));
 		}
-		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3), new MSMMeasurer(), true);
+		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3),
+				new MSMClassifier(new MSMSemanticParameter[] {//
+						new MSMSemanticParameter(Semantic.GEOGRAPHIC, 100.0, .2), //
+						new MSMSemanticParameter(Semantic.TEMPORAL, 30 * 60 * 1000L, .2), //
+						new MSMSemanticParameter(BikeDataReader.USER, null, .2), //
+						new MSMSemanticParameter(BikeDataReader.GENDER, null, .2), //
+						new MSMSemanticParameter(BikeDataReader.BIRTH_YEAR, null, .2)//
+					}), true);
 		Object classified = nn.classify(new DataEntry<SemanticTrajectory>(trajectories.get(0), "descubra"));
 		System.out.println(classified);
 	}

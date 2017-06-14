@@ -14,21 +14,21 @@ public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	}
 
 	public double getDistance(Trajectory A, Trajectory B) {
-		return getDistance(new SemanticTrajectory(A), new SemanticTrajectory(B));
+		return distance(new SemanticTrajectory(A), new SemanticTrajectory(B));
 	}
 
-	public double getDistance(SemanticTrajectory A, SemanticTrajectory B) {
+	public double getSimilarity(SemanticTrajectory A, SemanticTrajectory B) {
 		int n = A.length();
 		int m = B.length();
 		double aScore[] = new double[n];
 		double bScore[] = new double[m];
-
+		
 		double parityAB = 0.0;
-
+		
 		for (int i = 0; i < n; i++) {
 			double score = 0.0;
 			double maxScore = 0.0;
-
+		
 			for (int j = 0; j < m; j++) {
 				double semanticScore = 0;
 				for (int k = 0; k < semantics.length; k++) {
@@ -36,7 +36,7 @@ public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 					semanticScore += (semantic.match(A, i, B, j, (Object) semantics[k].threshlod) ? 1 : 0) * semantics[k].weight;
 				}
 				score = semanticScore;
-
+		
 				if (score >= maxScore) {
 					maxScore = score;
 					bScore[j] = maxScore > bScore[j] ? maxScore : bScore[j];
@@ -45,15 +45,19 @@ public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 			aScore[i] = maxScore;
 			parityAB += maxScore;
 		}
-
+		
 		double parityBA = 0;
 		for (int j = 0; j < m; j++) {
 			parityBA += bScore[j];
 		}
-
-		double similarity = (parityAB + parityBA) / (n + m);
+		
+		double similarity = (parityAB + parityBA) / (A.length() + B.length());
 
 		return similarity;
+	}
+
+	public double distance(SemanticTrajectory A, SemanticTrajectory B) {
+		return 1 - getSimilarity(A, B);
 	}
 	
 	public static class MSMSemanticParameter<V, T> {

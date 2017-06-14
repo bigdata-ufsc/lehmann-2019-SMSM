@@ -1,5 +1,7 @@
 package br.ufsc.core.trajectory;
 
+import java.util.Arrays;
+
 public class SemanticElement {
 	
 	private Object[] dimensions;
@@ -22,6 +24,11 @@ public class SemanticElement {
 
 	public void addData(Semantic<?, ?> semantic, Object data) {
 		dimensions[semantic.index] = data;
+	}
+
+	@Override
+	public String toString() {
+		return "SemanticElement [dimensions=" + Arrays.toString(dimensions) + "]";
 	}
 
 }

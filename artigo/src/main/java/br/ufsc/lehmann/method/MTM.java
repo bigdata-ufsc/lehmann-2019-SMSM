@@ -14,8 +14,9 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
+import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 
-public class MTM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
+public class MTM extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 
 	private Semantic<?, Number> semantic;
 	private int totalTrajectories;
@@ -38,10 +39,15 @@ public class MTM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 			}
 		}
 	}
+	
+	@Override
+	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+		return SimUser(t1, t2);
+	}
 
 	@Override
-	public double getDistance(SemanticTrajectory t1, SemanticTrajectory t2) {
-		return SimUser(t1, t2);
+	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
+		return distance(t1, t2) / Math.max(t1.length(), t2.length());
 	}
 
 	public double SimUser(SemanticTrajectory S1, SemanticTrajectory S2) {
@@ -131,6 +137,11 @@ public class MTM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 			return c <= threshold;
 		}
 		return false;
+	}
+	
+	@Override
+	public String name() {
+		return "MTM";
 	}
 
 	class WhiteBlackTree {

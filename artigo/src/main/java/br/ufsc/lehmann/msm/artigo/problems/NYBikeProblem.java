@@ -12,11 +12,13 @@ public class NYBikeProblem implements Problem {
 	private List<SemanticTrajectory> data;
 	private List<SemanticTrajectory> trainingData;
 	private List<SemanticTrajectory> testingData;
+	private List<SemanticTrajectory> validatingData;
 
 	public NYBikeProblem() throws IOException, InterruptedException {
 		data = new BikeDataReader().read();
-		this.trainingData = data.subList(0, (int) (data.size() * (2.0 / 3)));
-		this.testingData = data.subList((int) (data.size() * (2.0 / 3)), data.size() - 1);
+		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
+		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));
+		this.validatingData = data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1);
 	}
 
 	@Override
@@ -48,6 +50,11 @@ public class NYBikeProblem implements Problem {
 	@Override
 	public List<SemanticTrajectory> testingData() {
 		return testingData;
+	}
+
+	@Override
+	public List<SemanticTrajectory> validatingData() {
+		return validatingData;
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class FTSMBUMS extends TrajectorySimilarityCalculator<Trajectory> {
 
 	}
 
-	public double getDistance(Trajectory R, Trajectory S) {
+	public double getSimilarity(Trajectory R, Trajectory S) {
 		int n = R.length();
 		int m = S.length();
 

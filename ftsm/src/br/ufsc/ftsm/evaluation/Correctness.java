@@ -77,28 +77,28 @@ public static void main(String[] args) throws InstantiationException, IllegalAcc
 
 	System.out.println("### DTW-Based:");
 	System.out.println("DTW: "+dtw.getDistance(t1, t2));
-	System.out.println("PDTW: "+pdtw.getDistance(t1, t2));
+	System.out.println("PDTW: "+pdtw.getSimilarity(t1, t2));
 	
 	System.out.println("### MSM-Based:");
 	System.out.println("MSM: "+msm.getDistance(t1, t2));
-	System.out.println("FTSMBMSM: "+ftsmbmsm.getDistance(t1, t2));
-	System.out.println("FTSMBDMSM: "+ftsmbdmsm.getDistance(t1, t2));
-	System.out.println("FTSMQMSM: "+ftsmqmsm.getDistance(t1, t2));
-	System.out.println("FTSMOMSM: "+ftsmomsm.getDistance(t1, t2));
+	System.out.println("FTSMBMSM: "+ftsmbmsm.getSimilarity(t1, t2));
+	System.out.println("FTSMBDMSM: "+ftsmbdmsm.getSimilarity(t1, t2));
+	System.out.println("FTSMQMSM: "+ftsmqmsm.getSimilarity(t1, t2));
+	System.out.println("FTSMOMSM: "+ftsmomsm.getSimilarity(t1, t2));
 	
 	System.out.println("### LCSS-Based:");
 	System.out.println("LCSS: "+lcss.getDistance(t1, t2));
-	System.out.println("LCSSL: "+lcssl.getDistance(t1, t2));
-	System.out.println("FTSMBLCSS: "+ftsmblcss.getDistance(t1, t2));
-	System.out.println("FTSMQLCSS: "+ftsmqlcss.getDistance(t1, t2));
-	System.out.println("FTSMOLCSS: "+ftsmolcss.getDistance(t1, t2));
+	System.out.println("LCSSL: "+lcssl.getSimilarity(t1, t2));
+	System.out.println("FTSMBLCSS: "+ftsmblcss.getSimilarity(t1, t2));
+	System.out.println("FTSMQLCSS: "+ftsmqlcss.getSimilarity(t1, t2));
+	System.out.println("FTSMOLCSS: "+ftsmolcss.getSimilarity(t1, t2));
 	
 	
 	System.out.println("### UMS-Based:");
-	System.out.println("UMS: "+ums.getDistance(t1, t2));
-	System.out.println("UMS3: "+ums3.getDistance(t1, t2));
-	System.out.println("FTSMBUMS: "+ftsmbums.getDistance(t1, t2));
-	System.out.println("FTSMBUMS3: "+ftsmbums2.getDistance(t1, t2));
+	System.out.println("UMS: "+ums.getSimilarity(t1, t2));
+	System.out.println("UMS3: "+ums3.getSimilarity(t1, t2));
+	System.out.println("FTSMBUMS: "+ftsmbums.getSimilarity(t1, t2));
+	System.out.println("FTSMBUMS3: "+ftsmbums2.getSimilarity(t1, t2));
 
 
 	

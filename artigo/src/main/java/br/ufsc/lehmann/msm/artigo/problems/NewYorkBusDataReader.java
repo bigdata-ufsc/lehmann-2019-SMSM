@@ -26,6 +26,7 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
 public class NewYorkBusDataReader {
 	
@@ -36,7 +37,7 @@ public class NewYorkBusDataReader {
 	public static final BasicSemantic<String> PHASE = new BasicSemantic<>(7);
 	public static final BasicSemantic<Double> NEXT_STOP_DISTANCE = new BasicSemantic<>(8);
 	public static final BasicSemantic<String> NEXT_STOP_ID = new BasicSemantic<>(9);
-	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(10);
+	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(10, new LatLongDistanceFunction());
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.nyc_20140927", null, null);
@@ -46,13 +47,29 @@ public class NewYorkBusDataReader {
 		conn.setAutoCommit(false);
 		Statement st = conn.createStatement();
 		st.setFetchSize(1000);
+		ResultSet stopsData = st.executeQuery(
+				"SELECT stop_id, start_lat, start_lon, end_lat, end_lon, centroid_lat, " + //
+						"centroid_lon, start_time, end_time " + //
+						"FROM stops_moves.bus_nyc_20140927");
+		Map<Integer, Stop> stops = new HashMap<>();
+		while(stopsData.next()) {
+			int stopId = stopsData.getInt("stop_id");
+			Stop stop = stops.get(stopId);
+			if(stop == null) {
+				stop = new Stop(stopId, null, stopsData.getTimestamp("start_time"), stopsData.getTimestamp("end_time"), new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")),
+						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")));
+				stops.put(stopId, stop);
+			}
+		}
 		ResultSet data = st.executeQuery(
 				"select gid, time_received as \"time\", vehicle_id, trim(infered_route_id) as route, "
 				/**/+ "trim(infered_trip_id) as trip_id, longitude, latitude, distance_along_trip, infered_direction_id, "
 				/**/+ "trim(infered_phase) as phase, next_scheduled_stop_distance, next_scheduled_stop_id, semantic_stop_id "
-				+ "from bus.nyc_20140927 "
-				+ "where infered_trip_id is not null "
-				+ "order by time_received"
+				+ "from bus.nyc_20140927 "//
+				+ "where infered_trip_id is not null "//
+				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_Q13'=infered_route_id or 'MTABC_Q66'=infered_route_id or 'MTABC_Q65'=infered_route_id or 'MTA NYCT_Q32'=infered_route_id or 'MTA NYCT_M42'=infered_route_id or 'MTABC_Q49'=infered_route_id) "//
+				+ "and time_received < to_timestamp('2014-09-27 12:00:00', 'yyyy-MM-dd HH24:mi:ss')"//
+				+ "order by time_received"//
 				);
 		Multimap<String, NewYorkBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		System.out.println("Fetching...");
@@ -84,7 +101,6 @@ public class NewYorkBusDataReader {
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
-		Map<Integer, Stop> stops = new HashMap<>();
 		int trajectoryId = 0;
 		for (String trajId : keys) {
 			SemanticTrajectory s = new SemanticTrajectory(trajectoryId++, 11);
@@ -103,10 +119,6 @@ public class NewYorkBusDataReader {
 				s.addData(i, PHASE, record.getPhase());
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
-					if(stop == null) {
-						stop = new Stop(s, record.getSemanticStop());
-						stops.put(record.getSemanticStop(), stop);
-					}
 					s.addData(i, STOP_SEMANTIC, stop);
 				}
 				i++;

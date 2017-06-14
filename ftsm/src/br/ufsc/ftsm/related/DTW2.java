@@ -7,7 +7,7 @@ import br.ufsc.utils.Distance;
 
 public class DTW2 extends TrajectorySimilarityCalculator<Trajectory> {
 
-	public double getDistance(Trajectory r, Trajectory s) {
+	public double getSimilarity(Trajectory r, Trajectory s) {
 //		if (r.length() > s.length() || r.length() < s.length()) {
 //			int i = -1;
 //		}

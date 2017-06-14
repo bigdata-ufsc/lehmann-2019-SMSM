@@ -19,9 +19,14 @@ public class ClimateTemperatureSemantic extends Semantic<Double, Number>{
 
 	@Override
 	public Number distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
-		Double tempA = (Double) a.getDimensionData(index, i);
-		Double tempB = (Double) b.getDimensionData(index, j);
-		return Math.abs(tempA - tempB);
+		Double tempA = (Double) getData(a, i);
+		Double tempB = (Double) getData(b, j);
+		return distance(tempA, tempB);
+	}
+	
+	@Override
+	public double distance(Double d1, Double d2) {
+		return Math.abs(d1 - d2);
 	}
 
 }

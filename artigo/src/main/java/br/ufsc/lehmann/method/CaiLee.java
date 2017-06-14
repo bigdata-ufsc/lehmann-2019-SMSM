@@ -17,7 +17,7 @@ public class CaiLee extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	}
 
 	@Override
-	public double getDistance(SemanticTrajectory R, SemanticTrajectory S) {
+	public double getSimilarity(SemanticTrajectory R, SemanticTrajectory S) {
 		double[][] CaiLeeMetric = new double[R.length() + 1][S.length() + 1];
 
 		for (int i = 0; i <= R.length(); i++) {

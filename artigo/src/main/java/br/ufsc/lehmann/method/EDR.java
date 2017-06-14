@@ -4,7 +4,6 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 
-
 public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 
 	private EDRSemanticParameter<?, ?>[] parameters;
@@ -14,7 +13,12 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 	}
 
 	@Override
-	public double getDistance(SemanticTrajectory r, SemanticTrajectory s) {
+	public double getSimilarity(SemanticTrajectory r, SemanticTrajectory s) {
+		double distance = distance(r, s);
+		return 1-(distance / (Math.max(r.length(), s.length()) * parameters.length));
+	}
+
+	public double distance(SemanticTrajectory r, SemanticTrajectory s) {
 		double[][] edrMetric = new double[r.length() + 1][s.length() + 1];
 
 		for (int i = 0; i <= r.length(); i++) {
@@ -35,13 +39,14 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 						subcost += 1;
 					}
 				}
-				edrMetric[i][j] = min(
-						edrMetric[i - 1][j - 1] + subcost,
-						edrMetric[i][j - 1] + 1, edrMetric[i - 1][j] + 1);
+				edrMetric[i][j] = min(//
+						edrMetric[i - 1][j - 1] + subcost,//
+						edrMetric[i][j - 1] + parameters.length,//
+						edrMetric[i - 1][j] + parameters.length);
 			}
 		}
-		return 1-(edrMetric[r.length()][s.length()] / Math.max(r.length(), s.length()));
-
+		double distance = edrMetric[r.length()][s.length()];
+		return distance;
 	}
 
 	private double min(double a, double b, double c) {

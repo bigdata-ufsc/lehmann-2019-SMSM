@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 
+import br.ufsc.core.trajectory.GeographicDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;

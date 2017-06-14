@@ -15,9 +15,10 @@ import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 public class DTWClassifier {
 
 	private static final class DTWMeasurer implements IMeasureDistance<SemanticTrajectory> {
+		DTW dtw = new DTW();
 		@Override
-		public double distance(DataEntry<SemanticTrajectory> t1, DataEntry<SemanticTrajectory> t2) {
-			return new DTW().getDistance(t1.getX(), t2.getX());
+		public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+			return dtw.getSimilarity(t1, t2);
 		}
 
 		@Override

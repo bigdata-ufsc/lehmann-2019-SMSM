@@ -12,6 +12,7 @@ public interface Problem {
 	Semantic discriminator();
 	List<SemanticTrajectory> trainingData();
 	List<SemanticTrajectory> testingData();
+	List<SemanticTrajectory> validatingData();
 	
 	String shortDescripton();
 }

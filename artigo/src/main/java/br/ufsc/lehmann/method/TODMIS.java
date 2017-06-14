@@ -122,7 +122,7 @@ public class TODMIS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	}
 	
 	@Override
-	public double getDistance(SemanticTrajectory t1, SemanticTrajectory t2) {
+	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

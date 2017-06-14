@@ -20,9 +20,14 @@ public class ClimateWeatherSemantic extends Semantic<List<Climate>, Number>{
 
 	@Override
 	public Number distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
-		List<Climate> climateA = (List<Climate>) a.getDimensionData(index, i);
-		List<Climate> climateB = (List<Climate>) b.getDimensionData(index, j);
-		return Sets.intersection(Sets.newHashSet(climateA), Sets.newHashSet(climateB)).size();
+		List<Climate> climateA = (List<Climate>) getData(a, i);
+		List<Climate> climateB = (List<Climate>) getData(b, j);
+		return distance(climateA, climateB);
+	}
+	
+	@Override
+	public double distance(List<Climate> d1, List<Climate> d2) {
+		return Sets.intersection(Sets.newHashSet(d1), Sets.newHashSet(d2)).size();
 	}
 
 }

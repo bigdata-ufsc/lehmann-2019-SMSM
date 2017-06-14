@@ -1,9 +1,8 @@
-package br.ufsc.lehmann.msm.artigo;
+package br.ufsc.lehmann;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
@@ -14,50 +13,59 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
+import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.lehmann.msm.artigo.IClassificationExecutor;
+import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
+import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.Problem;
 
-public class ClassificationExecutor {
+public class TestClassificationExecutor implements IClassificationExecutor {
+	
+	private Map<Object, DescriptiveStatistics> stats;
 
+	public TestClassificationExecutor(Map<Object, DescriptiveStatistics> stats) {
+		this.stats = stats;
+	}
+
+	@Override
 	public void classify(Problem problem, IMeasureDistance<SemanticTrajectory> measureDistance) {
-		File to = new File("./src/main/resources/output_" + measureDistance.name() + "_" + problem.shortDescripton() + ".txt");
-		try {
-			boolean b = to.createNewFile();
-			if (!b) {
-				to.delete();
-				b = to.createNewFile();
-				if (!b) {
-					throw new RuntimeException("Arquivo não criado");
-				} else {
-					System.out.println("Arquivo de saída: " + to.getAbsolutePath());
-				}
-			} else {
-				System.out.println("Arquivo de saída: " + to.getAbsolutePath());
-			}
-		} catch (IOException e1) {
-			throw new RuntimeException("Arquivo não criado", e1);
-		}
 		List<SemanticTrajectory> training = problem.trainingData();
+		List<SemanticTrajectory> testing = problem.testingData();
+		List<SemanticTrajectory> validating = problem.validatingData();
+		ArrayList<SemanticTrajectory> train = new ArrayList<>(training);
+		train.addAll(testing);
 
 		List<DataEntry<SemanticTrajectory>> entries = new ArrayList<DataEntry<SemanticTrajectory>>();
-		for (SemanticTrajectory traj : training) {
-			Object data = problem.discriminator().getData(traj, 0);
+		Semantic discriminator = problem.discriminator();
+		for (SemanticTrajectory traj : train) {
+			Object data = discriminator.getData(traj, 0);
 			entries.add(new DataEntry<SemanticTrajectory>(traj, data));
 		}
 		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(training.size(), 3), measureDistance,
 				false);
-		ExecutorService executorService = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() / 2,
-				Runtime.getRuntime().availableProcessors(), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 1.25),
+				Runtime.getRuntime().availableProcessors(), 10L, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>());
 		DelayQueue<DelayedClassification> classifications = new DelayQueue<>();
-		for (SemanticTrajectory semanticTrajectory : problem.testingData()) {
+		for (SemanticTrajectory semanticTrajectory : testing) {
 			Future<Classification> submit = executorService.submit(new Callable<Classification>() {
 
 				@Override
 				public Classification call() throws Exception {
-					return new Classification(semanticTrajectory, nn.classify(new DataEntry<SemanticTrajectory>(semanticTrajectory, "descubra")));
+					return new Classification(semanticTrajectory, "Testing", nn.classify(new DataEntry<SemanticTrajectory>(semanticTrajectory, "descubra")));
+				}
+			});
+			classifications.add(new DelayedClassification(submit, 0));
+		}
+		for (SemanticTrajectory semanticTrajectory : validating) {
+			Future<Classification> submit = executorService.submit(new Callable<Classification>() {
+
+				@Override
+				public Classification call() throws Exception {
+					return new Classification(semanticTrajectory, "Validating", nn.classify(new DataEntry<SemanticTrajectory>(semanticTrajectory, "descubra")));
 				}
 			});
 			classifications.add(new DelayedClassification(submit, 0));
@@ -74,21 +82,20 @@ public class ClassificationExecutor {
 				continue;
 			}
 			if (!toProcess.futureClassification.isDone()) {
-				classifications.add(new DelayedClassification(toProcess.futureClassification, 500/* ms */));
+				classifications.add(new DelayedClassification(toProcess.futureClassification, 1500/* ms */));
 			} else {
 				try {
 					Classification classification = toProcess.futureClassification.get();
 					SemanticTrajectory semanticTrajectory = classification.semanticTrajectory;
 					Object classifiedAs = classification.classifiedAs;
-					Object data = problem.discriminator().getData(semanticTrajectory, 0);
+					Object data = discriminator.getData(semanticTrajectory, 0);
+					DescriptiveStatistics statistics = stats.get(data);
 					if (data.equals(classifiedAs)) {
-						Files.append("Traj " + semanticTrajectory.getTrajectoryId() + " correct classified\n", to, Charsets.UTF_8);
+						statistics.addValue(1);
 					} else {
-						Files.append("Traj " + semanticTrajectory.getTrajectoryId() + " incorrect classified\n", to, Charsets.UTF_8);
+						statistics.addValue(0);
 					}
 				} catch (ExecutionException | InterruptedException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -98,9 +105,11 @@ public class ClassificationExecutor {
 	private static class Classification {
 		SemanticTrajectory semanticTrajectory;
 		Object classifiedAs;
+		private String phase;
 
-		public Classification(SemanticTrajectory semanticTrajectory, Object classify) {
+		public Classification(SemanticTrajectory semanticTrajectory, String phase, Object classify) {
 			this.semanticTrajectory = semanticTrajectory;
+			this.phase = phase;
 			classifiedAs = classify;
 		}
 	}

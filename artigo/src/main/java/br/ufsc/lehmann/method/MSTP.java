@@ -10,27 +10,35 @@ import java.util.Set;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
+import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 
-public class MSTP extends TrajectorySimilarityCalculator<SemanticTrajectory> {
+public class MSTP extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 	
 	private Semantic<Comparable<? extends Object>, ?>[] semantics;
+	private ComplexSemanticTypeComparator typeComparator = new ComplexSemanticTypeComparator();
 
 	public MSTP(Semantic<Comparable<? extends Object>, ?>... semantics) {
 		this.semantics = semantics;
 	}
 
 	@Override
-	public double getDistance(SemanticTrajectory t1, SemanticTrajectory t2) {
+	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
 		/*
 		 * Similarity algo. of MSTP-Similarity by [Ying, Lu el. 2010]
 		 */
-		RatioPair rp = calPatternSimilarRatios(t1, t2);
-		int pattern1_size = t1.length();
-		int pattern2_size = t2.length();
-		double ratio1 = 1.0 * rp.ratio1 / pattern1_size;
-		double ratio2 = 1.0 * rp.ratio2 / pattern2_size;
+		double distance = distance(t1, t2);
 		// weighted by length
-		return (pattern1_size * ratio1 + pattern2_size * ratio2) / (pattern1_size + pattern2_size);
+		return distance / (t1.length() + t2.length());
+	}
+
+	@Override
+	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+		RatioPair rp = calPatternSimilarRatios(t1, t2);
+		int t1length = t1.length();
+		int t2length = t2.length();
+		double ratio1 = 1.0 * rp.ratio1 / t1length;
+		double ratio2 = 1.0 * rp.ratio2 / t2length;
+		return t1length * ratio1 + t2length * ratio2;
 	}
 
 	private RatioPair calPatternSimilarRatios(SemanticTrajectory p1, SemanticTrajectory p2) {
@@ -46,7 +54,7 @@ public class MSTP extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 				Comparable<? extends Object> semanticData = semantics[j].getData(st, i);
 				complex.data[j] = semanticData;
 			}
-			ret.add(new Itemset<>(new ComplexSemanticTypeComparator(), complex));
+			ret.add(new Itemset<>(typeComparator, complex));
 		}
 		return ret;
 	}
@@ -111,6 +119,11 @@ public class MSTP extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 			}
 		}
 		return commonItemset;
+	}
+	
+	@Override
+	public String name() {
+		return "MSTP";
 	}
 
 	static class RatioPair {

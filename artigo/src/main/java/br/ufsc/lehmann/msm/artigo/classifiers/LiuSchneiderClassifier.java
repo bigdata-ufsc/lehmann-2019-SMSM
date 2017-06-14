@@ -3,10 +3,10 @@ package br.ufsc.lehmann.msm.artigo.classifiers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.method.LiuSchneider;
+import br.ufsc.lehmann.method.LiuSchneider.LiuSchneiderParameters;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
@@ -14,18 +14,22 @@ import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.Climate;
 import br.ufsc.lehmann.msm.artigo.problems.ClimateWeatherSemantic;
 
-public class LiuSchneiderClassifier {
+public class LiuSchneiderClassifier implements IMeasureDistance<SemanticTrajectory> {
 
-	private static final class LiuSchneiderMeasurer implements IMeasureDistance<SemanticTrajectory> {
-		@Override
-		public double distance(DataEntry<SemanticTrajectory> t1, DataEntry<SemanticTrajectory> t2) {
-			return new LiuSchneider(1).getDistance(t1.getX(), t2.getX());
-		}
+	private LiuSchneider liuSchneider;
+	
+	public LiuSchneiderClassifier(LiuSchneiderParameters params) {
+		this.liuSchneider = new LiuSchneider(params);
+	}
 
-		@Override
-		public String name() {
-			return "Liu&Schneider";
-		}
+	@Override
+	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+		return liuSchneider.distance(t1, t2);
+	}
+
+	@Override
+	public String name() {
+		return "Liu&Schneider";
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -36,7 +40,8 @@ public class LiuSchneiderClassifier {
 			List<Climate> data = weatherSemantic.getData(traj, 0);
 			entries.add(new DataEntry<SemanticTrajectory>(traj, data.get(0)));
 		}
-		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3), new LiuSchneiderMeasurer());
+		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3),
+				new LiuSchneiderClassifier(new LiuSchneiderParameters(0.5, BikeDataReader.BIRTH_YEAR, 100)));
 		Object classified = nn.classify(new DataEntry<SemanticTrajectory>(trajectories.get(0), "descubra"));
 		System.out.println(classified);
 	}

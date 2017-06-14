@@ -18,7 +18,7 @@ public class FTSMBPMSM extends TrajectorySimilarityCalculator<Trajectory> {
 		this.threshold = threshold;
 	}
 
-	public double getDistance(Trajectory R, Trajectory S) {
+	public double getSimilarity(Trajectory R, Trajectory S) {
 		double[] resultT1;
 		double[] resultT2;
 		

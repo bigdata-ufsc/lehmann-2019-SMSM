@@ -16,7 +16,7 @@ public class LCSSL extends TrajectorySimilarityCalculator<Trajectory> {
         this.threshold = spaceThreshold;
     }
 
-    public double getDistance(Trajectory R, Trajectory S) {
+    public double getSimilarity(Trajectory R, Trajectory S) {
 
         int m = R.length();
         int n = S.length();

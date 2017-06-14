@@ -332,7 +332,7 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 	}
 	
 	@Override
-	public double getDistance(Trajectory T1, Trajectory T2) {
+	public double getSimilarity(Trajectory T1, Trajectory T2) {
 		ETrajectory E1 = CreateEllipseMath.createEllipticalTrajectoryFixed(T1);
 		ETrajectory E2 = CreateEllipseMath.createEllipticalTrajectoryFixed(T2);
 		return getDistance(E1,E2);

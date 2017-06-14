@@ -56,4 +56,9 @@ public class SemanticTrajectory {
 	public Integer getTrajectoryId() {
 		return trajectoryId;
 	}
+
+	@Override
+	public String toString() {
+		return "SemanticTrajectory [elements=" + elements + ", trajectoryId=" + trajectoryId + ", semantics=" + semantics + "]";
+	}
 }

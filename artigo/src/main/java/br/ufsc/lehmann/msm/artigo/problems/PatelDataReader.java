@@ -26,6 +26,7 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
 
 public class PatelDataReader {
 	
@@ -38,7 +39,7 @@ public class PatelDataReader {
 	public static final BasicSemantic<Double> TEMPORAL = new BasicSemantic<>(2);
 	public static final BasicSemantic<String> TID = new BasicSemantic<>(3);
 	public static final BasicSemantic<String> CLASS = new BasicSemantic<>(4);
-	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(5);
+	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(5, new EuclideanDistanceFunction());
 	public static final BasicSemantic<Integer> GID = new BasicSemantic<>(6);
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
@@ -49,6 +50,20 @@ public class PatelDataReader {
 		conn.setAutoCommit(false);
 		Statement st = conn.createStatement();
 		st.setFetchSize(1000);
+		ResultSet stopsData = st.executeQuery(
+				"SELECT stop_id, start_lat, start_lon, end_lat, end_lon, centroid_lat, " + //
+						"centroid_lon, start_time, end_time " + //
+						"FROM stops_moves.patel_" + table);
+		Map<Integer, Stop> stops = new HashMap<>();
+		while(stopsData.next()) {
+			int stopId = stopsData.getInt("stop_id");
+			Stop stop = stops.get(stopId);
+			if(stop == null) {
+				stop = new Stop(stopId, null, stopsData.getTimestamp("start_time"), stopsData.getTimestamp("end_time"), new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")),
+						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")));
+				stops.put(stopId, stop);
+			}
+		}
 		ResultSet data = st.executeQuery(
 				"SELECT tid, class, \"time\", latitude, longitude, gid, semantic_stop_id, " + //
 						"semantic_move_id " + //
@@ -78,7 +93,6 @@ public class PatelDataReader {
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
-		Map<Integer, Stop> stops = new HashMap<>();
 		int trajectoryId = 0;
 		for (String trajId : keys) {
 			SemanticTrajectory s = new SemanticTrajectory(trajectoryId++, 7);
@@ -92,10 +106,6 @@ public class PatelDataReader {
 				s.addData(i, CLASS, record.getClazz());
 				if(record.getStop() != null) {
 					Stop stop = stops.get(record.getStop());
-					if(stop == null) {
-						stop = new Stop(s, record.getStop());
-						stops.put(record.getStop(), stop);
-					}
 					s.addData(i, STOP_SEMANTIC, stop);
 				}
 				i++;

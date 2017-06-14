@@ -15,7 +15,7 @@ public class HCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	}
 
 	@Override
-	public double getDistance(SemanticTrajectory R, SemanticTrajectory S) {
+	public double getSimilarity(SemanticTrajectory R, SemanticTrajectory S) {
 
 		int[][] HCSSMetric = new int[R.length() + 1][S.length() + 1];
 

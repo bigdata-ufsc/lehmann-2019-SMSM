@@ -1,6 +1,5 @@
 package br.ufsc.lehmann.method;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
@@ -16,10 +15,14 @@ public class DTWa extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	private NearestNeighbour<SemanticTrajectory> dwtdNN;
 	private Semantic<?, Number>[] semantics;
 	private double threshold;
+	private DTWi dtWi;
+	private DTWd dtWd;
 
 	public DTWa(double threshold, Semantic<?, Number>... semantics) {
 		this.semantics = semantics;
 		this.threshold = threshold;
+		dtWi = new DTWi(semantics);
+		dtWd = new DTWd(semantics);
 	}
 	
 	public void training(List<DataEntry<SemanticTrajectory>> trajectories) {
@@ -28,17 +31,27 @@ public class DTWa extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	}
 
 	@Override
-	public double getDistance(SemanticTrajectory t1, SemanticTrajectory t2) {
+	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
 		double distanceI = dwtiNN.distance(new DataEntry<SemanticTrajectory>(t1, null), new DataEntry<SemanticTrajectory>(t2, null));
 		double distanceD = dwtdNN.distance(new DataEntry<SemanticTrajectory>(t1, null), new DataEntry<SemanticTrajectory>(t2, null));
 		if(distanceD / distanceI > threshold) {
-			return new DTWi(semantics).getDistance(t1, t2);
+			return dtWi.getSimilarity(t1, t2);
 		} else {
-			return new DTWd(semantics).getDistance(t1, t2);
+			return dtWd.getSimilarity(t1, t2);
 		}
 	}
 
-	private static final class DTWiMeasurer implements IMeasureDistance<SemanticTrajectory> {
+	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+		double distanceI = dwtiNN.distance(new DataEntry<SemanticTrajectory>(t1, null), new DataEntry<SemanticTrajectory>(t2, null));
+		double distanceD = dwtdNN.distance(new DataEntry<SemanticTrajectory>(t1, null), new DataEntry<SemanticTrajectory>(t2, null));
+		if(distanceD / distanceI > threshold) {
+			return dtWi.distance(t1, t2);
+		} else {
+			return dtWd.distance(t1, t2);
+		}
+	}
+
+	private final class DTWiMeasurer implements IMeasureDistance<SemanticTrajectory> {
 		
 		private Semantic<?, Number>[] semantics;
 
@@ -47,8 +60,8 @@ public class DTWa extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		}
 		
 		@Override
-		public double distance(DataEntry<SemanticTrajectory> t1, DataEntry<SemanticTrajectory> t2) {
-			return new DTWi(semantics).getDistance(t1.getX(), t2.getX());
+		public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+			return dtWi.distance(t1, t2);
 		}
 
 		@Override
@@ -57,7 +70,7 @@ public class DTWa extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		}
 	}
 
-	private static final class DTWdMeasurer implements IMeasureDistance<SemanticTrajectory> {
+	private final class DTWdMeasurer implements IMeasureDistance<SemanticTrajectory> {
 		
 		private Semantic<?, Number>[] semantics;
 
@@ -66,8 +79,8 @@ public class DTWa extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		}
 		
 		@Override
-		public double distance(DataEntry<SemanticTrajectory> t1, DataEntry<SemanticTrajectory> t2) {
-			return new DTWd(semantics).getDistance(t1.getX(), t2.getX());
+		public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+			return dtWd.distance(t1, t2);
 		}
 
 		@Override

@@ -13,7 +13,12 @@ public class DTWd extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	}
 
 	@Override
-	public double getDistance(SemanticTrajectory A, SemanticTrajectory B) {
+	public double getSimilarity(SemanticTrajectory A, SemanticTrajectory B) {
+		double distance = distance(A, B);
+		return 1 - distance / Math.max(A.length(), B.length()) * semantics.length;
+	}
+
+	double distance(SemanticTrajectory A, SemanticTrajectory B) {
 		SemanticTrajectory p, q;
 		if (A.length() >= B.length()) {
 			p = A;
@@ -53,11 +58,11 @@ public class DTWd extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 					// DTW(i,j) = c(i-1,j-1) + min(DTW(i-1,j-1), DTW(i,j-1), DTW(i-1,j)).
 					score += Math.pow(semantic.distance(q, i - 1, p, j - 1).doubleValue(), 2);
 				}
-				dtwMatrix[i % 2][j] = score
-						+ Math.min(dtwMatrix[thisI][j - 1], Math.min(dtwMatrix[prevI][j], dtwMatrix[prevI][j - 1]));
+				dtwMatrix[i % 2][j] = score + Math.min(dtwMatrix[thisI][j - 1], Math.min(dtwMatrix[prevI][j], dtwMatrix[prevI][j - 1]));
 			}
 		}
-		return dtwMatrix[q.length()%2][p.length()];
+		double distance = dtwMatrix[q.length() % 2][p.length()];
+		return distance;
 	}
 
 }

@@ -246,7 +246,7 @@ public class NearestNeighbour<T> {
 	 * @return Distance
 	 */
 	public double distance(DataEntry<T> a, DataEntry<T> b) {
-		return measurer.distance(a, b);
+		return measurer.distance(a.getX(), b.getX());
 	}
 
 	/**

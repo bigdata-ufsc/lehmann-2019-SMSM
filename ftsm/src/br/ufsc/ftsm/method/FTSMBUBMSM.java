@@ -21,7 +21,7 @@ public class FTSMBUBMSM extends TrajectorySimilarityCalculator<Trajectory> {
 		this.threshold = threshold;
 	}
 
-	public double getDistance(Trajectory R, Trajectory S) {
+	public double getSimilarity(Trajectory R, Trajectory S) {
 		double maxX = Integer.MIN_VALUE;
 		double maxY = Integer.MIN_VALUE;
 

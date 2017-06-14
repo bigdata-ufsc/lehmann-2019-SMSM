@@ -14,7 +14,7 @@ public class CATS extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 	}
 
 	@Override
-	public double getDistance(SemanticTrajectory r, SemanticTrajectory s) {
+	public double getSimilarity(SemanticTrajectory r, SemanticTrajectory s) {
 		double totalScore = 1.0;
 
 		for (int i = 0; i < r.length(); i++) {

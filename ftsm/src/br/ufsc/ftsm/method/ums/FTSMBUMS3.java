@@ -391,7 +391,7 @@ public class FTSMBUMS3 extends TrajectorySimilarityCalculator<Trajectory> {
 	}
 
 	@Override
-	public double getDistance(Trajectory t1, Trajectory t2) {
+	public double getSimilarity(Trajectory t1, Trajectory t2) {
 		
 		return getDistance(CreateEllipseMath.createEllipticalTrajectoryFixed(t1),CreateEllipseMath.createEllipticalTrajectoryFixed(t2));
 	}

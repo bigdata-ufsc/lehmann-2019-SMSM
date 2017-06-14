@@ -13,7 +13,7 @@ import org.junit.Test;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
-import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier.MSMMeasurer;
+import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
 
 public class MSMClassifierTest {
 
@@ -31,7 +31,7 @@ public class MSMClassifierTest {
 		for (SemanticTrajectory traj : training) {
 			entries.add(new DataEntry<SemanticTrajectory>(traj, traj.getDimensionData(7, 0)));
 		}
-		nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(training.size(), 3), new MSMMeasurer(), false);
+		nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(training.size(), 3), new MSMClassifier(), false);
 	}
 	
 	@Test

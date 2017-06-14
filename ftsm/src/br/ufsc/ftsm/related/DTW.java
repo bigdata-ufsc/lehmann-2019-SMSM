@@ -14,7 +14,7 @@ public class DTW extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		return getDistance(sp, sq, 1.0);
 	}
 
-	public double getDistance(SemanticTrajectory p, SemanticTrajectory q) {
+	public double getSimilarity(SemanticTrajectory p, SemanticTrajectory q) {
 		return getDistance(p, q, 1.0);
 	}
 	

@@ -11,14 +11,19 @@ public class BasicSemantic<V> extends Semantic<V, Number> {
 
 	@Override
 	public Number distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
-		Object aData = a.getDimensionData(index, i);
-		Object bData = b.getDimensionData(index, j);
-		return aData.equals(bData) ? 1 : 0;
+		V aData = (V) getData(a, i);
+		V bData = (V) getData(b, j);
+		return distance(aData, bData);
+	}
+	
+	@Override
+	public double distance(V d1, V d2) {
+		return d1.equals(d2) ? 0 : 1;
 	}
 
 	@Override
 	public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshold) {
-		return distance(a, i, b, j).longValue() >= (threshold == null ? Long.MAX_VALUE : threshold.longValue());
+		return distance(a, i, b, j).longValue() <= (threshold == null ? 0 : threshold.longValue());
 	}
 
 }

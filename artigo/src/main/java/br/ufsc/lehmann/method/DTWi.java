@@ -13,22 +13,26 @@ public class DTWi extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	}
 
 	@Override
-	public double getDistance(SemanticTrajectory A, SemanticTrajectory B) {
+	public double getSimilarity(SemanticTrajectory A, SemanticTrajectory B) {
+		return 1 - distance(A, B) / Math.max(A.length(), B.length()) * semantics.length;
+	}
+
+	double distance(SemanticTrajectory A, SemanticTrajectory B) {
 		double score = 0.0;
+		SemanticTrajectory p,q;
+		if (A.length()>=B.length()){
+			p = A;
+			q = B;
+		} else {
+			p = B;
+			q = A;
+		}
+		// "DTW matrix" in linear space.
+		double[][] dtwMatrix = new double[2][p.length()+1];
+		// The absolute size of the warping window (to each side of the main diagonal)
+		int w = p.length();
 		for (int k = 0; k < semantics.length; k++) {
 			Semantic<?, Number> semantic = semantics[k];
-			SemanticTrajectory p,q;
-			if (A.length()>=B.length()){
-				p = A;
-				q = B;
-			} else {
-				p = B;
-				q = A;
-			}
-			// "DTW matrix" in linear space.
-			double[][] dtwMatrix = new double[2][p.length()+1];
-			// The absolute size of the warping window (to each side of the main diagonal)
-			int w = p.length();
 
 			// Initialization (all elements of the first line are INFINITY, except the 0th, and
 			// the same value is given to the first element of the first analyzed line).

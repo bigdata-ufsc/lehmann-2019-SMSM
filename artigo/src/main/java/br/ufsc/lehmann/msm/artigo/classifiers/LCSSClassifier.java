@@ -14,22 +14,22 @@ import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
 import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 
-public class LCSSClassifier {
+public class LCSSClassifier implements IMeasureDistance<SemanticTrajectory> {
 
-	private static final class LCSSMeasurer implements IMeasureDistance<SemanticTrajectory> {
-		@Override
-		public double distance(DataEntry<SemanticTrajectory> t1, DataEntry<SemanticTrajectory> t2) {
-			return new LCSS(new LCSSSemanticParameter(Semantic.GEOGRAPHIC, 100.0),//
-					new LCSSSemanticParameter(Semantic.TEMPORAL, 30 * 60 * 1000L),//
-					new LCSSSemanticParameter(BikeDataReader.USER, null),//
-					new LCSSSemanticParameter(BikeDataReader.GENDER, null),//
-					new LCSSSemanticParameter(BikeDataReader.BIRTH_YEAR, null)).getDistance(t1.getX(), t2.getX());
-		}
+	private LCSS lcss;
+	
+	public LCSSClassifier(LCSSSemanticParameter... params) {
+		lcss = new LCSS(params);
+	}
+	
+	@Override
+	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+		return lcss.distance(t1, t2);
+	}
 
-		@Override
-		public String name() {
-			return "LCSS";
-		}
+	@Override
+	public String name() {
+		return "LCSS";
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -39,7 +39,14 @@ public class LCSSClassifier {
 		for (SemanticTrajectory traj : trajectories) {
 			entries.add(new DataEntry<SemanticTrajectory>(traj, y.nextBoolean() ? "chuva" : "sol"));
 		}
-		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3), new LCSSMeasurer());
+		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3),
+				new LCSSClassifier(new LCSSSemanticParameter[] {//
+						new LCSSSemanticParameter(Semantic.GEOGRAPHIC, 100.0), //
+						new LCSSSemanticParameter(Semantic.TEMPORAL, 30 * 60 * 1000L), //
+						new LCSSSemanticParameter(BikeDataReader.USER, null), //
+						new LCSSSemanticParameter(BikeDataReader.GENDER, null), //
+						new LCSSSemanticParameter(BikeDataReader.BIRTH_YEAR, null)
+				}));
 		Object classified = nn.classify(new DataEntry<SemanticTrajectory>(trajectories.get(0), "descubra"));
 		System.out.println(classified);
 	}

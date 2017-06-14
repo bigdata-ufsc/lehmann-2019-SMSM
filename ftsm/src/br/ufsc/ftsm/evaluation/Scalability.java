@@ -188,7 +188,7 @@ public class Scalability {
 		
 		for (Trajectory t1 : T){
 			for (Trajectory t2: T){
-				result+=tsc.getDistance(t1, t2);
+				result+=tsc.getSimilarity(t1, t2);
 			}
 		}
 		
@@ -206,7 +206,7 @@ public class Scalability {
 		
 		for (int i = 0; i<limit; i++){
 			for (int j = 0; j<limit; j++){
-				result+=tsc.getDistance(T.get(i), T.get(j));
+				result+=tsc.getSimilarity(T.get(i), T.get(j));
 			}
 		}
 		
@@ -284,7 +284,7 @@ System.out.println();
 		for (int i = 0; i<k; i++){
 			for (Trajectory T2 : T){
 				//System.out.println(T.get(i).getTid()+" : "+T.get(j).getTid());
-				result+=tsc.getDistance(T.get(i), T2);
+				result+=tsc.getSimilarity(T.get(i), T2);
 			}
 		}
 		

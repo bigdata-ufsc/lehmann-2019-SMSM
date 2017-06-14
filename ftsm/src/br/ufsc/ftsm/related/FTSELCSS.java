@@ -18,7 +18,7 @@ public class FTSELCSS extends TrajectorySimilarityCalculator<Trajectory> {
 		this.threshold = spaceThreshold;
 	}
 
-	public double getDistance(Trajectory R, Trajectory S) {
+	public double getSimilarity(Trajectory R, Trajectory S) {
 
 		// Discover the Boundaries for the Grid
 		double maxX = Integer.MIN_VALUE;

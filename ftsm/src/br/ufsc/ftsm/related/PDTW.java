@@ -5,7 +5,7 @@ import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.utils.Distance;
 //PrunedDTW based on author's implementation
 public class PDTW extends TrajectorySimilarityCalculator<Trajectory> {
-	public double getDistance(Trajectory p, Trajectory q) {
+	public double getSimilarity(Trajectory p, Trajectory q) {
 		return getDistance(p, q, 1.0);
 	}
 
