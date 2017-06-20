@@ -4,7 +4,6 @@ import br.ufsc.core.base.Point;
 import br.ufsc.core.trajectory.GeographicDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.related.LCSS;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
@@ -18,7 +17,7 @@ public class LiuSchneider extends TrajectorySimilarityCalculator<SemanticTraject
 	private LCSS lcss;
 	private GeographicDistanceFunction distance;
 
-	public LiuSchneider(LiuSchneiderParameters params) {
+	public LiuSchneider(LiuSchneiderParameters<?, ?> params) {
 		this.semanticWeight = params.semanticWeight;
 		lcss = new LCSS(params.semanticDimension);
 		this.distance = new EuclideanDistanceFunction();
@@ -41,12 +40,14 @@ public class LiuSchneider extends TrajectorySimilarityCalculator<SemanticTraject
 		double cosineSimilarity = cosineSimilarity(t1, t2);
 //		return crtDist + (crtDist * (Math.abs(t1.length() - t2.length()) / Math.max((double) t1.length(), t2.length())))
 //				- ((t1.length() + t2.length()) / 2.0) * cosineSimilarity;
-		return (crtDist * (1 + (Math.abs((distance.length(t1) - distance.length(t2))) / Math.max(distance.length(t1), distance.length(t2)))))
-				- ((distance.length(t1) + distance.length(t2)) / 2) * cosineSimilarity;
+		double t1_length = distance.length(t1);
+		double t2_length = distance.length(t2);
+		return (crtDist * (1 + (Math.abs((t1_length - t2_length)) / Math.max(t1_length, t2_length))))
+				- ((t1_length + t2_length) / 2) * cosineSimilarity;
 	}
 
 	public double sem(SemanticTrajectory t1, SemanticTrajectory t2) {
-		double distance = lcss.distance(t1, t2);
+		double distance = lcss.getSimilarity(t1, t2);
 		return distance;
 	}
 	
@@ -61,14 +62,6 @@ public class LiuSchneider extends TrajectorySimilarityCalculator<SemanticTraject
 		return (s1 * s2) / (distance.length(t1) * distance.length(t2));
 	}
 	
-	private static double dotProduct(double[] s1, double[] s2) {
-		double sum = 0;
-		for (int i = 0; i < s1.length; i++) {
-			sum += s1[i] * s2[i];
-		}
-		return sum;
-	}
-
 	public static double centroidDistance(SemanticTrajectory t1, SemanticTrajectory t2) {
 		Point[] pA = new Point[t1.length()];
 		for (int i = 0; i < t1.length(); i++) {
@@ -92,12 +85,12 @@ public class LiuSchneider extends TrajectorySimilarityCalculator<SemanticTraject
 		return new double[] { centroidX / pA.length, centroidY / pA.length };
 	}
 	
-	public static class LiuSchneiderParameters {
+	public static class LiuSchneiderParameters<V, T> {
 		double semanticWeight;
-		LCSSSemanticParameter semanticDimension;
-		public LiuSchneiderParameters(double semanticWeight, Semantic semanticDimension, int threshold) {
+		LCSSSemanticParameter<V, T> semanticDimension;
+		public LiuSchneiderParameters(double semanticWeight, Semantic<V, T> semanticDimension, T threshold) {
 			this.semanticWeight = semanticWeight;
-			this.semanticDimension = new LCSSSemanticParameter(semanticDimension, threshold);
+			this.semanticDimension = new LCSSSemanticParameter<V, T>(semanticDimension, threshold);
 		} 
 		
 	}

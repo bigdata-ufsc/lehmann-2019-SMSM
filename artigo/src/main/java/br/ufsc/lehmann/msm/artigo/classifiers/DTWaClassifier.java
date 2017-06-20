@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.method.DTWa;
 import br.ufsc.lehmann.msm.artigo.MultiThreadClassificationExecutor;
@@ -18,8 +19,8 @@ public class DTWaClassifier implements IMeasureDistance<SemanticTrajectory> {
 
 	private DTWa kernel;
 
-	public DTWaClassifier(Problem problem) {
-		kernel = new DTWa(1.0, problem.semantics());
+	public DTWaClassifier(Problem problem, Semantic<?, Number>... semantics) {
+		kernel = new DTWa(1.0, semantics);
 
 		List<SemanticTrajectory> training = problem.trainingData();
 
@@ -46,7 +47,7 @@ public class DTWaClassifier implements IMeasureDistance<SemanticTrajectory> {
 		MultiThreadClassificationExecutor executor = new MultiThreadClassificationExecutor();
 		DublinBusProblem problem = new DublinBusProblem();
 		// NYBikeProblem problem = new NYBikeProblem();
-		executor.classify(problem, new DTWaClassifier(problem));
+		executor.classify(problem, new DTWaClassifier(problem, problem.semantics()));
 	}
 
 }

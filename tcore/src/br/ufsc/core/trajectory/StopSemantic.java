@@ -18,18 +18,13 @@ public class StopSemantic extends Semantic<Stop, Number> {
 
 	@Override
 	public double distance(Stop d1, Stop d2) {
-		Stop aData = d1;
-		Stop bData = d2;
-		if (aData == null && bData == null) {
-			return Double.POSITIVE_INFINITY;
-		}
-		if (aData == null || bData == null) {
-			return Double.POSITIVE_INFINITY;
-		}
-		if (aData == bData) {
+		if (d1 == d2) {
 			return 0;
 		}
-		return distance.distanceInMeters(aData.getCentroid(), bData.getCentroid());
+		if (d1 == null || d2 == null) {
+			return Double.POSITIVE_INFINITY;
+		}
+		return distance.distanceInMeters(d1.getCentroid(), d2.getCentroid());
 	}
 
 	@Override

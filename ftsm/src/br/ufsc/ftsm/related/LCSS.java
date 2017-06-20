@@ -22,12 +22,12 @@ public class LCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		return similarity(R, S);
 	}
 
-	public int distance(SemanticTrajectory R, SemanticTrajectory S) {
-		int similarity = similarity(R, S);
-		return 1 - similarity / Math.min(R.length(), S.length());
+	public double distance(SemanticTrajectory R, SemanticTrajectory S) {
+		double similarity = similarity(R, S);
+		return 1 - similarity;
 	}
 
-	private int similarity(SemanticTrajectory R, SemanticTrajectory S) {
+	private double similarity(SemanticTrajectory R, SemanticTrajectory S) {
 		int[][] LCSSMetric = new int[R.length() + 1][S.length() + 1];
 
 		for (int i = 0; i <= R.length(); i++) {
@@ -52,8 +52,8 @@ public class LCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 			}
 		}
 
-		int similarity = LCSSMetric[R.length()][S.length()];
-		return similarity;
+		double similarity = LCSSMetric[R.length()][S.length()];
+		return similarity / Math.min(R.length(), S.length());
 	}
 
 	public static class LCSSSemanticParameter<V, T> {

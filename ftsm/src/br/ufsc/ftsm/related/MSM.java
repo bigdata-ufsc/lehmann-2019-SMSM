@@ -51,7 +51,7 @@ public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 			parityBA += bScore[j];
 		}
 		
-		double similarity = (parityAB + parityBA) / (A.length() + B.length());
+		double similarity = (parityAB + parityBA) / (n + m);
 
 		return similarity;
 	}

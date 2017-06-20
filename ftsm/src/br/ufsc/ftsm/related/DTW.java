@@ -4,21 +4,30 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
-import br.ufsc.utils.Distance;
 //DTW with linear space
-public class DTW extends TrajectorySimilarityCalculator<SemanticTrajectory> {
+public class DTW<T, V> extends TrajectorySimilarityCalculator<SemanticTrajectory> {
+
+	private Semantic<T, V> semantic;
+	
+	public DTW(Semantic<T, V> semantic) {
+		this.semantic = semantic;
+	}
 
 	public double getDistance(Trajectory p, Trajectory q) {
 		SemanticTrajectory sp = new SemanticTrajectory(p);
 		SemanticTrajectory sq = new SemanticTrajectory(q);
-		return getDistance(sp, sq, 1.0);
+		return distance(sp, sq, 1.0);
 	}
 
 	public double getSimilarity(SemanticTrajectory p, SemanticTrajectory q) {
-		return getDistance(p, q, 1.0);
+		return 1 - distance(p, q, 1.0) / Math.min(p.length(), q.length());
 	}
 	
-	public double getDistance(SemanticTrajectory A, SemanticTrajectory B,double warping) {
+	public double distance(SemanticTrajectory A, SemanticTrajectory B) {
+		return distance(A, B, 1.0);
+	}
+	
+	public double distance(SemanticTrajectory A, SemanticTrajectory B,double warping) {
 		SemanticTrajectory p,q;
 		if (A.length()>=B.length()){
 			p = A;
@@ -31,7 +40,7 @@ public class DTW extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		// "DTW matrix" in linear space.
 		double[][] dtwMatrix = new double[2][p.length()+1];
 		// The absolute size of the warping window (to each side of the main diagonal)
-		int w = (int) Math.ceil((p.length()) * warping);
+		int w = (int) Math.ceil(p.length() * warping);
 
 		// Initialization (all elements of the first line are INFINITY, except the 0th, and
 		// the same value is given to the first element of the first analyzed line).
@@ -54,7 +63,7 @@ public class DTW extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 
 			for (int j = beg; j <= end; j++) {
 				// DTW(i,j) = c(i-1,j-1) + min(DTW(i-1,j-1), DTW(i,j-1), DTW(i-1,j)).
-				dtwMatrix[i%2][j] = Distance.euclidean(Semantic.GEOGRAPHIC.getData(q, i-1),Semantic.GEOGRAPHIC.getData(p, j-1))
+				dtwMatrix[i%2][j] = semantic.distance(semantic.getData(q, i-1),semantic.getData(p, j-1))
 					+ Math.min(dtwMatrix[thisI][j-1],Math.min(dtwMatrix[prevI][j], dtwMatrix[prevI][j-1]));
 			}
 		}

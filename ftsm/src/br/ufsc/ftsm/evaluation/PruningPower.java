@@ -46,7 +46,7 @@ public class PruningPower {
 		T = retriever.fastFetchTrajectories(); 
 
 		//DTW-based measures
-		DTW dtw = new DTW();
+		DTW dtw = new DTW(Semantic.GEOGRAPHIC);
 		PDTW pdtw = new PDTW();
 		
 		//MSM-based measures

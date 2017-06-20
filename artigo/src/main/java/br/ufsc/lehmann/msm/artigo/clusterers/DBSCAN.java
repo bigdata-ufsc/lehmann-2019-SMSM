@@ -13,12 +13,14 @@ import org.apache.commons.math3.ml.clustering.Cluster;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
+import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
+import weka.clusterers.ClusterEvaluation;
 
 public class DBSCAN {
 
@@ -26,10 +28,13 @@ public class DBSCAN {
 //		PatelProblem problem = new PatelProblem("animal");
 		NewYorkBusProblem problem = new NewYorkBusProblem();
 		List<SemanticTrajectory> data = new ArrayList<>(problem.data());
-		IntStream.iterate(70, i -> i + 10).limit(1).parallel().forEach((threshold) -> {
+		IntStream.iterate(20, i -> i + 5).limit(4).parallel().forEach((threshold) -> {
 //			EDR measurer = new EDR(new EDRSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, threshold));
-			LCSSClassifier measurer = new LCSSClassifier(new LCSSSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, threshold));
-			IntStream.iterate(650, i -> i + 50).limit(1).parallel().forEach((meters) -> {
+			LCSSClassifier measurer = new LCSSClassifier(
+					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, threshold),//
+					new LCSSSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, threshold * 2)//
+					);
+			IntStream.iterate(150, i -> i + 50).limit(4).parallel().forEach((meters) -> {
 				kmeans(data, threshold, measurer, meters / 1000.0);
 			});
 		});

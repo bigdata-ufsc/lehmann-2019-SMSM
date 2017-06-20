@@ -57,7 +57,7 @@ public class Scalability {
 		T = retriever.fastFetchTrajectories(); 
 
 		//DTW-based measures
-		DTW dtw = new DTW();
+		DTW dtw = new DTW(Semantic.GEOGRAPHIC);
 		DTW2 dtw2 = new DTW2();
 		PDTW pdtw = new PDTW();
 		

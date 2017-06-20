@@ -51,7 +51,7 @@ public static void main(String[] args) throws InstantiationException, IllegalAcc
 	//System.out.println("::: Baseline: "+(t1.length()*t2.length()));
 	
 	//DTW-based measures
-	DTW dtw = new DTW();
+	DTW dtw = new DTW(Semantic.GEOGRAPHIC);
 	PDTW pdtw = new PDTW();
 	
 	//MSM-based measures

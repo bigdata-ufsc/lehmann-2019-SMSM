@@ -10,7 +10,7 @@ public class LiuSchneiderClassifierTest extends AbstractClassifierTest {
 
 	@Override
 	IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
-		return new LiuSchneider(new LiuSchneiderParameters(0.5, problem.semantics()[0], 0));
+		return new LiuSchneider(new LiuSchneiderParameters(0.5, problem.semantics()[0], null));
 	}
 
 }

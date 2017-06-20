@@ -10,8 +10,7 @@ public class MSMClassifierTest extends AbstractClassifierTest {
 
 	@Override
 	IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
-		return new MSMClassifier(new MSMSemanticParameter(problem.semantics()[0], 0, 0.5),
-				new MSMSemanticParameter(problem.semantics()[1], 0, 0.5));
+		return new MSMClassifier(new MSMSemanticParameter(problem.semantics()[0], null, 1.0));
 	}
 
 }

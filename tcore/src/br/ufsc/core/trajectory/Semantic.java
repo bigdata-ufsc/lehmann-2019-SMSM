@@ -24,11 +24,11 @@ public abstract class Semantic<V, T> {
 		}
 		
 	};
-	public static final Semantic<TPoint, Number> GEOGRAPHIC = new Semantic<TPoint, Number>(1) {
+	public static final Semantic<TPoint, Number> GEOGRAPHIC_EUCLIDEAN = new Semantic<TPoint, Number>(1) {
 
 		@Override
-		public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshlod) {
-			return distance(a, i, b, j) <= threshlod.doubleValue();
+		public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshold) {
+			return distance(a, i, b, j) <= threshold.doubleValue();
 		}
 
 		@Override
@@ -38,6 +38,23 @@ public abstract class Semantic<V, T> {
 		
 		public double distance(TPoint d1, TPoint d2) {
 			return Distance.euclidean(d1, d2);
+		}
+		
+	};
+	public static final Semantic<TPoint, Number> GEOGRAPHIC_LATLON = new Semantic<TPoint, Number>(1) {
+
+		@Override
+		public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshold) {
+			return distance(a, i, b, j) <= threshold.doubleValue();
+		}
+
+		@Override
+		public Double distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
+			return distance((TPoint) a.getDimensionData(index, i), (TPoint) b.getDimensionData(index, j));
+		}
+		
+		public double distance(TPoint d1, TPoint d2) {
+			return Distance.distFrom(d1, d2);
 		}
 		
 	};
@@ -74,6 +91,9 @@ public abstract class Semantic<V, T> {
 		}
 		
 	};
+	
+	public static final Semantic<TPoint, Number> GEOGRAPHIC = GEOGRAPHIC_EUCLIDEAN;
+	
 	protected int index;
 	
 	public Semantic(int index) {
