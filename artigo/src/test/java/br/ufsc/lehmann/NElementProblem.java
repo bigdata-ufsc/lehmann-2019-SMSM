@@ -20,14 +20,17 @@ public class NElementProblem implements Problem {
 	BasicSemantic<Number> dataSemantic = new BasicSemantic<>(0);
 	BasicSemantic<String> discriminator = new BasicSemantic<>(3);
 	
-	public NElementProblem(int elements) {
+	public NElementProblem(int elements, int classes) {
+		if(elements < 1) {
+			throw new IllegalArgumentException("No mínimo 1 elemento deve ser testado");
+		}
 		data = new ArrayList<>(elements);
 		testing = new ArrayList<>();
 		validating = new ArrayList<>();
 		training = new ArrayList<>();
 		for (int i = 0; i < elements; i++) {
 			SemanticTrajectory t = new SemanticTrajectory(i, 4);
-			int k = i%5;
+			int k = i%classes;
 			for (int j = 0; j < 5; j++) {
 				t.addData(j, dataSemantic, k * k);
 				t.addData(j, Semantic.GEOGRAPHIC, new TPoint(k + (j / 10.0), k + (j / 10.0)));
@@ -42,6 +45,9 @@ public class NElementProblem implements Problem {
 			} else if (i % 3 == 2) {
 				validating.add(t);
 			}
+		}
+		if(validating.isEmpty()) {
+			validating.add(data.get(0));
 		}
 	}
 

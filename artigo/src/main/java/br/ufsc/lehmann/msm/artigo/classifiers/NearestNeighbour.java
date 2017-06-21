@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo;
+package br.ufsc.lehmann.msm.artigo.classifiers;
 
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
@@ -16,7 +16,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
+import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 
 /**
  * 
@@ -27,11 +28,11 @@ import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
  * 
  *         Main method to classify if entry is male or female based on: Height, weight
  */
-public class NearestNeighbour<T> {
+public class NearestNeighbour<T, Label> {
 
 	private int k;
-	private List<Object> classes;
-	private List<DataEntry<T>> dataSet;
+	private List<Label> classes;
+	private List<DataEntry<T, Label>> dataSet;
 	private IMeasureDistance<T> measurer;
 	private boolean multithread;
 
@@ -42,7 +43,7 @@ public class NearestNeighbour<T> {
 	 * @param k
 	 *            The number of neighbours to use
 	 */
-	public NearestNeighbour(List<DataEntry<T>> dataSet, int k, IMeasureDistance<T> measurer) {
+	public NearestNeighbour(List<DataEntry<T, Label>> dataSet, int k, IMeasureDistance<T> measurer) {
 		this(dataSet, k, measurer, false);
 	}
 
@@ -53,21 +54,21 @@ public class NearestNeighbour<T> {
 	 * @param k
 	 *            The number of neighbours to use
 	 */
-	public NearestNeighbour(List<DataEntry<T>> dataSet, int k, IMeasureDistance<T> measurer, boolean multithread) {
+	public NearestNeighbour(List<DataEntry<T, Label>> dataSet, int k, IMeasureDistance<T> measurer, boolean multithread) {
 		this.measurer = measurer;
 		this.multithread = multithread;
-		this.classes = new ArrayList<Object>();
+		this.classes = new ArrayList<>();
 		this.k = k;
 		this.dataSet = dataSet;
 
 		// Load different classes
-		for (DataEntry<T> entry : dataSet) {
+		for (DataEntry<T, Label> entry : dataSet) {
 			if (!classes.contains(entry.getY()))
 				classes.add(entry.getY());
 		}
 	}
 
-	private DataEntry<T>[] getNearestNeighbourType(DataEntry<T> x) {
+	private DataEntry<T, Label>[] getNearestNeighbourType(DataEntry<T, Label> x) {
 		if (multithread) {
 			try {
 				return getNearestNeighbourTypeMultithreaded(x);
@@ -79,12 +80,12 @@ public class NearestNeighbour<T> {
 		}
 	}
 
-	private DataEntry<T>[] getNearestNeighbourTypeSinglethreaded(DataEntry<T> x) {
+	private DataEntry<T, Label>[] getNearestNeighbourTypeSinglethreaded(DataEntry<T, Label> x) {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
-		DataEntry<T>[] retur = new DataEntry[this.k];
+		DataEntry<T, Label>[] retur = new DataEntry[this.k];
 		double fjernest = Double.MIN_VALUE;
 		int index = 0;
-		for (DataEntry<T> tse : this.dataSet) {
+		for (DataEntry<T, Label> tse : this.dataSet) {
 			double distance = distance(x, tse);
 			if (retur[retur.length - 1] == null) { // Hvis ikke fyldt
 				int j = 0;
@@ -119,13 +120,13 @@ public class NearestNeighbour<T> {
 		return retur;
 	}
 
-	private DataEntry<T>[] getNearestNeighbourTypeMultithreaded(DataEntry<T> x) throws InterruptedException {
+	private DataEntry<T, Label>[] getNearestNeighbourTypeMultithreaded(DataEntry<T, Label> x) throws InterruptedException {
 		ExecutorService executorService = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() / 8,
 				Runtime.getRuntime().availableProcessors() / 4, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
-		List<DataEntry<T>> dataSet = new ArrayList<>(this.dataSet);
-		DataEntry<T>[] retur = new DataEntry[this.k];
-		DelayQueue<DelayedDistanceMeasure<T>> queueProcess = new DelayQueue<>();
-		for (DataEntry<T> tse : dataSet) {
+		List<DataEntry<T, Label>> dataSet = new ArrayList<>(this.dataSet);
+		DataEntry<T, Label>[] retur = new DataEntry[this.k];
+		DelayQueue<DelayedDistanceMeasure<T, Label>> queueProcess = new DelayQueue<>();
+		for (DataEntry<T, Label> tse : dataSet) {
 			Future<Double> future = executorService.submit(new Callable<Double>() {
 
 				@Override
@@ -133,10 +134,10 @@ public class NearestNeighbour<T> {
 					return distance(x, tse);
 				}
 			});
-			queueProcess.add(new DelayedDistanceMeasure<T>(x, tse, future, 0));
+			queueProcess.add(new DelayedDistanceMeasure<T, Label>(x, tse, future, 0));
 		}
 		while (!queueProcess.isEmpty()) {
-			DelayedDistanceMeasure<T> toProcess = queueProcess.poll();
+			DelayedDistanceMeasure<T, Label> toProcess = queueProcess.poll();
 			if (toProcess == null) {
 				try {
 					Thread.sleep(5);
@@ -147,7 +148,7 @@ public class NearestNeighbour<T> {
 			}
 			Future<Double> fut = toProcess.distance;
 			if (!fut.isDone()) {
-				queueProcess.add(new DelayedDistanceMeasure<T>(toProcess.a, toProcess.b, toProcess.distance, 50/* ms */));
+				queueProcess.add(new DelayedDistanceMeasure<T, Label>(toProcess.a, toProcess.b, toProcess.distance, 50/* ms */));
 			} else {
 				double fjernest = Double.MIN_VALUE;
 				int index = 0;
@@ -193,14 +194,14 @@ public class NearestNeighbour<T> {
 		return retur;
 	}
 
-	static class DelayedDistanceMeasure<T> implements Delayed {
+	static class DelayedDistanceMeasure<T, Label> implements Delayed {
 
-		private DataEntry<T> a;
-		private DataEntry<T> b;
+		private DataEntry<T, Label> a;
+		private DataEntry<T, Label> b;
 		private Future<Double> distance;
 		private long delay;
 
-		DelayedDistanceMeasure(DataEntry<T> a, DataEntry<T> b, Future<Double> distance, int delay) {
+		DelayedDistanceMeasure(DataEntry<T, Label> a, DataEntry<T, Label> b, Future<Double> distance, int delay) {
 			this.a = a;
 			this.b = b;
 			this.distance = distance;
@@ -212,7 +213,7 @@ public class NearestNeighbour<T> {
 			if (other == this) // compare zero if same object
 				return 0;
 			if (other instanceof DelayedDistanceMeasure) {
-				DelayedDistanceMeasure<?> x = (DelayedDistanceMeasure<?>) other;
+				DelayedDistanceMeasure<?, Label> x = (DelayedDistanceMeasure<?, Label>) other;
 				long diff = delay - x.delay;
 				if (diff < 0)
 					return -1;
@@ -245,7 +246,7 @@ public class NearestNeighbour<T> {
 	 *            To
 	 * @return Distance
 	 */
-	public double distance(DataEntry<T> a, DataEntry<T> b) {
+	public double distance(DataEntry<T, Label> a, DataEntry<T, Label> b) {
 		return measurer.distance(a.getX(), b.getX());
 	}
 
@@ -255,9 +256,9 @@ public class NearestNeighbour<T> {
 	 *            Entry to be classifies
 	 * @return The class of the most probable class
 	 */
-	public Object classify(DataEntry<T> e) {
-		HashMap<Object, Double> classcount = new HashMap<Object, Double>();
-		DataEntry<T>[] de = this.getNearestNeighbourType(e);
+	public Label classify(DataEntry<T, Label> e) {
+		HashMap<Label, Double> classcount = new HashMap<>();
+		DataEntry<T, Label>[] de = this.getNearestNeighbourType(e);
 		for (int i = 0; i < de.length; i++) {
 			double distance = convertDistance(distance(de[i], e));
 			if (!classcount.containsKey(de[i].getY())) {
@@ -267,9 +268,9 @@ public class NearestNeighbour<T> {
 			}
 		}
 		// Find right choice
-		Object o = null;
+		Label o = null;
 		double max = 0;
-		for (Object ob : classcount.keySet()) {
+		for (Label ob : classcount.keySet()) {
 			if (classcount.get(ob) > max) {
 				max = classcount.get(ob);
 				o = ob;
@@ -279,20 +280,20 @@ public class NearestNeighbour<T> {
 		return o;
 	}
 
-	public static class DataEntry<T> {
-		private T x;
-		private Object y;
+	public static class DataEntry<Traj, Label> {
+		private Traj x;
+		private Label y;
 
-		public DataEntry(T x, Object y) {
+		public DataEntry(Traj x, Label y) {
 			this.x = x;
 			this.y = y;
 		}
 
-		public T getX() {
+		public Traj getX() {
 			return this.x;
 		}
 
-		public Object getY() {
+		public Label getY() {
 			return this.y;
 		}
 	}

@@ -25,7 +25,7 @@ public abstract class AbstractClusteringTest {
 	
 	@Test
 	public void selfClassification() throws Exception {
-		NElementProblem problem = new NElementProblem(2);
+		NElementProblem problem = new NElementProblem(2, 2);
 		TestClusteringExecutor executor = new TestClusteringExecutor(2);
 
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
@@ -41,8 +41,8 @@ public abstract class AbstractClusteringTest {
 
 	@Test
 	public void simpleClassification() throws Exception {
+		NElementProblem problem = new NElementProblem(15, 5);
 		TestClusteringExecutor executor = new TestClusteringExecutor(5);
-		NElementProblem problem = new NElementProblem(15);
 		List<SemanticTrajectory> data = problem.data();
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
 		ClusteringResult result = null;

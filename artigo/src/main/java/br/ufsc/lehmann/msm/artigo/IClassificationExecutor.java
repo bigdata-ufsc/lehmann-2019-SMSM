@@ -4,5 +4,5 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 
 public interface IClassificationExecutor {
 
-	void classify(Problem problem, IMeasureDistance<SemanticTrajectory> measureDistance);
+	void classifyProblem(Problem problem, IMeasureDistance<SemanticTrajectory> measureDistance);
 }

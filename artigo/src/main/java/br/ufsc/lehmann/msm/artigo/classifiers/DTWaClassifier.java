@@ -11,23 +11,23 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.method.DTWa;
 import br.ufsc.lehmann.msm.artigo.MultiThreadClassificationExecutor;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.Problem;
+import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 
-public class DTWaClassifier implements IMeasureDistance<SemanticTrajectory> {
+public class DTWaClassifier<Label> implements IMeasureDistance<SemanticTrajectory> {
 
-	private DTWa kernel;
+	private DTWa<Label> kernel;
 
 	public DTWaClassifier(Problem problem, Semantic<?, Number>... semantics) {
-		kernel = new DTWa(1.0, semantics);
+		kernel = new DTWa<>(1.0, semantics);
 
 		List<SemanticTrajectory> training = problem.trainingData();
 
-		List<DataEntry<SemanticTrajectory>> entries = new ArrayList<DataEntry<SemanticTrajectory>>();
+		List<DataEntry<SemanticTrajectory, Label>> entries = new ArrayList<DataEntry<SemanticTrajectory, Label>>();
 		for (SemanticTrajectory traj : training) {
-			Object data = problem.discriminator().getData(traj, 0);
-			entries.add(new DataEntry<SemanticTrajectory>(traj, data));
+			Label data = (Label) problem.discriminator().getData(traj, 0);
+			entries.add(new DataEntry<>(traj, data));
 		}
 		kernel.training(entries);
 	}
@@ -47,7 +47,7 @@ public class DTWaClassifier implements IMeasureDistance<SemanticTrajectory> {
 		MultiThreadClassificationExecutor executor = new MultiThreadClassificationExecutor();
 		DublinBusProblem problem = new DublinBusProblem();
 		// NYBikeProblem problem = new NYBikeProblem();
-		executor.classify(problem, new DTWaClassifier(problem, problem.semantics()));
+		executor.classifyProblem(problem, new DTWaClassifier<>(problem, problem.semantics()));
 	}
 
 }

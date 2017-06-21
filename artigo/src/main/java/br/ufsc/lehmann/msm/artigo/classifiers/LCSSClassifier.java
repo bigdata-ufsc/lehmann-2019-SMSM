@@ -10,9 +10,9 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.related.LCSS;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.Climate;
 
 public class LCSSClassifier implements IMeasureDistance<SemanticTrajectory> {
 
@@ -34,12 +34,12 @@ public class LCSSClassifier implements IMeasureDistance<SemanticTrajectory> {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		List<SemanticTrajectory> trajectories = new BikeDataReader().read();
-		ArrayList<DataEntry<SemanticTrajectory>> entries = new ArrayList<DataEntry<SemanticTrajectory>>();
+		ArrayList<DataEntry<SemanticTrajectory, String>> entries = new ArrayList<>();
 		Random y = new Random(trajectories.size());
 		for (SemanticTrajectory traj : trajectories) {
-			entries.add(new DataEntry<SemanticTrajectory>(traj, y.nextBoolean() ? "chuva" : "sol"));
+			entries.add(new DataEntry<>(traj, y.nextBoolean() ? "chuva" : "sol"));
 		}
-		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3),
+		NearestNeighbour<SemanticTrajectory, String> nn = new NearestNeighbour<SemanticTrajectory, String>(entries, Math.min(trajectories.size(), 3),
 				new LCSSClassifier(new LCSSSemanticParameter[] {//
 						new LCSSSemanticParameter(Semantic.GEOGRAPHIC, 100.0), //
 						new LCSSSemanticParameter(Semantic.TEMPORAL, 30 * 60 * 1000L), //
@@ -47,7 +47,7 @@ public class LCSSClassifier implements IMeasureDistance<SemanticTrajectory> {
 						new LCSSSemanticParameter(BikeDataReader.GENDER, null), //
 						new LCSSSemanticParameter(BikeDataReader.BIRTH_YEAR, null)
 				}));
-		Object classified = nn.classify(new DataEntry<SemanticTrajectory>(trajectories.get(0), "descubra"));
+		Object classified = nn.classify(new DataEntry<>(trajectories.get(0), "descubra"));
 		System.out.println(classified);
 	}
 }

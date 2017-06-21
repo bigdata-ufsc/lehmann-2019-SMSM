@@ -19,11 +19,12 @@ import com.google.common.io.Files;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour;
+import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 
 public class MultiThreadClassificationExecutor implements IClassificationExecutor {
 
-	public void classify(Problem problem, IMeasureDistance<SemanticTrajectory> measureDistance) {
+	public void classifyProblem(Problem problem, IMeasureDistance<SemanticTrajectory> measureDistance) {
 		File to = new File("./src/main/resources/output_" + measureDistance.name() + "_" + problem.shortDescripton() + ".txt");
 		try {
 			boolean b = to.createNewFile();
@@ -47,13 +48,13 @@ public class MultiThreadClassificationExecutor implements IClassificationExecuto
 		ArrayList<SemanticTrajectory> train = new ArrayList<>(training);
 		train.addAll(testing);
 
-		List<DataEntry<SemanticTrajectory>> entries = new ArrayList<DataEntry<SemanticTrajectory>>();
+		List<DataEntry<SemanticTrajectory, Object>> entries = new ArrayList<>();
 		Semantic discriminator = problem.discriminator();
 		for (SemanticTrajectory traj : train) {
 			Object data = discriminator.getData(traj, 0);
-			entries.add(new DataEntry<SemanticTrajectory>(traj, data));
+			entries.add(new DataEntry<>(traj, data));
 		}
-		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(training.size(), 3), measureDistance,
+		NearestNeighbour<SemanticTrajectory, Object> nn = new NearestNeighbour<SemanticTrajectory, Object>(entries, Math.min(training.size(), 3), measureDistance,
 				false);
 		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 1.25),
 				Runtime.getRuntime().availableProcessors(), 10L, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>());
@@ -63,7 +64,7 @@ public class MultiThreadClassificationExecutor implements IClassificationExecuto
 
 				@Override
 				public Classification call() throws Exception {
-					return new Classification(semanticTrajectory, "Testing", nn.classify(new DataEntry<SemanticTrajectory>(semanticTrajectory, "descubra")));
+					return new Classification(semanticTrajectory, "Testing", nn.classify(new DataEntry<>(semanticTrajectory, "descubra")));
 				}
 			});
 			classifications.add(new DelayedClassification(submit, 0));
@@ -73,7 +74,7 @@ public class MultiThreadClassificationExecutor implements IClassificationExecuto
 
 				@Override
 				public Classification call() throws Exception {
-					return new Classification(semanticTrajectory, "Validating", nn.classify(new DataEntry<SemanticTrajectory>(semanticTrajectory, "descubra")));
+					return new Classification(semanticTrajectory, "Validating", nn.classify(new DataEntry<>(semanticTrajectory, "descubra")));
 				}
 			});
 			classifications.add(new DelayedClassification(submit, 0));

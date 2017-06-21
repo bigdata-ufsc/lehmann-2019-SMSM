@@ -60,7 +60,7 @@ public class NewYorkBus_AllClassifiers {
 				new LandmarkStop(new TPoint(0, 0)))));
 		for (IMeasureDistance<SemanticTrajectory> measureDistance : measures) {
 			try {
-				executor.classify(problem, measureDistance);
+				executor.classifyProblem(problem, measureDistance);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

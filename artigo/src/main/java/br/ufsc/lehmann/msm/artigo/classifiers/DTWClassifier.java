@@ -9,8 +9,7 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.related.DTW;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 
 public class DTWClassifier<T, V> implements IMeasureDistance<SemanticTrajectory> {
@@ -32,14 +31,14 @@ public class DTWClassifier<T, V> implements IMeasureDistance<SemanticTrajectory>
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		List<SemanticTrajectory> trajectories = new BikeDataReader().read();
-		ArrayList<DataEntry<SemanticTrajectory>> entries = new ArrayList<DataEntry<SemanticTrajectory>>();
+		ArrayList<DataEntry<SemanticTrajectory, String>> entries = new ArrayList<>();
 		Random y = new Random(trajectories.size());
 		for (SemanticTrajectory traj : trajectories) {
-			entries.add(new DataEntry<SemanticTrajectory>(traj, y.nextBoolean() ? "chuva" : "sol"));
+			entries.add(new DataEntry<>(traj, y.nextBoolean() ? "chuva" : "sol"));
 		}
-		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(trajectories.size(), 3),
+		NearestNeighbour<SemanticTrajectory, String> nn = new NearestNeighbour<SemanticTrajectory, String>(entries, Math.min(trajectories.size(), 3),
 				new DTWClassifier(Semantic.GEOGRAPHIC));
-		Object classified = nn.classify(new DataEntry<SemanticTrajectory>(trajectories.get(0), "descubra"));
+		Object classified = nn.classify(new DataEntry<>(trajectories.get(0), "descubra"));
 		System.out.println(classified);
 	}
 }

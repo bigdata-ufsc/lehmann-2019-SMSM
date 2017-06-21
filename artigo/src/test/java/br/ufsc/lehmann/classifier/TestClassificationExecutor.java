@@ -19,9 +19,9 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.IClassificationExecutor;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.Problem;
+import br.ufsc.lehmann.msm.artigo.classifiers.IClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.KNNTrainer;
 
 public class TestClassificationExecutor implements IClassificationExecutor {
 	
@@ -32,21 +32,15 @@ public class TestClassificationExecutor implements IClassificationExecutor {
 	}
 
 	@Override
-	public void classify(Problem problem, IMeasureDistance<SemanticTrajectory> measureDistance) {
-		List<SemanticTrajectory> training = problem.trainingData();
+	public void classifyProblem(Problem problem, IMeasureDistance<SemanticTrajectory> measureDistance) {
+		List<SemanticTrajectory> training = new ArrayList<>(problem.trainingData());
 		List<SemanticTrajectory> testing = problem.testingData();
 		List<SemanticTrajectory> validating = problem.validatingData();
-		ArrayList<SemanticTrajectory> train = new ArrayList<>(training);
-		train.addAll(testing);
-
-		List<DataEntry<SemanticTrajectory>> entries = new ArrayList<DataEntry<SemanticTrajectory>>();
+		training.addAll(testing);
 		Semantic discriminator = problem.discriminator();
-		for (SemanticTrajectory traj : train) {
-			Object data = discriminator.getData(traj, 0);
-			entries.add(new DataEntry<SemanticTrajectory>(traj, data));
-		}
-		NearestNeighbour<SemanticTrajectory> nn = new NearestNeighbour<SemanticTrajectory>(entries, Math.min(training.size(), 3), measureDistance,
-				false);
+		KNNTrainer trainer = new KNNTrainer();
+		IClassifier classifier = trainer.train(training.toArray(new SemanticTrajectory[training.size()]), discriminator, measureDistance);
+		
 		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 1.25),
 				Runtime.getRuntime().availableProcessors(), 10L, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>());
 		DelayQueue<DelayedClassification> classifications = new DelayQueue<>();
@@ -55,7 +49,7 @@ public class TestClassificationExecutor implements IClassificationExecutor {
 
 				@Override
 				public Classification call() throws Exception {
-					return new Classification(semanticTrajectory, "Testing", nn.classify(new DataEntry<SemanticTrajectory>(semanticTrajectory, "descubra")));
+					return new Classification(semanticTrajectory, "Testing", classifier.classify(semanticTrajectory));
 				}
 			});
 			classifications.add(new DelayedClassification(submit, 0));
@@ -65,7 +59,7 @@ public class TestClassificationExecutor implements IClassificationExecutor {
 
 				@Override
 				public Classification call() throws Exception {
-					return new Classification(semanticTrajectory, "Validating", nn.classify(new DataEntry<SemanticTrajectory>(semanticTrajectory, "descubra")));
+					return new Classification(semanticTrajectory, "Validating", classifier.classify(semanticTrajectory));
 				}
 			});
 			classifications.add(new DelayedClassification(submit, 0));

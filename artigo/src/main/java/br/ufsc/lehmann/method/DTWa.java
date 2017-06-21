@@ -6,13 +6,13 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour;
-import br.ufsc.lehmann.msm.artigo.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour;
+import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 
-public class DTWa extends TrajectorySimilarityCalculator<SemanticTrajectory> {
+public class DTWa<Label> extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	
-	private NearestNeighbour<SemanticTrajectory> dwtiNN;
-	private NearestNeighbour<SemanticTrajectory> dwtdNN;
+	private NearestNeighbour<SemanticTrajectory, Label> dwtiNN;
+	private NearestNeighbour<SemanticTrajectory, Label> dwtdNN;
 	private Semantic<?, Number>[] semantics;
 	private double threshold;
 	private DTWi dtWi;
@@ -25,15 +25,15 @@ public class DTWa extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		dtWd = new DTWd(semantics);
 	}
 	
-	public void training(List<DataEntry<SemanticTrajectory>> trajectories) {
-		dwtiNN = new NearestNeighbour<SemanticTrajectory>(trajectories, Math.min(trajectories.size(), 3), new DTWiMeasurer(semantics));
-		dwtdNN = new NearestNeighbour<SemanticTrajectory>(trajectories, Math.min(trajectories.size(), 3), new DTWdMeasurer(semantics));
+	public void training(List<DataEntry<SemanticTrajectory, Label>> trajectories) {
+		dwtiNN = new NearestNeighbour<>(trajectories, Math.min(trajectories.size(), 3), new DTWiMeasurer(semantics));
+		dwtdNN = new NearestNeighbour<>(trajectories, Math.min(trajectories.size(), 3), new DTWdMeasurer(semantics));
 	}
 
 	@Override
 	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
-		double distanceI = dwtiNN.distance(new DataEntry<SemanticTrajectory>(t1, null), new DataEntry<SemanticTrajectory>(t2, null));
-		double distanceD = dwtdNN.distance(new DataEntry<SemanticTrajectory>(t1, null), new DataEntry<SemanticTrajectory>(t2, null));
+		double distanceI = dwtiNN.distance(new DataEntry<SemanticTrajectory, Label>(t1, null), new DataEntry<SemanticTrajectory, Label>(t2, null));
+		double distanceD = dwtdNN.distance(new DataEntry<SemanticTrajectory, Label>(t1, null), new DataEntry<SemanticTrajectory, Label>(t2, null));
 		if(distanceD / distanceI > threshold) {
 			return dtWi.getSimilarity(t1, t2);
 		} else {
@@ -42,8 +42,8 @@ public class DTWa extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	}
 
 	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
-		double distanceI = dwtiNN.distance(new DataEntry<SemanticTrajectory>(t1, null), new DataEntry<SemanticTrajectory>(t2, null));
-		double distanceD = dwtdNN.distance(new DataEntry<SemanticTrajectory>(t1, null), new DataEntry<SemanticTrajectory>(t2, null));
+		double distanceI = dwtiNN.distance(new DataEntry<SemanticTrajectory, Label>(t1, null), new DataEntry<SemanticTrajectory, Label>(t2, null));
+		double distanceD = dwtdNN.distance(new DataEntry<SemanticTrajectory, Label>(t1, null), new DataEntry<SemanticTrajectory, Label>(t2, null));
 		if(distanceD / distanceI > threshold) {
 			return dtWi.distance(t1, t2);
 		} else {
