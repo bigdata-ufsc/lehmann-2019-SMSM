@@ -2,6 +2,7 @@ package br.ufsc.lehmann.method;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Set;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
+import br.ufsc.lehmann.method.MSTP.RatioPair;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 
 public class MSTP extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
@@ -26,19 +28,18 @@ public class MSTP extends TrajectorySimilarityCalculator<SemanticTrajectory> imp
 		/*
 		 * Similarity algo. of MSTP-Similarity by [Ying, Lu el. 2010]
 		 */
-		double distance = distance(t1, t2);
+		RatioPair rp = calPatternSimilarRatios(t1, t2);
+		int t1length = t1.length();
+		int t2length = t2.length();
+		double ratio1 = rp.ratio1 / t1length;
+		double ratio2 = rp.ratio2 / t2length;
 		// weighted by length
-		return distance / (t1.length() + t2.length());
+		return (t1length * ratio1 + t2length * ratio2) / (t1.length() + t2.length());
 	}
 
 	@Override
 	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
-		RatioPair rp = calPatternSimilarRatios(t1, t2);
-		int t1length = t1.length();
-		int t2length = t2.length();
-		double ratio1 = 1.0 * rp.ratio1 / t1length;
-		double ratio2 = 1.0 * rp.ratio2 / t2length;
-		return t1length * ratio1 + t2length * ratio2;
+		return 1 - getSimilarity(t1, t2);
 	}
 
 	private RatioPair calPatternSimilarRatios(SemanticTrajectory p1, SemanticTrajectory p2) {
@@ -144,6 +145,33 @@ public class MSTP extends TrajectorySimilarityCalculator<SemanticTrajectory> imp
 
 		ComplexSemanticType(int semantics) {
 			data = new Comparable<?>[semantics];
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + Arrays.hashCode(data);
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			ComplexSemanticType other = (ComplexSemanticType) obj;
+			if (!Arrays.equals(data, other.data))
+				return false;
+			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "ComplexSemanticType [data=" + Arrays.toString(data) + "]";
 		}
 	}
 

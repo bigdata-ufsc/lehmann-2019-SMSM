@@ -23,7 +23,7 @@ public class MSTPClassifier implements IMeasureDistance<SemanticTrajectory> {
 
 	@Override
 	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
-		return mstp.getSimilarity(t1, t2);
+		return mstp.distance(t1, t2);
 	}
 
 	@Override

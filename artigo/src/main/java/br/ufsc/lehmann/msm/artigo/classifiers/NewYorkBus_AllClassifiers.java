@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Stop;
@@ -17,7 +18,6 @@ import br.ufsc.lehmann.msm.artigo.MultiThreadClassificationExecutor;
 import br.ufsc.lehmann.msm.artigo.classifiers.ERPClassifier.ERPSemanticParameter;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
-import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
 
 public class NewYorkBus_AllClassifiers {
 
@@ -26,18 +26,18 @@ public class NewYorkBus_AllClassifiers {
 		NewYorkBusProblem problem = new NewYorkBusProblem();
 		List<IMeasureDistance<SemanticTrajectory>> measures = new ArrayList<>();
 //		measures.add(new DTWClassifier(
-////				Semantic.GEOGRAPHIC,//
+////				Semantic.GEOGRAPHIC_EUCLIDEAN,//
 //				NewYorkBusDataReader.STOP_SEMANTIC));
 //		measures.add(new DTWaClassifier(problem, //
-////				Semantic.GEOGRAPHIC,//
+//				Semantic.GEOGRAPHIC,//
 //				NewYorkBusDataReader.STOP_SEMANTIC));
 //		measures.add(new EDRClassifier(//
-////				new EDRSemanticParameter(Semantic.GEOGRAPHIC, 100.0), //
+//				new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, 100.0), //
 ////				new EDRSemanticParameter(Semantic.TEMPORAL, 30 * 60 * 1000L), //
 //				new EDRSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100)
 //			));
 //		measures.add(new LCSSClassifier(
-////				new LCSSSemanticParameter(Semantic.GEOGRAPHIC, 100.0), //
+//				new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, 100.0), //
 ////				new LCSSSemanticParameter(Semantic.TEMPORAL, 30 * 60 * 1000L), //
 //				new LCSSSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100) //
 //			));
@@ -45,16 +45,16 @@ public class NewYorkBus_AllClassifiers {
 //				new LiuSchneiderParameters(0.5, NewYorkBusDataReader.STOP_SEMANTIC, 100)
 //			));
 //		measures.add(new MSMClassifier(
-////				new MSMSemanticParameter(Semantic.GEOGRAPHIC, 100.0, 1.0 / 3), //
+//				new MSMSemanticParameter(Semantic.GEOGRAPHIC_LATLON, 100.0, 0.5), //
 ////				new MSMSemanticParameter(Semantic.TEMPORAL, 30 * 60 * 1000L, 1.0 / 3), //
-//				new MSMSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100, 1.0) //
+//				new MSMSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100, 0.5) //
 //			));
 		measures.add(new MSTPClassifier(//
-//				Semantic.GEOGRAPHIC, //
+				Semantic.GEOGRAPHIC, //
 //				Semantic.TEMPORAL, //
 				new ComparableStopSemantic(NewYorkBusDataReader.STOP_SEMANTIC) //
 				));
-//		measures.add(new MTMClassifier(problem));
+		measures.add(new MTMClassifier(problem));
 		measures.add(new ERPClassifier(new ERPSemanticParameter(//
 				NewYorkBusDataReader.STOP_SEMANTIC,//
 				new LandmarkStop(new TPoint(0, 0)))));

@@ -9,10 +9,16 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.mutable.MutableLong;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
+
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.related.LCSS;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
+import br.ufsc.lehmann.msm.artigo.IClusteringExecutor;
+import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
+import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.Trajectories;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
 import br.ufsc.lehmann.msm.artigo.clusterers.dissimilarity.CompleteLinkDissimilarity;
@@ -23,47 +29,67 @@ import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import smile.clustering.SpectralClustering;
 
-public class SpectralCluster {
+public class SpectralCluster implements IClusteringExecutor {
+	
+	private int numOfClasses;
 
-	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		NewYorkBusProblem problem = new NewYorkBusProblem();
-		List<SemanticTrajectory> training = new ArrayList<>(problem.trainingData());
-		training.addAll(problem.testingData());
+	public SpectralCluster(int numOfClasses) {
+		this.numOfClasses = numOfClasses;
+	}
+
+	@Override
+	public ClusteringResult cluster(Problem problem, IMeasureDistance<SemanticTrajectory> measureDistance) {
+		List<SemanticTrajectory> training = new ArrayList<>(problem.data());
 		double[][] distances = new double[training.size()][training.size()];
-		LCSSClassifier lcssClassifier = new LCSSClassifier(new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, 50),
-				new LCSSSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100));
-		LCSS lcss = new LCSS(new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, 50),
-				new LCSSSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100));
 		for (int i = 0; i < training.size(); i++) {
 			distances[i][i] = 0;
 			final int finalI = i;
 			IntStream.iterate(0, j -> j + 1).limit(training.size()).parallel().forEach((j) -> {
 				if(finalI < j) {
-					distances[finalI][j] = lcss.distance(training.get(finalI), training.get(j));
+					distances[finalI][j] = measureDistance.distance(training.get(finalI), training.get(j));
 					distances[j][finalI] = distances[finalI][j];
 				}
 			});
 		}
-		SpectralClustering clustering = new SpectralClustering(distances, 2);
+		SpectralClustering clustering = new SpectralClustering(distances, numOfClasses);
 		int[] clusterLabel = clustering.getClusterLabel();
-		Map<String, MutableLong> counters = new HashMap<>();
+		Multimap<Integer, SemanticTrajectory> clusteres = MultimapBuilder.hashKeys().arrayListValues().build();
 		for (int i = 0; i < clusterLabel.length; i++) {
-			String data = NewYorkBusDataReader.ROUTE.getData(training.get(i), 0);
-			MutableLong counter = counters.get(data + "_" + clusterLabel[i]);
-			if(counter == null) {
-				counter = new MutableLong(0L);
-				counters.put(data + "_" + clusterLabel[i], counter);
+			clusteres.put(i, training.get(i));
+		}
+		return new ClusteringResult((List) clusteres.asMap().values(), clusterLabel);
+	}
+
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		NewYorkBusProblem problem = new NewYorkBusProblem();
+		List<SemanticTrajectory> data = problem.data();
+		LCSSClassifier lcssClassifier = new LCSSClassifier(new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, 50),
+				new LCSSSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100));
+		LCSS lcss = new LCSS(new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, 50),
+				new LCSSSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100));
+		SpectralCluster spectralCluster = new SpectralCluster(2);
+		ClusteringResult clusteringResult = spectralCluster.cluster(problem, lcssClassifier);
+		List<List<SemanticTrajectory>> clusteres = clusteringResult.getClusteres();
+		Map<String, MutableLong> counters = new HashMap<>();
+		for (int i = 0; i < clusteres.size(); i++) {
+			for (SemanticTrajectory trajs : clusteres.get(i)) {
+				String route = NewYorkBusDataReader.ROUTE.getData(trajs, 0);
+				MutableLong counter = counters.get(route + "_" + i);
+				if (counter == null) {
+					counter = new MutableLong(0L);
+					counters.put(route + "_" + i, counter);
+				}
+				counter.increment();
 			}
-			counter.increment();
 		}
 		for (Map.Entry<String, MutableLong> entry : counters.entrySet()) {
 			System.out.println(entry.getKey() + " - " + entry.getValue().getValue());
 		}
 		AdjustedRandIndex<String> randIndex = new AdjustedRandIndex<String>();
-		double value = randIndex.evaluate(clusterLabel, new Trajectories<>(training, problem.discriminator()));
+		double value = randIndex.evaluate(clusteringResult.getClusterLabel(), new Trajectories<>(data, problem.discriminator()));
 		System.out.println("Adjusted Rand-index: " + value);
 		DunnIndex<String> dunnIndex = new DunnIndex<>(new MaxDistance(lcssClassifier), new CompleteLinkDissimilarity(lcssClassifier));
-		value = dunnIndex.evaluate(clusterLabel, new Trajectories<>(training, problem.discriminator()));
+		value = dunnIndex.evaluate(clusteringResult.getClusterLabel(), new Trajectories<>(data, problem.discriminator()));
 		System.out.println("Dunn index: " + value);
 	}
 }

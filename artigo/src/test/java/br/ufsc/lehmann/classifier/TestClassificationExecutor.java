@@ -1,4 +1,4 @@
-package br.ufsc.lehmann;
+package br.ufsc.lehmann.classifier;
 
 import java.util.ArrayList;
 import java.util.List;

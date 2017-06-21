@@ -4,8 +4,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
@@ -28,13 +30,16 @@ public class MTM extends TrajectorySimilarityCalculator<SemanticTrajectory> impl
 		this.timeThreshold = timeThreshould;
 		totalTrajectories = trajs.size();
 		for (SemanticTrajectory traj : trajs) {
+			Set<Object> userVisitedSemantic = new LinkedHashSet<>();
 			for (int j = 0; j < traj.length(); j++) {
 				Object data = semantic.getData(traj, j);
-				MutableInt counter = stopCounts.get(data);
-				if(counter == null) {
-					stopCounts.put(data, new MutableInt(1));
-				} else {
-					counter.increment();
+				if(userVisitedSemantic.add(data)) {
+					MutableInt counter = stopCounts.get(data);
+					if(counter == null) {
+						stopCounts.put(data, new MutableInt(1));
+					} else {
+						counter.increment();
+					}
 				}
 			}
 		}
@@ -72,7 +77,7 @@ public class MTM extends TrajectorySimilarityCalculator<SemanticTrajectory> impl
 	}
 	
 	public double iuf(Object semanticLocation) {
-		return Math.log(totalTrajectories / stopCounts.get(semanticLocation).intValue());
+		return Math.log(totalTrajectories / stopCounts.get(semanticLocation).doubleValue());
 	}
 
 	public WhiteBlackTree buildGraph(SemanticTrajectory t1, SemanticTrajectory t2, double threshold) {
