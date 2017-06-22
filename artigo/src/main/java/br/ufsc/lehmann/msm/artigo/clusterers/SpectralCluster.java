@@ -38,8 +38,8 @@ public class SpectralCluster implements IClusteringExecutor {
 	}
 
 	@Override
-	public ClusteringResult cluster(Problem problem, IMeasureDistance<SemanticTrajectory> measureDistance) {
-		List<SemanticTrajectory> training = new ArrayList<>(problem.data());
+	public ClusteringResult cluster(List<SemanticTrajectory> data, IMeasureDistance<SemanticTrajectory> measureDistance) {
+		List<SemanticTrajectory> training = new ArrayList<>(data);
 		double[][] distances = new double[training.size()][training.size()];
 		for (int i = 0; i < training.size(); i++) {
 			distances[i][i] = 0;
@@ -68,7 +68,7 @@ public class SpectralCluster implements IClusteringExecutor {
 		LCSS lcss = new LCSS(new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, 50),
 				new LCSSSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100));
 		SpectralCluster spectralCluster = new SpectralCluster(2);
-		ClusteringResult clusteringResult = spectralCluster.cluster(problem, lcssClassifier);
+		ClusteringResult clusteringResult = spectralCluster.cluster(problem.data(), lcssClassifier);
 		List<List<SemanticTrajectory>> clusteres = clusteringResult.getClusteres();
 		Map<String, MutableLong> counters = new HashMap<>();
 		for (int i = 0; i < clusteres.size(); i++) {

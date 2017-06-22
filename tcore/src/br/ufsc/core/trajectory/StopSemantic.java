@@ -4,11 +4,11 @@ import br.ufsc.core.trajectory.semantic.Stop;
 
 public class StopSemantic extends Semantic<Stop, Number> {
 
-	private GeographicDistanceFunction distance;
+	private GeographicDistanceFunction function;
 
 	public StopSemantic(int index, GeographicDistanceFunction distance) {
 		super(index);
-		this.distance = distance;
+		this.function = distance;
 	}
 
 	@Override
@@ -22,9 +22,9 @@ public class StopSemantic extends Semantic<Stop, Number> {
 			return 0;
 		}
 		if (d1 == null || d2 == null) {
-			return Double.POSITIVE_INFINITY;
+			return 1;
 		}
-		return distance.distanceInMeters(d1.getCentroid(), d2.getCentroid());
+		return function.distance(d1.getCentroid(), d2.getCentroid());
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class StopSemantic extends Semantic<Stop, Number> {
 		if (threshold == null) {
 			return distance == 0;
 		}
-		return distance <= threshold.doubleValue();
+		return distance <= function.convert(threshold.doubleValue());
 	}
 
 }

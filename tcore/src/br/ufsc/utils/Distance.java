@@ -7,6 +7,8 @@ import br.ufsc.core.trajectory.TPoint;
 
 public class Distance {
 	
+	public static final double EARTH_RADIUS = 6371000d;
+
 	public static void main(String[] args) {
 		
 		
@@ -75,13 +77,13 @@ public class Distance {
 	}
 	
 	public static float distFrom(Point p1,Point p2) {
-		double earthRadius = 6371000; // meters
+		 // meters
 		double dLat = Math.toRadians(p2.getX() - p1.getX());
 		double dLng = Math.toRadians(p2.getY() - p2.getY());
 		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
 				+ Math.cos(Math.toRadians(p1.getX())) * Math.cos(Math.toRadians(p2.getX())) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		float dist = (float) (earthRadius * c);
+		float dist = (float) (EARTH_RADIUS * c);
 
 		return dist;
 	}

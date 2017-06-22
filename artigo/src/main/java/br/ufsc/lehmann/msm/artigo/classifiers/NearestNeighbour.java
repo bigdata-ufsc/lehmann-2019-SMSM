@@ -121,8 +121,8 @@ public class NearestNeighbour<T, Label> {
 	}
 
 	private DataEntry<T, Label>[] getNearestNeighbourTypeMultithreaded(DataEntry<T, Label> x) throws InterruptedException {
-		ExecutorService executorService = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() / 8,
-				Runtime.getRuntime().availableProcessors() / 4, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+		ExecutorService executorService = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),
+				Runtime.getRuntime().availableProcessors(), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 		List<DataEntry<T, Label>> dataSet = new ArrayList<>(this.dataSet);
 		DataEntry<T, Label>[] retur = new DataEntry[this.k];
 		DelayQueue<DelayedDistanceMeasure<T, Label>> queueProcess = new DelayQueue<>();

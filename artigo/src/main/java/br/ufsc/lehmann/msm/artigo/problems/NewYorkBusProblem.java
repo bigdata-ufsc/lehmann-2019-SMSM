@@ -25,7 +25,7 @@ public class NewYorkBusProblem implements Problem {
 	@Override
 	public Semantic[] semantics() {
 		return new Semantic[] {
-			 Semantic.GEOGRAPHIC, //
+			 Semantic.GEOGRAPHIC_LATLON, //
 //			 Semantic.TEMPORAL,//
 			// NewYorkBusDataReader.OPERATOR,
 			NewYorkBusDataReader.STOP_SEMANTIC

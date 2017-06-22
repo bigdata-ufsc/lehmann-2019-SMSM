@@ -9,17 +9,22 @@ import br.ufsc.utils.Distance;
 public class LatLongDistanceFunction implements GeographicDistanceFunction {
 
 	@Override
-	public double distanceInMeters(TPoint p, TPoint d) {
-		return Distance.distFrom(p, d);
+	public double distance(TPoint p, TPoint d) {
+		return Distance.distFrom(p, d) / Distance.EARTH_RADIUS;
 	}
 	
 	@Override
 	public double length(SemanticTrajectory trajectory) {
 		double ret = 0;
 		for (int i = 0; i < trajectory.length() - 2; i++) {
-			ret += distanceInMeters(Semantic.GEOGRAPHIC.getData(trajectory, i), Semantic.GEOGRAPHIC.getData(trajectory, i + 1));
+			ret += distance(Semantic.GEOGRAPHIC.getData(trajectory, i), Semantic.GEOGRAPHIC.getData(trajectory, i + 1));
 		}
 		return ret;
+	}
+	
+	@Override
+	public double convert(double units) {
+		return units / Distance.EARTH_RADIUS;
 	}
 
 }

@@ -90,17 +90,22 @@ public class Validation {
      * @param measures the performance measures of classification.
      * @return the test results with the same size of order of measures
      */
-    public<Label> double[] test(IClassifier<Label> classifier, SemanticTrajectory[] x, Object[] y, ClassificationMeasure[] measures) {
+    public<Label> double[] test(IClassifier<Label> classifier, SemanticTrajectory[] x, Label[] y, Binarizer binarizer, ClassificationMeasure[] measures) {
         int n = x.length;
+        Boolean[] groundTruth = new Boolean[y.length];
+        for (int i = 0; i < y.length; i++) {
+        	groundTruth[i] = binarizer.isTrue(y[i]);
+        }
         Object[] predictions = new Object[n];
         for (int i = 0; i < n; i++) {
-            predictions[i] = classifier.classify(x[i]);
+            Label classified = classifier.classify(x[i]);
+			predictions[i] = binarizer.isTrue(classified);
         }
         
         int m = measures.length;
         double[] results = new double[m];
         for (int i = 0; i < m; i++) {
-            results[i] = measures[i].measure(y, predictions);
+            results[i] = measures[i].measure(groundTruth, predictions);
         }
         
         return results;

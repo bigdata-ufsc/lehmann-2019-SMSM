@@ -10,7 +10,6 @@ import com.google.common.collect.MultimapBuilder;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.IClusteringExecutor;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
-import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.clusterers.ClusteringResult;
 import smile.clustering.SpectralClustering;
 
@@ -23,8 +22,8 @@ public class TestClusteringExecutor implements IClusteringExecutor {
 	}
 
 	@Override
-	public ClusteringResult cluster(Problem problem, IMeasureDistance<SemanticTrajectory> measureDistance) {
-		List<SemanticTrajectory> training = new ArrayList<>(problem.data());
+	public ClusteringResult cluster(List<SemanticTrajectory> data, IMeasureDistance<SemanticTrajectory> measureDistance) {
+		List<SemanticTrajectory> training = new ArrayList<>(data);
 		double[][] distances = new double[training.size()][training.size()];
 		for (int i = 0; i < training.size(); i++) {
 			distances[i][i] = 0;

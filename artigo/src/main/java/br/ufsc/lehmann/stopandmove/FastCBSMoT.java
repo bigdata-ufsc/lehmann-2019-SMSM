@@ -128,7 +128,7 @@ public class FastCBSMoT {
 		while (j < T.length() && yet) {
 			TPoint p = Semantic.GEOGRAPHIC.getData(T, i);
 			TPoint d = Semantic.GEOGRAPHIC.getData(T, j);
-			if (distance.distanceInMeters(p, d) < maxDist) {
+			if (distance.distance(p, d) < maxDist) {
 				neighbors++;
 			} else {
 				yet = false;

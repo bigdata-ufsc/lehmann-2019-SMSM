@@ -9,7 +9,7 @@ import br.ufsc.utils.Distance;
 public class EuclideanDistanceFunction implements GeographicDistanceFunction {
 
 	@Override
-	public double distanceInMeters(TPoint p, TPoint d) {
+	public double distance(TPoint p, TPoint d) {
 		return Distance.euclidean(p, d);
 	}
 	
@@ -20,6 +20,11 @@ public class EuclideanDistanceFunction implements GeographicDistanceFunction {
 			ret += Semantic.GEOGRAPHIC.distance(trajectory, i, trajectory, i + 1).doubleValue();
 		}
 		return ret;
+	}
+	
+	@Override
+	public double convert(double units) {
+		return units;
 	}
 
 }

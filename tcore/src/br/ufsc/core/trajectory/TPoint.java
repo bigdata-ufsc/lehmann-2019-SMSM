@@ -103,7 +103,7 @@ public class TPoint extends Point {
             return false;
 		
 		TPoint p = (TPoint) obj;
-		return this.x == p.x && this.y == p.y && this.t.equals(p.t);
+		return this.x == p.x && this.y == p.y /*&& this.t.equals(p.t)*/;
 	}
 	
 	@Override

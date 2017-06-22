@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ DTWClusteringTest.class, DTWaClusteringTest.class, EDRClusteringTest.class, ERPClusteringTest.class, LCSSClusteringTest.class,
-		LiuSchneiderClusteringTest.class, MSMClusteringTest.class, MSTPClusteringTest.class, MTMClusteringTest.class })
+@SuiteClasses({ DTWClusteringTest.class, DTWaClusteringTest.class, EDRClusteringTest.class, ERPClusteringTest.class, LCSSClusteringTest.class, MSMClusteringTest.class, MSTPClusteringTest.class,
+	HCSSClusteringTest.class, CVTIClusteringTest.class, LiuSchneiderClusteringTest.class, MTMClusteringTest.class })
 public class AllClusteringTests {
 
 }

@@ -6,8 +6,9 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TemporalDuration;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
+import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 
-public class CVTI extends TrajectorySimilarityCalculator<SemanticTrajectory> {
+public class CVTI extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 
 	private CVTISemanticParameter parameter;
 
@@ -17,6 +18,15 @@ public class CVTI extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 
 	@Override
 	public double getSimilarity(SemanticTrajectory R, SemanticTrajectory S) {
+		return similarity(R, S);
+	}
+
+	@Override
+	public double distance(SemanticTrajectory R, SemanticTrajectory S) {
+		return 1 - similarity(R, S);
+	}
+
+	private double similarity(SemanticTrajectory R, SemanticTrajectory S) {
 		long[][] CVTIMetric = new long[R.length() + 1][S.length() + 1];
 
 		for (int i = 0; i <= R.length(); i++) {
@@ -31,20 +41,29 @@ public class CVTI extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		for (int i = 1; i <= R.length(); i++) {
 			for (int j = 1; j <= S.length(); j++) {
 				if (parameter.semantic.match(R, i - 1, S, j - 1, parameter.threshlod)) {
-					TemporalDuration temporalDuration = Semantic.TEMPORAL.getData(R, i);
+					TemporalDuration temporalDuration = Semantic.TEMPORAL.getData(R, i - 1);
 					Interval interval = new Interval(temporalDuration.getStart().toEpochMilli(), temporalDuration.getEnd().toEpochMilli());
-					TemporalDuration temporalDuration2 = Semantic.TEMPORAL.getData(S, j);
+					TemporalDuration temporalDuration2 = Semantic.TEMPORAL.getData(S, j - 1);
 					Interval interval2 = new Interval(temporalDuration2.getStart().toEpochMilli(), temporalDuration2.getEnd().toEpochMilli());
-					CVTIMetric[i][j] = CVTIMetric[i - 1][j - 1] + interval.overlap(interval2).toDurationMillis();
+					Interval overlap = interval.overlap(interval2);
+					if(overlap != null) {
+						CVTIMetric[i][j] = CVTIMetric[i - 1][j - 1] + (overlap.toDurationMillis() / Math.min(interval.toDurationMillis(), interval2.toDurationMillis()));
+					} else {
+						CVTIMetric[i][j] = CVTIMetric[i - 1][j - 1];
+					}
 				} else {
 					CVTIMetric[i][j] = Math.max(CVTIMetric[i][j - 1], CVTIMetric[i - 1][j]);
 				}
 			}
 		}
 
-		double result = ((double) CVTIMetric[R.length()][S.length()] / Math.min(R.length(), S.length()));
+		double distance = (double) CVTIMetric[R.length()][S.length()];
+		return distance / Math.min(R.length(), S.length());
+	}
 
-		return result;
+	@Override
+	public String name() {
+		return "CVTI";
 	}
 
 	public static class CVTISemanticParameter<V, T> {
