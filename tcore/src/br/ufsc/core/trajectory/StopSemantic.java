@@ -29,7 +29,11 @@ public class StopSemantic extends Semantic<Stop, Number> {
 
 	@Override
 	public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshold) {
-		double distance = distance(getData(a, i), getData(b, j));
+		return match(getData(a, i), getData(b, j), threshold);
+	}
+
+	public boolean match(Stop d1, Stop d2, Number threshold) {
+		double distance = distance(d1, d2);
 		if (threshold == null) {
 			return distance == 0;
 		}

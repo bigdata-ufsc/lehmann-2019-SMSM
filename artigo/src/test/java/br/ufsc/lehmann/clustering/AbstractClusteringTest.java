@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.rules.TestName;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
@@ -23,7 +24,9 @@ import br.ufsc.lehmann.msm.artigo.clusterers.dissimilarity.CompleteLinkDissimila
 import br.ufsc.lehmann.msm.artigo.clusterers.evaluation.AdjustedRandIndex;
 import br.ufsc.lehmann.msm.artigo.clusterers.evaluation.DunnIndex;
 import br.ufsc.lehmann.msm.artigo.clusterers.evaluation.intra.MaxDistance;
+import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusStopsDataReader;
 
 public abstract class AbstractClusteringTest {
 	
@@ -44,7 +47,7 @@ public abstract class AbstractClusteringTest {
 	@Test
 	public void selfClusterization() throws Exception {
 		NElementProblem problem = new NElementProblem(2, 2);
-		TestClusteringExecutor executor = new TestClusteringExecutor(2);
+		TestClusteringDistanceBetweenTrajectoriesExecutor executor = new TestClusteringDistanceBetweenTrajectoriesExecutor(2);
 
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
 		List<SemanticTrajectory> data = problem.data();
@@ -59,9 +62,31 @@ public abstract class AbstractClusteringTest {
 	}
 
 	@Test
-	public void simpleClusterization() throws Exception {
+	public void simpleClusterizationBySimilarityMeasure() throws Exception {
 //		NElementProblem problem = new NElementProblem(15, 5);
-		TestClusteringExecutor executor = new TestClusteringExecutor(2);
+		TestClusteringDistanceBetweenTrajectoriesExecutor executor = new TestClusteringDistanceBetweenTrajectoriesExecutor(5);
+		List<SemanticTrajectory> data = problem.data();
+		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
+		ClusteringResult result = null;
+		try {
+			result = executor.cluster(data, classifier);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+		AdjustedRandIndex<String> randIndex = new AdjustedRandIndex<String>();
+		double value = randIndex.evaluate(result.getClusterLabel(), new Trajectories<>(data, problem.discriminator()));
+		assertEquals(0.0, value, 0.00001);
+		DunnIndex<String> dunnIndex = new DunnIndex<>(new MaxDistance(classifier), new CompleteLinkDissimilarity(classifier));
+		value = dunnIndex.evaluate(result.getClusterLabel(), new Trajectories<>(data, problem.discriminator()));
+		assertEquals(0.0, value, 0.00001);
+	}
+
+	@Test
+	public void simpleClusterizationByStops() throws Exception {
+//		NElementProblem problem = new NElementProblem(15, 5);
+		List<Stop> stops = new NewYorkBusStopsDataReader().read();
+		TestClusteringStopsExecutor executor = new TestClusteringStopsExecutor(NewYorkBusDataReader.STOP_SEMANTIC, stops, 100, 2);
 		List<SemanticTrajectory> data = problem.data();
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
 		ClusteringResult result = null;

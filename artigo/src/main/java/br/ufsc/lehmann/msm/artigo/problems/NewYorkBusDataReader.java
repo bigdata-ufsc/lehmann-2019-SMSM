@@ -67,9 +67,19 @@ public class NewYorkBusDataReader {
 				/**/+ "trim(infered_phase) as phase, next_scheduled_stop_distance, next_scheduled_stop_id, semantic_stop_id "
 				+ "from bus.nyc_20140927 "//
 				+ "where infered_trip_id is not null "//
-//				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_M102'=infered_route_id) "//
-				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_Q13'=infered_route_id or 'MTABC_Q66'=infered_route_id or 'MTABC_Q65'=infered_route_id or 'MTA NYCT_Q32'=infered_route_id) "//
-//				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_Q13'=infered_route_id or 'MTABC_Q66'=infered_route_id or 'MTABC_Q65'=infered_route_id or 'MTA NYCT_Q32'=infered_route_id or 'MTA NYCT_M42'=infered_route_id or 'MTABC_Q49'=infered_route_id or 'MTA NYCT_Q28'=infered_route_id or 'MTA NYCT_X10'=infered_route_id or 'MTA NYCT_M102'=infered_route_id) "//
+//				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_M102'=infered_route_id) "//2 linhas
+//				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_Q13'=infered_route_id or 'MTABC_Q66'=infered_route_id or 'MTABC_Q65'=infered_route_id or 'MTA NYCT_Q32'=infered_route_id) "//5 linhas
+//				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_Q13'=infered_route_id or 'MTABC_Q66'=infered_route_id or 'MTABC_Q65'=infered_route_id or 'MTA NYCT_Q32'=infered_route_id or 'MTA NYCT_M42'=infered_route_id or 'MTABC_Q49'=infered_route_id or 'MTA NYCT_Q28'=infered_route_id or 'MTA NYCT_X10'=infered_route_id or 'MTA NYCT_M102'=infered_route_id) "//10 linhas
+				+ "and ('MTABC_Q34'=infered_route_id or 'MTA NYCT_X28'=infered_route_id or 'MTA NYCT_Q20B'=infered_route_id or 'MTA NYCT_S42'=infered_route_id or 'MTA NYCT_S66'=infered_route_id or "
+				+ "'MTABC_BM5'=infered_route_id or 'MTABC_BM4'=infered_route_id or 'MTABC_BM1'=infered_route_id or 'MTABC_Q67'=infered_route_id or 'MTABC_QM15'=infered_route_id or "
+				+ "'MTABC_BM3'=infered_route_id or 'MTA NYCT_B84'=infered_route_id or 'MTABC_BM2'=infered_route_id or 'MTABC_BXM4'=infered_route_id or 'MTABC_QM5'=infered_route_id or "
+				+ "'MTABC_QM6'=infered_route_id or 'MTABC_QM2'=infered_route_id or 'MTABC_QM4'=infered_route_id or 'MTABC_BXM3'=infered_route_id or 'MTABC_BXM6'=infered_route_id or "
+				+ "'MTA NYCT_M106'=infered_route_id or 'MTABC_Q103'=infered_route_id or 'MTA NYCT_X27'=infered_route_id or 'MTA NYCT_Q31'=infered_route_id or 'MTABC_Q19'=infered_route_id or "
+				+ "'MTABC_BXM8'=infered_route_id or 'MTABC_BXM9'=infered_route_id or 'MTABC_BXM10'=infered_route_id or 'MTABC_Q104'=infered_route_id or 'MTA NYCT_BX18'=infered_route_id or "
+				+ "'MTABC_BXM1'=infered_route_id or 'MTA NYCT_B39'=infered_route_id or 'MTABC_Q101'=infered_route_id or 'MTA NYCT_B32'=infered_route_id or 'MTABC_BXM11'=infered_route_id or "
+				+ "'MTA NYCT_X17'=infered_route_id or 'MTABC_BXM2'=infered_route_id or 'MTA NYCT_B69'=infered_route_id or 'MTA NYCT_BX46'=infered_route_id or 'MTA NYCT_M50'=infered_route_id or "
+				+ "'MTA NYCT_M12'=infered_route_id or 'MTA NYCT_S57'=infered_route_id or 'MTA NYCT_BX24'=infered_route_id or 'MTA NYCT_Q76'=infered_route_id or 'MTA NYCT_BX4A'=infered_route_id or "
+				+ "'MTABC_BX23'=infered_route_id or 'MTA NYCT_BX8'=infered_route_id or 'MTA NYCT_B74'=infered_route_id or 'MTA NYCT_Q15A'=infered_route_id) "//50 menores linhas
 //				+ "and time_received < to_timestamp('2014-09-27 12:00:00', 'yyyy-MM-dd HH24:mi:ss')"//
 				+ "order by time_received"//
 				);
