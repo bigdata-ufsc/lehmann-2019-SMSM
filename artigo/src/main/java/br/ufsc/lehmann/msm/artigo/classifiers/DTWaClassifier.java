@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.method.DTWa;
 import br.ufsc.lehmann.msm.artigo.MultiThreadClassificationExecutor;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
@@ -15,7 +16,7 @@ import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 
-public class DTWaClassifier<Label> implements IMeasureDistance<SemanticTrajectory> {
+public class DTWaClassifier<Label> extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 
 	private DTWa<Label> kernel;
 
@@ -35,6 +36,11 @@ public class DTWaClassifier<Label> implements IMeasureDistance<SemanticTrajector
 	@Override
 	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
 		return kernel.distance(t1, t2);
+	}
+
+	@Override
+	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
+		return kernel.getSimilarity(t1, t2);
 	}
 
 	@Override

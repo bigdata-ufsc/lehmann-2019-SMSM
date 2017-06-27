@@ -7,12 +7,13 @@ import java.util.Random;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.related.DTW;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 
-public class DTWClassifier<T, V> implements IMeasureDistance<SemanticTrajectory> {
+public class DTWClassifier<T, V> extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 
 	private DTW<T, V> dtw;
 	public DTWClassifier(Semantic<T, V> semantic) {
@@ -22,6 +23,11 @@ public class DTWClassifier<T, V> implements IMeasureDistance<SemanticTrajectory>
 	@Override
 	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
 		return dtw.distance(t1, t2);
+	}
+
+	@Override
+	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
+		return dtw.getSimilarity(t1, t2);
 	}
 
 	@Override

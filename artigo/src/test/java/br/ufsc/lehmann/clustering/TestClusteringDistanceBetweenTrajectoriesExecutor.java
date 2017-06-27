@@ -8,6 +8,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.msm.artigo.IClusteringExecutor;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.clusterers.ClusteringResult;
@@ -23,13 +24,16 @@ public class TestClusteringDistanceBetweenTrajectoriesExecutor implements IClust
 
 	@Override
 	public ClusteringResult cluster(List<SemanticTrajectory> data, IMeasureDistance<SemanticTrajectory> measureDistance) {
+		if(!(measureDistance instanceof TrajectorySimilarityCalculator)) {
+			throw new IllegalArgumentException("To clustering trajectories, measureDistance must be a TrajectorySimilarityCalculator!");
+		}
 		List<SemanticTrajectory> training = new ArrayList<>(data);
 		double[][] distances = new double[training.size()][training.size()];
 		for (int i = 0; i < training.size(); i++) {
 			distances[i][i] = 0;
 			final int finalI = i;
 			IntStream.iterate(0, j -> j + 1).limit(i).parallel().forEach((j) -> {
-				distances[finalI][j] = measureDistance.distance(training.get(finalI), training.get(j));
+				distances[finalI][j] = ((TrajectorySimilarityCalculator<SemanticTrajectory>)measureDistance).getSimilarity(training.get(finalI), training.get(j));
 				distances[j][finalI] = distances[finalI][j];
 			});
 		}

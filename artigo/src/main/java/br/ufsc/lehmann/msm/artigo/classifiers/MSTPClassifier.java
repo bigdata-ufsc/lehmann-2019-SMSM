@@ -7,12 +7,13 @@ import java.util.Random;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.method.MSTP;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 
-public class MSTPClassifier implements IMeasureDistance<SemanticTrajectory> {
+public class MSTPClassifier extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 
 	private MSTP mstp;
 
@@ -23,6 +24,11 @@ public class MSTPClassifier implements IMeasureDistance<SemanticTrajectory> {
 	@Override
 	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
 		return mstp.distance(t1, t2);
+	}
+	
+	@Override
+	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
+		return mstp.getSimilarity(t1, t2);
 	}
 
 	@Override

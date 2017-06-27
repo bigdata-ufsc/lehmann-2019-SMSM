@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -82,6 +83,7 @@ public abstract class AbstractClusteringTest {
 		assertEquals(0.0, value, 0.00001);
 	}
 
+	@Ignore
 	@Test
 	public void simpleClusterizationByStops() throws Exception {
 //		NElementProblem problem = new NElementProblem(15, 5);
