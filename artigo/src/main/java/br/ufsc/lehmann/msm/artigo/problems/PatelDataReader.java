@@ -31,9 +31,11 @@ import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
 public class PatelDataReader {
 	
 	private String table;
+	private String stopMoveTable;
 
-	public PatelDataReader(String table) {
+	public PatelDataReader(String table, String stopMoveTable) {
 		this.table = table;
+		this.stopMoveTable = stopMoveTable;
 	}
 
 	public static final BasicSemantic<Double> TEMPORAL = new BasicSemantic<>(2);
@@ -53,7 +55,7 @@ public class PatelDataReader {
 		ResultSet stopsData = st.executeQuery(
 				"SELECT stop_id, start_lat, start_lon, end_lat, end_lon, centroid_lat, " + //
 						"centroid_lon, start_time, end_time " + //
-						"FROM stops_moves.patel_" + table);
+						"FROM stops_moves.patel_" + stopMoveTable);
 		Map<Integer, Stop> stops = new HashMap<>();
 		while(stopsData.next()) {
 			int stopId = stopsData.getInt("stop_id");

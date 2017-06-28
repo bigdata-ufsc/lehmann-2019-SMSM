@@ -29,7 +29,7 @@ public class FastCBSMoT_AnimalsPatel {
 		FastCBSMoT fastCBSMoT = new FastCBSMoT(new EuclideanDistanceFunction());
 		PatelProblem problem = new PatelProblem("animal");
 		List<SemanticTrajectory> trajs = problem.data();
-		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.patel_animals", null, "geom");
+		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.patel_animal", null, "geom");
 
 		// Trajectory t = retriever.fastFetchTrajectory(9543);
 		// FIND STOPS
@@ -49,53 +49,53 @@ public class FastCBSMoT_AnimalsPatel {
 		long start = System.currentTimeMillis();
 		Connection conn = source.getRetriever().getConnection();
 		
-		ResultSet executeQuery = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.patel_animals");
+		ResultSet executeQuery = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.patel_animal");
 		executeQuery.next();
 		MutableInt sid = new MutableInt(executeQuery.getInt(1));
 		PreparedStatement update = conn.prepareStatement("update patel.animal set semantic_stop_id = ?, semantic_move_id = ? where gid in (SELECT * FROM unnest(?))");
-		PreparedStatement insert = conn.prepareStatement("insert into stops_moves.patel_animals(stop_id, start_time, start_lat, start_lon, end_time, end_lat, end_lon, centroid_lat, centroid_lon) values (?,?,?,?,?,?,?,?,?)");
+		PreparedStatement insert = conn.prepareStatement("insert into stops_moves.patel_animal(stop_id, start_time, start_lat, start_lon, end_time, end_lat, end_lon, centroid_lat, centroid_lon) values (?,?,?,?,?,?,?,?,?)");
 		try {
 			conn.setAutoCommit(false);
-//			Map<String, Integer> bestCombinations = findBestCBSMoT(fastCBSMoT, trajs, sid);
-//			for (Map.Entry<String, Integer> e : bestCombinations.entrySet()) {
-//				if(e.getValue() > 400){
-//					System.out.println(e.getKey() + " ->" + e.getValue());
-//				}
-//			}
-			List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), ratio, timeTolerance, maxDist, mergeTolerance, minTime, sid);
-			for (StopAndMove stopAndMove : findBestCBSMoT) {
-				List<Stop> stops = stopAndMove.getStops();
-				System.out.println("Traj.: " + PatelDataReader.TID.getData(stopAndMove.getTrajectory(), 0) + ", stops: " + stops.size());
-				for (Stop stop : stops) {
-					System.out.println("From " + stop.getStartTime() + " to " + stop.getEndTime());
-					List<Integer> gids = stopAndMove.getGids(stop);
-					Array array = conn.createArrayOf("integer", gids.toArray(new Integer[gids.size()]));
-					update.setInt(1, stop.getStopId());
-					update.setNull(2, Types.NUMERIC);
-					update.setArray(3, array);
-					update.addBatch();
-					
-					List<TPoint> points = new ArrayList<>(stop.getPoints());
-					insert.setInt(1, stop.getStopId());
-					insert.setTimestamp(2, stop.getStartTime());
-					insert.setDouble(3, points.get(0).getX());
-					insert.setDouble(4, points.get(0).getY());
-					insert.setTimestamp(5, stop.getEndTime());
-					insert.setDouble(6, points.get(points.size() - 1).getX());
-					insert.setDouble(7, points.get(points.size() - 1).getY());
-					insert.setDouble(8, stop.getCentroid().getX());
-					insert.setDouble(9, stop.getCentroid().getY());
-					insert.addBatch();
-				}
-				if(sid.getValue() % 10 == 0) {
-					update.executeBatch();
-					insert.executeBatch();
-					conn.commit();
+			Map<String, Integer> bestCombinations = findBestCBSMoT(fastCBSMoT, trajs, sid);
+			for (Map.Entry<String, Integer> e : bestCombinations.entrySet()) {
+				if(e.getValue() > 400){
+					System.out.println(e.getKey() + " ->" + e.getValue());
 				}
 			}
-			update.executeBatch();
-			insert.executeBatch();
-			conn.commit();
+//			List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), ratio, timeTolerance, maxDist, mergeTolerance, minTime, sid);
+//			for (StopAndMove stopAndMove : findBestCBSMoT) {
+//				List<Stop> stops = stopAndMove.getStops();
+//				System.out.println("Traj.: " + PatelDataReader.TID.getData(stopAndMove.getTrajectory(), 0) + ", stops: " + stops.size());
+//				for (Stop stop : stops) {
+//					System.out.println("From " + stop.getStartTime() + " to " + stop.getEndTime());
+//					List<Integer> gids = stopAndMove.getGids(stop);
+//					Array array = conn.createArrayOf("integer", gids.toArray(new Integer[gids.size()]));
+//					update.setInt(1, stop.getStopId());
+//					update.setNull(2, Types.NUMERIC);
+//					update.setArray(3, array);
+//					update.addBatch();
+//					
+//					List<TPoint> points = new ArrayList<>(stop.getPoints());
+//					insert.setInt(1, stop.getStopId());
+//					insert.setTimestamp(2, stop.getStartTime());
+//					insert.setDouble(3, points.get(0).getX());
+//					insert.setDouble(4, points.get(0).getY());
+//					insert.setTimestamp(5, stop.getEndTime());
+//					insert.setDouble(6, points.get(points.size() - 1).getX());
+//					insert.setDouble(7, points.get(points.size() - 1).getY());
+//					insert.setDouble(8, stop.getCentroid().getX());
+//					insert.setDouble(9, stop.getCentroid().getY());
+//					insert.addBatch();
+//				}
+//				if(sid.getValue() % 10 == 0) {
+//					update.executeBatch();
+//					insert.executeBatch();
+//					conn.commit();
+//				}
+//			}
+//			update.executeBatch();
+//			insert.executeBatch();
+//			conn.commit();
 		} finally {
 			update.close();
 			insert.close();

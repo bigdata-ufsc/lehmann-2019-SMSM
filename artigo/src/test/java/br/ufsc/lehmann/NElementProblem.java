@@ -19,8 +19,12 @@ public class NElementProblem implements Problem {
 	List<SemanticTrajectory> training;
 	BasicSemantic<Number> dataSemantic = new BasicSemantic<>(0);
 	BasicSemantic<String> discriminator = new BasicSemantic<>(3);
+	private int elements;
+	private int classes;
 	
 	public NElementProblem(int elements, int classes) {
+		this.elements = elements;
+		this.classes = classes;
 		if(elements < 1) {
 			throw new IllegalArgumentException("No mínimo 1 elemento deve ser testado");
 		}
@@ -86,7 +90,7 @@ public class NElementProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "Test problem";
+		return "Synthetic test problem(samples=" + elements + ", classes=" + classes + ")";
 	}
 
 }

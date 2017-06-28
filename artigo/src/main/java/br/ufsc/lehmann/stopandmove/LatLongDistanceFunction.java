@@ -17,7 +17,7 @@ public class LatLongDistanceFunction implements GeographicDistanceFunction {
 	public double length(SemanticTrajectory trajectory) {
 		double ret = 0;
 		for (int i = 0; i < trajectory.length() - 2; i++) {
-			ret += distance(Semantic.GEOGRAPHIC.getData(trajectory, i), Semantic.GEOGRAPHIC.getData(trajectory, i + 1));
+			ret += distance(Semantic.GEOGRAPHIC_LATLON.getData(trajectory, i), Semantic.GEOGRAPHIC_LATLON.getData(trajectory, i + 1));
 		}
 		return ret;
 	}

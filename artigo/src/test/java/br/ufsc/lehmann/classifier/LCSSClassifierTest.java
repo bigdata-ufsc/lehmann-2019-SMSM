@@ -2,13 +2,19 @@ package br.ufsc.lehmann.classifier;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
+import br.ufsc.lehmann.EnumProblem;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 
 public class LCSSClassifierTest extends AbstractClassifierTest {
+
+	public LCSSClassifierTest(EnumProblem problemDescriptor) {
+		super(problemDescriptor);
+	}
 
 	@Override
 	IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
@@ -17,7 +23,13 @@ public class LCSSClassifierTest extends AbstractClassifierTest {
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new LCSSClassifier(//
 					new LCSSSemanticParameter(problem.semantics()[0], 50),//
-					new LCSSSemanticParameter(problem.semantics()[1], 100)//
+					new LCSSSemanticParameter(problem.semantics()[1], null)//
+					);
+		}
+		if(problem instanceof PatelProblem) {
+			return new LCSSClassifier(//
+					new LCSSSemanticParameter(problem.semantics()[0], 0.2),//
+					new LCSSSemanticParameter(problem.semantics()[2], null)//
 					);
 		}
 		return null;

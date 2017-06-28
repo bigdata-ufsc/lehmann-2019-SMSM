@@ -35,9 +35,9 @@ import br.ufsc.core.trajectory.TemporalDuration;
 
 public class BikeDataReader {
 
-	public static final BasicSemantic<String> USER = new BasicSemantic<>(2);
-	public static final BasicSemantic<String> GENDER = new BasicSemantic<>(3);
-	public static final BasicSemantic<Number> BIRTH_YEAR = new BasicSemantic<>(4);
+	public static final BasicSemantic<String> USER = new BasicSemantic<>(3);
+	public static final BasicSemantic<String> GENDER = new BasicSemantic<>(4);
+	public static final BasicSemantic<Number> BIRTH_YEAR = new BasicSemantic<>(5);
 	
 	private final class CSVComparator implements Comparator<CSVRecord> {
 		private final Integer bikeid;

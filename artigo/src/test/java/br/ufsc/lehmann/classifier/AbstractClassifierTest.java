@@ -3,26 +3,30 @@ package br.ufsc.lehmann.classifier;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.lehmann.EnumProblem;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.KNNTrainer;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.validation.Accuracy;
 import br.ufsc.lehmann.msm.artigo.validation.ClassificationMeasure;
 import br.ufsc.lehmann.msm.artigo.validation.FDR;
@@ -33,21 +37,26 @@ import br.ufsc.lehmann.msm.artigo.validation.Recall;
 import br.ufsc.lehmann.msm.artigo.validation.Specificity;
 import br.ufsc.lehmann.msm.artigo.validation.Validation;
 
+@RunWith(Parameterized.class)
 public abstract class AbstractClassifierTest {
 	
     @Rule public TestName name = new TestName();
+    
+    @Parameters(name="{0}")
+    public static Collection<EnumProblem> data() {
+        return Arrays.asList(EnumProblem.values());
+    }
 	
 	abstract IMeasureDistance<SemanticTrajectory> measurer(Problem problem);
-	private static NewYorkBusProblem problem;
+	private Problem problem;
+	
+	public AbstractClassifierTest(EnumProblem problemDescriptor) {
+		problem = problemDescriptor.problem();
+	}
 	
 	@Before
 	public void before() {
 		System.out.println(getClass().getSimpleName() + "#" + name.getMethodName());
-	}
-	
-	@BeforeClass
-	public static void beforeClass() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		problem = new NewYorkBusProblem();
 	}
 	
 	@Test
@@ -90,27 +99,53 @@ public abstract class AbstractClassifierTest {
 	@Test
 	public void validation_accuracy() throws Exception {
 //		NElementProblem problem = new NElementProblem(150, 10);
-		SemanticTrajectory[] data = problem.data().toArray(new SemanticTrajectory[problem.data().size()]);
-		Object[] dataLabel = new Object[data.length];
-		for (int i = 0; i < data.length; i++) {
-			dataLabel[i] = problem.discriminator().getData(data[i], 0);
+		List<SemanticTrajectory> testingData = problem.testingData();
+		List<SemanticTrajectory> trainingData = new ArrayList<>(problem.trainingData());
+		trainingData.addAll(testingData);
+		SemanticTrajectory[] trainData = trainingData.toArray(new SemanticTrajectory[trainingData.size()]);
+		List<SemanticTrajectory> validatingData = new ArrayList<>(problem.validatingData());
+		SemanticTrajectory[] validateData = validatingData.toArray(new SemanticTrajectory[validatingData.size()]);
+		Object[] validateLabelData = new Object[validateData.length];
+		Semantic discriminator = problem.discriminator();
+		for (int i = 0; i < validateData.length; i++) {
+			validateLabelData[i] = discriminator.getData(validateData[i], 0);
+		}
+		SemanticTrajectory[] testData = testingData.toArray(new SemanticTrajectory[testingData.size()]);
+		Object[] testLabelData = new Object[testData.length];
+		for (int i = 0; i < testLabelData.length; i++) {
+			testLabelData[i] = discriminator.getData(testData[i], 0);
 		}
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
 		Validation validation = new Validation(problem, classifier);
-		IClassifier<Object> train = new KNNTrainer<>().train(data, problem.discriminator(), classifier);
-		double accuracy = validation.<Object> test(train, data, dataLabel, new Accuracy());
-		System.out.println(accuracy);
-		assertTrue("Accuracy = " + accuracy, accuracy > .8);
+		
+		IClassifier<Object> train = new KNNTrainer<>().train(trainData, discriminator, classifier);
+		double testingAccuracy = validation.<Object> test(train, testData, testLabelData, new Accuracy());
+		System.out.println(testingAccuracy);
+		assertTrue("Testing accuracy = " + testingAccuracy, testingAccuracy > .95);
+		
+		double validationAccuracy = validation.<Object> test(train, validateData, validateLabelData, new Accuracy());
+		System.out.println(validationAccuracy);
+		assertTrue("Validation Accuracy = " + validationAccuracy, validationAccuracy > .8);
 	}
 	
 	@Test
 	public void validation_precision_recall() throws Exception {
 //		NElementProblem problem = new NElementProblem(150, 10);
-		SemanticTrajectory[] data = problem.data().toArray(new SemanticTrajectory[problem.data().size()]);
-		Object[] dataLabel = new Object[data.length];
+		List<SemanticTrajectory> testingData = problem.testingData();
+		List<SemanticTrajectory> trainingData = new ArrayList<>(problem.trainingData());
+		trainingData.addAll(testingData);
+		SemanticTrajectory[] trainData = trainingData.toArray(new SemanticTrajectory[trainingData.size()]);
+		List<SemanticTrajectory> validatingData = new ArrayList<>(problem.validatingData());
+		SemanticTrajectory[] validateData = validatingData.toArray(new SemanticTrajectory[validatingData.size()]);
+		Object[] validateLabelData = new Object[validateData.length];
 		Semantic discriminator = problem.discriminator();
-		for (int i = 0; i < data.length; i++) {
-			dataLabel[i] = discriminator.getData(data[i], 0);
+		for (int i = 0; i < validateData.length; i++) {
+			validateLabelData[i] = discriminator.getData(validateData[i], 0);
+		}
+		SemanticTrajectory[] testData = testingData.toArray(new SemanticTrajectory[testingData.size()]);
+		Object[] testLabelData = new Object[testData.length];
+		for (int i = 0; i < testLabelData.length; i++) {
+			testLabelData[i] = discriminator.getData(testData[i], 0);
 		}
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
 		Validation validation = new Validation(problem, classifier);
@@ -122,10 +157,15 @@ public abstract class AbstractClassifierTest {
 				new Fallout(),//
 				new FDR()
 				};
-		IClassifier<Object> train = new KNNTrainer<>().train(data, discriminator, classifier);
-		double[] precision = validation.<Object> test(train, data, dataLabel, new Binarizer(dataLabel[0]), measures);
-		System.out.println(Arrays.toString(precision));
-		assertTrue("Precision = " + precision[0], precision[0] > .8);
+
+		IClassifier<Object> train = new KNNTrainer<>().train(trainData, discriminator, classifier);
+		double[] testingAccuracy = validation.<Object> test(train, testData, testLabelData, new Binarizer(testLabelData[0]), measures);
+		System.out.println(Arrays.toString(testingAccuracy));
+		assertTrue("Testing accuracy = " + testingAccuracy[0], testingAccuracy[0] > .95);
+		
+		double[] validationAccuracy = validation.<Object> test(train, validateData, validateLabelData, new Binarizer(validateLabelData[0]), measures);
+		System.out.println(Arrays.toString(validationAccuracy));
+		assertTrue("Validation Accuracy = " + validationAccuracy[0], validationAccuracy[0] > .8);
 	}
 	
 	@Test

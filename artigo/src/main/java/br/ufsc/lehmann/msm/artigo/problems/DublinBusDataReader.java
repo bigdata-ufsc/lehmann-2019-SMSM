@@ -64,7 +64,7 @@ public class DublinBusDataReader {
 				"select gid, to_timestamp(time_in_seconds / 1000000) as \"time\", line_id, trim(journey_pattern) as journey_pattern, "
 				/**/+ "vehicle_journey, trim(operator) as operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id, semantic_stop_id "
 				+ "from bus.dublin_201301 "
-				+ "where date_frame between '2013-01-25' and '2013-01-31'"
+				+ "where date_frame between '2013-01-31' and '2013-01-31'"
 				+ "order by time_in_seconds"
 				);
 		Multimap<Integer, DublinBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
