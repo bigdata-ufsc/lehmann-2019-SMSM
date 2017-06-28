@@ -1,6 +1,8 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
@@ -75,10 +77,11 @@ public class NewYorkBusProblem implements Problem {
 			return;
 		}
 		try {
-			data = new NewYorkBusDataReader().read();
+			data = new ArrayList<>(new NewYorkBusDataReader().read());
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}
+		Collections.shuffle(data);
 //		data = data.subList(0, data.size() / 80);
 		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
 		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));

@@ -17,6 +17,7 @@ package br.ufsc.lehmann.msm.artigo.validation;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.classifier.Binarizer;
@@ -97,15 +98,16 @@ public class Validation {
         	groundTruth[i] = binarizer.isTrue(y[i]);
         }
         Object[] predictions = new Object[n];
-        for (int i = 0; i < n; i++) {
-            Label classified = classifier.classify(x[i]);
-			predictions[i] = binarizer.isTrue(classified);
-        }
+        IntStream.iterate(0, i -> i + 1).limit(n).parallel().forEach((i) -> {
+        	Label classified = classifier.classify(x[i]);
+        	predictions[i] = binarizer.isTrue(classified);
+        });
         
         int m = measures.length;
         double[] results = new double[m];
         for (int i = 0; i < m; i++) {
-            results[i] = measures[i].measure(groundTruth, predictions);
+            double r = measures[i].measure(groundTruth, predictions);
+			results[i] = r;
         }
         
         return results;
@@ -204,38 +206,6 @@ public class Validation {
      * @param trainer a classifier trainer that is properly parameterized.
      * @param x the test data set.
      * @param y the test data labels.
-     * @return the accuracy on test dataset
-     */
-    public<Label> double cv(int k, ITrainer<Label> trainer, SemanticTrajectory[] x, Object[] y) {
-        if (k < 2) {
-            throw new IllegalArgumentException("Invalid k for k-fold cross validation: " + k);
-        }
-        
-        int n = x.length;
-        Object[] predictions = new Object[n];
-        
-        CrossValidation cv = new CrossValidation(n, k);
-        for (int i = 0; i < k; i++) {
-            SemanticTrajectory[] trainx = Math.slice(x, cv.train[i]);
-            
-            IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
-
-            for (int j : cv.test[i]) {
-                predictions[j] = classifier.classify(x[j]);
-            }
-        }
-        
-        return new Accuracy().measure(y, predictions);
-    }
-    
-    /**
-     * Cross validation of a classification model.
-     * 
-     * @param <T> the data type of input objects.
-     * @param k k-fold cross validation.
-     * @param trainer a classifier trainer that is properly parameterized.
-     * @param x the test data set.
-     * @param y the test data labels.
      * @param measure the performance measure of classification.
      * @return the test results with the same size of order of measures
      */
@@ -245,20 +215,25 @@ public class Validation {
         }
         
         int n = x.length;
-        Object[] predictions = new Object[n];
         
         CrossValidation cv = new CrossValidation(n, k);
+        double result = 0.0;
         for (int i = 0; i < k; i++) {
+        	final int finalI = i;
             SemanticTrajectory[] trainx = Math.slice(x, cv.train[i]);
             
             IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
 
-            for (int j : cv.test[i]) {
-                predictions[j] = classifier.classify(x[j]);
-            }
+            Object[] predictions = new Object[cv.test[i].length];
+            Object[] real = new Object[cv.test[i].length];
+            IntStream.iterate(0, l -> l + 1).limit(cv.test[i].length).parallel().forEach((l) -> {
+            	predictions[l] = classifier.classify(x[cv.test[finalI][l]]);
+            	real[l] = y[cv.test[finalI][l]];
+            });
+            result += measure.measure(real, predictions);
         }
         
-        return measure.measure(y, predictions);
+        return result / k;
     }
     
     /**
@@ -279,7 +254,6 @@ public class Validation {
         }
         
         int n = x.length;
-        Object[] predictions = new Object[n];
         int m = measures.length;
         double[] results = new double[m];
         Boolean[] groundTruth = new Boolean[y.length];
@@ -289,16 +263,19 @@ public class Validation {
 
         CrossValidation cv = new CrossValidation(n, k);
         for (int i = 0; i < k; i++) {
+        	final int finalI = i;
             SemanticTrajectory[] trainx = Math.slice(x, cv.train[i]);
             
             IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
 
-            for (int j : cv.test[i]) {
-                Label classified = classifier.classify(x[j]);
-				predictions[j] = binarizer.isTrue(classified);
-            }
+            Object[] predictions = new Object[cv.test[i].length];
+            Boolean[] real = new Boolean[cv.test[i].length];
+            IntStream.iterate(0, j -> j + 1).limit(cv.test[i].length).parallel().forEach((j) -> {
+            	predictions[j] = classifier.classify(x[cv.test[finalI][j]]);
+            	real[j] = groundTruth[cv.test[finalI][j]];
+            });
             for (int j = 0; j < m; j++) {
-            	results[j] += measures[j].measure(groundTruth, predictions);
+            	results[j] += measures[j].measure(real, predictions);
             }
         }
         for (int i = 0; i < results.length; i++) {

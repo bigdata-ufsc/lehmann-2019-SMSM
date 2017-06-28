@@ -1,6 +1,8 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,10 +36,11 @@ public class PatelProblem implements Problem {
 			return;
 		}
 		try {
-			data = new PatelDataReader(table, stopMoveTable).read();
+			data = new ArrayList<>(new PatelDataReader(table, stopMoveTable).read());
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}
+		Collections.shuffle(data);
 //		data = data.subList(0, data.size() / 10);
 		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
 		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));

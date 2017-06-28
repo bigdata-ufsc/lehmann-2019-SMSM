@@ -64,4 +64,9 @@ public class FMeasure implements ClassificationMeasure {
         double r = new Recall().measure(truth, prediction);
         return (1 + beta2) * (p * r) / (beta2 * p + r);
     }
+    
+    @Override
+    public String toString() {
+    	return "F-measure";
+    }
 }

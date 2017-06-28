@@ -21,15 +21,15 @@ public class EDRClassifierTest extends AbstractClassifierTest {
 		if(problem instanceof NElementProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter(problem.semantics()[0], null));
-		} else if(problem instanceof NewYorkBusProblem || problem instanceof PatelProblem) {
+		} else if(problem instanceof NewYorkBusProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter(problem.semantics()[0], 50),//
 					new EDRSemanticParameter(problem.semantics()[1], null));
 		}
 		if(problem instanceof PatelProblem) {
 			return new EDRClassifier(//
-					new EDRSemanticParameter(problem.semantics()[0], 0.2),//
-					new EDRSemanticParameter(problem.semantics()[2], null));
+					new EDRSemanticParameter(problem.semantics()[0], 500),//
+					new EDRSemanticParameter(problem.semantics()[1], 100));
 		}
 		return null;
 	}
