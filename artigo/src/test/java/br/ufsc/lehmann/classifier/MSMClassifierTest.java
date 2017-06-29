@@ -32,8 +32,8 @@ public class MSMClassifierTest extends AbstractClassifierTest {
 					new MSMSemanticParameter(problem.semantics()[2], null, 1/3));
 		}
 		if(problem instanceof PatelProblem) {
-			return new MSMClassifier(new MSMSemanticParameter(problem.semantics()[0], 0.2, 0.5),
-					new MSMSemanticParameter(problem.semantics()[2], null, 0.5));
+			return new MSMClassifier(new MSMSemanticParameter(problem.semantics()[0], 500, 0.5),
+					new MSMSemanticParameter(problem.semantics()[1], 100, 0.5));
 		}
 		return null;
 	}

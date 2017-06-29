@@ -74,9 +74,9 @@ public class Validation {
     public<Label> double test(IClassifier<Label> classifier, SemanticTrajectory[] x, Object[] y, ClassificationMeasure measure) {
         int n = x.length;
         Object[] predictions = new Object[n];
-        for (int i = 0; i < n; i++) {
-            predictions[i] = classifier.classify(x[i]);
-        }
+        IntStream.iterate(0, i -> i + 1).limit(n).parallel().forEach((i) -> {
+        	predictions[i] = classifier.classify(x[i]);
+        });
         
         return measure.measure(y, predictions);
     }
@@ -271,7 +271,8 @@ public class Validation {
             Object[] predictions = new Object[cv.test[i].length];
             Boolean[] real = new Boolean[cv.test[i].length];
             IntStream.iterate(0, j -> j + 1).limit(cv.test[i].length).parallel().forEach((j) -> {
-            	predictions[j] = classifier.classify(x[cv.test[finalI][j]]);
+            	Label classifiedAs = classifier.classify(x[cv.test[finalI][j]]);
+				predictions[j] = binarizer.isTrue(classifiedAs);
             	real[j] = groundTruth[cv.test[finalI][j]];
             });
             for (int j = 0; j < m; j++) {

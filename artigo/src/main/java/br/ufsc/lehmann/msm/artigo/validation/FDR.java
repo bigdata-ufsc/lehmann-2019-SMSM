@@ -43,6 +43,9 @@ public class FDR implements ClassificationMeasure {
                 }
             }
         }
+        if(p == 0.0) {
+        	return 0.0;
+        }
 
         return (double) fp / p;
     }

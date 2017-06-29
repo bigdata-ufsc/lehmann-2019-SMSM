@@ -28,8 +28,8 @@ public class LCSSClassifierTest extends AbstractClassifierTest {
 		}
 		if(problem instanceof PatelProblem) {
 			return new LCSSClassifier(//
-					new LCSSSemanticParameter(problem.semantics()[0], 0.2),//
-					new LCSSSemanticParameter(problem.semantics()[2], null)//
+					new LCSSSemanticParameter(problem.semantics()[0], 500),//
+					new LCSSSemanticParameter(problem.semantics()[1], 100)//
 					);
 		}
 		return null;

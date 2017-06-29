@@ -43,7 +43,9 @@ public class Precision implements ClassificationMeasure {
                 }
             }
         }
-
+        if(p == 0.0) {
+        	return 0.0;
+        }
         return (double) tp / p;
     }
 

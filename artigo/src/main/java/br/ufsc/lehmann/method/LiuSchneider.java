@@ -25,24 +25,24 @@ public class LiuSchneider extends TrajectorySimilarityCalculator<SemanticTraject
 	
 	@Override
 	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
-		double geoDist = geoDist(t1, t2);
+		double geoDist = geoSimilarity(t1, t2);
 		double sem = sem(t1, t2);
-		return geoDist * (1 / (1 + semanticWeight * sem));
+		return geoDist / (1 + semanticWeight * sem);
 	}
 
 	@Override
 	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
-		return geoDist(t1, t2) * (1 / (1 + semanticWeight * sem(t1, t2)));
+		return geoSimilarity(t1, t2) / (1 + semanticWeight * sem(t1, t2));
 	}
 
-	public double geoDist(SemanticTrajectory t1, SemanticTrajectory t2) {
+	public double geoSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
 		double crtDist = centroidDistance(t1, t2);
 		double cosineSimilarity = cosineSimilarity(t1, t2);
 //		return crtDist + (crtDist * (Math.abs(t1.length() - t2.length()) / Math.max((double) t1.length(), t2.length())))
 //				- ((t1.length() + t2.length()) / 2.0) * cosineSimilarity;
 		double t1_length = distance.length(t1);
 		double t2_length = distance.length(t2);
-		return (crtDist * (1 + (Math.abs((t1_length - t2_length)) / Math.max(t1_length, t2_length))))
+		return (crtDist * (1 + (Math.abs(t1_length - t2_length) / Math.max(t1_length, t2_length))))
 				- ((t1_length + t2_length) / 2) * cosineSimilarity;
 	}
 

@@ -45,6 +45,9 @@ public class Fallout implements ClassificationMeasure {
                 }
             }
         }
+        if(n == 0.0) {
+        	return 0.0;
+        }
 
         return 1.0 - (double) tn / n;
     }

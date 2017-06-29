@@ -51,6 +51,9 @@ public class Specificity implements ClassificationMeasure {
                 }
             }
         }
+        if(n == 0.0) {
+        	return 0.0;
+        }
 
         return (double) tn / n;
     }

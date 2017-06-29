@@ -62,6 +62,9 @@ public class FMeasure implements ClassificationMeasure {
     public double measure(Object[] truth, Object[] prediction) {
         double p = new Precision().measure(truth, prediction);
         double r = new Recall().measure(truth, prediction);
+        if(p + r == 0.0) {
+        	return 0.0;
+        }
         return (1 + beta2) * (p * r) / (beta2 * p + r);
     }
     

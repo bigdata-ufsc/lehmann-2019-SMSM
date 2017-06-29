@@ -1,7 +1,6 @@
 package br.ufsc.lehmann.classifier;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -35,7 +33,6 @@ import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.KNNSmileTrainer;
-import br.ufsc.lehmann.msm.artigo.classifiers.KNNTrainer;
 import br.ufsc.lehmann.msm.artigo.validation.Accuracy;
 import br.ufsc.lehmann.msm.artigo.validation.ClassificationMeasure;
 import br.ufsc.lehmann.msm.artigo.validation.FDR;
@@ -110,22 +107,21 @@ public abstract class AbstractClassifierTest {
 			e.printStackTrace();
 		}
 		for (int i = 0; i < 5; i++) {
-			assertEquals(1.0, stats.get(String.valueOf(i)).getMean(), 0.000001);
-			assertEquals(2, stats.get(String.valueOf(i)).getValues().length);
+			assertEquals(String.format("Class %s - ", String.valueOf(i)), 1.0, stats.get(String.valueOf(i)).getMean(), 0.000001);
+			assertEquals(String.format("Class %s - ", String.valueOf(i)), 2, stats.get(String.valueOf(i)).getValues().length);
 		}
 	}
 	
 	@Test
 	public void validation_accuracy() throws Exception {
-//		NElementProblem problem = new NElementProblem(150, 10);
 		List<SemanticTrajectory> data = problem.data();
-		List<SemanticTrajectory> testingData = problem.testingData();
+		List<SemanticTrajectory> testingData = new ArrayList<>(problem.testingData());
 		List<SemanticTrajectory> trainingData = new ArrayList<>(problem.trainingData());
-		trainingData.addAll(testingData);
-		SemanticTrajectory[] trainData = trainingData.toArray(new SemanticTrajectory[trainingData.size()]);
 		List<SemanticTrajectory> validatingData = new ArrayList<>(problem.validatingData());
-		SemanticTrajectory[] validateData = validatingData.toArray(new SemanticTrajectory[validatingData.size()]);
+		trainingData.addAll(testingData);
 		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
+		SemanticTrajectory[] trainData = trainingData.toArray(new SemanticTrajectory[trainingData.size()]);
+		SemanticTrajectory[] validateData = validatingData.toArray(new SemanticTrajectory[validatingData.size()]);
 		Object[] validateLabelData = new Object[validateData.length];
 		Object[] allLabelData = new Object[allData.length];
 		Semantic discriminator = problem.discriminator();
@@ -144,27 +140,32 @@ public abstract class AbstractClassifierTest {
 		Validation validation = new Validation(problem, classifier);
 
 		KNNSmileTrainer<Object> trainer = new KNNSmileTrainer<>();
-//		IClassifier<Object> train = trainer.train(trainData, discriminator, classifier);
-//		double testingAccuracy = validation.<Object> test(train, testData, testLabelData, ACCURACY);
-//		System.out.println(testingAccuracy);
-//		assertTrue("Testing accuracy = " + testingAccuracy, testingAccuracy > .8);
+		IClassifier<Object> train = trainer.train(trainData, discriminator, classifier);
+		double testingAccuracy = validation.<Object> test(train, testData, testLabelData, ACCURACY);
+		System.out.println(testingAccuracy);
+		assertMeasure(ACCURACY, "Testing = " + testingAccuracy, testingAccuracy > .8);
 //		
 		double validationAccuracy = validation.<Object> cv(10, trainer, allData, allLabelData, ACCURACY);
 		System.out.println(validationAccuracy);
-		assertMeasure(ACCURACY, "Validating accuracy = " + validationAccuracy, validationAccuracy > .8);
+		assertMeasure(ACCURACY, "Validating = " + validationAccuracy, validationAccuracy > .8);
 	}
 	
 	@Test
 	public void validation_precision_recall() throws Exception {
-//		NElementProblem problem = new NElementProblem(150, 10);
-		List<SemanticTrajectory> testingData = problem.testingData();
+		List<SemanticTrajectory> data = problem.data();
+		List<SemanticTrajectory> testingData = new ArrayList<>(problem.testingData());
 		List<SemanticTrajectory> trainingData = new ArrayList<>(problem.trainingData());
-		trainingData.addAll(testingData);
-		SemanticTrajectory[] trainData = trainingData.toArray(new SemanticTrajectory[trainingData.size()]);
 		List<SemanticTrajectory> validatingData = new ArrayList<>(problem.validatingData());
+		trainingData.addAll(testingData);
+		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
+		SemanticTrajectory[] trainData = trainingData.toArray(new SemanticTrajectory[trainingData.size()]);
 		SemanticTrajectory[] validateData = validatingData.toArray(new SemanticTrajectory[validatingData.size()]);
 		Object[] validateLabelData = new Object[validateData.length];
+		Object[] allLabelData = new Object[allData.length];
 		Semantic discriminator = problem.discriminator();
+		for (int i = 0; i < allData.length; i++) {
+			allLabelData[i] = discriminator.getData(allData[i], 0);
+		}
 		for (int i = 0; i < validateData.length; i++) {
 			validateLabelData[i] = discriminator.getData(validateData[i], 0);
 		}
@@ -188,69 +189,21 @@ public abstract class AbstractClassifierTest {
 		IClassifier<Object> train = trainer.train(trainData, discriminator, classifier);
 		double[] testingMensures = validation.<Object> test(train, testData, testLabelData, new Binarizer(testLabelData[0]), measures);
 		System.out.println(Arrays.toString(testingMensures));
-		assertMeasure(PRECISION, "Testing precision = " + testingMensures[0], testingMensures[0] > .8);
+		assertMeasure(PRECISION, "Testing = " + testingMensures[0], testingMensures[0] > .8);
+		assertMeasure(RECALL, "Testing = " + testingMensures[1], testingMensures[1] > .8);
+		assertMeasure(F_MEASURE, "Testing = " + testingMensures[2], testingMensures[2] > .8);
+		assertMeasure(SPECIFICITY, "Testing = " + testingMensures[3], testingMensures[3] > .8);
+		assertMeasure(FALLOUT, "Testing = " + testingMensures[4], testingMensures[4] < .2);
+		assertMeasure(FDR, "Testing = " + testingMensures[5], testingMensures[5] < .2);
 		
-		double[] validationAccuracy = validation.<Object> test(train, validateData, validateLabelData, new Binarizer(validateLabelData[0]), measures);
+		double[] validationAccuracy = validation.<Object> cv(10, trainer, allData, allLabelData, new Binarizer(allLabelData[0]), measures);
 		System.out.println(Arrays.toString(validationAccuracy));
-		assertMeasure(PRECISION, "Validation precision = " + validationAccuracy[0], validationAccuracy[0] > .8);
-		assertMeasure(RECALL, "Recall = " + validationAccuracy[1], validationAccuracy[1] > .8);
-		assertMeasure(F_MEASURE, "F-Measure = " + validationAccuracy[2], validationAccuracy[2] > .8);
-		assertMeasure(SPECIFICITY, "Specificity = " + validationAccuracy[3], validationAccuracy[3] > .8);
-		assertMeasure(FALLOUT, "False alarm rate = " + validationAccuracy[4], validationAccuracy[4] < .2);
-		assertMeasure(FDR, "False discovery rate = " + validationAccuracy[5], validationAccuracy[5] < .2);
-	}
-	
-	@Test
-	@Ignore
-	public void crossValidation_10_accuracy() throws Exception {
-		HashMap<Object, DescriptiveStatistics> stats = new HashMap<>();
-		for (int i = 0; i < 15; i++) {
-			stats.put(String.valueOf(i), new DescriptiveStatistics());
-		}
-		NElementProblem problem = new NElementProblem(150, 10);
-		SemanticTrajectory[] data = problem.data().toArray(new SemanticTrajectory[problem.data().size()]);
-		Object[] dataLabel = new Object[data.length];
-		for (int i = 0; i < data.length; i++) {
-			dataLabel[i] = problem.discriminator().getData(data[i], 0);
-		}
-		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		Validation validation = new Validation(problem, classifier);
-		double accuracy = validation.<SemanticTrajectory> cv(10, new KNNTrainer<>(), data, dataLabel, ACCURACY);
-		System.out.println(accuracy);
-		assertMeasure(ACCURACY, "Accuracy = " + accuracy, accuracy > .8);
-	}
-	
-	@Test
-	@Ignore
-	public void crossValidation_10_precision_recall() throws Exception {
-		HashMap<Object, DescriptiveStatistics> stats = new HashMap<>();
-		for (int i = 0; i < 15; i++) {
-			stats.put(String.valueOf(i), new DescriptiveStatistics());
-		}
-//		NElementProblem problem = new NElementProblem(150, 10);
-		SemanticTrajectory[] data = problem.data().toArray(new SemanticTrajectory[problem.data().size()]);
-		Object[] dataLabel = new Object[data.length];
-		for (int i = 0; i < data.length; i++) {
-			dataLabel[i] = problem.discriminator().getData(data[i], 0);
-		}
-		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		Validation validation = new Validation(problem, classifier);
-		ClassificationMeasure[] measures = new ClassificationMeasure[] {//
-				PRECISION,//
-				RECALL,//
-				F_MEASURE,//
-				SPECIFICITY,//
-				FALLOUT,//
-				FDR
-				};
-		double[] precision = validation.<SemanticTrajectory> cv(10, new KNNTrainer<>(), data, dataLabel, new Binarizer(dataLabel[0]), measures);
-		System.out.println(Arrays.toString(precision));
-		assertMeasure(PRECISION, "Precision = " + precision[0], precision[0] > .8);
-		assertMeasure(RECALL, "Recall = " + precision[1], precision[1] > .8);
-		assertMeasure(F_MEASURE, "F-Measure = " + precision[2], precision[2] > .8);
-		assertMeasure(SPECIFICITY, "Specificity = " + precision[3], precision[3] > .8);
-		assertMeasure(FALLOUT, "False alarm rate = " + precision[4], precision[4] < .2);
-		assertMeasure(FDR, "False discovery rate = " + precision[5], precision[5] < .2);
+		assertMeasure(PRECISION, "Validation = " + validationAccuracy[0], validationAccuracy[0] > .8);
+		assertMeasure(RECALL, "Validation = " + validationAccuracy[1], validationAccuracy[1] > .8);
+		assertMeasure(F_MEASURE, "Validation = " + validationAccuracy[2], validationAccuracy[2] > .8);
+		assertMeasure(SPECIFICITY, "Validation = " + validationAccuracy[3], validationAccuracy[3] > .8);
+		assertMeasure(FALLOUT, "Validation = " + validationAccuracy[4], validationAccuracy[4] < .2);
+		assertMeasure(FDR, "Validation = " + validationAccuracy[5], validationAccuracy[5] < .2);
 	}
 	
 	public void assertMeasure(ClassificationMeasure measure, double expected, double actual, double delta) {
