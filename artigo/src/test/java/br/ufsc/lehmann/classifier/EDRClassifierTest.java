@@ -28,8 +28,9 @@ public class EDRClassifierTest extends AbstractClassifierTest {
 		}
 		if(problem instanceof PatelProblem) {
 			return new EDRClassifier(//
-					new EDRSemanticParameter(problem.semantics()[0], 500),//
-					new EDRSemanticParameter(problem.semantics()[1], 100));
+					new EDRSemanticParameter(problem.semantics()[0], 50),//
+					new EDRSemanticParameter(problem.semantics()[1], 100),//
+					new EDRSemanticParameter(problem.semantics()[2], null));
 		}
 		return null;
 	}

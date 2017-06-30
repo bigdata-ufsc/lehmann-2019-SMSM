@@ -32,7 +32,9 @@ import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.IClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.ITrainer;
 import br.ufsc.lehmann.msm.artigo.classifiers.KNNSmileTrainer;
+import br.ufsc.lehmann.msm.artigo.classifiers.RBFSmileTrainer;
 import br.ufsc.lehmann.msm.artigo.validation.Accuracy;
 import br.ufsc.lehmann.msm.artigo.validation.ClassificationMeasure;
 import br.ufsc.lehmann.msm.artigo.validation.FDR;
@@ -139,7 +141,7 @@ public abstract class AbstractClassifierTest {
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
 		Validation validation = new Validation(problem, classifier);
 
-		KNNSmileTrainer<Object> trainer = new KNNSmileTrainer<>();
+		ITrainer<Object> trainer = new KNNSmileTrainer<>();
 		IClassifier<Object> train = trainer.train(trainData, discriminator, classifier);
 		double testingAccuracy = validation.<Object> test(train, testData, testLabelData, ACCURACY);
 		System.out.println(testingAccuracy);

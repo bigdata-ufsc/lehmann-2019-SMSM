@@ -21,6 +21,7 @@ import br.ufsc.lehmann.msm.artigo.IClassificationExecutor;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.IClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.ITrainer;
 import br.ufsc.lehmann.msm.artigo.classifiers.KNNTrainer;
 
 public class TestClassificationExecutor implements IClassificationExecutor {
@@ -38,7 +39,7 @@ public class TestClassificationExecutor implements IClassificationExecutor {
 		List<SemanticTrajectory> validating = problem.validatingData();
 		training.addAll(testing);
 		Semantic discriminator = problem.discriminator();
-		KNNTrainer trainer = new KNNTrainer();
+		ITrainer trainer = new KNNTrainer();
 		IClassifier classifier = trainer.train(training.toArray(new SemanticTrajectory[training.size()]), discriminator, measureDistance);
 		
 		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 1.25),
