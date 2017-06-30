@@ -6,7 +6,7 @@ import org.joda.time.Interval;
 
 import br.ufsc.utils.Distance;
 
-public abstract class Semantic<V, T> {
+public abstract class Semantic<Element, Threshold> {
 	public static final Semantic<Number, Number> GID = new Semantic<Number, Number>(0) {
 
 		@Override
@@ -100,13 +100,13 @@ public abstract class Semantic<V, T> {
 		this.index = index;
 	}
 
-	public V getData(SemanticTrajectory p, int i) {
-		return (V) p.getDimensionData(index, i);
+	public Element getData(SemanticTrajectory p, int i) {
+		return (Element) p.getDimensionData(index, i);
 	}
 
-	public abstract T distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j);
+	public abstract Threshold distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j);
 
-	public abstract boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, T threshlod);
+	public abstract boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Threshold threshold);
 
-	public abstract double distance(V d1, V d2);
+	public abstract double distance(Element d1, Element d2);
 }

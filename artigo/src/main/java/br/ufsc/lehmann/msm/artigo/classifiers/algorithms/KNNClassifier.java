@@ -1,6 +1,7 @@
-package br.ufsc.lehmann.msm.artigo.classifiers;
+package br.ufsc.lehmann.msm.artigo.classifiers.algorithms;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 
 public class KNNClassifier<Label> implements IClassifier<Label> {

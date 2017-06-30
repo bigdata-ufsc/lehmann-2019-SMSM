@@ -20,16 +20,15 @@ public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	public double getSimilarity(SemanticTrajectory A, SemanticTrajectory B) {
 		int n = A.length();
 		int m = B.length();
-		double aScore[] = new double[n];
 		double bScore[] = new double[m];
 		
 		double parityAB = 0.0;
 		
 		for (int i = 0; i < n; i++) {
-			double score = 0.0;
 			double maxScore = 0.0;
 		
 			for (int j = 0; j < m; j++) {
+				double score = 0.0;
 				double semanticScore = 0;
 				for (int k = 0; k < semantics.length; k++) {
 					Semantic semantic = semantics[k].semantic;
@@ -42,7 +41,6 @@ public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 					bScore[j] = maxScore > bScore[j] ? maxScore : bScore[j];
 				}
 			}
-			aScore[i] = maxScore;
 			parityAB += maxScore;
 		}
 		
@@ -61,7 +59,7 @@ public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	}
 	
 	public static class MSMSemanticParameter<V, T> {
-		public double weight;
+		private double weight;
 		private Semantic<V, T> semantic;
 		private T threshlod;
 		public MSMSemanticParameter(Semantic<V, T> semantic, T threshlod, double weight) {
@@ -69,6 +67,15 @@ public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 			this.semantic = semantic;
 			this.threshlod = threshlod;
 			this.weight = weight;
+		}
+		public double getWeight() {
+			return weight;
+		}
+		public Semantic<V, T> getSemantic() {
+			return semantic;
+		}
+		public T getThreshlod() {
+			return threshlod;
 		}
 	}
 

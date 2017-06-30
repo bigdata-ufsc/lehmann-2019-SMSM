@@ -20,9 +20,9 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.IClassificationExecutor;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
-import br.ufsc.lehmann.msm.artigo.classifiers.IClassifier;
-import br.ufsc.lehmann.msm.artigo.classifiers.ITrainer;
-import br.ufsc.lehmann.msm.artigo.classifiers.KNNSmileTrainer;
+import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;
+import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.KNNSmileTrainer;
 
 public class TestClassificationExecutor implements IClassificationExecutor {
 	

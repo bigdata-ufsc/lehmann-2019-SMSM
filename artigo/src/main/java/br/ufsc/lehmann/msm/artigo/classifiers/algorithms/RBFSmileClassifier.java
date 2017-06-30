@@ -1,16 +1,16 @@
-package br.ufsc.lehmann.msm.artigo.classifiers;
+package br.ufsc.lehmann.msm.artigo.classifiers.algorithms;
 
 import java.util.List;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import smile.classification.KNN;
+import smile.classification.RBFNetwork;
 
-public class KNNSmileClassifier<Label> implements IClassifier<Label> {
+public class RBFSmileClassifier<Label> implements IClassifier<Label> {
 
-	private KNN<SemanticTrajectory> nn;
+	private RBFNetwork<SemanticTrajectory> nn;
 	private List<Label> uniqueLabels;
 
-	public KNNSmileClassifier(KNN<SemanticTrajectory> knn, List<Label> uniqueLabels) {
+	public RBFSmileClassifier(RBFNetwork<SemanticTrajectory> knn, List<Label> uniqueLabels) {
 		nn = knn;
 		this.uniqueLabels = uniqueLabels;
 	}

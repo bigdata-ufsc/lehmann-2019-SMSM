@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo.classifiers;
+package br.ufsc.lehmann.msm.artigo.classifiers.algorithms;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;

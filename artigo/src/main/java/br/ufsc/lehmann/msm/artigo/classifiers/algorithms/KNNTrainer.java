@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo.classifiers;
+package br.ufsc.lehmann.msm.artigo.classifiers.algorithms;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +7,7 @@ import java.util.List;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
+import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 
 public class KNNTrainer<Label> implements ITrainer<Label> {

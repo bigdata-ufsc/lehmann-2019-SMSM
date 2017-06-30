@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo.classifiers;
+package br.ufsc.lehmann.msm.artigo.classifiers.algorithms;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,10 +8,10 @@ import java.util.List;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
-import smile.classification.RBFNetwork;
-import smile.math.distance.Metric;
+import smile.classification.KNN;
+import smile.math.distance.Distance;
 
-public class RBFSmileTrainer<Label> implements ITrainer<Label> {
+public class KNNSmileTrainer<Label> implements ITrainer<Label> {
 
 	@Override
 	public IClassifier<Label> train(SemanticTrajectory[] trainx, Semantic<Label, ?> discriminator, IMeasureDistance<SemanticTrajectory> measure) {
@@ -27,11 +27,11 @@ public class RBFSmileTrainer<Label> implements ITrainer<Label> {
 			y[i] = uniqueLabels.indexOf(labels.get(i));
 		}
 		
-		RBFNetwork.Trainer<SemanticTrajectory> knn = new RBFNetwork.Trainer<>(new SmileDistanceWrapper(measure));
-		return new RBFSmileClassifier<Label>(knn.train(trainx, y), uniqueLabels);
+		KNN<SemanticTrajectory> knn = new KNN<>(trainx, y, new SmileDistanceWrapper(measure));
+		return new KNNSmileClassifier<Label>(knn, uniqueLabels);
 	}
 	
-	class SmileDistanceWrapper implements Metric<SemanticTrajectory> {
+	class SmileDistanceWrapper implements Distance<SemanticTrajectory> {
 
 		private IMeasureDistance<SemanticTrajectory> measure;
 
