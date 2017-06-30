@@ -22,7 +22,7 @@ import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.ITrainer;
-import br.ufsc.lehmann.msm.artigo.classifiers.KNNTrainer;
+import br.ufsc.lehmann.msm.artigo.classifiers.KNNSmileTrainer;
 
 public class TestClassificationExecutor implements IClassificationExecutor {
 	
@@ -38,9 +38,9 @@ public class TestClassificationExecutor implements IClassificationExecutor {
 		List<SemanticTrajectory> testing = problem.testingData();
 		List<SemanticTrajectory> validating = problem.validatingData();
 		training.addAll(testing);
-		Semantic discriminator = problem.discriminator();
-		ITrainer trainer = new KNNTrainer();
-		IClassifier classifier = trainer.train(training.toArray(new SemanticTrajectory[training.size()]), discriminator, measureDistance);
+		Semantic<Object, Object> discriminator = problem.discriminator();
+		ITrainer<Object> trainer = new KNNSmileTrainer<Object>();
+		IClassifier<Object> classifier = trainer.train(training.toArray(new SemanticTrajectory[training.size()]), discriminator, measureDistance);
 		
 		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 1.25),
 				Runtime.getRuntime().availableProcessors(), 10L, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>());
@@ -77,7 +77,7 @@ public class TestClassificationExecutor implements IClassificationExecutor {
 				continue;
 			}
 			if (!toProcess.futureClassification.isDone()) {
-				classifications.add(new DelayedClassification(toProcess.futureClassification, 1500/* ms */));
+				classifications.add(new DelayedClassification(toProcess.futureClassification, 150/* ms */));
 			} else {
 				try {
 					Classification classification = toProcess.futureClassification.get();
