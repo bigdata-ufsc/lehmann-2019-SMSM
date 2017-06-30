@@ -34,7 +34,6 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.ITrainer;
 import br.ufsc.lehmann.msm.artigo.classifiers.KNNSmileTrainer;
-import br.ufsc.lehmann.msm.artigo.classifiers.RBFSmileTrainer;
 import br.ufsc.lehmann.msm.artigo.validation.Accuracy;
 import br.ufsc.lehmann.msm.artigo.validation.ClassificationMeasure;
 import br.ufsc.lehmann.msm.artigo.validation.FDR;
@@ -147,7 +146,7 @@ public abstract class AbstractClassifierTest {
 		System.out.println(testingAccuracy);
 		assertMeasure(ACCURACY, "Testing = " + testingAccuracy, testingAccuracy > .8);
 //		
-		double validationAccuracy = validation.<Object> cv(10, trainer, allData, allLabelData, ACCURACY);
+		double validationAccuracy = validation.<Object> cv(5, trainer, allData, allLabelData, ACCURACY);
 		System.out.println(validationAccuracy);
 		assertMeasure(ACCURACY, "Validating = " + validationAccuracy, validationAccuracy > .8);
 	}
@@ -198,7 +197,7 @@ public abstract class AbstractClassifierTest {
 		assertMeasure(FALLOUT, "Testing = " + testingMensures[4], testingMensures[4] < .2);
 		assertMeasure(FDR, "Testing = " + testingMensures[5], testingMensures[5] < .2);
 		
-		double[] validationAccuracy = validation.<Object> cv(10, trainer, allData, allLabelData, new Binarizer(allLabelData[0]), measures);
+		double[] validationAccuracy = validation.<Object> cv(5, trainer, allData, allLabelData, new Binarizer(allLabelData[0]), measures);
 		System.out.println(Arrays.toString(validationAccuracy));
 		assertMeasure(PRECISION, "Validation = " + validationAccuracy[0], validationAccuracy[0] > .8);
 		assertMeasure(RECALL, "Validation = " + validationAccuracy[1], validationAccuracy[1] > .8);
