@@ -9,11 +9,11 @@ public enum EnumProblem {
 //	DUBLIN_BUS(new DublinBusProblem()),//
 //	NEWYORK_BIKE(new NYBikeProblem()), //
 //	PATEL_ANIMALS(new PatelProblem("animal")),//
-	PATEL_HURRICANE(new PatelProblem("hurricane")),//
-	PATEL_HURRICANE_1vs4(new PatelProblem("hurricane_1vs4", "hurricane")),//
-	PATEL_HURRICANE_2vs3(new PatelProblem("hurricane_2vs3", "hurricane")),//
-	PATEL_HURRICANE_tsvs45(new PatelProblem("hurricane_tsvs45", "hurricane")),//
-	PATEL_HURRICANE_12vs45(new PatelProblem("hurricane_12vs45", "hurricane")),//
+//	PATEL_HURRICANE(new PatelProblem("hurricane")),//
+//	PATEL_HURRICANE_1vs4(new PatelProblem("hurricane_1vs4", "hurricane")),//
+//	PATEL_HURRICANE_2vs3(new PatelProblem("hurricane_2vs3", "hurricane")),//
+//	PATEL_HURRICANE_tsvs45(new PatelProblem("hurricane_tsvs45", "hurricane")),//
+//	PATEL_HURRICANE_12vs45(new PatelProblem("hurricane_12vs45", "hurricane")),//
 //	PATEL_VEHICLE_URBAN(new PatelProblem("vehicle_urban", "vehicle")),//
 	SYNTHETIC(new NElementProblem(50, 5));
 	

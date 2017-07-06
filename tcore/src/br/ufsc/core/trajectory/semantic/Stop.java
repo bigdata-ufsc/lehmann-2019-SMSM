@@ -17,8 +17,8 @@ public class Stop {
 	private int tid;
 	private int stopId;
 	private String stopName;
-	private Timestamp startTime;
-	private Timestamp endTime;
+	private long startTime;
+	private long endTime;
 	private double avg;
 
 	private Set<TPoint> points = new HashSet<TPoint>();
@@ -27,7 +27,7 @@ public class Stop {
 	private TPoint startPoint;
 	private TPoint endPoint;
 
-	public Stop(int stopId, String stopName, Timestamp startTime, Timestamp endTime, TPoint startPoint, TPoint endPoint, TPoint centroid) {
+	public Stop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, TPoint endPoint, TPoint centroid) {
 		this.stopId = stopId;
 		this.stopName = stopName;
 		this.startTime = startTime;
@@ -37,7 +37,7 @@ public class Stop {
 		this.centroid = centroid;
 	}
 
-	public Stop(SemanticTrajectory t, int stopId, Timestamp startTime, Timestamp endTime) {
+	public Stop(SemanticTrajectory t, int stopId, long startTime, long endTime) {
 		this.parent = t;
 		this.tid = t.getTrajectoryId();
 		this.stopId = stopId;
@@ -61,11 +61,11 @@ public class Stop {
 		return stopName;
 	}
 
-	public Timestamp getStartTime() {
+	public long getStartTime() {
 		return startTime;
 	}
 
-	public Timestamp getEndTime() {
+	public long getEndTime() {
 		return endTime;
 	}
 
@@ -89,11 +89,11 @@ public class Stop {
 		return centroid;
 	}
 
-	public void setEndTime(Timestamp endTime) {
+	public void setEndTime(long endTime) {
 		this.endTime = endTime;
 	}
 
-	public void setStartTime(Timestamp startTime) {
+	public void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
 
@@ -116,5 +116,25 @@ public class Stop {
 
 	public TPoint getEndPoint() {
 		return endPoint;
+	}
+
+	@Override
+	public String toString() {
+		return "Stop [trajectory=" + tid + ", stopId=" + stopId + ", stopName=" + stopName + ", startTime=" + startTime + ", endTime=" + endTime + ", avg="
+				+ avg + ", centroid=" + centroid + ", startPoint=" + startPoint + ", endPoint=" + endPoint + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Stop other = (Stop) obj;
+		if (stopId != other.stopId)
+			return false;
+		return true;
 	}
 }

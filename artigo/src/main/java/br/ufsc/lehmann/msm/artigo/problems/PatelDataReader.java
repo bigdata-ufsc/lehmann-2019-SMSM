@@ -38,11 +38,9 @@ public class PatelDataReader {
 		this.stopMoveTable = stopMoveTable;
 	}
 
-	public static final BasicSemantic<Double> TEMPORAL = new BasicSemantic<>(2);
 	public static final BasicSemantic<String> TID = new BasicSemantic<>(3);
 	public static final BasicSemantic<String> CLASS = new BasicSemantic<>(4);
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(5, new EuclideanDistanceFunction());
-	public static final BasicSemantic<Integer> GID = new BasicSemantic<>(6);
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "patel." + table, null, null);
@@ -61,7 +59,7 @@ public class PatelDataReader {
 			int stopId = stopsData.getInt("stop_id");
 			Stop stop = stops.get(stopId);
 			if(stop == null) {
-				stop = new Stop(stopId, null, stopsData.getTimestamp("start_time"), stopsData.getTimestamp("end_time"), new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")),
+				stop = new Stop(stopId, null, stopsData.getTimestamp("start_time").getTime(), stopsData.getTimestamp("end_time").getTime(), new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")),
 						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")));
 				stops.put(stopId, stop);
 			}
@@ -90,7 +88,7 @@ public class PatelDataReader {
 			records.put(record.getTid(), record);
 		}
 		st.close();
-		System.out.printf("Loaded %d raw trajectories from database\n", records.size());
+		System.out.printf("Loaded %d GPS points from database\n", records.size());
 		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<String> keys = records.keySet();

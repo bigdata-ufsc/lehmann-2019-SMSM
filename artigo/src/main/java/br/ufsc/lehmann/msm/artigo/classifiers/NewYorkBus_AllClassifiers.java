@@ -70,7 +70,7 @@ public class NewYorkBus_AllClassifiers {
 	public static class LandmarkStop extends Stop {
 
 		public LandmarkStop(TPoint centroid) {
-			super(-1, null, null, null, null, null, centroid);
+			super(-1, null, 0, 0, null, null, centroid);
 		}
 		
 	}

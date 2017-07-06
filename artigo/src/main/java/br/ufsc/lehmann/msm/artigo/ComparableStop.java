@@ -1,7 +1,5 @@
 package br.ufsc.lehmann.msm.artigo;
 
-import java.sql.Timestamp;
-
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Stop;
 
@@ -14,7 +12,7 @@ public class ComparableStop extends Stop implements Comparable<ComparableStop> {
 		this.comparator = comparator;
 	}
 
-	public ComparableStop(int stopId, String stopName, Timestamp startTime, Timestamp endTime, TPoint startPoint, TPoint endPoint, TPoint centroid) {
+	public ComparableStop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, TPoint endPoint, TPoint centroid) {
 		super(stopId, stopName, startTime, endTime, startPoint, endPoint, centroid);
 	}
 

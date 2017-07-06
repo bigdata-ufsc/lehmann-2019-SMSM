@@ -1,4 +1,7 @@
 package br.ufsc.core.trajectory.semantic;
+
+import br.ufsc.core.trajectory.SemanticTrajectory;
+
 /**
  * 
  * @author André Salvaro Furtado
@@ -6,55 +9,32 @@ package br.ufsc.core.trajectory.semantic;
  */
 public class Move {
 	
-	private int tid;
 	private int moveId;
-	private int startStopId;
-	private String startStopName;
-	private int endStopId;
-	private String endStopName;
 	private double startTime;
 	private double endTime;
-	// points interval - indexes
-	private int begin, end;
+	private SemanticTrajectory t;
+	private Stop start;
+	private Stop end;
+	private int begin;
+	private int length;
 
-
-	public Move(int tid, int moveId, int startStopId, String startStopName,
-			int endStopId, String endStopName, double startTime,
-			double endTime, int begin, int end) {
-		this.tid = tid;
+	public Move(SemanticTrajectory t, int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length) {
+		this.t = t;
 		this.moveId = moveId;
-		this.startStopId = startStopId;
-		this.startStopName = startStopName;
-		this.endStopId = endStopId;
-		this.endStopName = endStopName;
+		this.start = start;
+		this.end = end;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.begin = begin;
-		this.end = end;
+		this.length = length;
 	}
 
 	public int getTid() {
-		return tid;
+		return t.getTrajectoryId();
 	}
 
 	public int getMoveId() {
 		return moveId;
-	}
-
-	public int getStartStopId() {
-		return startStopId;
-	}
-
-	public String getStartStopName() {
-		return startStopName;
-	}
-
-	public int getEndStopId() {
-		return endStopId;
-	}
-
-	public String getEndStopName() {
-		return endStopName;
 	}
 
 	public double getStartTime() {
@@ -65,12 +45,92 @@ public class Move {
 		return endTime;
 	}
 
-	public int getBegin() {
-		return this.begin;
+	public SemanticTrajectory getT() {
+		return t;
 	}
 
-	public int getEnd() {
-		return this.end;
+	public void setT(SemanticTrajectory t) {
+		this.t = t;
 	}
-	
+
+	public Stop getStart() {
+		return start;
+	}
+
+	public void setStart(Stop start) {
+		this.start = start;
+	}
+
+	public Stop getEnd() {
+		return end;
+	}
+
+	public void setEnd(Stop end) {
+		this.end = end;
+	}
+
+	public void setMoveId(int moveId) {
+		this.moveId = moveId;
+	}
+
+	public void setStartTime(double startTime) {
+		this.startTime = startTime;
+	}
+
+	public void setEndTime(double endTime) {
+		this.endTime = endTime;
+	}
+
+	public int getBegin() {
+		return begin;
+	}
+
+	public void setBegin(int begin) {
+		this.begin = begin;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	@Override
+	public String toString() {
+		return "Move [moveId=" + moveId + ", startTime=" + startTime + ", endTime=" + endTime + ", trajectory=" + t.getTrajectoryId() + ", start=" + start + ", end=" + end
+				+ ", begin=" + begin + ", length=" + length + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + begin;
+		result = prime * result + ((end == null) ? 0 : end.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(endTime);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + length;
+		result = prime * result + moveId;
+		result = prime * result + ((start == null) ? 0 : start.hashCode());
+		temp = Double.doubleToLongBits(startTime);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Move other = (Move) obj;
+		if (moveId != other.moveId)
+			return false;
+		return true;
+	}
 }

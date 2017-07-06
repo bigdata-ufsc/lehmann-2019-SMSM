@@ -1,15 +1,20 @@
 package br.ufsc.lehmann;
 
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.core.trajectory.semantic.Move;
+import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
+import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
 
 public class NElementProblem implements Problem {
 	
@@ -17,8 +22,10 @@ public class NElementProblem implements Problem {
 	List<SemanticTrajectory> testing;
 	List<SemanticTrajectory> validating;
 	List<SemanticTrajectory> training;
-	BasicSemantic<Number> dataSemantic = new BasicSemantic<>(0);
-	BasicSemantic<String> discriminator = new BasicSemantic<>(3);
+	public static BasicSemantic<Number> dataSemantic = new BasicSemantic<>(0);
+	public static BasicSemantic<String> discriminator = new BasicSemantic<>(3);
+	public static StopSemantic stop = new StopSemantic(4, new EuclideanDistanceFunction());
+	public static MoveSemantic move = new MoveSemantic(5);
 	private int elements;
 	private int classes;
 	
@@ -33,13 +40,29 @@ public class NElementProblem implements Problem {
 		validating = new ArrayList<>();
 		training = new ArrayList<>();
 		for (int i = 0; i < elements; i++) {
-			SemanticTrajectory t = new SemanticTrajectory(i, 4);
+			SemanticTrajectory t = new SemanticTrajectory(i, 6);
 			int k = i%classes;
-			for (int j = 0; j < 5; j++) {
+			Instant now = java.time.Instant.now();
+			long nowMilli = now.toEpochMilli();
+			Stop startStop = null, endStop = null;
+			int initMove = -1;
+			for (int j = 0; j < 15; j++) {
 				t.addData(j, dataSemantic, k * k);
-				t.addData(j, Semantic.GEOGRAPHIC, new TPoint(k + (j / 10.0), k + (j / 10.0)));
-				t.addData(j, Semantic.TEMPORAL, new TemporalDuration(java.time.Instant.now().plus(j, ChronoUnit.MINUTES), java.time.Instant.now().plus(j + 1, ChronoUnit.MINUTES)));
+				t.addData(j, Semantic.GEOGRAPHIC, new TPoint(k + (j / 20.0), k + (j / 20.0)));
+				t.addData(j, Semantic.TEMPORAL, new TemporalDuration(now.plus(j, ChronoUnit.MINUTES), now.plus(j + 1, ChronoUnit.MINUTES)));
 				t.addData(j, discriminator, String.valueOf(k));
+				long future = now.plus(j, ChronoUnit.MINUTES).toEpochMilli();
+				if(j % 3 == 0) {
+					if(startStop == null) {
+						startStop = new Stop(t, j, nowMilli, nowMilli);
+					} else {
+						startStop = endStop;
+					}
+					endStop = new Stop(t, j + 2, nowMilli, nowMilli);
+					t.addData(j, stop, startStop);
+				} else {
+					t.addData(j, move, new Move(t, j, startStop, endStop, nowMilli, future, initMove, 4));
+				}
 			}
 			data.add(t);
 			if (i % 3 == 0) {
@@ -59,7 +82,8 @@ public class NElementProblem implements Problem {
 	public Semantic[] semantics() {
 		return new Semantic[] {
 			dataSemantic,
-			Semantic.GEOGRAPHIC
+			Semantic.GEOGRAPHIC,
+			move
 		};
 	}
 

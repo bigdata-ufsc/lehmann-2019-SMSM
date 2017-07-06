@@ -56,7 +56,7 @@ public class NewYorkBusDataReader {
 			int stopId = stopsData.getInt("stop_id");
 			Stop stop = stops.get(stopId);
 			if(stop == null) {
-				stop = new Stop(stopId, null, stopsData.getTimestamp("start_time"), stopsData.getTimestamp("end_time"), new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")),
+				stop = new Stop(stopId, null, stopsData.getTimestamp("start_time").getTime(), stopsData.getTimestamp("end_time").getTime(), new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")),
 						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")));
 				stops.put(stopId, stop);
 			}
@@ -111,7 +111,7 @@ public class NewYorkBusDataReader {
 			records.put(record.getTripId(), record);
 		}
 		st.close();
-		System.out.printf("Loaded %d raw trajectories from database\n", records.size());
+		System.out.printf("Loaded %d GPS points from database\n", records.size());
 		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<String> keys = records.keySet();

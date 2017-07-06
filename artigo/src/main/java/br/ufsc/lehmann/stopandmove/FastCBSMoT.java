@@ -25,7 +25,7 @@ public class FastCBSMoT {
 	}
 
 	public StopAndMove findStops(SemanticTrajectory T, double maxDist, int minTime, int timeTolerance, int mergeTolerance, double ratio,
-			MutableInt sid) {
+			MutableInt sid, MutableInt mid) {
 		int size = T.length();
 		int[] neighborhood = new int[size];
 	
@@ -45,11 +45,11 @@ public class FastCBSMoT {
 				Instant p1 = Semantic.TEMPORAL.getData(T, i).getStart();
 				Instant p2 = Semantic.TEMPORAL.getData(T, i + neighborhood[i] - 1).getStart();
 	
-				long p2Milli = p2.toEpochMilli();
 				long p1Milli = p1.toEpochMilli();
+				long p2Milli = p2.toEpochMilli();
 				if ((p2Milli - p1Milli) >= timeTolerance) {
 					List<Integer> points = new ArrayList<>(neighborhood[i]);
-					Stop s = new Stop(T, sid.getAndIncrement(), new Timestamp(p1Milli), new Timestamp(p2Milli));
+					Stop s = new Stop(T, sid.getAndIncrement(), p1Milli, p2Milli);
 					s.setCentroid(centroid(T, i, i + neighborhood[i] - 1));
 	
 					for (int x = 0; x < neighborhood[i]; x++) {
@@ -58,7 +58,26 @@ public class FastCBSMoT {
 						points.add(Semantic.GID.getData(T, i + x).intValue());
 					}
 					ret.addStop(s, points);
+				} else {
+					List<Integer> gids = new ArrayList<>();
+					int init = i, j = i;
+					for (; j < neighborhood.length && j < i + neighborhood[i] + 1; j++) {
+						gids.add(Semantic.GID.getData(T, j).intValue());
+					}
+					ret.addMove(new Move(T, mid.getAndIncrement(), ret.lastStop(), null, p1Milli, p2Milli, init, j - init), gids);
+					i += neighborhood[i];
 				}
+			} else {
+				List<Integer> gids = new ArrayList<>();
+				int init = i, j = i;
+				for (; j < neighborhood.length && neighborhood[j] == 0; j++) {
+					gids.add(Semantic.GID.getData(T, j).intValue());
+				}
+				i += (j - init) - 1;
+				Instant p1 = Semantic.TEMPORAL.getData(T, init).getStart();
+				Instant p2 = Semantic.TEMPORAL.getData(T, j - 1).getEnd();
+				Move m = new Move(T, mid.getAndIncrement(), ret.lastStop(), null, p1.toEpochMilli(), p2.toEpochMilli(), init, j - init);
+				ret.addMove(m, gids);
 			}
 		}
 	
@@ -71,9 +90,8 @@ public class FastCBSMoT {
 		for (int i = 0; i < S.size(); i++) {
 			Stop s = S.get(i);
 
-			if ((s.getEndTime().getTime() - s.getStartTime().getTime()) < minTime) {
-				Collection<Integer> oldStopPoints = stopAndMove.remove(s);
-				stopAndMove.addMove(new Move(0, 0, 0, null, 0, null, 0.0, 0.0, 0, 0), oldStopPoints);
+			if ((s.getEndTime() - s.getStartTime()) < minTime) {
+				stopAndMove.remove(s);
 			}
 		}
 		return stopAndMove;
@@ -86,7 +104,7 @@ public class FastCBSMoT {
 			if (i + 1 != S.size()) {
 				Stop s1 = S.get(i);
 				Stop s2 = S.get(i + 1);
-				if (s2.getStartTime().getTime() - s1.getEndTime().getTime() <= timeTolerance) {
+				if (s2.getStartTime() - s1.getEndTime() <= timeTolerance) {
 
 					TPoint c1 = S.get(i).getCentroid();
 					TPoint c2 = S.get(i + 1).getCentroid();
