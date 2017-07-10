@@ -74,7 +74,7 @@ public class TaxiShangaiProblem implements Problem {
 			return;
 		}
 		try {
-			data = new ArrayList<>(new TDriveDataReader().read());
+			data = new ArrayList<>(new TaxiShangaiDataReader().read());
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}

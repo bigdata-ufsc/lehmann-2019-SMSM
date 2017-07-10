@@ -49,14 +49,15 @@ public class FastCBSMoT {
 				long p2Milli = p2.toEpochMilli();
 				if ((p2Milli - p1Milli) >= timeTolerance) {
 					List<Integer> points = new ArrayList<>(neighborhood[i]);
-					Stop s = new Stop(T, sid.getAndIncrement(), p1Milli, p2Milli);
+					Stop s = new Stop(T, sid.getAndIncrement(), i, p1Milli, i + neighborhood[i], p2Milli);
 					s.setCentroid(centroid(T, i, i + neighborhood[i] - 1));
 	
-					for (int x = 0; x < neighborhood[i]; x++) {
+					for (int x = 0; x <= neighborhood[i]; x++) {
 						TPoint p = Semantic.GEOGRAPHIC.getData(T, i + x);
 						s.addPoint(p);
 						points.add(Semantic.GID.getData(T, i + x).intValue());
 					}
+					i += neighborhood[i];
 					ret.addStop(s, points);
 				} else {
 					List<Integer> gids = new ArrayList<>();
@@ -73,25 +74,25 @@ public class FastCBSMoT {
 				for (; j < neighborhood.length && neighborhood[j] == 0; j++) {
 					gids.add(Semantic.GID.getData(T, j).intValue());
 				}
-				i += (j - init) - 1;
+				i = j - 1;
 				Instant p1 = Semantic.TEMPORAL.getData(T, init).getStart();
-				Instant p2 = Semantic.TEMPORAL.getData(T, j - 1).getEnd();
+				Instant p2 = Semantic.TEMPORAL.getData(T, i).getEnd();
 				Move m = new Move(T, mid.getAndIncrement(), ret.lastStop(), null, p1.toEpochMilli(), p2.toEpochMilli(), init, j - init);
 				ret.addMove(m, gids);
 			}
 		}
 	
 		ret = mergeStops(ret, maxDist, mergeTolerance);
-		ret = cleanStops(ret, minTime);
+		ret = cleanStops(ret, minTime, mid);
 		return ret;
 	}
-	StopAndMove cleanStops(StopAndMove stopAndMove, int minTime) {
+	StopAndMove cleanStops(StopAndMove stopAndMove, int minTime, MutableInt mid) {
 		List<Stop> S = new ArrayList<>(stopAndMove.getStops());
 		for (int i = 0; i < S.size(); i++) {
 			Stop s = S.get(i);
 
 			if ((s.getEndTime() - s.getStartTime()) < minTime) {
-				stopAndMove.remove(s);
+				stopAndMove.remove(s, i == 0 ? null : S.get(i - 1), i + 1 == S.size() ? null : S.get(i + 1), mid);
 			}
 		}
 		return stopAndMove;
@@ -146,7 +147,7 @@ public class FastCBSMoT {
 		while (j < T.length() && yet) {
 			TPoint p = Semantic.GEOGRAPHIC.getData(T, i);
 			TPoint d = Semantic.GEOGRAPHIC.getData(T, j);
-			if (distance.distance(p, d) < maxDist) {
+			if (distance.distance(p, d) < distance.convert(maxDist)) {
 				neighbors++;
 			} else {
 				yet = false;

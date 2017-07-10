@@ -59,7 +59,8 @@ public class TDriveDataReader {
 				"SELECT tid, \"time\", lat, lon, gid, semantic_stop_id, " + //
 						"semantic_move_id " + //
 						"FROM taxi.\"beijing_t-drive\"" + //
-						" where tid < 500" + //
+//						" where semantic_stop_id is null and semantic_move_id is null" + //
+//						" where tid=1489" + //
 						" order by \"time\"");
 		Multimap<String, TDriveRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		System.out.println("Fetching...");
@@ -84,9 +85,8 @@ public class TDriveDataReader {
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
-		int trajectoryId = 0;
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajectoryId++, 7);
+			SemanticTrajectory s = new SemanticTrajectory(Integer.parseInt(trajId), 7);
 			Collection<TDriveRecord> collection = records.get(trajId);
 			int i = 0;
 			for (TDriveRecord record : collection) {

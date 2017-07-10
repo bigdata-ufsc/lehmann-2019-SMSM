@@ -84,9 +84,8 @@ public class TaxiShangaiDataReader {
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
-		int trajectoryId = 0;
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajectoryId++, 7);
+			SemanticTrajectory s = new SemanticTrajectory(Integer.valueOf(trajId), 7);
 			Collection<TDriveRecord> collection = records.get(trajId);
 			int i = 0;
 			for (TDriveRecord record : collection) {

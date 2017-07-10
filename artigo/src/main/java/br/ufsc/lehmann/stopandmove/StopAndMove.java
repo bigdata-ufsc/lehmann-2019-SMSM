@@ -8,10 +8,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.mutable.MutableInt;
+
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.Multiset;
 
+import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Move;
@@ -54,29 +57,35 @@ public class StopAndMove {
 		});
 	}
 
-	public Collection<Integer> remove(Stop s) {
+	public Collection<Integer> remove(Stop s, Stop previousStop, Stop nextStop, MutableInt mid) {
 		Set<Move> movesToMerge = moves.asMap().entrySet().parallelStream().filter((Map.Entry<Move, Collection<Integer>> entry) -> {
 			return entry.getKey().getStart() == s || entry.getKey().getEnd() == s;
-		}).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet();
+		}).collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.counting())).keySet();
 		if(movesToMerge.isEmpty()) {
-			throw new IllegalStateException("No moves around stop");
+			Collection<Integer> stopPoints = stops.removeAll(s);
+			Move move = new Move(trajectory, mid.getAndIncrement(), previousStop, nextStop, s.getStartTime(), s.getEndTime(), s.getBegin(), stopPoints.size());
+			moves.putAll(move, stopPoints);
+			return stopPoints;
 		}
 		Collection<Integer> stopPoints = stops.removeAll(s);
 		List<Integer> mergedPoints = new ArrayList<>(stopPoints);
 		Move initial = null, end = null;
-		Integer initialIndex = Integer.MAX_VALUE, endIndex = -1;
+		Integer initialIndex = previousStop == null ? 0 : previousStop.getEnd() + 1, endIndex = nextStop == null ? this.trajectory.length() - 1 : nextStop.getBegin();
 		for (Move move : movesToMerge) {
-			if(initialIndex > move.getBegin()) {
+			if(initialIndex >= move.getBegin()) {
 				initialIndex = move.getBegin();
 				initial = move;
 			}
-			if(endIndex < move.getBegin() + move.getLength()) {
+			if(endIndex <= move.getBegin() + move.getLength()) {
 				endIndex = move.getBegin() + move.getLength();
 				end = move;
 			}
 			mergedPoints.addAll(moves.removeAll(move));
 		}
-		Move move = new Move(trajectory, initial.getMoveId(), initial.getStart(), end.getEnd(), initial.getStartTime(), end.getEndTime(), initialIndex, endIndex - initialIndex);
+		int moveId = (initial == null ? end : initial).getMoveId();
+		double startTime = initial == null ? (previousStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getEnd().toEpochMilli() : previousStop.getEndTime()) : initial.getStartTime();
+		double endTime = end == null ? (nextStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getStart().toEpochMilli() : nextStop.getStartTime()) : end.getEndTime();
+		Move move = new Move(trajectory, moveId, previousStop, nextStop, startTime, endTime, initialIndex, endIndex - initialIndex);
 		moves.putAll(move, mergedPoints);
 		return stopPoints;
 	}

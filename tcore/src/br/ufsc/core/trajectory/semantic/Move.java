@@ -107,16 +107,7 @@ public class Move {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + begin;
-		result = prime * result + ((end == null) ? 0 : end.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(endTime);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + length;
 		result = prime * result + moveId;
-		result = prime * result + ((start == null) ? 0 : start.hashCode());
-		temp = Double.doubleToLongBits(startTime);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 

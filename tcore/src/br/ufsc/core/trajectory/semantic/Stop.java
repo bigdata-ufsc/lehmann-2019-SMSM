@@ -21,6 +21,7 @@ public class Stop {
 	private long endTime;
 	private double avg;
 
+	private int begin, end;
 	private Set<TPoint> points = new HashSet<TPoint>();
 	private TPoint centroid;
 	private SemanticTrajectory parent;
@@ -37,8 +38,16 @@ public class Stop {
 		this.centroid = centroid;
 	}
 
-	public Stop(SemanticTrajectory t, int stopId, long startTime, long endTime) {
+	public Stop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, int beginIndex, TPoint endPoint, int endIndex, TPoint centroid) {
+		this(stopId, stopName, startTime, endTime, startPoint, endPoint, centroid);
+		begin = beginIndex;
+		end = endIndex;
+	}
+
+	public Stop(SemanticTrajectory t, int stopId, int beginIndex, long startTime, int endIndex, long endTime) {
 		this.parent = t;
+		this.begin = beginIndex;
+		this.end = endIndex;
 		this.tid = t.getTrajectoryId();
 		this.stopId = stopId;
 		this.startTime = startTime;
@@ -116,6 +125,14 @@ public class Stop {
 
 	public TPoint getEndPoint() {
 		return endPoint;
+	}
+
+	public int getBegin() {
+		return begin;
+	}
+
+	public int getEnd() {
+		return end;
 	}
 
 	@Override

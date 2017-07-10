@@ -27,17 +27,39 @@ public class StopAndMoveExtractor {
 			int mergeTolerance, int minTime, Connection conn, MutableInt sid, MutableInt mid, PreparedStatement update, PreparedStatement insert)
 			throws SQLException {
 		List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), ratio, timeTolerance, maxDist, mergeTolerance, minTime, sid, mid);
+//		for (StopAndMove stopAndMove : findBestCBSMoT) {
+//			int moveAndStopPoints = 0;
+//			List<Stop> stops = stopAndMove.getStops();
+//			for (Stop stop : stops) {
+//				List<Integer> gids = stopAndMove.getGids(stop);
+//				moveAndStopPoints += gids.size();
+//			}
+//			List<Move> moves = stopAndMove.getMoves();
+//			for (Move move : moves) {
+//				List<Integer> gids = stopAndMove.getGids(move);
+//				moveAndStopPoints += gids.size();
+//			}
+//			if(stopAndMove.getTrajectory().length() != moveAndStopPoints) {
+//				System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", length: " + stopAndMove.getTrajectory().length() + ", stops and moves: " + moveAndStopPoints);
+//			}
+//		}
+//		if(true) {
+//			throw new RuntimeException();
+//		}
+		int registers = 0;
 		for (StopAndMove stopAndMove : findBestCBSMoT) {
 			List<Stop> stops = stopAndMove.getStops();
 			List<Move> moves = stopAndMove.getMoves();
 			System.out.println("Traj.: " + PatelDataReader.TID.getData(stopAndMove.getTrajectory(), 0) + ", stops: " + stops.size());
 			for (Stop stop : stops) {
-				System.out.println("From " + stop.getStartTime() + " to " + stop.getEndTime());
+				registers++;
+//				System.out.println("From " + stop.getStartTime() + " to " + stop.getEndTime());
 				List<Integer> gids = stopAndMove.getGids(stop);
 				Array array = conn.createArrayOf("integer", gids.toArray(new Integer[gids.size()]));
 				update.setInt(1, stop.getStopId());
 				update.setNull(2, Types.NUMERIC);
-				update.setArray(3, array);
+				update.setInt(3, stopAndMove.getTrajectory().getTrajectoryId());
+				update.setArray(4, array);
 				update.addBatch();
 				
 				List<TPoint> points = new ArrayList<>(stop.getPoints());
@@ -52,19 +74,26 @@ public class StopAndMoveExtractor {
 				insert.setDouble(9, stop.getCentroid().getX());
 				insert.setDouble(10, stop.getCentroid().getY());
 				insert.addBatch();
+				if(registers % 100 == 0) {
+					update.executeBatch();
+					insert.executeBatch();
+					conn.commit();
+				}
 			}
 			System.out.println("Traj.: " + PatelDataReader.TID.getData(stopAndMove.getTrajectory(), 0) + ", moves: " + moves.size());
 			for (Move move : moves) {
-				System.out.println("From " + move.getStartTime() + " to " + move.getEndTime());
+				registers++;
+//				System.out.println("From " + move.getStartTime() + " to " + move.getEndTime());
 				List<Integer> gids = stopAndMove.getGids(move);
 				Array array = conn.createArrayOf("integer", gids.toArray(new Integer[gids.size()]));
 				update.setNull(1, Types.NUMERIC);
 				update.setInt(2, move.getMoveId());
-				update.setArray(3, array);
+				update.setInt(3, stopAndMove.getTrajectory().getTrajectoryId());
+				update.setArray(4, array);
 				update.addBatch();
 				
 				TPoint initialPoint = Semantic.GEOGRAPHIC.getData(move.getT(), move.getBegin());
-				TPoint endPoint = Semantic.GEOGRAPHIC.getData(move.getT(), move.getBegin() + move.getLength());
+				TPoint endPoint = Semantic.GEOGRAPHIC.getData(move.getT(), move.getBegin() + move.getLength() - 1);
 				insert.setNull(1, Types.INTEGER);
 				insert.setInt(2, move.getMoveId());
 				insert.setTimestamp(3, new Timestamp((long) move.getStartTime()));
@@ -76,11 +105,11 @@ public class StopAndMoveExtractor {
 				insert.setNull(9, Types.DOUBLE);
 				insert.setNull(10, Types.DOUBLE);
 				insert.addBatch();
-			}
-			if(sid.getValue() % 10 == 0) {
-				update.executeBatch();
-				insert.executeBatch();
-				conn.commit();
+				if(registers % 100 == 0) {
+					update.executeBatch();
+					insert.executeBatch();
+					conn.commit();
+				}
 			}
 		}
 		update.executeBatch();
@@ -97,7 +126,7 @@ public class StopAndMoveExtractor {
 				for (int k = 475; k <= 475; k+=25) {//maxDist
 					final int finalK = k;
 					IntStream.iterate(325, l -> l + 25).limit(1).parallel().forEach((l) -> {//mergeTolerance
-						for (int m = 10 * 1000; m <= 20 * 1000; m+=2) {//minTime
+						for (int m = 30 * 1000; m <= 90 * 1000; m+=1000) {//minTime
 							List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), finalI, finalJ, finalK, l, m, sid, mid);
 							int stopsCount = 0;
 							for (StopAndMove stopAndMove : findBestCBSMoT) {

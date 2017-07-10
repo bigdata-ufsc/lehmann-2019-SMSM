@@ -80,9 +80,9 @@ public class TDriveProblem implements Problem {
 		}
 		Collections.shuffle(data);
 //		data = data.subList(0, data.size() / 80);
-		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
-		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));
-		this.validatingData = data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1);
+//		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
+//		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));
+//		this.validatingData = data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1);
 		loaded = true;
 	}
 

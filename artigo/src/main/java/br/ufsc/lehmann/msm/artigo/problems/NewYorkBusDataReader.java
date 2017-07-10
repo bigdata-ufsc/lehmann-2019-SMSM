@@ -116,9 +116,8 @@ public class NewYorkBusDataReader {
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
-		int trajectoryId = 0;
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajectoryId++, 11);
+			SemanticTrajectory s = new SemanticTrajectory(Integer.valueOf(trajId), 11);
 			Collection<NewYorkBusRecord> collection = records.get(trajId);
 			int i = 0;
 			for (NewYorkBusRecord record : collection) {
