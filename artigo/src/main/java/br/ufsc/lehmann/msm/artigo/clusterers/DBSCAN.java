@@ -20,7 +20,6 @@ import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
-import weka.clusterers.ClusterEvaluation;
 
 public class DBSCAN {
 

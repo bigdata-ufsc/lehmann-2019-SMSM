@@ -18,9 +18,10 @@ public class DublinBusRecord {
 	private int stop_id;
 	private int gid;
 	private Integer semanticStopId;
+	private Integer semanticMoveId;
 
 	public DublinBusRecord(int gid, Timestamp time, int lineId, String journey_pattern, int vehicle_journey, String operator, boolean congestion, double longitude, double latitude,
-			int block_journey_id, int vehicle_id, int stop_id, Integer semanticStopId) {
+			int block_journey_id, int vehicle_id, int stop_id, Integer semanticStopId, Integer semanticMoveId) {
 				this.gid = gid;
 				this.time = time;
 				this.lineId = lineId;
@@ -34,6 +35,7 @@ public class DublinBusRecord {
 				this.vehicle_id = vehicle_id;
 				this.stop_id = stop_id;
 				this.semanticStopId = semanticStopId;
+				this.semanticMoveId = semanticMoveId;
 	}
 
 	public Timestamp getTime() {
@@ -88,4 +90,7 @@ public class DublinBusRecord {
 		return gid;
 	}
 
+	public Integer getSemanticMoveId() {
+		return semanticMoveId;
+	}
 }

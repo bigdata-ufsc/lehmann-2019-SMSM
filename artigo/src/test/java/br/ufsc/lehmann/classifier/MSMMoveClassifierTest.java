@@ -14,6 +14,7 @@ import br.ufsc.lehmann.msm.artigo.classifiers.MSMMoveClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NYBikeProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 
 public class MSMMoveClassifierTest extends AbstractClassifierTest {
@@ -39,7 +40,8 @@ public class MSMMoveClassifierTest extends AbstractClassifierTest {
 					new MSMSemanticParameter(problem.semantics()[2], null, 1/3));
 		}
 		if(problem instanceof PatelProblem) {
-			return new MSMMoveClassifier(new MSMSemanticParameter(problem.semantics()[0], 500, 0.5),
+			return new MSMMoveClassifier(new MSMSemanticParameter(PatelDataReader.MOVE_SEMANTIC, null, 0.5),
+					new MSMSemanticParameter(problem.semantics()[0], 500, 0.5),
 					new MSMSemanticParameter(problem.semantics()[1], 100, 0.5));
 		}
 		return null;

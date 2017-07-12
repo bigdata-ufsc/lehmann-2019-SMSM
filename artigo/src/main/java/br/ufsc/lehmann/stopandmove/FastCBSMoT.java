@@ -49,7 +49,7 @@ public class FastCBSMoT {
 				long p2Milli = p2.toEpochMilli();
 				if ((p2Milli - p1Milli) >= timeTolerance) {
 					List<Integer> points = new ArrayList<>(neighborhood[i]);
-					Stop s = new Stop(T, sid.getAndIncrement(), i, p1Milli, i + neighborhood[i], p2Milli);
+					Stop s = new Stop(sid.getAndIncrement(), i, p1Milli, neighborhood[i] + 1, p2Milli);
 					s.setCentroid(centroid(T, i, i + neighborhood[i] - 1));
 	
 					for (int x = 0; x <= neighborhood[i]; x++) {
@@ -65,7 +65,7 @@ public class FastCBSMoT {
 					for (; j < neighborhood.length && j < i + neighborhood[i] + 1; j++) {
 						gids.add(Semantic.GID.getData(T, j).intValue());
 					}
-					ret.addMove(new Move(T, mid.getAndIncrement(), ret.lastStop(), null, p1Milli, p2Milli, init, j - init), gids);
+					ret.addMove(new Move(mid.getAndIncrement(), ret.lastStop(), null, p1Milli, p2Milli, init, j - init), gids);
 					i += neighborhood[i];
 				}
 			} else {
@@ -77,7 +77,7 @@ public class FastCBSMoT {
 				i = j - 1;
 				Instant p1 = Semantic.TEMPORAL.getData(T, init).getStart();
 				Instant p2 = Semantic.TEMPORAL.getData(T, i).getEnd();
-				Move m = new Move(T, mid.getAndIncrement(), ret.lastStop(), null, p1.toEpochMilli(), p2.toEpochMilli(), init, j - init);
+				Move m = new Move(mid.getAndIncrement(), ret.lastStop(), null, p1.toEpochMilli(), p2.toEpochMilli(), init, j - init);
 				ret.addMove(m, gids);
 			}
 		}

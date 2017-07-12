@@ -26,7 +26,7 @@ public class NewYorkBusStopsDataReader {
 		Statement st = conn.createStatement();
 		st.setFetchSize(1000);
 		ResultSet stopsData = st.executeQuery(
-				"SELECT stop_id, start_lat, start_lon, end_lat, end_lon, centroid_lat, " + //
+				"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
 						"centroid_lon, start_time, end_time " + //
 						"FROM stops_moves.bus_nyc_20140927");
 		Map<Integer, Stop> stops = new HashMap<>();
@@ -34,8 +34,15 @@ public class NewYorkBusStopsDataReader {
 			int stopId = stopsData.getInt("stop_id");
 			Stop stop = stops.get(stopId);
 			if(stop == null) {
-				stop = new Stop(stopId, null, stopsData.getTimestamp("start_time").getTime(), stopsData.getTimestamp("end_time").getTime(), new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")),
-						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")));
+				stop = new Stop(stopId, null, //
+						stopsData.getTimestamp("start_time").getTime(), //
+						stopsData.getTimestamp("end_time").getTime(), //
+						new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")),//
+						stopsData.getInt("begin"),//
+						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
+						stopsData.getInt("length"),//
+						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon"))//
+						);
 				stops.put(stopId, stop);
 			}
 		}

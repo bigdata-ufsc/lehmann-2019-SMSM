@@ -14,7 +14,6 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 
-import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Move;
@@ -24,7 +23,7 @@ import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 public class StopAndMoveExtractor {
 
 	public static void persistStopMove(FastCBSMoT fastCBSMoT, List<SemanticTrajectory> trajs, double ratio, int timeTolerance, double maxDist,
-			int mergeTolerance, int minTime, Connection conn, MutableInt sid, MutableInt mid, PreparedStatement update, PreparedStatement insert)
+			int mergeTolerance, int minTime, Connection conn, MutableInt sid, MutableInt mid, PreparedStatement update, PreparedStatement insertStop, PreparedStatement insertMove)
 			throws SQLException {
 		List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), ratio, timeTolerance, maxDist, mergeTolerance, minTime, sid, mid);
 //		for (StopAndMove stopAndMove : findBestCBSMoT) {
@@ -50,7 +49,7 @@ public class StopAndMoveExtractor {
 		for (StopAndMove stopAndMove : findBestCBSMoT) {
 			List<Stop> stops = stopAndMove.getStops();
 			List<Move> moves = stopAndMove.getMoves();
-			System.out.println("Traj.: " + PatelDataReader.TID.getData(stopAndMove.getTrajectory(), 0) + ", stops: " + stops.size());
+			System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", stops: " + stops.size());
 			for (Stop stop : stops) {
 				registers++;
 //				System.out.println("From " + stop.getStartTime() + " to " + stop.getEndTime());
@@ -58,29 +57,35 @@ public class StopAndMoveExtractor {
 				Array array = conn.createArrayOf("integer", gids.toArray(new Integer[gids.size()]));
 				update.setInt(1, stop.getStopId());
 				update.setNull(2, Types.NUMERIC);
-				update.setInt(3, stopAndMove.getTrajectory().getTrajectoryId());
+				update.setObject(3, stopAndMove.getTrajectory().getTrajectoryId());
 				update.setArray(4, array);
 				update.addBatch();
 				
 				List<TPoint> points = new ArrayList<>(stop.getPoints());
-				insert.setInt(1, stop.getStopId());
-				insert.setNull(2, Types.INTEGER);
-				insert.setTimestamp(3, new Timestamp(stop.getStartTime()));
-				insert.setDouble(4, points.get(0).getX());
-				insert.setDouble(5, points.get(0).getY());
-				insert.setTimestamp(6, new Timestamp(stop.getEndTime()));
-				insert.setDouble(7, points.get(points.size() - 1).getX());
-				insert.setDouble(8, points.get(points.size() - 1).getY());
-				insert.setDouble(9, stop.getCentroid().getX());
-				insert.setDouble(10, stop.getCentroid().getY());
-				insert.addBatch();
+				insertStop.setInt(1, stop.getStopId());
+				insertStop.setTimestamp(2, new Timestamp(stop.getStartTime()));
+				insertStop.setDouble(3, points.get(0).getX());
+				insertStop.setDouble(4, points.get(0).getY());
+				insertStop.setInt(5, stop.getBegin());
+				insertStop.setTimestamp(6, new Timestamp(stop.getEndTime()));
+				insertStop.setDouble(7, points.get(points.size() - 1).getX());
+				insertStop.setDouble(8, points.get(points.size() - 1).getY());
+				insertStop.setInt(9, stop.getLength());
+				insertStop.setDouble(10, stop.getCentroid().getX());
+				insertStop.setDouble(11, stop.getCentroid().getY());
+				insertStop.addBatch();
 				if(registers % 100 == 0) {
-					update.executeBatch();
-					insert.executeBatch();
+					try {
+						update.executeBatch();
+						insertStop.executeBatch();
+						insertMove.executeBatch();
+					} catch (SQLException e) {
+						throw e.getNextException();
+					}
 					conn.commit();
 				}
 			}
-			System.out.println("Traj.: " + PatelDataReader.TID.getData(stopAndMove.getTrajectory(), 0) + ", moves: " + moves.size());
+			System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", moves: " + moves.size());
 			for (Move move : moves) {
 				registers++;
 //				System.out.println("From " + move.getStartTime() + " to " + move.getEndTime());
@@ -88,32 +93,41 @@ public class StopAndMoveExtractor {
 				Array array = conn.createArrayOf("integer", gids.toArray(new Integer[gids.size()]));
 				update.setNull(1, Types.NUMERIC);
 				update.setInt(2, move.getMoveId());
-				update.setInt(3, stopAndMove.getTrajectory().getTrajectoryId());
+				update.setObject(3, stopAndMove.getTrajectory().getTrajectoryId());
 				update.setArray(4, array);
 				update.addBatch();
 				
-				TPoint initialPoint = Semantic.GEOGRAPHIC.getData(move.getT(), move.getBegin());
-				TPoint endPoint = Semantic.GEOGRAPHIC.getData(move.getT(), move.getBegin() + move.getLength() - 1);
-				insert.setNull(1, Types.INTEGER);
-				insert.setInt(2, move.getMoveId());
-				insert.setTimestamp(3, new Timestamp((long) move.getStartTime()));
-				insert.setDouble(4, initialPoint.getX());
-				insert.setDouble(5, initialPoint.getY());
-				insert.setTimestamp(6, new Timestamp((long) move.getEndTime()));
-				insert.setDouble(7, endPoint.getX());
-				insert.setDouble(8, endPoint.getY());
-				insert.setNull(9, Types.DOUBLE);
-				insert.setNull(10, Types.DOUBLE);
-				insert.addBatch();
+				insertMove.setInt(1, move.getMoveId());
+				insertMove.setTimestamp(2, new Timestamp((long) move.getStartTime()));
+				if(move.getStart() != null) {
+					insertMove.setInt(3, move.getStart().getStopId());
+				} else {
+					insertMove.setNull(3, Types.INTEGER);
+				}
+				insertMove.setDouble(4, move.getBegin());
+				insertMove.setTimestamp(5, new Timestamp((long) move.getEndTime()));
+				if(move.getEnd() != null) {
+					insertMove.setInt(6, move.getEnd().getStopId());
+				} else {
+					insertMove.setNull(6, Types.INTEGER);
+				}
+				insertMove.setInt(7, move.getLength());
+				insertMove.addBatch();
 				if(registers % 100 == 0) {
-					update.executeBatch();
-					insert.executeBatch();
+					try {
+						update.executeBatch();
+						insertStop.executeBatch();
+						insertMove.executeBatch();
+					} catch (SQLException e) {
+						throw e.getNextException();
+					}
 					conn.commit();
 				}
 			}
 		}
 		update.executeBatch();
-		insert.executeBatch();
+		insertStop.executeBatch();
+		insertMove.executeBatch();
 		conn.commit();
 	}
 

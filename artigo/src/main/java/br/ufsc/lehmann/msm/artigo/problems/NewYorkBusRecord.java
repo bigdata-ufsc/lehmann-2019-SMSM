@@ -17,9 +17,10 @@ public class NewYorkBusRecord {
 	private double nextStopDistance;
 	private String nextStopId;
 	private Integer semanticStop;
+	private Integer semanticMoveId;
 
 	public NewYorkBusRecord(int gid, Timestamp time, int vehicleId, String route, String tripId, double longitude, double latitude, double distanceAlongTrip,
-			int direction, String phase, double nextStopDistance, String nextStopId, Integer semanticStop) {
+			int direction, String phase, double nextStopDistance, String nextStopId, Integer semanticStop, Integer semanticMoveId) {
 				this.gid = gid;
 				this.time = time;
 				this.vehicleId = vehicleId;
@@ -33,6 +34,7 @@ public class NewYorkBusRecord {
 				this.nextStopDistance = nextStopDistance;
 				this.nextStopId = nextStopId;
 				this.semanticStop = semanticStop;
+				this.semanticMoveId = semanticMoveId;
 	}
 
 	public int getGid() {
@@ -85,5 +87,9 @@ public class NewYorkBusRecord {
 
 	public Integer getSemanticStop() {
 		return semanticStop;
+	}
+
+	public Integer getSemanticMoveId() {
+		return semanticMoveId;
 	}
 }

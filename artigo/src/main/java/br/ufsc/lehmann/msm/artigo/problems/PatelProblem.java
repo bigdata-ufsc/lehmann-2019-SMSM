@@ -53,7 +53,8 @@ public class PatelProblem implements Problem {
 		return new Semantic[] {
 			 Semantic.GEOGRAPHIC, //
 			 Semantic.TEMPORAL,//
-				PatelDataReader.STOP_SEMANTIC
+				PatelDataReader.STOP_SEMANTIC,//
+				PatelDataReader.MOVE_SEMANTIC
 		};
 	}
 

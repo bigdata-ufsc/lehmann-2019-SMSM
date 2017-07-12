@@ -8,14 +8,16 @@ public class TDriveRecord {
 	private double longitude;
 	private double latitude;
 	private Integer stop;
+	private Integer semanticMoveId;
 
-	public TDriveRecord(String tid, int gid, double time, double longitude, double latitude, Integer stop) {
+	public TDriveRecord(String tid, int gid, double time, double longitude, double latitude, Integer stop, Integer semanticMoveId) {
 		this.tid = tid;
 		this.gid = gid;
 		this.time = time;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.stop = stop;
+		this.semanticMoveId = semanticMoveId;
 	}
 
 	public String getTid() {
@@ -40,5 +42,9 @@ public class TDriveRecord {
 
 	public Integer getStop() {
 		return stop;
+	}
+
+	public Integer getSemanticMoveId() {
+		return semanticMoveId;
 	}
 }

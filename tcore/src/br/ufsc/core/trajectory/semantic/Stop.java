@@ -1,10 +1,8 @@
 package br.ufsc.core.trajectory.semantic;
 
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 
 /**
@@ -14,21 +12,19 @@ import br.ufsc.core.trajectory.TPoint;
  */
 public class Stop {
 
-	private int tid;
 	private int stopId;
 	private String stopName;
 	private long startTime;
 	private long endTime;
 	private double avg;
 
-	private int begin, end;
+	private int begin, length;
 	private Set<TPoint> points = new HashSet<TPoint>();
 	private TPoint centroid;
-	private SemanticTrajectory parent;
 	private TPoint startPoint;
 	private TPoint endPoint;
 
-	public Stop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, TPoint endPoint, TPoint centroid) {
+	public Stop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, int beginIndex, TPoint endPoint, int length, TPoint centroid) {
 		this.stopId = stopId;
 		this.stopName = stopName;
 		this.startTime = startTime;
@@ -36,30 +32,16 @@ public class Stop {
 		this.startPoint = startPoint;
 		this.endPoint = endPoint;
 		this.centroid = centroid;
-	}
-
-	public Stop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, int beginIndex, TPoint endPoint, int endIndex, TPoint centroid) {
-		this(stopId, stopName, startTime, endTime, startPoint, endPoint, centroid);
-		begin = beginIndex;
-		end = endIndex;
-	}
-
-	public Stop(SemanticTrajectory t, int stopId, int beginIndex, long startTime, int endIndex, long endTime) {
-		this.parent = t;
 		this.begin = beginIndex;
-		this.end = endIndex;
-		this.tid = t.getTrajectoryId();
+		this.length = length;
+	}
+
+	public Stop(int stopId, int beginIndex, long startTime, int length, long endTime) {
+		this.begin = beginIndex;
+		this.length = length;
 		this.stopId = stopId;
 		this.startTime = startTime;
 		this.endTime = endTime;
-	}
-
-	public void setTid(int tid) {
-		this.tid = tid;
-	}
-
-	public int getTid() {
-		return tid;
 	}
 
 	public int getStopId() {
@@ -106,14 +88,6 @@ public class Stop {
 		this.startTime = startTime;
 	}
 
-	public SemanticTrajectory getParent() {
-		return parent;
-	}
-
-	public void setParent(SemanticTrajectory parent) {
-		this.parent = parent;
-	}
-
 	@Override
 	public int hashCode() {
 		return stopId;
@@ -131,13 +105,13 @@ public class Stop {
 		return begin;
 	}
 
-	public int getEnd() {
-		return end;
+	public int getLength() {
+		return length;
 	}
 
 	@Override
 	public String toString() {
-		return "Stop [trajectory=" + tid + ", stopId=" + stopId + ", stopName=" + stopName + ", startTime=" + startTime + ", endTime=" + endTime + ", avg="
+		return "Stop [stopId=" + stopId + ", stopName=" + stopName + ", startTime=" + startTime + ", endTime=" + endTime + ", avg="
 				+ avg + ", centroid=" + centroid + ", startPoint=" + startPoint + ", endPoint=" + endPoint + "]";
 	}
 
@@ -153,5 +127,9 @@ public class Stop {
 		if (stopId != other.stopId)
 			return false;
 		return true;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
 	}
 }

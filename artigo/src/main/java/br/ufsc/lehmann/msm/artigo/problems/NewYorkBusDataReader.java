@@ -22,10 +22,12 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
 public class NewYorkBusDataReader {
@@ -38,6 +40,7 @@ public class NewYorkBusDataReader {
 	public static final BasicSemantic<Double> NEXT_STOP_DISTANCE = new BasicSemantic<>(8);
 	public static final BasicSemantic<String> NEXT_STOP_ID = new BasicSemantic<>(9);
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(10, new LatLongDistanceFunction());
+	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(11);
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.nyc_20140927", null, null);
@@ -47,28 +50,62 @@ public class NewYorkBusDataReader {
 		conn.setAutoCommit(false);
 		Statement st = conn.createStatement();
 		st.setFetchSize(1000);
+
 		ResultSet stopsData = st.executeQuery(
-				"SELECT stop_id, start_lat, start_lon, end_lat, end_lon, centroid_lat, " + //
+				"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
 						"centroid_lon, start_time, end_time " + //
-						"FROM stops_moves.bus_nyc_20140927");
+						"FROM stops_moves.bus_nyc_20140927_stop");
 		Map<Integer, Stop> stops = new HashMap<>();
-		while(stopsData.next()) {
+		while (stopsData.next()) {
 			int stopId = stopsData.getInt("stop_id");
 			Stop stop = stops.get(stopId);
-			if(stop == null) {
-				stop = new Stop(stopId, null, stopsData.getTimestamp("start_time").getTime(), stopsData.getTimestamp("end_time").getTime(), new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")),
-						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")));
+			if (stop == null) {
+				stop = new Stop(stopId, null, //
+						stopsData.getTimestamp("start_time").getTime(), //
+						stopsData.getTimestamp("end_time").getTime(), //
+						new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
+						stopsData.getInt("begin"), //
+						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
+						stopsData.getInt("length"), //
+						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon"))//
+				);
 				stops.put(stopId, stop);
+			}
+		}
+		Map<Integer, Move> moves = new HashMap<>();
+		ResultSet movesData = st.executeQuery(
+				"SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length " + //
+						"FROM stops_moves.bus_nyc_20140927_move");
+		while(movesData.next()) {
+			int moveId = movesData.getInt("move_id");
+				Move move = moves.get(moveId);
+			if (move == null) {
+				int startStopId = movesData.getInt("start_stop_id");
+				if (movesData.wasNull()) {
+					startStopId = -1;
+				}
+				int endStopId = movesData.getInt("end_stop_id");
+				if (movesData.wasNull()) {
+					endStopId = -1;
+				}
+				move = new Move(moveId, //
+						stops.get(startStopId), //
+						stops.get(endStopId), //
+						movesData.getTimestamp("start_time").getTime(), //
+						movesData.getTimestamp("end_time").getTime(), //
+						movesData.getInt("begin"), //
+						movesData.getInt("length"));
+				moves.put(moveId, move);
 			}
 		}
 		ResultSet data = st.executeQuery(
 				"select gid, time_received as \"time\", vehicle_id, trim(infered_route_id) as route, "
 				/**/+ "trim(infered_trip_id) as trip_id, longitude, latitude, distance_along_trip, infered_direction_id, "
-				/**/+ "trim(infered_phase) as phase, next_scheduled_stop_distance, next_scheduled_stop_id, semantic_stop_id "
+				/**/+ "trim(infered_phase) as phase, next_scheduled_stop_distance, next_scheduled_stop_id, semantic_stop_id, semantic_move_id "
 				+ "from bus.nyc_20140927 "//
 				+ "where infered_trip_id is not null "//
 				//2 linhas
-				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_M102'=infered_route_id) "
+//				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_M102'=infered_route_id) "
 				//5 linhas
 //				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_Q13'=infered_route_id or 'MTABC_Q66'=infered_route_id or 'MTABC_Q65'=infered_route_id or 'MTA NYCT_Q32'=infered_route_id) "
 				//10 linhas
@@ -93,6 +130,10 @@ public class NewYorkBusDataReader {
 			if(data.wasNull()) {
 				stop = null;
 			}
+			Integer move = data.getInt("semantic_move_id");
+			if(data.wasNull()) {
+				move = null;
+			}
 			NewYorkBusRecord record = new NewYorkBusRecord(
 				data.getInt("gid"),
 				data.getTimestamp("time"),
@@ -106,7 +147,8 @@ public class NewYorkBusDataReader {
 				data.getString("phase"),
 				data.getDouble("next_scheduled_stop_distance"),
 				data.getString("next_scheduled_stop_id"),
-				stop
+				stop,
+				move
 			);
 			records.put(record.getTripId(), record);
 		}
@@ -117,7 +159,7 @@ public class NewYorkBusDataReader {
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(Integer.valueOf(trajId), 11);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 11);
 			Collection<NewYorkBusRecord> collection = records.get(trajId);
 			int i = 0;
 			for (NewYorkBusRecord record : collection) {
@@ -134,6 +176,10 @@ public class NewYorkBusDataReader {
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
 					s.addData(i, STOP_SEMANTIC, stop);
+				}
+				if(record.getSemanticMoveId() != null) {
+					Move move = moves.get(record.getSemanticMoveId());
+					s.addData(i, MOVE_SEMANTIC, move);
 				}
 				i++;
 			}

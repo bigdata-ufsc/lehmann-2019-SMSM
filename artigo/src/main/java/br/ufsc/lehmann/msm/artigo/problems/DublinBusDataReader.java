@@ -22,10 +22,12 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
 public class DublinBusDataReader {
@@ -37,6 +39,7 @@ public class DublinBusDataReader {
 	public static final BasicSemantic<Integer> STOP = new BasicSemantic<>(7);
 	public static final BasicSemantic<String> OPERATOR = new BasicSemantic<>(8);
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(9, new LatLongDistanceFunction());
+	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(10);
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.dublin201301", null, null);
@@ -46,25 +49,61 @@ public class DublinBusDataReader {
 		conn.setAutoCommit(false);
 		Statement st = conn.createStatement();
 		st.setFetchSize(1000);
+
 		ResultSet stopsData = st.executeQuery(
-				"SELECT stop_id, start_lat, start_lon, end_lat, end_lon, centroid_lat, " + //
+				"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
 						"centroid_lon, start_time, end_time " + //
-						"FROM stops_moves.bus_dublin_201301");
+						"FROM stops_moves.bus_dublin_201301_stop");
 		Map<Integer, Stop> stops = new HashMap<>();
-		while(stopsData.next()) {
+		while (stopsData.next()) {
 			int stopId = stopsData.getInt("stop_id");
 			Stop stop = stops.get(stopId);
-			if(stop == null) {
-				stop = new Stop(stopId, null, stopsData.getTimestamp("start_time").getTime(), stopsData.getTimestamp("end_time").getTime(), new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")),
-						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")));
+			if (stop == null) {
+				stop = new Stop(stopId, null, //
+						stopsData.getTimestamp("start_time").getTime(), //
+						stopsData.getTimestamp("end_time").getTime(), //
+						new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
+						stopsData.getInt("begin"), //
+						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
+						stopsData.getInt("length"), //
+						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon"))//
+				);
 				stops.put(stopId, stop);
 			}
 		}
+		Map<Integer, Move> moves = new HashMap<>();
+		ResultSet movesData = st.executeQuery(
+				"SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length " + //
+						"FROM stops_moves.bus_dublin_201301_move");
+		while(movesData.next()) {
+			int moveId = movesData.getInt("move_id");
+				Move move = moves.get(moveId);
+			if (move == null) {
+				int startStopId = movesData.getInt("start_stop_id");
+				if (movesData.wasNull()) {
+					startStopId = -1;
+				}
+				int endStopId = movesData.getInt("end_stop_id");
+				if (movesData.wasNull()) {
+					endStopId = -1;
+				}
+				move = new Move(moveId, //
+						stops.get(startStopId), //
+						stops.get(endStopId), //
+						movesData.getTimestamp("start_time").getTime(), //
+						movesData.getTimestamp("end_time").getTime(), //
+						movesData.getInt("begin"), //
+						movesData.getInt("length"));
+				moves.put(moveId, move);
+			}
+		}
+
 		ResultSet data = st.executeQuery(
 				"select gid, to_timestamp(time_in_seconds / 1000000) as \"time\", line_id, trim(journey_pattern) as journey_pattern, "
-				/**/+ "vehicle_journey, trim(operator) as operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id, semantic_stop_id "
+				/**/+ "vehicle_journey, trim(operator) as operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id, "
+				/**/+ "semantic_stop_id, semantic_move_id "
 				+ "from bus.dublin_201301 "
-				+ "where date_frame between '2013-01-31' and '2013-01-31'"
+				+ "where date_frame between '2012-12-31' and '2013-01-10'"
 				+ "order by time_in_seconds"
 				);
 		Multimap<Integer, DublinBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
@@ -73,6 +112,10 @@ public class DublinBusDataReader {
 			Integer stop = data.getInt("semantic_stop_id");
 			if(data.wasNull()) {
 				stop = null;
+			}
+			Integer move = data.getInt("semantic_move_id");
+			if(data.wasNull()) {
+				move = null;
 			}
 			DublinBusRecord record = new DublinBusRecord(
 				data.getInt("gid"),
@@ -87,7 +130,8 @@ public class DublinBusDataReader {
 				data.getInt("block_journey_id"),
 				data.getInt("vehicle_id"),
 				data.getInt("stop_id"),
-				stop
+				stop,
+				move
 			);
 			records.put(record.getVehicle_journey(), record);
 		}
@@ -98,7 +142,7 @@ public class DublinBusDataReader {
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 10);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 11);
 			Collection<DublinBusRecord> collection = records.get(trajId);
 			int i = 0;
 			for (DublinBusRecord record : collection) {
@@ -114,6 +158,10 @@ public class DublinBusDataReader {
 				if(record.getSemanticStopId() != null) {
 					Stop stop = stops.get(record.getSemanticStopId());
 					s.addData(i, STOP_SEMANTIC, stop);
+				}
+				if(record.getSemanticMoveId() != null) {
+					Move move = moves.get(record.getSemanticMoveId());
+					s.addData(i, MOVE_SEMANTIC, move);
 				}
 				i++;
 			}

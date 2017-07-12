@@ -54,14 +54,14 @@ public class NElementProblem implements Problem {
 				long future = now.plus(j, ChronoUnit.MINUTES).toEpochMilli();
 				if(j % 3 == 0) {
 					if(startStop == null) {
-						startStop = new Stop(t, j, j, nowMilli, j + 2, nowMilli);
+						startStop = new Stop(j, j, nowMilli, 2, nowMilli);
 					} else {
 						startStop = endStop;
 					}
-					endStop = new Stop(t, j + 2, j, nowMilli, j + 2, nowMilli);
+					endStop = new Stop(j + 2, j, nowMilli, 2, nowMilli);
 					t.addData(j, stop, startStop);
 				} else {
-					t.addData(j, move, new Move(t, j, startStop, endStop, nowMilli, future, initMove, 4));
+					t.addData(j, move, new Move(j, startStop, endStop, nowMilli, future, initMove, 4));
 				}
 			}
 			data.add(t);

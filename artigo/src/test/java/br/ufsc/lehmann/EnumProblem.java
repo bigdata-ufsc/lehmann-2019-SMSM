@@ -8,7 +8,7 @@ public enum EnumProblem {
 //	NEWYORK_BUS(new NewYorkBusProblem()),// 
 //	DUBLIN_BUS(new DublinBusProblem()),//
 //	NEWYORK_BIKE(new NYBikeProblem()), //
-//	PATEL_ANIMALS(new PatelProblem("animal")),//
+	PATEL_ANIMALS(new PatelProblem("animal")),//
 //	PATEL_HURRICANE(new PatelProblem("hurricane")),//
 //	PATEL_HURRICANE_1vs4(new PatelProblem("hurricane_1vs4", "hurricane")),//
 //	PATEL_HURRICANE_2vs3(new PatelProblem("hurricane_2vs3", "hurricane")),//

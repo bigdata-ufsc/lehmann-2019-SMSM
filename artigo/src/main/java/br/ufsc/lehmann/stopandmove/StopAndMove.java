@@ -46,15 +46,16 @@ public class StopAndMove {
 
 		TPoint c = new TPoint(0, cx, cy, new Timestamp(0));
 		s1.setCentroid(c);
-		
+
 		stops.putAll(s1, stops.removeAll(s2));
 
 		Set<Move> removedMoves = moves.asMap().entrySet().parallelStream().filter((Map.Entry<Move, Collection<Integer>> entry) -> {
 			return entry.getKey().getStart() == s1 && entry.getKey().getEnd() == s2;
 		}).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet();
 		removedMoves.forEach((Move m) -> {
-			moves.removeAll(m);
+			stops.putAll(s1, moves.removeAll(m));
 		});
+		s1.setLength((s2.getBegin() + s2.getLength()) - s1.getBegin());
 	}
 
 	public Collection<Integer> remove(Stop s, Stop previousStop, Stop nextStop, MutableInt mid) {
@@ -63,14 +64,14 @@ public class StopAndMove {
 		}).collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.counting())).keySet();
 		if(movesToMerge.isEmpty()) {
 			Collection<Integer> stopPoints = stops.removeAll(s);
-			Move move = new Move(trajectory, mid.getAndIncrement(), previousStop, nextStop, s.getStartTime(), s.getEndTime(), s.getBegin(), stopPoints.size());
+			Move move = new Move(mid.getAndIncrement(), previousStop, nextStop, s.getStartTime(), s.getEndTime(), s.getBegin(), stopPoints.size());
 			moves.putAll(move, stopPoints);
 			return stopPoints;
 		}
-		Collection<Integer> stopPoints = stops.removeAll(s);
+		Collection<Integer> stopPoints = stops.get(s);
 		List<Integer> mergedPoints = new ArrayList<>(stopPoints);
 		Move initial = null, end = null;
-		Integer initialIndex = previousStop == null ? 0 : previousStop.getEnd() + 1, endIndex = nextStop == null ? this.trajectory.length() - 1 : nextStop.getBegin();
+		Integer initialIndex = previousStop == null ? 0 : previousStop.getBegin() + previousStop.getLength() + 1, endIndex = nextStop == null ? this.trajectory.length() - 1 : nextStop.getBegin();
 		for (Move move : movesToMerge) {
 			if(initialIndex >= move.getBegin()) {
 				initialIndex = move.getBegin();
@@ -80,13 +81,20 @@ public class StopAndMove {
 				endIndex = move.getBegin() + move.getLength();
 				end = move;
 			}
-			mergedPoints.addAll(moves.removeAll(move));
+			mergedPoints.addAll(moves.get(move));
+		}
+		if(initial == null && end == null) {
+			throw new RuntimeException("initial and end is null. trajId = " + this.trajectory.getTrajectoryId());
 		}
 		int moveId = (initial == null ? end : initial).getMoveId();
 		double startTime = initial == null ? (previousStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getEnd().toEpochMilli() : previousStop.getEndTime()) : initial.getStartTime();
 		double endTime = end == null ? (nextStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getStart().toEpochMilli() : nextStop.getStartTime()) : end.getEndTime();
-		Move move = new Move(trajectory, moveId, previousStop, nextStop, startTime, endTime, initialIndex, endIndex - initialIndex);
+		Move move = new Move(moveId, previousStop, nextStop, startTime, endTime, initialIndex, endIndex - initialIndex);
 		moves.putAll(move, mergedPoints);
+		stops.removeAll(s);
+		for (Move it : movesToMerge) {
+			moves.removeAll(it);
+		}
 		return stopPoints;
 	}
 
@@ -95,7 +103,7 @@ public class StopAndMove {
 			ArrayList<Integer> list = new ArrayList<>(gids);
 			list.addAll(moves.removeAll(uncompletedMove));
 			gids = list;
-			move = new Move(trajectory, uncompletedMove.getMoveId(), uncompletedMove.getStart(), move.getEnd(), uncompletedMove.getStartTime(), move.getEndTime(), uncompletedMove.getBegin(), uncompletedMove.getLength() + move.getLength());
+			move = new Move(uncompletedMove.getMoveId(), uncompletedMove.getStart(), move.getEnd(), uncompletedMove.getStartTime(), move.getEndTime(), uncompletedMove.getBegin(), uncompletedMove.getLength() + move.getLength());
 		}
 		moves.putAll(move, gids);
 		this.uncompletedMove = move;

@@ -1,7 +1,5 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.sql.Timestamp;
-
 public class PatelRecord {
 
 	private String tid;
@@ -11,8 +9,9 @@ public class PatelRecord {
 	private double longitude;
 	private double latitude;
 	private Integer stop;
+	private Integer move;
 
-	public PatelRecord(String tid, int gid, double time, String clazz, double longitude, double latitude, Integer stop) {
+	public PatelRecord(String tid, int gid, double time, String clazz, double longitude, double latitude, Integer stop, Integer move) {
 		this.tid = tid;
 		this.gid = gid;
 		this.time = time;
@@ -20,6 +19,7 @@ public class PatelRecord {
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.stop = stop;
+		this.move = move;
 	}
 
 	public String getTid() {
@@ -48,5 +48,9 @@ public class PatelRecord {
 
 	public Integer getStop() {
 		return stop;
+	}
+
+	public Integer getMove() {
+		return move;
 	}
 }

@@ -1,7 +1,5 @@
 package br.ufsc.core.trajectory.semantic;
 
-import br.ufsc.core.trajectory.SemanticTrajectory;
-
 /**
  * 
  * @author André Salvaro Furtado
@@ -12,14 +10,12 @@ public class Move {
 	private int moveId;
 	private double startTime;
 	private double endTime;
-	private SemanticTrajectory t;
 	private Stop start;
 	private Stop end;
 	private int begin;
 	private int length;
 
-	public Move(SemanticTrajectory t, int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length) {
-		this.t = t;
+	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length) {
 		this.moveId = moveId;
 		this.start = start;
 		this.end = end;
@@ -27,10 +23,6 @@ public class Move {
 		this.endTime = endTime;
 		this.begin = begin;
 		this.length = length;
-	}
-
-	public int getTid() {
-		return t.getTrajectoryId();
 	}
 
 	public int getMoveId() {
@@ -43,14 +35,6 @@ public class Move {
 
 	public double getEndTime() {
 		return endTime;
-	}
-
-	public SemanticTrajectory getT() {
-		return t;
-	}
-
-	public void setT(SemanticTrajectory t) {
-		this.t = t;
 	}
 
 	public Stop getStart() {
@@ -99,7 +83,7 @@ public class Move {
 
 	@Override
 	public String toString() {
-		return "Move [moveId=" + moveId + ", startTime=" + startTime + ", endTime=" + endTime + ", trajectory=" + t.getTrajectoryId() + ", start=" + start + ", end=" + end
+		return "Move [moveId=" + moveId + ", startTime=" + startTime + ", endTime=" + endTime + ", start=" + start + ", end=" + end
 				+ ", begin=" + begin + ", length=" + length + "]";
 	}
 

@@ -6,7 +6,7 @@ import java.util.List;
 public class SemanticTrajectory {
 
 	private List<SemanticElement> elements = new ArrayList<>();
-	private Integer trajectoryId;
+	private Object trajectoryId;
 	private int semantics;
 
 	public SemanticTrajectory(Trajectory q) {
@@ -20,7 +20,7 @@ public class SemanticTrajectory {
 		this.semantics = 1;
 	}
 
-	public SemanticTrajectory(Integer trajectoryId, int semantics) {
+	public SemanticTrajectory(Object trajectoryId, int semantics) {
 		this.trajectoryId = trajectoryId;
 		this.semantics = semantics;
 	}
@@ -53,7 +53,7 @@ public class SemanticTrajectory {
 		return semantics;
 	}
 
-	public Integer getTrajectoryId() {
+	public Object getTrajectoryId() {
 		return trajectoryId;
 	}
 

@@ -8,12 +8,8 @@ public class ComparableStop extends Stop implements Comparable<ComparableStop> {
 	private StopComparator comparator;
 
 	public ComparableStop(Stop stop, StopComparator comparator) {
-		super(stop.getStopId(), stop.getStopName(), stop.getStartTime(), stop.getEndTime(), stop.getStartPoint(), stop.getEndPoint(), stop.getCentroid());
+		super(stop.getStopId(), stop.getStopName(), stop.getStartTime(), stop.getEndTime(), stop.getStartPoint(), stop.getBegin(), stop.getEndPoint(), stop.getLength(), stop.getCentroid());
 		this.comparator = comparator;
-	}
-
-	public ComparableStop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, TPoint endPoint, TPoint centroid) {
-		super(stopId, stopName, startTime, endTime, startPoint, endPoint, centroid);
 	}
 
 	@Override
