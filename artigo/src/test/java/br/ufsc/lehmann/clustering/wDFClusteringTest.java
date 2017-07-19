@@ -2,19 +2,19 @@ package br.ufsc.lehmann.clustering;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.EnumProblem;
-import br.ufsc.lehmann.method.MSTPTest;
+import br.ufsc.lehmann.method.wDFTest;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
 
-public class MSTPClusteringTest extends AbstractClusteringTest implements MSTPTest {
+public class wDFClusteringTest extends AbstractClusteringTest implements wDFTest {
 
-	public MSTPClusteringTest(EnumProblem problemDescriptor) {
+	public wDFClusteringTest(EnumProblem problemDescriptor) {
 		super(problemDescriptor);
 	}
 
 	@Override
 	public IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
-		return MSTPTest.super.measurer(problem);
+		return wDFTest.super.measurer(problem);
 	}
 
 }

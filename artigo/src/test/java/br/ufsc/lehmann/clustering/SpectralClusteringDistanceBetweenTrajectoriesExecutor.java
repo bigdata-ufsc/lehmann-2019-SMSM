@@ -14,11 +14,11 @@ import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.clusterers.ClusteringResult;
 import smile.clustering.SpectralClustering;
 
-public class TestClusteringDistanceBetweenTrajectoriesExecutor implements IClusteringExecutor {
+public class SpectralClusteringDistanceBetweenTrajectoriesExecutor implements IClusteringExecutor {
 	
 	private int classesCount;
 
-	public TestClusteringDistanceBetweenTrajectoriesExecutor(int classesCount) {
+	public SpectralClusteringDistanceBetweenTrajectoriesExecutor(int classesCount) {
 		this.classesCount = classesCount;
 	}
 
@@ -42,6 +42,20 @@ public class TestClusteringDistanceBetweenTrajectoriesExecutor implements IClust
 		Multimap<Integer, SemanticTrajectory> clusteres = MultimapBuilder.hashKeys().arrayListValues().build();
 		for (int i = 0; i < clusterLabel.length; i++) {
 			clusteres.put(i, training.get(i));
+		}
+		return new ClusteringResult(clusteres.asMap().values(), clusterLabel);
+	}
+
+	@Override
+	public ClusteringResult cluster(double[][] distances, SemanticTrajectory[] training, IMeasureDistance<SemanticTrajectory> measureDistance) {
+		if(!(measureDistance instanceof TrajectorySimilarityCalculator)) {
+			throw new IllegalArgumentException("To clustering trajectories, measureDistance must be a TrajectorySimilarityCalculator!");
+		}
+		SpectralClustering clustering = new SpectralClustering(distances, classesCount);
+		int[] clusterLabel = clustering.getClusterLabel();
+		Multimap<Integer, SemanticTrajectory> clusteres = MultimapBuilder.hashKeys().arrayListValues().build();
+		for (int i = 0; i < clusterLabel.length; i++) {
+			clusteres.put(i, training[i]);
 		}
 		return new ClusteringResult(clusteres.asMap().values(), clusterLabel);
 	}

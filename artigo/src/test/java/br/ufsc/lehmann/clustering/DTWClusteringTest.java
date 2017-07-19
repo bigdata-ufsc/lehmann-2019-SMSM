@@ -1,21 +1,19 @@
 package br.ufsc.lehmann.clustering;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.NElementProblem;
+import br.ufsc.lehmann.EnumProblem;
+import br.ufsc.lehmann.method.DTWTest;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
-import br.ufsc.lehmann.msm.artigo.classifiers.DTWClassifier;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 
-public class DTWClusteringTest extends AbstractClusteringTest {
+public class DTWClusteringTest extends AbstractClusteringTest implements DTWTest {
+
+	public DTWClusteringTest(EnumProblem problemDescriptor) {
+		super(problemDescriptor);
+	}
 
 	@Override
-	IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
-		if(problem instanceof NElementProblem) {
-			return new DTWClassifier(problem.semantics()[0]);
-		} else if(problem instanceof NewYorkBusProblem) {
-			return new DTWClassifier(problem.semantics()[1]);
-		}
-		return null;
+	public IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
+		return DTWTest.super.measurer(problem);
 	}
 }

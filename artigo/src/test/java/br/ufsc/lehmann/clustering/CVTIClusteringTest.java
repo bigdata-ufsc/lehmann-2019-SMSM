@@ -1,22 +1,19 @@
 package br.ufsc.lehmann.clustering;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.NElementProblem;
-import br.ufsc.lehmann.method.CVTI;
-import br.ufsc.lehmann.method.CVTI.CVTISemanticParameter;
+import br.ufsc.lehmann.EnumProblem;
+import br.ufsc.lehmann.method.CVTITest;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 
-public class CVTIClusteringTest extends AbstractClusteringTest {
+public class CVTIClusteringTest extends AbstractClusteringTest implements CVTITest {
+
+	public CVTIClusteringTest(EnumProblem problemDescriptor) {
+		super(problemDescriptor);
+	}
 
 	@Override
-	IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
-		if(problem instanceof NElementProblem) {
-			return new CVTI(new CVTISemanticParameter(problem.semantics()[0], null));
-		} else if(problem instanceof NewYorkBusProblem) {
-			return new CVTI(new CVTISemanticParameter(problem.semantics()[1], 100));
-		}
-		return null;
+	public IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
+		return CVTITest.super.measurer(problem);
 	}
 }

@@ -103,7 +103,7 @@ public class DublinBusDataReader {
 				/**/+ "vehicle_journey, trim(operator) as operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id, "
 				/**/+ "semantic_stop_id, semantic_move_id "
 				+ "from bus.dublin_201301 "
-				+ "where date_frame between '2012-12-31' and '2013-01-10'"
+				+ "where date_frame between '2013-01-26' and '2013-01-31'"
 				+ "order by time_in_seconds"
 				);
 		Multimap<Integer, DublinBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();

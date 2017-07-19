@@ -1,22 +1,29 @@
 package br.ufsc.lehmann.clustering;
 
-import static org.junit.Assert.*;
-
-import java.sql.SQLException;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.stream.IntStream;
 
+import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.core.trajectory.semantic.Stop;
-import br.ufsc.lehmann.NElementProblem;
+import br.ufsc.lehmann.EnumProblem;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.Trajectories;
@@ -25,85 +32,113 @@ import br.ufsc.lehmann.msm.artigo.clusterers.dissimilarity.CompleteLinkDissimila
 import br.ufsc.lehmann.msm.artigo.clusterers.evaluation.AdjustedRandIndex;
 import br.ufsc.lehmann.msm.artigo.clusterers.evaluation.DunnIndex;
 import br.ufsc.lehmann.msm.artigo.clusterers.evaluation.intra.MaxDistance;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusStopsDataReader;
+import br.ufsc.lehmann.msm.artigo.clusterers.util.DistanceMatrix;
+import br.ufsc.lehmann.msm.artigo.validation.Silhouette;
+import br.ufsc.lehmann.msm.artigo.validation.Silhouettes;
 
+@RunWith(Parameterized.class)
 public abstract class AbstractClusteringTest {
 	
     @Rule public TestName name = new TestName();
+	private Multimap<String, String> measureFailures = MultimapBuilder.linkedHashKeys().linkedHashSetValues().build();
+
+	private EnumProblem descriptor;
 	
-	private static NewYorkBusProblem problem;
+    @Parameters(name="{0}")
+    public static Collection<EnumProblem> data() {
+        return Arrays.asList(EnumProblem.values());
+    }
+    
+	public AbstractClusteringTest(EnumProblem problemDescriptor) {
+		descriptor = problemDescriptor;
+	}
 	
 	@Before
 	public void before() {
 		System.out.println(getClass().getSimpleName() + "#" + name.getMethodName());
 	}
 	
-	@BeforeClass
-	public static void beforeClass() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		problem = new NewYorkBusProblem();
-	}
-	
-	@Test
-	public void selfClusterization() throws Exception {
-		NElementProblem problem = new NElementProblem(2, 2);
-		TestClusteringDistanceBetweenTrajectoriesExecutor executor = new TestClusteringDistanceBetweenTrajectoriesExecutor(2);
-
-		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		List<SemanticTrajectory> data = problem.data();
-		ClusteringResult result = null;
-		try {
-			result = executor.cluster(data, classifier);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+	@After
+	public void after() {
+		if(!measureFailures.isEmpty()) {
+			StringWriter sw = new StringWriter();
+			for (Map.Entry<String, Collection<String>> entry : measureFailures.asMap().entrySet()) {
+				sw.append(entry.getKey()).append(" - [");
+				Collection<String> value = entry.getValue();
+				for (Iterator iterator = value.iterator(); iterator.hasNext();) {
+					String message = (String) iterator.next();
+					sw.append(message);
+					if(iterator.hasNext()) {
+						sw.append(", ");
+					}
+				}
+				sw.append("]\n");
+			}
+			Assert.fail(sw.toString());
 		}
-		int[] clusterLabel = result.getClusterLabel();
-		assertTrue(Arrays.asList(0, 1).containsAll(Arrays.stream(clusterLabel).boxed().collect(Collectors.toList())));
 	}
 
 	@Test
 	public void simpleClusterizationBySimilarityMeasure() throws Exception {
-//		NElementProblem problem = new NElementProblem(15, 5);
-		TestClusteringDistanceBetweenTrajectoriesExecutor executor = new TestClusteringDistanceBetweenTrajectoriesExecutor(5);
+		HierarchicalClusteringDistanceBetweenTrajectoriesExecutor executor = new HierarchicalClusteringDistanceBetweenTrajectoriesExecutor(descriptor.numClasses());
+		Problem problem = descriptor.problem();
 		List<SemanticTrajectory> data = problem.data();
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
+		SemanticTrajectory[] training = data.toArray(new SemanticTrajectory[data.size()]);
+		double[][] distances = new double[training.length][training.length];
+		for (int i = 0; i < training.length; i++) {
+			distances[i][i] = 0;
+			final int finalI = i;
+			IntStream.iterate(0, j -> j + 1).limit(i).parallel().forEach((j) -> {
+				distances[finalI][j] = classifier.distance(training[finalI], training[j]);
+				distances[j][finalI] = distances[finalI][j];
+			});
+		}
 		ClusteringResult result = null;
 		try {
-			result = executor.cluster(data, classifier);
+			result = executor.cluster(distances, training, classifier);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
 		AdjustedRandIndex<String> randIndex = new AdjustedRandIndex<String>();
-		double value = randIndex.evaluate(result.getClusterLabel(), new Trajectories<>(data, problem.discriminator()));
-		assertEquals(0.0, value, 0.00001);
-		DunnIndex<String> dunnIndex = new DunnIndex<>(new MaxDistance(classifier), new CompleteLinkDissimilarity(classifier));
-		value = dunnIndex.evaluate(result.getClusterLabel(), new Trajectories<>(data, problem.discriminator()));
-		assertEquals(0.0, value, 0.00001);
+		Trajectories trajectories = new Trajectories<>(data, problem.discriminator());
+		int[] clusterLabel = result.getClusterLabel();
+		double value = randIndex.evaluate(clusterLabel, trajectories);
+		assertMeasure("AdjustedRandIndex", 0.0, value, 0.01);
+		DistanceMatrix<SemanticTrajectory> matrix = new DistanceMatrix<>(data, distances);
+		DunnIndex<String> dunnIndex = new DunnIndex<>(new MaxDistance(matrix), new CompleteLinkDissimilarity(matrix));
+		value = dunnIndex.evaluate(clusterLabel, trajectories);
+		assertMeasure("DunnIndex", 0.0, value, 0.01);
+		Silhouettes silhouette = Silhouette.calculate(distances, clusterLabel);
+		for (int i = 0; i < result.getClusteres().size(); i++) {
+			value = silhouette.getSilhouette(i);
+			assertMeasure("Silhouette (cluster " + i + ")", String.format("Expected a silhouette index greater than 0.0 but was %.2f", value), 0.0 <= value);
+		}
 	}
-
-	@Ignore
-	@Test
-	public void simpleClusterizationByStops() throws Exception {
-//		NElementProblem problem = new NElementProblem(15, 5);
-		List<Stop> stops = new NewYorkBusStopsDataReader().read();
-		TestClusteringStopsExecutor executor = new TestClusteringStopsExecutor(NewYorkBusDataReader.STOP_SEMANTIC, stops, 100, 2);
-		List<SemanticTrajectory> data = problem.data();
-		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		ClusteringResult result = null;
-		try {
-			result = executor.cluster(data, classifier);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+	
+	public void assertMeasure(String measure, double expected, double actual, double delta) {
+		if(Math.abs(expected - actual) > delta) {
+			measureFailures.put(measure, "Expected was " + expected + " but actual is " + actual);
 		}
-
-		AdjustedRandIndex<String> randIndex = new AdjustedRandIndex<String>();
-		double value = randIndex.evaluate(result.getClusterLabel(), new Trajectories<>(data, problem.discriminator()));
-		assertEquals(0.0, value, 0.00001);
-		DunnIndex<String> dunnIndex = new DunnIndex<>(new MaxDistance(classifier), new CompleteLinkDissimilarity(classifier));
-		value = dunnIndex.evaluate(result.getClusterLabel(), new Trajectories<>(data, problem.discriminator()));
-		assertEquals(0.0, value, 0.00001);
+	}
+	
+	public void assertMeasure(String measure, String message, double expected, double actual, double delta) {
+		if(Math.abs(expected - actual) > delta) {
+			measureFailures.put(measure, message);
+		}
+	}
+	
+	public void assertMeasure(String measure, boolean test) {
+		if(!test) {
+			measureFailures.put(measure, "Expected true but actual is false");
+		}
+	}
+	
+	public void assertMeasure(String measure, String message, boolean test) {
+		if(!test) {
+			measureFailures.put(measure, message);
+		}
 	}
 	
 	abstract IMeasureDistance<SemanticTrajectory> measurer(Problem problem);

@@ -1,20 +1,19 @@
 package br.ufsc.lehmann.clustering;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.NElementProblem;
+import br.ufsc.lehmann.EnumProblem;
+import br.ufsc.lehmann.method.MTMTest;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
-import br.ufsc.lehmann.msm.artigo.classifiers.MTMClassifier;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 
-public class MTMClusteringTest extends AbstractClusteringTest {
+public class MTMClusteringTest extends AbstractClusteringTest implements MTMTest {
 
-	@Override
-	IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
-		if(problem instanceof NElementProblem) {
-		} else if(problem instanceof NewYorkBusProblem) {
-		}
-		return new MTMClassifier(problem);
+	public MTMClusteringTest(EnumProblem problemDescriptor) {
+		super(problemDescriptor);
 	}
 
+	@Override
+	public IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
+		return MTMTest.super.measurer(problem);
+	}
 }

@@ -18,7 +18,6 @@ import br.ufsc.ftsm.related.LCSS;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.lehmann.msm.artigo.IClusteringExecutor;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
-import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.Trajectories;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
 import br.ufsc.lehmann.msm.artigo.clusterers.dissimilarity.CompleteLinkDissimilarity;
@@ -56,6 +55,17 @@ public class SpectralCluster implements IClusteringExecutor {
 		Multimap<Integer, SemanticTrajectory> clusteres = MultimapBuilder.hashKeys().arrayListValues().build();
 		for (int i = 0; i < clusterLabel.length; i++) {
 			clusteres.put(i, training.get(i));
+		}
+		return new ClusteringResult((List) clusteres.asMap().values(), clusterLabel);
+	}
+	
+	@Override
+	public ClusteringResult cluster(double[][] distances, SemanticTrajectory[] training, IMeasureDistance<SemanticTrajectory> measureDistance) {
+		SpectralClustering clustering = new SpectralClustering(distances, numOfClasses);
+		int[] clusterLabel = clustering.getClusterLabel();
+		Multimap<Integer, SemanticTrajectory> clusteres = MultimapBuilder.hashKeys().arrayListValues().build();
+		for (int i = 0; i < clusterLabel.length; i++) {
+			clusteres.put(i, training[i]);
 		}
 		return new ClusteringResult((List) clusteres.asMap().values(), clusterLabel);
 	}

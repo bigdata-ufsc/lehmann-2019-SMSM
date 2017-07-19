@@ -159,7 +159,7 @@ public class NewYorkBusDataReader {
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 11);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 12);
 			Collection<NewYorkBusRecord> collection = records.get(trajId);
 			int i = 0;
 			for (NewYorkBusRecord record : collection) {
