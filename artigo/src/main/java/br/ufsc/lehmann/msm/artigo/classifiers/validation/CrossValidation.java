@@ -14,7 +14,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 /**
  * Cross-validation is a technique for assessing how the results of a

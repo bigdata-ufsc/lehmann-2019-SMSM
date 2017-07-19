@@ -34,15 +34,15 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.KNNSmileTrainer;
-import br.ufsc.lehmann.msm.artigo.validation.Accuracy;
-import br.ufsc.lehmann.msm.artigo.validation.ClassificationMeasure;
-import br.ufsc.lehmann.msm.artigo.validation.FDR;
-import br.ufsc.lehmann.msm.artigo.validation.FMeasure;
-import br.ufsc.lehmann.msm.artigo.validation.Fallout;
-import br.ufsc.lehmann.msm.artigo.validation.Precision;
-import br.ufsc.lehmann.msm.artigo.validation.Recall;
-import br.ufsc.lehmann.msm.artigo.validation.Specificity;
-import br.ufsc.lehmann.msm.artigo.validation.Validation;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.Accuracy;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.ClassificationMeasure;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.FDR;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.FMeasure;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.Fallout;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.Precision;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.Recall;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.Specificity;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.Validation;
 
 @RunWith(Parameterized.class)
 public abstract class AbstractClassifierTest {

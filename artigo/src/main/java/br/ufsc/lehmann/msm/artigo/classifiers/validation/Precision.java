@@ -14,25 +14,17 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 /**
- * Specificity (SPC) or True Negative Rate is a statistical measures of the
- * performance of a binary classification test. Specificity measures the
- * proportion of negatives which are correctly identified.
+ * The precision or positive predictive value (PPV) is ratio of true positives
+ * to combined true and false positives, which is different from sensitivity.
  * <p>
- * SPC = TN / N = TN / (FP + TN) = 1 - FPR
- * <p>
- * Sensitivity and specificity are closely related to the concepts of type
- * I and type II errors. For any test, there is usually a trade-off between
- * the measures. This trade-off can be represented graphically using an ROC curve.
- * <p>
- * In this implementation, the class label 1 is regarded as positive and all others
- * are regarded as negative.
+ * PPV = TP / (TP + FP)
  *
  * @author Haifeng Li
  */
-public class Specificity implements ClassificationMeasure {
+public class Precision implements ClassificationMeasure {
 
     @Override
     public double measure(Object[] truth, Object[] prediction) {
@@ -40,26 +32,25 @@ public class Specificity implements ClassificationMeasure {
             throw new IllegalArgumentException(String.format("The vector sizes don't match: %d != %d.", truth.length, prediction.length));
         }
 
-        int tn = 0;
-        int n = 0;
+        int tp = 0;
+        int p = 0;
         for (int i = 0; i < truth.length; i++) {
-            if (truth[i] == Boolean.FALSE) {
-                n++;
+            if (prediction[i] == Boolean.TRUE) {
+                p++;
 
-                if (prediction[i] == Boolean.FALSE) {
-                    tn++;
+                if (truth[i] == Boolean.TRUE) {
+                    tp++;
                 }
             }
         }
-        if(n == 0.0) {
+        if(p == 0.0) {
         	return 0.0;
         }
-
-        return (double) tn / n;
+        return (double) tp / p;
     }
 
     @Override
     public String toString() {
-        return "Specificity";
+        return "Precision";
     }
 }

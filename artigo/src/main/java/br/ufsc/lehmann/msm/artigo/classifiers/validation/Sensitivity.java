@@ -14,7 +14,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 /**
  * Sensitivity or true positive rate (TPR) (also called hit rate, recall) is a

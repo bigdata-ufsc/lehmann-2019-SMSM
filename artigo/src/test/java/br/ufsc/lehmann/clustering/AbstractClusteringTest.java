@@ -1,7 +1,6 @@
 package br.ufsc.lehmann.clustering;
 
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -27,14 +26,14 @@ import br.ufsc.lehmann.EnumProblem;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.Trajectories;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.Silhouette;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.Silhouettes;
 import br.ufsc.lehmann.msm.artigo.clusterers.ClusteringResult;
 import br.ufsc.lehmann.msm.artigo.clusterers.dissimilarity.CompleteLinkDissimilarity;
 import br.ufsc.lehmann.msm.artigo.clusterers.evaluation.AdjustedRandIndex;
 import br.ufsc.lehmann.msm.artigo.clusterers.evaluation.DunnIndex;
 import br.ufsc.lehmann.msm.artigo.clusterers.evaluation.intra.MaxDistance;
 import br.ufsc.lehmann.msm.artigo.clusterers.util.DistanceMatrix;
-import br.ufsc.lehmann.msm.artigo.validation.Silhouette;
-import br.ufsc.lehmann.msm.artigo.validation.Silhouettes;
 
 @RunWith(Parameterized.class)
 public abstract class AbstractClusteringTest {

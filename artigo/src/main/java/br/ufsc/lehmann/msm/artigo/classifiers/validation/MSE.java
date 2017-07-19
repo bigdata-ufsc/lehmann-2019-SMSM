@@ -14,33 +14,34 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
+
+import smile.math.Math;
 
 /**
- * The accuracy is the proportion of true results (both true positives and true negatives) in the population.
- * 
+ * Mean squared error.
+ *
  * @author Haifeng Li
  */
-public class Accuracy implements ClassificationMeasure {
+public class MSE implements RegressionMeasure {
 
-	@Override
-	public double measure(Object[] truth, Object[] prediction) {
-		if (truth.length != prediction.length) {
-			throw new IllegalArgumentException(String.format("The vector sizes don't match: %d != %d.", truth.length, prediction.length));
-		}
+    @Override
+    public double measure(double[] truth, double[] prediction) {
+        if (truth.length != prediction.length) {
+            throw new IllegalArgumentException(String.format("The vector sizes don't match: %d != %d.", truth.length, prediction.length));
+        }
 
-		int match = 0;
-		for (int i = 0; i < truth.length; i++) {
-			if (truth[i].equals(prediction[i])) {
-				match++;
-			}
-		}
+        int n = truth.length;
+        double rss = 0.0;
+        for (int i = 0; i < n; i++) {
+            rss += Math.sqr(truth[i] - prediction[i]);
+        }
 
-		return (double) match / truth.length;
-	}
+        return rss / n;
+    }
 
-	@Override
-	public String toString() {
-		return "Accuracy";
-	}
+    @Override
+    public String toString() {
+        return "MSE";
+    }
 }

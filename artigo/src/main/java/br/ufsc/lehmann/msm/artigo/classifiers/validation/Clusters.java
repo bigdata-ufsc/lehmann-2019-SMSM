@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 import java.util.Arrays;
 import java.util.TreeMap;
