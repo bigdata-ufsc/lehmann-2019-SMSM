@@ -14,7 +14,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 import smile.math.Math;
 

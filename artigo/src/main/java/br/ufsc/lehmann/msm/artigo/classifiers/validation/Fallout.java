@@ -14,34 +14,46 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
-
-import smile.math.Math;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 /**
- * Absolute deviation error.
- * 
+ * Fall-out, false alarm rate, or false positive rate (FPR)
+ * <p>
+ * FPR = FP / N = FP / (FP + TN)
+ * <p>
+ * Fall-out is actually Type I error and closely related to specificity
+ * (1 - specificity).
+ *
  * @author Haifeng Li
  */
-public class AbsoluteDeviation implements RegressionMeasure {
+public class Fallout implements ClassificationMeasure {
 
     @Override
-    public double measure(double[] truth, double[] prediction) {
+    public double measure(Object[] truth, Object[] prediction) {
         if (truth.length != prediction.length) {
             throw new IllegalArgumentException(String.format("The vector sizes don't match: %d != %d.", truth.length, prediction.length));
         }
 
-        int n = truth.length;
-        double error = 0.0;
-        for (int i = 0; i < n; i++) {
-            error += Math.abs(truth[i] - prediction[i]);
+        int tn = 0;
+        int n = 0;
+        for (int i = 0; i < truth.length; i++) {
+            if (truth[i] == Boolean.FALSE) {
+                n++;
+
+                if (prediction[i] == Boolean.FALSE) {
+                    tn++;
+                }
+            }
+        }
+        if(n == 0.0) {
+        	return 0.0;
         }
 
-        return error/n;
+        return 1.0 - (double) tn / n;
     }
 
     @Override
     public String toString() {
-        return "Absolute Deviation";
+        return "Fall-out";
     }
 }

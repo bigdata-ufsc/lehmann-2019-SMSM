@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 import java.util.HashSet;
 import java.util.Set;

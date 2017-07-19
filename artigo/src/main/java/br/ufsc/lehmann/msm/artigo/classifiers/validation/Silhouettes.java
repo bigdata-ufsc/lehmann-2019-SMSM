@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 import smile.math.DoubleArrayList;
 import smile.math.IntArrayList;

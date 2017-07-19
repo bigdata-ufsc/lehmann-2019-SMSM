@@ -14,7 +14,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 /**
  * The F-score (or F-measure) considers both the precision and the recall of the test

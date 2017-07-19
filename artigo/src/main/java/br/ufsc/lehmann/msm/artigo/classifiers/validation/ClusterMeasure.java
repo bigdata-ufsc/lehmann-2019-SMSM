@@ -14,19 +14,20 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 /**
- * An abstract interface to measure the regression performance.
+ * An abstract interface to measure the clustering performance.
  *
  * @author Haifeng Li
  */
-public interface RegressionMeasure {
+public interface ClusterMeasure {
 
     /**
-     * Returns an index to measure the quality of regression.
-     * @param truth the true response values.
-     * @param prediction the predicted response values.
+     * Returns an index to measure the quality of clustering.
+     * @param y1 the cluster labels.
+     * @param y2 the alternative cluster labels.
      */
-    public double measure(double[] truth, double[] prediction);
+    public double measure(int[] y1, int[] y2);
+
 }

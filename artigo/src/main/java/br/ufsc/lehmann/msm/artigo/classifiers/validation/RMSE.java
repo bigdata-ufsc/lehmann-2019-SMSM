@@ -14,43 +14,34 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
+
+import smile.math.Math;
 
 /**
- * In information retrieval area, sensitivity is called recall.
- *
- * @see Sensitivity
- *
+ * Root mean squared error.
+ * 
  * @author Haifeng Li
  */
-public class Recall implements ClassificationMeasure {
+public class RMSE implements RegressionMeasure {
 
     @Override
-    public double measure(Object[] truth, Object[] prediction) {
+    public double measure(double[] truth, double[] prediction) {
         if (truth.length != prediction.length) {
             throw new IllegalArgumentException(String.format("The vector sizes don't match: %d != %d.", truth.length, prediction.length));
         }
 
-        int tp = 0;
-        int p = 0;
-        for (int i = 0; i < truth.length; i++) {
-            if (truth[i] == Boolean.TRUE) {
-                p++;
-
-                if (prediction[i] == Boolean.TRUE) {
-                    tp++;
-                }
-            }
-        }
-        if(p == 0.0) {
-        	return 0.0;
+        int n = truth.length;
+        double rss = 0.0;
+        for (int i = 0; i < n; i++) {
+            rss += Math.sqr(truth[i] - prediction[i]);
         }
 
-        return (double) tp / p;
+        return Math.sqrt(rss/n);
     }
 
     @Override
     public String toString() {
-        return "Recall";
+        return "RMSE";
     }
 }

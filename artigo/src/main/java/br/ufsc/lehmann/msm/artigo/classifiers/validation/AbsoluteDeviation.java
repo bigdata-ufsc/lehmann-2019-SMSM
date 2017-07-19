@@ -14,44 +14,34 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
+
+import smile.math.Math;
 
 /**
- * The false discovery rate (FDR) is ratio of false positives
- * to combined true and false positives, which is actually 1 - precision.
- * <p>
- * FDR = FP / (TP + FP)
- *
+ * Absolute deviation error.
+ * 
  * @author Haifeng Li
  */
-public class FDR implements ClassificationMeasure {
+public class AbsoluteDeviation implements RegressionMeasure {
 
     @Override
-    public double measure(Object[] truth, Object[] prediction) {
+    public double measure(double[] truth, double[] prediction) {
         if (truth.length != prediction.length) {
             throw new IllegalArgumentException(String.format("The vector sizes don't match: %d != %d.", truth.length, prediction.length));
         }
 
-        int fp = 0;
-        int p = 0;
-        for (int i = 0; i < truth.length; i++) {
-            if (prediction[i] == Boolean.TRUE) {
-                p++;
-
-                if (truth[i] == Boolean.FALSE) {
-                    fp++;
-                }
-            }
-        }
-        if(p == 0.0) {
-        	return 0.0;
+        int n = truth.length;
+        double error = 0.0;
+        for (int i = 0; i < n; i++) {
+            error += Math.abs(truth[i] - prediction[i]);
         }
 
-        return (double) fp / p;
+        return error/n;
     }
 
     @Override
     public String toString() {
-        return "False Discovery Rate";
+        return "Absolute Deviation";
     }
 }

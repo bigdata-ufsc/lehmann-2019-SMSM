@@ -14,34 +14,19 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
-
-import smile.math.Math;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 /**
- * Residual sum of squares.
+ * An abstract interface to measure the regression performance.
  *
  * @author Haifeng Li
  */
-public class RSS implements RegressionMeasure {
+public interface RegressionMeasure {
 
-    @Override
-    public double measure(double[] truth, double[] prediction) {
-        if (truth.length != prediction.length) {
-            throw new IllegalArgumentException(String.format("The vector sizes don't match: %d != %d.", truth.length, prediction.length));
-        }
-
-        int n = truth.length;
-        double rss = 0.0;
-        for (int i = 0; i < n; i++) {
-            rss += Math.sqr(truth[i] - prediction[i]);
-        }
-
-        return rss;
-    }
-
-    @Override
-    public String toString() {
-        return "RSS";
-    }
+    /**
+     * Returns an index to measure the quality of regression.
+     * @param truth the true response values.
+     * @param prediction the predicted response values.
+     */
+    public double measure(double[] truth, double[] prediction);
 }

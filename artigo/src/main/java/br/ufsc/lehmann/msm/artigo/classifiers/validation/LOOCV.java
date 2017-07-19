@@ -14,7 +14,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 /**
  * Leave-one-out cross validation. LOOCV uses a single observation

@@ -14,34 +14,44 @@
  * limitations under the License.
  *******************************************************************************/
 
-package br.ufsc.lehmann.msm.artigo.validation;
-
-import smile.math.Math;
+package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 /**
- * Root mean squared error.
- * 
+ * The false discovery rate (FDR) is ratio of false positives
+ * to combined true and false positives, which is actually 1 - precision.
+ * <p>
+ * FDR = FP / (TP + FP)
+ *
  * @author Haifeng Li
  */
-public class RMSE implements RegressionMeasure {
+public class FDR implements ClassificationMeasure {
 
     @Override
-    public double measure(double[] truth, double[] prediction) {
+    public double measure(Object[] truth, Object[] prediction) {
         if (truth.length != prediction.length) {
             throw new IllegalArgumentException(String.format("The vector sizes don't match: %d != %d.", truth.length, prediction.length));
         }
 
-        int n = truth.length;
-        double rss = 0.0;
-        for (int i = 0; i < n; i++) {
-            rss += Math.sqr(truth[i] - prediction[i]);
+        int fp = 0;
+        int p = 0;
+        for (int i = 0; i < truth.length; i++) {
+            if (prediction[i] == Boolean.TRUE) {
+                p++;
+
+                if (truth[i] == Boolean.FALSE) {
+                    fp++;
+                }
+            }
+        }
+        if(p == 0.0) {
+        	return 0.0;
         }
 
-        return Math.sqrt(rss/n);
+        return (double) fp / p;
     }
 
     @Override
     public String toString() {
-        return "RMSE";
+        return "False Discovery Rate";
     }
 }
