@@ -34,6 +34,7 @@ import br.ufsc.lehmann.msm.artigo.clusterers.evaluation.AdjustedRandIndex;
 import br.ufsc.lehmann.msm.artigo.clusterers.evaluation.DunnIndex;
 import br.ufsc.lehmann.msm.artigo.clusterers.evaluation.intra.MaxDistance;
 import br.ufsc.lehmann.msm.artigo.clusterers.util.DistanceMatrix;
+import smile.math.Random;
 
 @RunWith(Parameterized.class)
 public abstract class AbstractClusteringTest {
@@ -42,6 +43,7 @@ public abstract class AbstractClusteringTest {
 	private Multimap<String, String> measureFailures = MultimapBuilder.linkedHashKeys().linkedHashSetValues().build();
 
 	private EnumProblem descriptor;
+	private Problem problem;
 	
     @Parameters(name="{0}")
     public static Collection<EnumProblem> data() {
@@ -50,6 +52,7 @@ public abstract class AbstractClusteringTest {
     
 	public AbstractClusteringTest(EnumProblem problemDescriptor) {
 		descriptor = problemDescriptor;
+		problem = problemDescriptor.problem(new Random(5));
 	}
 	
 	@Before
@@ -80,7 +83,6 @@ public abstract class AbstractClusteringTest {
 	@Test
 	public void simpleClusterizationBySimilarityMeasure() throws Exception {
 		HierarchicalClusteringDistanceBetweenTrajectoriesExecutor executor = new HierarchicalClusteringDistanceBetweenTrajectoriesExecutor(descriptor.numClasses());
-		Problem problem = descriptor.problem();
 		List<SemanticTrajectory> data = problem.data();
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
 		SemanticTrajectory[] training = data.toArray(new SemanticTrajectory[data.size()]);

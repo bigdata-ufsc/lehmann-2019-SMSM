@@ -86,15 +86,16 @@ public class StopAndMove {
 		if(initial == null && end == null) {
 			throw new RuntimeException("initial and end is null. trajId = " + this.trajectory.getTrajectoryId());
 		}
+		//remove o mapeamento antigo
+		for (Move it : movesToMerge) {
+			moves.removeAll(it);
+		}
 		int moveId = (initial == null ? end : initial).getMoveId();
 		double startTime = initial == null ? (previousStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getEnd().toEpochMilli() : previousStop.getEndTime()) : initial.getStartTime();
 		double endTime = end == null ? (nextStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getStart().toEpochMilli() : nextStop.getStartTime()) : end.getEndTime();
 		Move move = new Move(moveId, previousStop, nextStop, startTime, endTime, initialIndex, endIndex - initialIndex);
 		moves.putAll(move, mergedPoints);
 		stops.removeAll(s);
-		for (Move it : movesToMerge) {
-			moves.removeAll(it);
-		}
 		return stopPoints;
 	}
 

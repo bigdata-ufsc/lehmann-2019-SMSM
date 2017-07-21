@@ -1,6 +1,8 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
+import java.sql.Array;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -41,7 +43,7 @@ public class DublinBusDataReader {
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(9, new LatLongDistanceFunction());
 	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(10);
 
-	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+	public List<SemanticTrajectory> read(String[] lines) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.dublin201301", null, null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
@@ -98,14 +100,21 @@ public class DublinBusDataReader {
 			}
 		}
 
-		ResultSet data = st.executeQuery(
-				"select gid, to_timestamp(time_in_seconds / 1000000) as \"time\", line_id, trim(journey_pattern) as journey_pattern, "
-				/**/+ "vehicle_journey, trim(operator) as operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id, "
-				/**/+ "semantic_stop_id, semantic_move_id "
-				+ "from bus.dublin_201301 "
-				+ "where date_frame between '2013-01-26' and '2013-01-31'"
-				+ "order by time_in_seconds"
-				);
+		String sql = "select gid, to_timestamp(time_in_seconds / 1000000) as \"time\", line_id, trim(journey_pattern) as journey_pattern, "
+		/**/+ "vehicle_journey, trim(operator) as operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id, "
+		/**/+ "semantic_stop_id, semantic_move_id "
+		+ "from bus.dublin_201301 ";
+		sql += "where date_frame between '2012-12-31' and '2013-01-05'";
+		if(lines != null && lines.length > 0) {
+			sql += "where trim(journey_pattern) in (SELECT * FROM unnest(?)) ";
+		}
+		sql += "order by time_in_seconds";
+		PreparedStatement preparedStatement = conn.prepareStatement(sql);
+		if(lines != null && lines.length > 0) {
+			Array array = conn.createArrayOf("varchar", lines);
+			preparedStatement.setArray(1, array);
+		}
+		ResultSet data = preparedStatement.executeQuery();
 		Multimap<Integer, DublinBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		System.out.println("Fetching...");
 		while(data.next()) {

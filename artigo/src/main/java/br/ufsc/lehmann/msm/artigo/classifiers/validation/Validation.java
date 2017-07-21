@@ -15,8 +15,6 @@
  *******************************************************************************/
 package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.stream.IntStream;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
@@ -26,6 +24,7 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;
 import smile.math.Math;
+import smile.math.Random;
 
 /**
  * A utility class for validating predictive models on test data.
@@ -36,10 +35,16 @@ public class Validation {
 	
 	private Problem problem;
 	private IMeasureDistance<SemanticTrajectory> measure;
+	private Random random;
 
 	public Validation(Problem problem, IMeasureDistance<SemanticTrajectory> measure) {
+		this(problem, measure, new Random(System.currentTimeMillis()));
+	}
+
+	public Validation(Problem problem, IMeasureDistance<SemanticTrajectory> measure, Random random) {
 		this.problem = problem;
 		this.measure = measure;
+		this.random = random;
 	}
 	
     /**
@@ -216,7 +221,7 @@ public class Validation {
         
         int n = x.length;
         
-        CrossValidation cv = new CrossValidation(n, k);
+        CrossValidation cv = new CrossValidation(n, k, this.random);
         double result = 0.0;
         for (int i = 0; i < k; i++) {
         	final int finalI = i;
@@ -261,7 +266,7 @@ public class Validation {
 			groundTruth[i] = binarizer.isTrue(y[i]);
 		}
 
-        CrossValidation cv = new CrossValidation(n, k);
+        CrossValidation cv = new CrossValidation(n, k, this.random);
         for (int i = 0; i < k; i++) {
         	final int finalI = i;
             SemanticTrajectory[] trainx = Math.slice(x, cv.train[i]);

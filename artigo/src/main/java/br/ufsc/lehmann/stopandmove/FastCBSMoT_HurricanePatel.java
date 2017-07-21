@@ -57,12 +57,12 @@ public class FastCBSMoT_HurricanePatel {
 		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.patel_hurricane_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
 		try {
 			conn.setAutoCommit(false);
-			Map<String, Integer> bestCombinations = findBestCBSMoT(fastCBSMoT, trajs, sid, mid);
-			for (Map.Entry<String, Integer> e : bestCombinations.entrySet()) {
-				if(e.getValue() > 400){
-					System.out.println(e.getKey() + " ->" + e.getValue());
-				}
-			}
+//			Map<String, Integer> bestCombinations = findBestCBSMoT(fastCBSMoT, trajs, sid, mid);
+//			for (Map.Entry<String, Integer> e : bestCombinations.entrySet()) {
+//				if(e.getValue() > 400){
+//					System.out.println(e.getKey() + " ->" + e.getValue());
+//				}
+//			}
 			StopAndMoveExtractor.persistStopMove(fastCBSMoT, trajs, ratio, timeTolerance, maxDist, mergeTolerance, minTime, conn, sid, mid, update, insertStop, insertMove);
 		} finally {
 			update.close();

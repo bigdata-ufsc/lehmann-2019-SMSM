@@ -18,7 +18,6 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
-import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 
 public class StopAndMoveExtractor {
 
@@ -26,22 +25,24 @@ public class StopAndMoveExtractor {
 			int mergeTolerance, int minTime, Connection conn, MutableInt sid, MutableInt mid, PreparedStatement update, PreparedStatement insertStop, PreparedStatement insertMove)
 			throws SQLException {
 		List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), ratio, timeTolerance, maxDist, mergeTolerance, minTime, sid, mid);
-//		for (StopAndMove stopAndMove : findBestCBSMoT) {
-//			int moveAndStopPoints = 0;
-//			List<Stop> stops = stopAndMove.getStops();
-//			for (Stop stop : stops) {
-//				List<Integer> gids = stopAndMove.getGids(stop);
-//				moveAndStopPoints += gids.size();
-//			}
-//			List<Move> moves = stopAndMove.getMoves();
-//			for (Move move : moves) {
-//				List<Integer> gids = stopAndMove.getGids(move);
-//				moveAndStopPoints += gids.size();
-//			}
-//			if(stopAndMove.getTrajectory().length() != moveAndStopPoints) {
-//				System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", length: " + stopAndMove.getTrajectory().length() + ", stops and moves: " + moveAndStopPoints);
-//			}
-//		}
+		for (StopAndMove stopAndMove : findBestCBSMoT) {
+			int moveAndStopPoints = 0;
+			List<Stop> stops = stopAndMove.getStops();
+			for (Stop stop : stops) {
+				List<Integer> gids = stopAndMove.getGids(stop);
+				moveAndStopPoints += gids.size();
+			}
+			List<Move> moves = stopAndMove.getMoves();
+			for (Move move : moves) {
+				List<Integer> gids = stopAndMove.getGids(move);
+				moveAndStopPoints += gids.size();
+			}
+			if(stopAndMove.getTrajectory().length() != moveAndStopPoints) {
+				System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", length: " + stopAndMove.getTrajectory().length() + ", stops and moves: " + moveAndStopPoints);
+			}
+			System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", stops: " + stops.size());
+			System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", moves: " + moves.size());
+		}
 //		if(true) {
 //			throw new RuntimeException();
 //		}

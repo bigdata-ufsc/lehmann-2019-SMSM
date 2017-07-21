@@ -16,6 +16,8 @@
 
 package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
+import smile.math.Random;
+
 /**
  * Cross-validation is a technique for assessing how the results of a
  * statistical analysis will generalize to an independent data set.
@@ -43,13 +45,23 @@ public class CrossValidation {
      * The index of testing instances.
      */
     public final int[][] test;
-
+    
     /**
      * Constructor.
      * @param n the number of samples.
      * @param k the number of rounds of cross validation.
      */
     public CrossValidation(int n, int k) {
+    	this(n, k, new Random(System.currentTimeMillis()));
+    }
+
+    /**
+     * Constructor.
+     * @param n the number of samples.
+     * @param k the number of rounds of cross validation.
+     * @param seed the random seed
+     */
+    public CrossValidation(int n, int k, Random random) {
         if (n < 0) {
             throw new IllegalArgumentException("Invalid sample size: " + n);
         }
@@ -60,7 +72,6 @@ public class CrossValidation {
 
         this.k = k;
 
-        smile.math.Random random = new smile.math.Random(System.currentTimeMillis());
         int[] index = random.permutate(n);
 
         train = new int[k][];

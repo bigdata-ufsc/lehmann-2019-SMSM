@@ -8,6 +8,7 @@ import java.util.List;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.Problem;
+import smile.math.Random;
 
 public class TaxiShangaiProblem implements Problem {
 	
@@ -16,6 +17,14 @@ public class TaxiShangaiProblem implements Problem {
 	private List<SemanticTrajectory> testingData;
 	private List<SemanticTrajectory> validatingData;
 	private boolean loaded;
+	private Random random = new Random();
+	
+	@Override
+	public TaxiShangaiProblem clone(Random r) {
+		TaxiShangaiProblem ret = new TaxiShangaiProblem();
+		ret.random = r;
+		return ret;
+	}
 
 	@Override
 	public Semantic[] semantics() {
@@ -78,7 +87,17 @@ public class TaxiShangaiProblem implements Problem {
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}
-		Collections.shuffle(data);
+		Collections.shuffle(data, new java.util.Random() {
+			@Override
+			public int nextInt(int bound) {
+				return random.nextInt(bound);
+			}
+			
+			@Override
+			public int nextInt() {
+				return random.nextInt();
+			}
+		});
 //		data = data.subList(0, data.size() / 80);
 		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
 		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));

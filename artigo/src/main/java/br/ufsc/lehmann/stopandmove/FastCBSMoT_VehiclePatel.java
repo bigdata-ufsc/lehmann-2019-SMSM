@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -53,16 +52,16 @@ public class FastCBSMoT_VehiclePatel {
 		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.patel_vehicle_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
 		try {
 			conn.setAutoCommit(false);
-			Map<String, Integer> bestCombinations = StopAndMoveExtractor.findBestCBSMoT(fastCBSMoT, trajs, sid, mid);
-			int maxStops = 0;
-			String bestConfiguration = null;
-			for (Map.Entry<String, Integer> e : bestCombinations.entrySet()) {
-				if(e.getValue() > maxStops) {
-					maxStops = e.getValue();
-					bestConfiguration = e.getKey();
-				}
-			}
-			System.out.println(bestConfiguration + " ->" + bestCombinations.get(bestConfiguration));
+//			Map<String, Integer> bestCombinations = StopAndMoveExtractor.findBestCBSMoT(fastCBSMoT, trajs, sid, mid);
+//			int maxStops = 0;
+//			String bestConfiguration = null;
+//			for (Map.Entry<String, Integer> e : bestCombinations.entrySet()) {
+//				if(e.getValue() > maxStops) {
+//					maxStops = e.getValue();
+//					bestConfiguration = e.getKey();
+//				}
+//			}
+//			System.out.println(bestConfiguration + " ->" + bestCombinations.get(bestConfiguration));
 			StopAndMoveExtractor.persistStopMove(fastCBSMoT, trajs, ratio, timeTolerance, maxDist, mergeTolerance, minTime, conn, sid, mid, update, insertStop, insertMove);
 		} finally {
 			update.close();

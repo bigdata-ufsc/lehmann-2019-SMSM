@@ -28,7 +28,7 @@ public interface MSMTest {
 					new MSMSemanticParameter(problem.semantics()[2], null, 1/3));
 		}
 		if(problem instanceof PatelProblem) {
-			return new MSMClassifier(new MSMSemanticParameter(Semantic.GEOGRAPHIC, 500, 1/3),
+			return new MSMClassifier(new MSMSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, 500, 1/3),
 					new MSMSemanticParameter(Semantic.TEMPORAL, 100, 1/3),
 					new MSMSemanticParameter(PatelDataReader.STOP_SEMANTIC, null, 1/3));
 		}

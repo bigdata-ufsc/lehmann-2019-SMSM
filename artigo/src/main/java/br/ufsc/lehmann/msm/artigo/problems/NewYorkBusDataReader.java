@@ -1,6 +1,8 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
+import java.sql.Array;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -42,7 +44,7 @@ public class NewYorkBusDataReader {
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(10, new LatLongDistanceFunction());
 	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(11);
 
-	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+	public List<SemanticTrajectory> read(String[] lines) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.nyc_20140927", null, null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
@@ -98,19 +100,18 @@ public class NewYorkBusDataReader {
 				moves.put(moveId, move);
 			}
 		}
-		ResultSet data = st.executeQuery(
-				"select gid, time_received as \"time\", vehicle_id, trim(infered_route_id) as route, "
-				/**/+ "trim(infered_trip_id) as trip_id, longitude, latitude, distance_along_trip, infered_direction_id, "
-				/**/+ "trim(infered_phase) as phase, next_scheduled_stop_distance, next_scheduled_stop_id, semantic_stop_id, semantic_move_id "
-				+ "from bus.nyc_20140927 "//
-				+ "where infered_trip_id is not null "//
-				//2 linhas
+		String sql = "select gid, time_received as \"time\", vehicle_id, trim(infered_route_id) as route, "
+		/**/+ "trim(infered_trip_id) as trip_id, longitude, latitude, distance_along_trip, infered_direction_id, "
+		/**/+ "trim(infered_phase) as phase, next_scheduled_stop_distance, next_scheduled_stop_id, semantic_stop_id, semantic_move_id "
+		+ "from bus.nyc_20140927 "//
+		+ "where infered_trip_id is not null ";//
+		//2 linhas
 //				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_M102'=infered_route_id) "
-				//5 linhas
+		//5 linhas
 //				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_Q13'=infered_route_id or 'MTABC_Q66'=infered_route_id or 'MTABC_Q65'=infered_route_id or 'MTA NYCT_Q32'=infered_route_id) "
-				//10 linhas
+		//10 linhas
 //				+ "and ('MTA NYCT_Q20A'=infered_route_id or 'MTA NYCT_Q13'=infered_route_id or 'MTABC_Q66'=infered_route_id or 'MTABC_Q65'=infered_route_id or 'MTA NYCT_Q32'=infered_route_id or 'MTA NYCT_M42'=infered_route_id or 'MTABC_Q49'=infered_route_id or 'MTA NYCT_Q28'=infered_route_id or 'MTA NYCT_X10'=infered_route_id or 'MTA NYCT_M102'=infered_route_id) "
-				//50 menores linhas
+		//50 menores linhas
 //				+ "and ('MTABC_Q34'=infered_route_id or 'MTA NYCT_X28'=infered_route_id or 'MTA NYCT_Q20B'=infered_route_id or 'MTA NYCT_S42'=infered_route_id or 'MTA NYCT_S66'=infered_route_id or "
 //				+ "'MTABC_BM5'=infered_route_id or 'MTABC_BM4'=infered_route_id or 'MTABC_BM1'=infered_route_id or 'MTABC_Q67'=infered_route_id or 'MTABC_QM15'=infered_route_id or "
 //				+ "'MTABC_BM3'=infered_route_id or 'MTA NYCT_B84'=infered_route_id or 'MTABC_BM2'=infered_route_id or 'MTABC_BXM4'=infered_route_id or 'MTABC_QM5'=infered_route_id or "
@@ -121,8 +122,16 @@ public class NewYorkBusDataReader {
 //				+ "'MTA NYCT_X17'=infered_route_id or 'MTABC_BXM2'=infered_route_id or 'MTA NYCT_B69'=infered_route_id or 'MTA NYCT_BX46'=infered_route_id or 'MTA NYCT_M50'=infered_route_id or "
 //				+ "'MTA NYCT_M12'=infered_route_id or 'MTA NYCT_S57'=infered_route_id or 'MTA NYCT_BX24'=infered_route_id or 'MTA NYCT_Q76'=infered_route_id or 'MTA NYCT_BX4A'=infered_route_id or "
 //				+ "'MTABC_BX23'=infered_route_id or 'MTA NYCT_BX8'=infered_route_id or 'MTA NYCT_B74'=infered_route_id or 'MTA NYCT_Q15A'=infered_route_id) "
-				+ "order by time_received"//
-				);
+		if(lines != null && lines.length > 0) {
+			sql += "and infered_route_id in (SELECT * FROM unnest(?)) ";
+		}
+		sql += "order by time_received";
+		PreparedStatement preparedStatement = conn.prepareStatement(sql);
+		if(lines != null && lines.length > 0) {
+			Array array = conn.createArrayOf("varchar", lines);
+			preparedStatement.setArray(1, array);
+		}
+		ResultSet data = preparedStatement.executeQuery();
 		Multimap<String, NewYorkBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		System.out.println("Fetching...");
 		while(data.next()) {

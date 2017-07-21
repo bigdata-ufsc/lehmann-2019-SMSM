@@ -43,6 +43,7 @@ import br.ufsc.lehmann.msm.artigo.classifiers.validation.Precision;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Recall;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Specificity;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Validation;
+import smile.math.Random;
 
 @RunWith(Parameterized.class)
 public abstract class AbstractClassifierTest {
@@ -55,17 +56,19 @@ public abstract class AbstractClassifierTest {
 	private static final Precision PRECISION = new Precision();
 	private static final Accuracy ACCURACY = new Accuracy();
 
+	private Problem problem;
+	private Multimap<ClassificationMeasure, String> measureFailures = MultimapBuilder.linkedHashKeys().linkedHashSetValues().build();
+	private Random RANDOM = new Random(5);
+
 	@Rule public TestName name = new TestName();
     
     @Parameters(name="{0}")
     public static Collection<EnumProblem> data() {
         return Arrays.asList(EnumProblem.values());
     }
-	private Problem problem;
-	private Multimap<ClassificationMeasure, String> measureFailures = MultimapBuilder.linkedHashKeys().linkedHashSetValues().build();
 	
 	public AbstractClassifierTest(EnumProblem problemDescriptor) {
-		problem = problemDescriptor.problem();
+		problem = problemDescriptor.problem(RANDOM);
 	}
 	
 	@Before
@@ -138,7 +141,7 @@ public abstract class AbstractClassifierTest {
 			testLabelData[i] = discriminator.getData(testData[i], 0);
 		}
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		Validation validation = new Validation(problem, classifier);
+		Validation validation = new Validation(problem, classifier, RANDOM);
 
 		ITrainer<Object> trainer = new KNNSmileTrainer<>();
 		IClassifier<Object> train = trainer.train(trainData, discriminator, classifier);
@@ -176,7 +179,7 @@ public abstract class AbstractClassifierTest {
 			testLabelData[i] = discriminator.getData(testData[i], 0);
 		}
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		Validation validation = new Validation(problem, classifier);
+		Validation validation = new Validation(problem, classifier, RANDOM);
 		ClassificationMeasure[] measures = new ClassificationMeasure[] {//
 				PRECISION,//
 				RECALL,//

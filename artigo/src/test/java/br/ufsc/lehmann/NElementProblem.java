@@ -15,6 +15,7 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
+import smile.math.Random;
 
 public class NElementProblem implements Problem {
 	
@@ -76,6 +77,11 @@ public class NElementProblem implements Problem {
 		if(validating.isEmpty()) {
 			validating.add(data.get(0));
 		}
+	}
+	
+	@Override
+	public NElementProblem clone(Random r) {
+		return new NElementProblem(elements, classes);
 	}
 
 	@Override

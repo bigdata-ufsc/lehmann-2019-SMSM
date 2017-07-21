@@ -1,26 +1,16 @@
 package br.ufsc.lehmann.stopandmove;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.core.trajectory.TPoint;
-import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
-import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 
 public class FastCBSMoT_BusesPatel {

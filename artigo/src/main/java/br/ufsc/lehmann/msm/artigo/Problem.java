@@ -4,8 +4,9 @@ import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import smile.math.Random;
 
-public interface Problem {
+public interface Problem extends Cloneable {
 
 	Semantic[] semantics();
 	List<SemanticTrajectory> data();
@@ -15,4 +16,6 @@ public interface Problem {
 	List<SemanticTrajectory> validatingData();
 	
 	String shortDescripton();
+	
+	Problem clone(Random r);
 }
