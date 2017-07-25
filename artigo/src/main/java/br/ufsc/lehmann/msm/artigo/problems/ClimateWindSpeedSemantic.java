@@ -18,6 +18,11 @@ public class ClimateWindSpeedSemantic extends Semantic<Double, Number>{
 	}
 
 	@Override
+	public boolean match(Double d1, Double d2, Number threshlod) {
+		return distance(d1, d2) <= threshold;
+	}
+
+	@Override
 	public Number distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
 		Double tempA = (Double) getData(a, i);
 		Double tempB = (Double) getData(b, j);

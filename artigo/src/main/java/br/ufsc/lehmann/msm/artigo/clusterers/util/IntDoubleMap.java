@@ -1,6 +1,10 @@
 package br.ufsc.lehmann.msm.artigo.clusterers.util;
 
-import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.*;
+import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.DELETED;
+import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.EMPTY;
+import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.INT_MASK;
+import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.OCCUPIED;
+import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.getNextPow2TwinPrime;
 
 import java.util.AbstractMap;
 import java.util.AbstractSet;

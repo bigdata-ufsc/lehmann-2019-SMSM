@@ -17,7 +17,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
-import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 
 /**
  * 

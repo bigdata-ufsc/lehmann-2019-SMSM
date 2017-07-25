@@ -2,7 +2,12 @@
 package br.ufsc.lehmann.msm.artigo.clusterers.util;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Provides a modifiable implementation of a List using a int array. This provides considerable

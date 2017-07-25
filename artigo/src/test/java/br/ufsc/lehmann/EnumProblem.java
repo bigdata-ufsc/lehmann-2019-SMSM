@@ -11,7 +11,7 @@ public enum EnumProblem {
 //	DUBLIN_BUS_2_LINES(new DublinBusProblem("017A0002", "00791001"), 2),//
 //	TDRIVE(new TDriveProblem()),//
 //	NEWYORK_BIKE(new NYBikeProblem()), //
-	PATEL_ANIMALS(new PatelProblem("animal"), 3),//
+//	PATEL_ANIMALS(new PatelProblem("animal"), 3),//
 //	PATEL_HURRICANE(new PatelProblem("hurricane"), 5),//
 //	PATEL_HURRICANE_1vs4(new PatelProblem("hurricane_1vs4", "hurricane"), 2),//
 //	PATEL_HURRICANE_2vs3(new PatelProblem("hurricane_2vs3", "hurricane"), 2),//

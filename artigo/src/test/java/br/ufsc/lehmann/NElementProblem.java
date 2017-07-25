@@ -27,6 +27,7 @@ public class NElementProblem implements Problem {
 	public static BasicSemantic<String> discriminator = new BasicSemantic<>(3);
 	public static StopSemantic stop = new StopSemantic(4, new EuclideanDistanceFunction());
 	public static MoveSemantic move = new MoveSemantic(5);
+	public static MoveSemantic stop_move = new StopMoveSemantic(5, stop);
 	private int elements;
 	private int classes;
 	
@@ -55,11 +56,11 @@ public class NElementProblem implements Problem {
 				long future = now.plus(j, ChronoUnit.MINUTES).toEpochMilli();
 				if(j % 3 == 0) {
 					if(startStop == null) {
-						startStop = new Stop(j, j, nowMilli, 2, nowMilli);
+						startStop = new Stop(j, j, nowMilli, 2, nowMilli, new TPoint(j + 1, j + 1));
 					} else {
 						startStop = endStop;
 					}
-					endStop = new Stop(j + 2, j, nowMilli, 2, nowMilli);
+					endStop = new Stop(j + 2, j, nowMilli, 2, nowMilli, new TPoint(j + 1, j + 1));
 					t.addData(j, stop, startStop);
 				} else {
 					t.addData(j, move, new Move(j, startStop, endStop, nowMilli, future, initMove, 4));

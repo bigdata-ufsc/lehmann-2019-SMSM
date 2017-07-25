@@ -1,6 +1,5 @@
 package br.ufsc.lehmann.msm.artigo;
 
-import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Stop;
 
 public class ComparableStop extends Stop implements Comparable<ComparableStop> {

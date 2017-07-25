@@ -1,6 +1,5 @@
 package br.ufsc.lehmann.msm.artigo;
 
-import br.ufsc.core.trajectory.GeographicDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
@@ -43,5 +42,10 @@ public class ComparableStopSemantic extends Semantic<Stop, Number> {
 	@Override
 	public double distance(Stop d1, Stop d2) {
 		return inner.distance(d1, d2);
+	}
+
+	@Override
+	public boolean match(Stop d1, Stop d2, Number threshlod) {
+		return inner.match(d1, d2, threshlod);
 	}
 }

@@ -43,7 +43,7 @@ public class Recall implements ClassificationMeasure {
             }
         }
         if(p == 0.0) {
-        	return 0.0;
+        	return 1.0;
         }
 
         return (double) tp / p;

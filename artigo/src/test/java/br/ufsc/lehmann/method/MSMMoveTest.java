@@ -4,8 +4,8 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
-import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
+import br.ufsc.lehmann.MSM_Move.MSMMoveSemanticParameter;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
@@ -23,29 +23,29 @@ public interface MSMMoveTest {
 
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		if(problem instanceof NElementProblem) {
-			return new MSMMoveClassifier(new MSMSemanticParameter<Move, Number>(NElementProblem.move, null, 0.5),
+			return new MSMMoveClassifier(new MSMMoveSemanticParameter(NElementProblem.stop, null, NElementProblem.move, null, 0.5),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 0.0, 0.5),
 					new MSMSemanticParameter<Number, Number>(NElementProblem.dataSemantic, null, 0.5));
 		}
 		if(problem instanceof NewYorkBusProblem) {
-			return new MSMMoveClassifier(new MSMSemanticParameter<Move, Number>(NewYorkBusDataReader.MOVE_SEMANTIC, null, 0.5),
+			return new MSMMoveClassifier(new MSMMoveSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100, NewYorkBusDataReader.MOVE_SEMANTIC, 10, 0.5),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, 50, 0.5),
 					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, 100, 0.5));
 		}
 		if(problem instanceof DublinBusProblem) {
-			return new MSMMoveClassifier(new MSMSemanticParameter<Move, Number>(DublinBusDataReader.MOVE_SEMANTIC, null, 0.5),
+			return new MSMMoveClassifier(new MSMMoveSemanticParameter(DublinBusDataReader.STOP_SEMANTIC, 100, DublinBusDataReader.MOVE_SEMANTIC, 10, 0.5),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, 50, 0.5),
 					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, 100, 0.5));
 		}
 		if(problem instanceof NYBikeProblem) {
-			return new MSMMoveClassifier(new MSMSemanticParameter<Move, Number>(problem.semantics()[0], 50, 1/3),
+			return new MSMMoveClassifier(new MSMMoveSemanticParameter(problem.semantics()[0], 50, problem.semantics()[0], 50, 1/3),
 					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, 0.5, 1/3),
 					new MSMSemanticParameter<String, Number>(BikeDataReader.USER, null, 1/3));
 		}
 		if(problem instanceof PatelProblem) {
-			return new MSMMoveClassifier(new MSMSemanticParameter<Move, Number>(PatelDataReader.MOVE_SEMANTIC, null, 0.5),
-					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, 500, 0.5),
-					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, 100, 0.5));
+			return new MSMMoveClassifier(new MSMMoveSemanticParameter(PatelDataReader.STOP_SEMANTIC, 500, PatelDataReader.MOVE_SEMANTIC, 10, 1));
+//					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, 500, 0.5),
+//					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, 100, 0.5));
 		}
 		return null;
 	}

@@ -84,20 +84,20 @@ public abstract class AbstractClusteringTest {
 	public void simpleClusterizationBySimilarityMeasure() throws Exception {
 		HierarchicalClusteringDistanceBetweenTrajectoriesExecutor executor = new HierarchicalClusteringDistanceBetweenTrajectoriesExecutor(descriptor.numClasses());
 		List<SemanticTrajectory> data = problem.data();
-		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
+		IMeasureDistance<SemanticTrajectory> measurer = measurer(problem);
 		SemanticTrajectory[] training = data.toArray(new SemanticTrajectory[data.size()]);
 		double[][] distances = new double[training.length][training.length];
 		for (int i = 0; i < training.length; i++) {
 			distances[i][i] = 0;
 			final int finalI = i;
 			IntStream.iterate(0, j -> j + 1).limit(i).parallel().forEach((j) -> {
-				distances[finalI][j] = classifier.distance(training[finalI], training[j]);
+				distances[finalI][j] = measurer.distance(training[finalI], training[j]);
 				distances[j][finalI] = distances[finalI][j];
 			});
 		}
 		ClusteringResult result = null;
 		try {
-			result = executor.cluster(distances, training, classifier);
+			result = executor.cluster(distances, training, measurer);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

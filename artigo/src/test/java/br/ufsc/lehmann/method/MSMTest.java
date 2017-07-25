@@ -1,6 +1,5 @@
 package br.ufsc.lehmann.method;
 
-import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 import br.ufsc.lehmann.NElementProblem;
@@ -28,9 +27,11 @@ public interface MSMTest {
 					new MSMSemanticParameter(problem.semantics()[2], null, 1/3));
 		}
 		if(problem instanceof PatelProblem) {
-			return new MSMClassifier(new MSMSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, 500, 1/3),
-					new MSMSemanticParameter(Semantic.TEMPORAL, 100, 1/3),
-					new MSMSemanticParameter(PatelDataReader.STOP_SEMANTIC, null, 1/3));
+			return new MSMClassifier(/*new MSMSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, 500, .25),
+					new MSMSemanticParameter(Semantic.TEMPORAL, 100, .25),*/
+					new MSMSemanticParameter(PatelDataReader.STOP_SEMANTIC, 500, .5),
+					new MSMSemanticParameter(PatelDataReader.MOVE_SEMANTIC, 10, .5)
+					);
 		}
 		return null;
 	}

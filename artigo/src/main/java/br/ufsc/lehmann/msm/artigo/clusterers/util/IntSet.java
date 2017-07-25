@@ -1,11 +1,21 @@
 
 package br.ufsc.lehmann.msm.artigo.clusterers.util;
 
-import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.*;
+import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.DELETED;
+import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.EMPTY;
+import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.EXTRA_INDEX_INFO;
+import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.INT_MASK;
+import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.OCCUPIED;
+import static br.ufsc.lehmann.msm.artigo.clusterers.util.ClosedHashingUtil.getNextPow2TwinPrime;
 import static br.ufsc.lehmann.msm.artigo.clusterers.util.IntDoubleMap.h;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractSet;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * A utility class for efficiently storing a set of integers. The implementation

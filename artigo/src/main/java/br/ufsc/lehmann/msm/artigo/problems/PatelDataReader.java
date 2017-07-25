@@ -28,6 +28,7 @@ import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.MoveSemantic;
+import br.ufsc.lehmann.StopMoveSemantic;
 import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
 
 public class PatelDataReader {
@@ -44,6 +45,7 @@ public class PatelDataReader {
 	public static final BasicSemantic<String> CLASS = new BasicSemantic<>(4);
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(5, new EuclideanDistanceFunction());
 	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(6);
+	public static final MoveSemantic STOP_MOVE_SEMANTIC = new StopMoveSemantic(6, STOP_SEMANTIC);
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "patel." + table, null, null);
@@ -76,7 +78,7 @@ public class PatelDataReader {
 		}
 		Map<Integer, Move> moves = new HashMap<>();
 		ResultSet movesData = st.executeQuery(
-				"SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length " + //
+				"SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length, angle " + //
 						"FROM stops_moves.patel_" + stopMoveTable + "_move");
 		while(movesData.next()) {
 			int moveId = movesData.getInt("move_id");
@@ -96,7 +98,8 @@ public class PatelDataReader {
 						movesData.getTimestamp("start_time").getTime(), //
 						movesData.getTimestamp("end_time").getTime(), //
 						movesData.getInt("begin"), //
-						movesData.getInt("length"));
+						movesData.getInt("length"), //
+						movesData.getDouble("angle"));
 				moves.put(moveId, move);
 			}
 		}

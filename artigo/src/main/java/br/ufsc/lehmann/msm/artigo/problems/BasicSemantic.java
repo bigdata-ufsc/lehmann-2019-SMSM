@@ -26,4 +26,9 @@ public class BasicSemantic<V> extends Semantic<V, Number> {
 		return distance(a, i, b, j).longValue() <= (threshold == null ? 0 : threshold.longValue());
 	}
 
+	@Override
+	public boolean match(V d1, V d2, Number threshold) {
+		return distance(d1, d2) <= (threshold == null ? 0 : threshold.doubleValue());
+	}
+
 }

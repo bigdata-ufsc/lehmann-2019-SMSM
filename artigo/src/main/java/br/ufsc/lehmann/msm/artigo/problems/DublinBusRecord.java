@@ -1,6 +1,5 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 public class DublinBusRecord {

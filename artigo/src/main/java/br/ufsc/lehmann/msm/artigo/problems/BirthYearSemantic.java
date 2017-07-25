@@ -13,6 +13,11 @@ public class BirthYearSemantic extends Semantic<String, Number>{
 	public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshlod) {
 		return distance(getData(a, i), getData(b, j)) == 0.0;
 	}
+
+	@Override
+	public boolean match(String d1, String d2, Number threshlod) {
+		return distance(d1, d2) == 0.0;
+	}
 	
 	@Override
 	public double distance(String d1, String d2) {

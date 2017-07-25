@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ DTWClassifierTest.class, DTWaClassifierTest.class, EDRClassifierTest.class, ERPClassifierTest.class, LCSSClassifierTest.class, MSMClassifierTest.class, MSTPClassifierTest.class,
-	HCSSClassifierTest.class, CVTIClassifierTest.class, wDFClassifierTest.class, SWALEClassifierTest.class, MSMMoveClassifierTest.class, /*, LiuSchneiderClassifierTest.class, MTMClassifierTest.class*/ })
+@SuiteClasses({ /*DTWClassifierTest.class, DTWaClassifierTest.class, EDRClassifierTest.class, ERPClassifierTest.class, LCSSClassifierTest.class, */MSMClassifierTest.class, /*MSTPClassifierTest.class,
+	HCSSClassifierTest.class, CVTIClassifierTest.class, wDFClassifierTest.class, SWALEClassifierTest.class,*/ MSMMoveClassifierTest.class, /*, LiuSchneiderClassifierTest.class, MTMClassifierTest.class*/ })
 public class AllClassifierTests {
 
 }

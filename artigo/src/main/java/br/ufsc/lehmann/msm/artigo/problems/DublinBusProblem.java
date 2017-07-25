@@ -37,7 +37,8 @@ public class DublinBusProblem implements Problem {
 			 Semantic.GEOGRAPHIC_LATLON, //
 			 Semantic.TEMPORAL,//
 			// DublinBusDataReader.OPERATOR,
-			DublinBusDataReader.STOP
+			DublinBusDataReader.STOP,
+			DublinBusDataReader.STOP_MOVE_SEMANTIC
 		};
 	}
 

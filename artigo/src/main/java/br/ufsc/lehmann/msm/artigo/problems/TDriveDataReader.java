@@ -28,6 +28,7 @@ import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.MoveSemantic;
+import br.ufsc.lehmann.StopMoveSemantic;
 import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
 
 public class TDriveDataReader {
@@ -35,6 +36,7 @@ public class TDriveDataReader {
 	public static final BasicSemantic<String> TID = new BasicSemantic<>(3);
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(4, new EuclideanDistanceFunction());
 	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(5);
+	public static final MoveSemantic STOP_MOVE_SEMANTIC = new StopMoveSemantic(5, STOP_SEMANTIC);
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "taxi.beijing_t-drive", null, null);

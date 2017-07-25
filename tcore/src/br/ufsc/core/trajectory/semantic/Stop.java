@@ -35,13 +35,18 @@ public class Stop {
 		this.begin = beginIndex;
 		this.length = length;
 	}
-
+	
 	public Stop(int stopId, int beginIndex, long startTime, int length, long endTime) {
+		this(stopId, beginIndex, startTime, length, endTime, null);
+	}
+
+	public Stop(int stopId, int beginIndex, long startTime, int length, long endTime, TPoint centroid) {
 		this.begin = beginIndex;
 		this.length = length;
 		this.stopId = stopId;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.centroid = centroid;
 	}
 
 	public int getStopId() {

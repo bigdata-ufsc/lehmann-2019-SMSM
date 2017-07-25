@@ -21,7 +21,7 @@ public class FastCBSMoT_VehicleUrbanPatel {
 		FastCBSMoT fastCBSMoT = new FastCBSMoT(new EuclideanDistanceFunction());
 		PatelProblem problem = new PatelProblem("vehicle_urban", "vehicle");
 		List<SemanticTrajectory> trajs = problem.data();
-		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.patel_vehicle", null, "geom");
+		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "patel.vehicle_urban", null, "geom");
 
 		// Trajectory t = retriever.fastFetchTrajectory(9543);
 		// FIND STOPS

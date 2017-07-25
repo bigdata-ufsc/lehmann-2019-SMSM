@@ -10,11 +10,11 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.method.DTWa;
-import br.ufsc.lehmann.msm.artigo.MultiThreadClassificationExecutor;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.MultiThreadClassificationExecutor;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
+import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 
 public class DTWaClassifier<Label> extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 

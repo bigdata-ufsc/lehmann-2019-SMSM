@@ -30,6 +30,7 @@ import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.MoveSemantic;
+import br.ufsc.lehmann.StopMoveSemantic;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
 public class DublinBusDataReader {
@@ -42,6 +43,7 @@ public class DublinBusDataReader {
 	public static final BasicSemantic<String> OPERATOR = new BasicSemantic<>(8);
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(9, new LatLongDistanceFunction());
 	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(10);
+	public static final MoveSemantic STOP_MOVE_SEMANTIC = new StopMoveSemantic(10, STOP_SEMANTIC);
 
 	public List<SemanticTrajectory> read(String[] lines) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.dublin201301", null, null);
@@ -75,7 +77,7 @@ public class DublinBusDataReader {
 		}
 		Map<Integer, Move> moves = new HashMap<>();
 		ResultSet movesData = st.executeQuery(
-				"SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length " + //
+				"SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length, angle " + //
 						"FROM stops_moves.bus_dublin_201301_move");
 		while(movesData.next()) {
 			int moveId = movesData.getInt("move_id");
@@ -95,7 +97,8 @@ public class DublinBusDataReader {
 						movesData.getTimestamp("start_time").getTime(), //
 						movesData.getTimestamp("end_time").getTime(), //
 						movesData.getInt("begin"), //
-						movesData.getInt("length"));
+						movesData.getInt("length"), //
+						movesData.getDouble("angle"));
 				moves.put(moveId, move);
 			}
 		}
@@ -104,7 +107,7 @@ public class DublinBusDataReader {
 		/**/+ "vehicle_journey, trim(operator) as operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id, "
 		/**/+ "semantic_stop_id, semantic_move_id "
 		+ "from bus.dublin_201301 ";
-		sql += "where date_frame between '2012-12-31' and '2013-01-05'";
+		//sql += "where date_frame between '2013-01-27' and '2013-01-31'";
 		if(lines != null && lines.length > 0) {
 			sql += "where trim(journey_pattern) in (SELECT * FROM unnest(?)) ";
 		}

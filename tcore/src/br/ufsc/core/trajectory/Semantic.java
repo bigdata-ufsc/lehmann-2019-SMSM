@@ -15,6 +15,11 @@ public abstract class Semantic<Element, Threshold> {
 		}
 
 		@Override
+		public boolean match(Number d1, Number d2, Number threshlod) {
+			return distance(d1, d2) <= threshlod.doubleValue();
+		}
+
+		@Override
 		public Number distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
 			return distance((Number) a.getDimensionData(index, i), (Number) b.getDimensionData(index, j));
 		}
@@ -29,6 +34,11 @@ public abstract class Semantic<Element, Threshold> {
 		@Override
 		public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshold) {
 			return distance(a, i, b, j) <= threshold.doubleValue();
+		}
+
+		@Override
+		public boolean match(TPoint d1, TPoint d2, Number threshold) {
+			return distance(d1, d2) <= threshold.doubleValue();
 		}
 
 		@Override
@@ -49,6 +59,11 @@ public abstract class Semantic<Element, Threshold> {
 		}
 
 		@Override
+		public boolean match(TPoint d1, TPoint d2, Number threshold) {
+			return distance(d1, d2) <= threshold.doubleValue();
+		}
+
+		@Override
 		public Double distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
 			return distance((TPoint) a.getDimensionData(index, i), (TPoint) b.getDimensionData(index, j));
 		}
@@ -63,6 +78,11 @@ public abstract class Semantic<Element, Threshold> {
 		@Override
 		public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshlod) {
 			return distance(a, i, b, j) <= threshlod.longValue();
+		}
+
+		@Override
+		public boolean match(TemporalDuration d1, TemporalDuration d2, Number threshlod) {
+			return distance(d1, d2) <= threshlod.longValue();
 		}
 
 		@Override
@@ -109,4 +129,6 @@ public abstract class Semantic<Element, Threshold> {
 	public abstract boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Threshold threshold);
 
 	public abstract double distance(Element d1, Element d2);
+
+	public abstract boolean match(Element d1, Element d2, Threshold threshold);
 }

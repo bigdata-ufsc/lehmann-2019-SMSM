@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
-import br.ufsc.lehmann.method.EDR.EDRSemanticParameter;
 import br.ufsc.lehmann.method.SWALE;
 import br.ufsc.lehmann.method.SWALE.SWALEParameters;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;

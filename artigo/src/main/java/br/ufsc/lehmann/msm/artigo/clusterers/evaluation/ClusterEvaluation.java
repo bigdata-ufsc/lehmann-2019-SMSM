@@ -2,10 +2,9 @@ package br.ufsc.lehmann.msm.artigo.clusterers.evaluation;
 
 import java.util.List;
 
-import org.junit.experimental.theories.DataPoint;
-
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.Trajectories;
+import br.ufsc.lehmann.msm.artigo.clusterers.dissimilarity.ClusterDissimilarity;
 
 /**
  * Provides the contract for evaluating the quality of a hard assignment of

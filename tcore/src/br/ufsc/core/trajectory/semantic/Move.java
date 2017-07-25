@@ -14,8 +14,13 @@ public class Move {
 	private Stop end;
 	private int begin;
 	private int length;
+	private double angle;
 
 	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length) {
+		this(moveId, start, end, startTime, endTime, begin, length, 0.0);
+	}
+
+	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, double angle) {
 		this.moveId = moveId;
 		this.start = start;
 		this.end = end;
@@ -23,6 +28,7 @@ public class Move {
 		this.endTime = endTime;
 		this.begin = begin;
 		this.length = length;
+		this.angle = angle;
 	}
 
 	public int getMoveId() {
@@ -107,5 +113,13 @@ public class Move {
 		if (moveId != other.moveId)
 			return false;
 		return true;
+	}
+
+	public double getAngle() {
+		return angle;
+	}
+
+	public void setAngle(double angle) {
+		this.angle = angle;
 	}
 }
