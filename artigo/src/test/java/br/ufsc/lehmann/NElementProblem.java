@@ -27,7 +27,6 @@ public class NElementProblem implements Problem {
 	public static BasicSemantic<String> discriminator = new BasicSemantic<>(3);
 	public static StopSemantic stop = new StopSemantic(4, new EuclideanDistanceFunction());
 	public static MoveSemantic move = new MoveSemantic(5);
-	public static MoveSemantic stop_move = new StopMoveSemantic(5, stop);
 	private int elements;
 	private int classes;
 	

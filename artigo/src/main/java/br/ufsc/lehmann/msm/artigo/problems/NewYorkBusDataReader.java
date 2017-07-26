@@ -30,7 +30,6 @@ import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.MoveSemantic;
-import br.ufsc.lehmann.StopMoveSemantic;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
 public class NewYorkBusDataReader {
@@ -44,7 +43,6 @@ public class NewYorkBusDataReader {
 	public static final BasicSemantic<String> NEXT_STOP_ID = new BasicSemantic<>(9);
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(10, new LatLongDistanceFunction());
 	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(11);
-	public static final MoveSemantic STOP_MOVE_SEMANTIC = new StopMoveSemantic(11, STOP_SEMANTIC);
 
 	public List<SemanticTrajectory> read(String[] lines) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.nyc_20140927", null, null);

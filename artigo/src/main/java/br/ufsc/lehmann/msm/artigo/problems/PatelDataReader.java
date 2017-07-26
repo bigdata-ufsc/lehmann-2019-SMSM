@@ -28,7 +28,6 @@ import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.MoveSemantic;
-import br.ufsc.lehmann.StopMoveSemantic;
 import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
 
 public class PatelDataReader {
@@ -45,7 +44,6 @@ public class PatelDataReader {
 	public static final BasicSemantic<String> CLASS = new BasicSemantic<>(4);
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(5, new EuclideanDistanceFunction());
 	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(6);
-	public static final MoveSemantic STOP_MOVE_SEMANTIC = new StopMoveSemantic(6, STOP_SEMANTIC);
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "patel." + table, null, null);

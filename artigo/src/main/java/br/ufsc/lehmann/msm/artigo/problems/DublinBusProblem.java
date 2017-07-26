@@ -38,7 +38,7 @@ public class DublinBusProblem implements Problem {
 			 Semantic.TEMPORAL,//
 			// DublinBusDataReader.OPERATOR,
 			DublinBusDataReader.STOP,
-			DublinBusDataReader.STOP_MOVE_SEMANTIC
+			DublinBusDataReader.MOVE_SEMANTIC
 		};
 	}
 
