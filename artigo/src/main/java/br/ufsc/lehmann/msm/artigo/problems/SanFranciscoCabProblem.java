@@ -10,23 +10,21 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import smile.math.Random;
 
-public class DublinBusProblem implements Problem {
+public class SanFranciscoCabProblem implements Problem {
 	
 	private List<SemanticTrajectory> data;
 	private List<SemanticTrajectory> trainingData;
 	private List<SemanticTrajectory> testingData;
 	private List<SemanticTrajectory> validatingData;
 	private boolean loaded;
-	private String[] lines;
 	private Random random = new Random();
 
-	public DublinBusProblem(String... lines) {
-		this.lines = lines;
+	public SanFranciscoCabProblem() {
 	}
 	
 	@Override
-	public Problem clone(Random r) {
-		DublinBusProblem ret = new DublinBusProblem(lines);
+	public SanFranciscoCabProblem clone(Random r) {
+		SanFranciscoCabProblem ret = new SanFranciscoCabProblem();
 		ret.random = r;
 		return ret;
 	}
@@ -35,10 +33,9 @@ public class DublinBusProblem implements Problem {
 	public Semantic[] semantics() {
 		return new Semantic[] {
 			 Semantic.GEOGRAPHIC_LATLON, //
-			 Semantic.TEMPORAL,//
-			// DublinBusDataReader.OPERATOR,
-			DublinBusDataReader.STOP_SEMANTIC,
-			DublinBusDataReader.MOVE_SEMANTIC
+//			 Semantic.TEMPORAL,//
+			SanFranciscoCabDataReader.STOP_SEMANTIC,
+			SanFranciscoCabDataReader.MOVE_SEMANTIC
 		};
 	}
 
@@ -52,7 +49,7 @@ public class DublinBusProblem implements Problem {
 
 	@Override
 	public Semantic discriminator() {
-		return DublinBusDataReader.LINE_INFO;
+		return SanFranciscoCabDataReader.OCCUPATION;
 	}
 
 	@Override
@@ -81,15 +78,15 @@ public class DublinBusProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "Dublin bus" + (lines != null ? "(lines=" + lines.length + ")" : "");
+		return "San Francisco cab";
 	}
-
+	
 	private void load() {
 		if(loaded) {
 			return;
 		}
 		try {
-			data = new ArrayList<>(new DublinBusDataReader().read(lines));
+			data = new ArrayList<>(new SanFranciscoCabDataReader().read());
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -104,10 +101,11 @@ public class DublinBusProblem implements Problem {
 				return random.nextInt();
 			}
 		});
+//		data = data.subList(0, data.size() / 80);
 		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
 		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));
 		this.validatingData = data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1);
-		this.loaded = true;
+		loaded = true;
 	}
 
 }

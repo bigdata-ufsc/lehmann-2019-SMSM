@@ -6,8 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang3.mutable.MutableInt;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.db.source.DataSource;
@@ -44,8 +43,8 @@ public class FastCBSMoT_TaxiShangai {
 
 		ResultSet executeQuery = conn.createStatement().executeQuery("select max(stop_id), max(move_id) from stops_moves.taxi_shangai_20070220");
 		executeQuery.next();
-		MutableInt sid = new MutableInt(executeQuery.getInt(1));
-		MutableInt mid = new MutableInt(executeQuery.getInt(2));
+		AtomicInteger sid = new AtomicInteger(executeQuery.getInt(1));
+		AtomicInteger mid = new AtomicInteger(executeQuery.getInt(2));
 		PreparedStatement update = conn.prepareStatement("update taxi.shangai_20070220 set semantic_stop_id = ?, semantic_move_id = ? where gid in (SELECT * FROM unnest(?))");
 		PreparedStatement insert = conn.prepareStatement("insert into stops_moves.taxi_shangai_20070220(stop_id, start_time, start_lat, start_lon, end_time, end_lat, end_lon, centroid_lat, centroid_lon) values (?,?,?,?,?,?,?,?,?)");
 		try {

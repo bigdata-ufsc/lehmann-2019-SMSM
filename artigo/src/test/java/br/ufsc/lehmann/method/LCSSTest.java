@@ -17,7 +17,10 @@ public interface LCSSTest {
 
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		if(problem instanceof NElementProblem) {
-			return new LCSSClassifier(new LCSSSemanticParameter(problem.semantics()[0], null));
+			return new LCSSClassifier(
+					new LCSSSemanticParameter(NElementProblem.stop, 0.5),
+					new LCSSSemanticParameter(NElementProblem.move, 10)
+					);
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new LCSSClassifier(//
 					new LCSSSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 500),//

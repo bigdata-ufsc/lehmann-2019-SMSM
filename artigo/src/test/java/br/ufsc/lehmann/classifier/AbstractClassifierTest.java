@@ -95,26 +95,6 @@ public abstract class AbstractClassifierTest {
 			Assert.fail(sw.toString());
 		}
 	}
-
-	@Test
-	public void simpleClassification() throws Exception {
-		HashMap<Object, DescriptiveStatistics> stats = new HashMap<>();
-		for (int i = 0; i < 5; i++) {
-			stats.put(String.valueOf(i), new DescriptiveStatistics());
-		}
-		TestClassificationExecutor executor = new TestClassificationExecutor(stats);
-		NElementProblem problem = new NElementProblem(15, 5);
-		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		try {
-			executor.classifyProblem(problem, classifier);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		for (int i = 0; i < 5; i++) {
-			assertEquals(String.format("Class %s - ", String.valueOf(i)), 1.0, stats.get(String.valueOf(i)).getMean(), 0.000001);
-			assertEquals(String.format("Class %s - ", String.valueOf(i)), 2, stats.get(String.valueOf(i)).getValues().length);
-		}
-	}
 	
 	@Test
 	public void validation_accuracy() throws Exception {

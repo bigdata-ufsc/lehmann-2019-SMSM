@@ -22,7 +22,7 @@ public class StopSemantic extends Semantic<Stop, Number> {
 			return 0;
 		}
 		if (d1 == null || d2 == null) {
-			return 1;
+			return Double.MAX_VALUE;
 		}
 		return function.distance(d1.getCentroid(), d2.getCentroid());
 	}

@@ -5,8 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
-import org.apache.commons.lang3.mutable.MutableInt;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.db.source.DataSource;
@@ -43,10 +42,10 @@ public class FastCBSMoT_TDrive {
 
 		ResultSet lastStop = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.\"taxi_beijing_t-drive_stop\"");
 		lastStop.next();
-		MutableInt sid = new MutableInt(lastStop.getInt(1));
+		AtomicInteger sid = new AtomicInteger(lastStop.getInt(1));
 		ResultSet lastMove = conn.createStatement().executeQuery("select max(move_id) from stops_moves.\"taxi_beijing_t-drive_move\"");
 		lastMove.next();
-		MutableInt mid = new MutableInt(lastMove.getInt(1));
+		AtomicInteger mid = new AtomicInteger(lastMove.getInt(1));
 		PreparedStatement update = conn.prepareStatement("update taxi.\"beijing_t-drive\" set semantic_stop_id = ?, semantic_move_id = ? where tid = ? and gid in (SELECT * FROM unnest(?))");
 		PreparedStatement insertStop = conn.prepareStatement("insert into stops_moves.\"taxi_beijing_t-drive_stop\"(stop_id, start_time, start_lat, start_lon, begin, end_time, end_lat, end_lon, length, centroid_lat, centroid_lon) values (?,?,?,?,?,?,?,?,?,?,?)");
 		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.\"taxi_beijing_t-drive_move\"(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");

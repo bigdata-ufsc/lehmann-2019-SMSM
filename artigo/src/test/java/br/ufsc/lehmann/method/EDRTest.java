@@ -18,10 +18,11 @@ public interface EDRTest {
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		if(problem instanceof NElementProblem) {
 			return new EDRClassifier(//
-					new EDRSemanticParameter(problem.semantics()[0], null));
+					new EDRSemanticParameter(NElementProblem.stop, 0.5),
+					new EDRSemanticParameter(NElementProblem.move, 10));
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new EDRClassifier(//
-					new EDRSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 50),//
+					new EDRSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 500),//
 					new EDRSemanticParameter(NewYorkBusDataReader.MOVE_SEMANTIC, 10));
 		} else if(problem instanceof DublinBusProblem) {
 			return new EDRClassifier(//

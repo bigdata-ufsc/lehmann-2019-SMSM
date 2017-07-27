@@ -6,9 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
@@ -58,7 +57,7 @@ public class StopAndMove {
 		s1.setLength((s2.getBegin() + s2.getLength()) - s1.getBegin());
 	}
 
-	public Collection<Integer> remove(Stop s, Stop previousStop, Stop nextStop, MutableInt mid) {
+	public Collection<Integer> remove(Stop s, Stop previousStop, Stop nextStop, AtomicInteger mid) {
 		Set<Move> movesToMerge = moves.asMap().entrySet().parallelStream().filter((Map.Entry<Move, Collection<Integer>> entry) -> {
 			return entry.getKey().getStart() == s || entry.getKey().getEnd() == s;
 		}).collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.counting())).keySet();

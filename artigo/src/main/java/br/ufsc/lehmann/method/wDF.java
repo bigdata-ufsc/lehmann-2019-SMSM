@@ -27,7 +27,6 @@ public class wDF implements IMeasureDistance<SemanticTrajectory> {
                 DF[i][j]=-1.0;
             }
         }
-       
         return computeWDF(R, S, DF, n-1, m-1);
     }
 
@@ -56,7 +55,6 @@ public class wDF implements IMeasureDistance<SemanticTrajectory> {
         	DF[i][j] = Semantic.GEOGRAPHIC_EUCLIDEAN.distance(p1, p2);
         }
         return DF[i][j];
-
     }
     
     @Override

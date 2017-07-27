@@ -2,6 +2,7 @@ package br.ufsc.lehmann.method;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.NElementProblem;
+import br.ufsc.lehmann.msm.artigo.ComparableMoveSemantic;
 import br.ufsc.lehmann.msm.artigo.ComparableStopSemantic;
 import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
@@ -17,14 +18,25 @@ public interface MSTPTest {
 
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		if(problem instanceof NElementProblem) {
-			return new MSTPClassifier(problem.semantics()[0]);
+			return new MSTPClassifier(//
+					new ComparableStopSemantic(NElementProblem.stop),//
+					new ComparableMoveSemantic(NElementProblem.move)//
+					);
 		} else if(problem instanceof NewYorkBusProblem) {
-			return new MSTPClassifier(new ComparableStopSemantic(NewYorkBusDataReader.STOP_SEMANTIC));
+			return new MSTPClassifier(//
+					new ComparableStopSemantic(NewYorkBusDataReader.STOP_SEMANTIC),//
+					new ComparableMoveSemantic(NewYorkBusDataReader.MOVE_SEMANTIC)//
+					);
 		} else if(problem instanceof DublinBusProblem) {
-			return new MSTPClassifier(new ComparableStopSemantic(DublinBusDataReader.STOP_SEMANTIC));
-		}
-		if(problem instanceof PatelProblem) {
-			return new MSTPClassifier(new ComparableStopSemantic(PatelDataReader.STOP_SEMANTIC));
+			return new MSTPClassifier(//
+					new ComparableStopSemantic(DublinBusDataReader.STOP_SEMANTIC),//
+					new ComparableMoveSemantic(DublinBusDataReader.MOVE_SEMANTIC)//
+					);
+		} else if(problem instanceof PatelProblem) {
+			return new MSTPClassifier(//
+					new ComparableStopSemantic(PatelDataReader.STOP_SEMANTIC),//
+					new ComparableMoveSemantic(PatelDataReader.MOVE_SEMANTIC)//
+					);
 		}
 		return null;
 	}

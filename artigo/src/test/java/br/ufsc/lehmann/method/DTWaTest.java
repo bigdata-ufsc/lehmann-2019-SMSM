@@ -16,7 +16,7 @@ public interface DTWaTest {
 
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		if(problem instanceof NElementProblem) {
-			return new DTWaClassifier(problem, problem.semantics()[0]);
+			return new DTWaClassifier(problem, NElementProblem.stop, NElementProblem.move);
 		} else if(problem instanceof PatelProblem) {
 			return new DTWaClassifier(problem, PatelDataReader.STOP_SEMANTIC, PatelDataReader.MOVE_SEMANTIC);
 		} else if(problem instanceof NewYorkBusProblem) {

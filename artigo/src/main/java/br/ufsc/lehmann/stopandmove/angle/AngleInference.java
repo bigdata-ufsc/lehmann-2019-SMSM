@@ -43,7 +43,7 @@ public class AngleInference {
 		conn.close();
 	}
 
-	private static double getAngle(TPoint p1, TPoint p2) {
+	public static double getAngle(TPoint p1, TPoint p2) {
 		double angle = Math.toDegrees(Math.atan2(p2.getY() - p1.getY(), p2.getX() - p1.getX()));
 
 	    if(angle < 0){

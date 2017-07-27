@@ -33,7 +33,7 @@ public class SpectralClusteringDistanceBetweenTrajectoriesExecutor implements IC
 			distances[i][i] = 0;
 			final int finalI = i;
 			IntStream.iterate(0, j -> j + 1).limit(i).parallel().forEach((j) -> {
-				distances[finalI][j] = ((TrajectorySimilarityCalculator<SemanticTrajectory>)measureDistance).getSimilarity(training.get(finalI), training.get(j));
+				distances[finalI][j] = 1 - ((TrajectorySimilarityCalculator<SemanticTrajectory>)measureDistance).getSimilarity(training.get(finalI), training.get(j));
 				distances[j][finalI] = distances[finalI][j];
 			});
 		}

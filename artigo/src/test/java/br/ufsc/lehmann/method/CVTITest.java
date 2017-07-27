@@ -16,7 +16,7 @@ public interface CVTITest {
 
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		if(problem instanceof NElementProblem) {
-			return new CVTI(new CVTISemanticParameter(NElementProblem.dataSemantic, null));
+			return new CVTI(new CVTISemanticParameter(NElementProblem.stop, 0.5));
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new CVTI(new CVTISemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100));
 		} else if(problem instanceof DublinBusProblem) {

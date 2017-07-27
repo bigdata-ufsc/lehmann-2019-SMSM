@@ -4,8 +4,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang3.mutable.MutableInt;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import br.ufsc.core.trajectory.GeographicDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
@@ -13,7 +12,6 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
-import br.ufsc.utils.Distance;
 
 public class FastCBSMoT {
 	
@@ -24,7 +22,7 @@ public class FastCBSMoT {
 	}
 
 	public StopAndMove findStops(SemanticTrajectory T, double maxDist, int minTime, int timeTolerance, int mergeTolerance, double ratio,
-			MutableInt sid, MutableInt mid) {
+			AtomicInteger sid, AtomicInteger mid) {
 		int size = T.length();
 		int[] neighborhood = new int[size];
 	
@@ -85,7 +83,7 @@ public class FastCBSMoT {
 		ret = cleanStops(ret, minTime, mid);
 		return ret;
 	}
-	StopAndMove cleanStops(StopAndMove stopAndMove, int minTime, MutableInt mid) {
+	StopAndMove cleanStops(StopAndMove stopAndMove, int minTime, AtomicInteger mid) {
 		List<Stop> S = new ArrayList<>(stopAndMove.getStops());
 		for (int i = 0; i < S.size(); i++) {
 			Stop s = S.get(i);
@@ -109,7 +107,7 @@ public class FastCBSMoT {
 					TPoint c1 = S.get(i).getCentroid();
 					TPoint c2 = S.get(i + 1).getCentroid();
 
-					if (Distance.euclidean(c1, c2) <= maxDist) {
+					if (distance.distance(c1, c2) <= distance.convert(maxDist)) {
 						stopAndMove.mergeStops(s1, s2);
 						
 						S.remove(s2);

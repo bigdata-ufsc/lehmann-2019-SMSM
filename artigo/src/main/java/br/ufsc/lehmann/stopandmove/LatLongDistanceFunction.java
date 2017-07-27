@@ -10,7 +10,7 @@ public class LatLongDistanceFunction implements GeographicDistanceFunction {
 
 	@Override
 	public double distance(TPoint p, TPoint d) {
-		return Distance.distFrom(p, d) / Distance.EARTH_RADIUS;
+		return Distance.distFrom(p, d);
 	}
 	
 	@Override
@@ -24,7 +24,7 @@ public class LatLongDistanceFunction implements GeographicDistanceFunction {
 	
 	@Override
 	public double convert(double units) {
-		return units / Distance.EARTH_RADIUS;
+		return units;
 	}
 
 }

@@ -10,9 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
-
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
@@ -22,27 +21,27 @@ import br.ufsc.core.trajectory.semantic.Stop;
 public class StopAndMoveExtractor {
 
 	public static void persistStopMove(FastCBSMoT fastCBSMoT, List<SemanticTrajectory> trajs, double ratio, int timeTolerance, double maxDist,
-			int mergeTolerance, int minTime, Connection conn, MutableInt sid, MutableInt mid, PreparedStatement update, PreparedStatement insertStop, PreparedStatement insertMove)
+			int mergeTolerance, int minTime, Connection conn, AtomicInteger sid, AtomicInteger mid, PreparedStatement update, PreparedStatement insertStop, PreparedStatement insertMove)
 			throws SQLException {
 		List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), ratio, timeTolerance, maxDist, mergeTolerance, minTime, sid, mid);
-		for (StopAndMove stopAndMove : findBestCBSMoT) {
-			int moveAndStopPoints = 0;
-			List<Stop> stops = stopAndMove.getStops();
-			for (Stop stop : stops) {
-				List<Integer> gids = stopAndMove.getGids(stop);
-				moveAndStopPoints += gids.size();
-			}
-			List<Move> moves = stopAndMove.getMoves();
-			for (Move move : moves) {
-				List<Integer> gids = stopAndMove.getGids(move);
-				moveAndStopPoints += gids.size();
-			}
-			if(stopAndMove.getTrajectory().length() != moveAndStopPoints) {
-				System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", length: " + stopAndMove.getTrajectory().length() + ", stops and moves: " + moveAndStopPoints);
-			}
-			System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", stops: " + stops.size());
-			System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", moves: " + moves.size());
-		}
+//		for (StopAndMove stopAndMove : findBestCBSMoT) {
+//			int moveAndStopPoints = 0;
+//			List<Stop> stops = stopAndMove.getStops();
+//			for (Stop stop : stops) {
+//				List<Integer> gids = stopAndMove.getGids(stop);
+//				moveAndStopPoints += gids.size();
+//			}
+//			List<Move> moves = stopAndMove.getMoves();
+//			for (Move move : moves) {
+//				List<Integer> gids = stopAndMove.getGids(move);
+//				moveAndStopPoints += gids.size();
+//			}
+//			if(stopAndMove.getTrajectory().length() != moveAndStopPoints) {
+//				System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", length: " + stopAndMove.getTrajectory().length() + ", stops and moves: " + moveAndStopPoints);
+//			}
+//			System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", stops: " + stops.size());
+//			System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", moves: " + moves.size());
+//		}
 //		if(true) {
 //			throw new RuntimeException();
 //		}
@@ -132,15 +131,15 @@ public class StopAndMoveExtractor {
 		conn.commit();
 	}
 
-	public static Map<String, Integer> findBestCBSMoT(FastCBSMoT fastCBSMoT, List<SemanticTrajectory> trajs, MutableInt sid, MutableInt mid) {
+	public static Map<String, Integer> findBestCBSMoT(FastCBSMoT fastCBSMoT, List<SemanticTrajectory> trajs, AtomicInteger sid, AtomicInteger mid) {
 		Map<String, Integer> bestCombinations = new HashMap<>();
 		for (int i = 40; i <= 200; i+=20) {//ratio
 			final int finalI = i;
-			IntStream.iterate(20 * 1000, j -> j + 2 * 1000).limit(10).parallel().forEach((j) -> {//mergeTolerance
+			IntStream.iterate(20 * 1000, j -> j + 2 * 1000).limit(10).parallel().forEach((j) -> {//timeTolerance
 				final int finalJ = j;
-				for (int k = 475; k <= 475; k+=25) {//maxDist
+				for (int k = 300; k <= 475; k+=25) {//maxDist
 					final int finalK = k;
-					IntStream.iterate(325, l -> l + 25).limit(1).parallel().forEach((l) -> {//mergeTolerance
+					IntStream.iterate(300, l -> l + 25).limit(10).parallel().forEach((l) -> {//mergeTolerance
 						for (int m = 30 * 1000; m <= 90 * 1000; m+=1000) {//minTime
 							List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), finalI, finalJ, finalK, l, m, sid, mid);
 							int stopsCount = 0;
@@ -158,7 +157,7 @@ public class StopAndMoveExtractor {
 	}
 
 	public static List<StopAndMove> findCBSMoT(FastCBSMoT fastCBSMoT, List<SemanticTrajectory> trajs, double ratio, int timeTolerance, double maxDist,
-			int mergeTolerance, int minTime, MutableInt sid, MutableInt mid) {
+			int mergeTolerance, int minTime, AtomicInteger sid, AtomicInteger mid) {
 		List<StopAndMove> ret = new ArrayList<>();
 		while (!trajs.isEmpty()) {
 			SemanticTrajectory t = trajs.remove(0);

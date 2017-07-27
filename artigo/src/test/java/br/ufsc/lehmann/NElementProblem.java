@@ -15,6 +15,7 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
+import br.ufsc.lehmann.stopandmove.angle.AngleInference;
 import smile.math.Random;
 
 public class NElementProblem implements Problem {
@@ -46,23 +47,25 @@ public class NElementProblem implements Problem {
 			Instant now = java.time.Instant.now();
 			long nowMilli = now.toEpochMilli();
 			Stop startStop = null, endStop = null;
-			int initMove = -1;
 			for (int j = 0; j < 15; j++) {
 				t.addData(j, dataSemantic, k * k);
 				t.addData(j, Semantic.GEOGRAPHIC, new TPoint(k + (j / 20.0), k + (j / 20.0)));
 				t.addData(j, Semantic.TEMPORAL, new TemporalDuration(now.plus(j, ChronoUnit.MINUTES), now.plus(j + 1, ChronoUnit.MINUTES)));
 				t.addData(j, discriminator, String.valueOf(k));
 				long future = now.plus(j, ChronoUnit.MINUTES).toEpochMilli();
+				int id = Integer.parseInt(i + "0" + j);
 				if(j % 3 == 0) {
 					if(startStop == null) {
-						startStop = new Stop(j, j, nowMilli, 2, nowMilli, new TPoint(j + 1, j + 1));
+						startStop = new Stop(id, j, nowMilli, 2, nowMilli, new TPoint(id, id));
 					} else {
 						startStop = endStop;
 					}
-					endStop = new Stop(j + 2, j, nowMilli, 2, nowMilli, new TPoint(j + 1, j + 1));
+					int endStopId = Integer.parseInt(i + "0" + (j + 2));
+					endStop = new Stop(endStopId, j, nowMilli, 2, nowMilli, new TPoint(endStopId, endStopId));
 					t.addData(j, stop, startStop);
 				} else {
-					t.addData(j, move, new Move(j, startStop, endStop, nowMilli, future, initMove, 4));
+					double angle = AngleInference.getAngle(startStop.getCentroid(), endStop.getCentroid());
+					t.addData(j, move, new Move(id, startStop, endStop, nowMilli, future, j, 2, angle));
 				}
 			}
 			data.add(t);
@@ -89,6 +92,7 @@ public class NElementProblem implements Problem {
 		return new Semantic[] {
 			dataSemantic,
 			Semantic.GEOGRAPHIC,
+			stop,
 			move
 		};
 	}

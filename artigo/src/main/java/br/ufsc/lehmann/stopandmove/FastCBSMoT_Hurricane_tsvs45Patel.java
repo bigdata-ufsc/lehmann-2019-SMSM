@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
-
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.semantic.Stop;
@@ -48,10 +47,10 @@ public class FastCBSMoT_Hurricane_tsvs45Patel {
 
 		ResultSet lastStop = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.patel_hurricane_stop");
 		lastStop.next();
-		MutableInt sid = new MutableInt(lastStop.getInt(1));
+		AtomicInteger sid = new AtomicInteger(lastStop.getInt(1));
 		ResultSet lastMove = conn.createStatement().executeQuery("select max(move_id) from stops_moves.patel_hurricane_move");
 		lastMove.next();
-		MutableInt mid = new MutableInt(lastMove.getInt(1));
+		AtomicInteger mid = new AtomicInteger(lastMove.getInt(1));
 		PreparedStatement update = conn.prepareStatement("update patel.hurricane_tsvs45 set semantic_stop_id = ?, semantic_move_id = ? where tid = ? and gid in (SELECT * FROM unnest(?))");
 		PreparedStatement insertStop = conn.prepareStatement("insert into stops_moves.patel_hurricane_stop(stop_id, start_time, start_lat, start_lon, begin, end_time, end_lat, end_lon, length, centroid_lat, centroid_lon) values (?,?,?,?,?,?,?,?,?,?,?)");
 		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.patel_hurricane_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
@@ -74,7 +73,7 @@ public class FastCBSMoT_Hurricane_tsvs45Patel {
 		System.out.println("Time: " + (end - start));
 	}
 
-	private static Map<String, Integer> findBestCBSMoT(FastCBSMoT fastCBSMoT, List<SemanticTrajectory> trajs, MutableInt sid, MutableInt mid) {
+	private static Map<String, Integer> findBestCBSMoT(FastCBSMoT fastCBSMoT, List<SemanticTrajectory> trajs, AtomicInteger sid, AtomicInteger mid) {
 		Map<String, Integer> bestCombinations = new HashMap<>();
 		for (double i = 0.5; i <= 4.0; i += 0.2) {//ratio
 			final double finalI = i;
@@ -100,7 +99,7 @@ public class FastCBSMoT_Hurricane_tsvs45Patel {
 	}
 
 	private static List<StopAndMove> findCBSMoT(FastCBSMoT fastCBSMoT, List<SemanticTrajectory> trajs, double ratio, int timeTolerance, double maxDist,
-			int mergeTolerance, int minTime, MutableInt sid, MutableInt mid) {
+			int mergeTolerance, int minTime, AtomicInteger sid, AtomicInteger mid) {
 		List<StopAndMove> ret = new ArrayList<>();
 		while (!trajs.isEmpty()) {
 			SemanticTrajectory t = trajs.remove(0);

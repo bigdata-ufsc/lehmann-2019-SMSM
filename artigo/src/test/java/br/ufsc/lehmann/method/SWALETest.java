@@ -18,8 +18,7 @@ public interface SWALETest {
 			return new SWALEClassifier(new SWALE.SWALEParameters(50, -10, 10));
 		} else if(problem instanceof DublinBusProblem) {
 			return new SWALEClassifier(new SWALE.SWALEParameters(50, -10, 10));
-		}
-		if(problem instanceof PatelProblem) {
+		} else if(problem instanceof PatelProblem) {
 			return new SWALEClassifier(new SWALE.SWALEParameters(2, -10, 10));
 		}
 		return null;
