@@ -16,8 +16,8 @@
  */
 package br.ufsc.lehmann.msm.artigo.clusterers.dissimilarity;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 
 /**
  * Median link dissimilarity, also called WPGMC. When two points are merged

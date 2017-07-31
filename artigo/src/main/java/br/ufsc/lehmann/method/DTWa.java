@@ -2,10 +2,10 @@ package br.ufsc.lehmann.method;
 
 import java.util.List;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 

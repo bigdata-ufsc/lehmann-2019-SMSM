@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.related.LCSS;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 

@@ -4,8 +4,8 @@ package br.ufsc.lehmann.msm.artigo.clusterers.evaluation.intra;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.clusterers.util.DistanceMatrix;
 
 /**

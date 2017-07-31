@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.related.MSM;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.Climate;

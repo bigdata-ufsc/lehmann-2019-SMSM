@@ -21,9 +21,9 @@ import org.junit.runners.Parameterized.Parameters;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.EnumProblem;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.Trajectories;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Silhouette;
@@ -39,6 +39,8 @@ import smile.math.Random;
 @RunWith(Parameterized.class)
 public abstract class AbstractClusteringTest {
 	
+	private static final Random RANDOM = new Random(5);
+	
     @Rule public TestName name = new TestName();
 	private Multimap<String, String> measureFailures = MultimapBuilder.linkedHashKeys().linkedHashSetValues().build();
 
@@ -52,7 +54,7 @@ public abstract class AbstractClusteringTest {
     
 	public AbstractClusteringTest(EnumProblem problemDescriptor) {
 		descriptor = problemDescriptor;
-		problem = problemDescriptor.problem(new Random(5));
+		problem = problemDescriptor.problem(RANDOM);
 	}
 	
 	@Before

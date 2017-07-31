@@ -1,11 +1,11 @@
 package br.ufsc.lehmann.msm.artigo.classifiers;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 import br.ufsc.lehmann.MSM_Move;
 import br.ufsc.lehmann.MSM_Move.MSMMoveSemanticParameter;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 
 public class MSMMoveClassifier extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 

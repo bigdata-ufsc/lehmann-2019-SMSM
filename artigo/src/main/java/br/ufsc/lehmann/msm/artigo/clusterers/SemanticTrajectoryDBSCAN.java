@@ -3,8 +3,8 @@ package br.ufsc.lehmann.msm.artigo.clusterers;
 import org.apache.commons.math3.ml.clustering.Clusterable;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 
 public class SemanticTrajectoryDBSCAN extends DBSCANClusterer<ClusterableTrajectory> {
 

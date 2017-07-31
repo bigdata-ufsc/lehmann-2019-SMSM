@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 
 /**
  * Also known as Group-Average Agglomerative Clustering (GAAC) and UPGMA, this

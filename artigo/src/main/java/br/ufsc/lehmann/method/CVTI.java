@@ -2,11 +2,11 @@ package br.ufsc.lehmann.method;
 
 import org.joda.time.Interval;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TemporalDuration;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 
 public class CVTI extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 

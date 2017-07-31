@@ -22,10 +22,12 @@ public class NYBikeProblem implements Problem {
 	}
 	
 	@Override
-	public Problem clone(Random r) {
-		NYBikeProblem ret = new NYBikeProblem();
-		ret.random = r;
-		return ret;
+	public void initialize(Random r) {
+		if(!random.equals(r)) {
+			random = r;
+			loaded = false;
+			load();
+		}
 	}
 
 	private void load() {

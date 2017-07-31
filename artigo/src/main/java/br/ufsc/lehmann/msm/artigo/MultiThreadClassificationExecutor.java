@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour;

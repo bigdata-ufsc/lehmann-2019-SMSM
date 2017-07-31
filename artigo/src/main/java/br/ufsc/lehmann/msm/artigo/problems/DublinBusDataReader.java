@@ -29,6 +29,7 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.MovePointsSemantic;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
@@ -42,6 +43,7 @@ public class DublinBusDataReader {
 	public static final BasicSemantic<String> OPERATOR = new BasicSemantic<>(8);
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(9, new LatLongDistanceFunction());
 	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(10);
+	public static final MovePointsSemantic MOVE_POINTS_SEMANTIC = new MovePointsSemantic(10, new LatLongDistanceFunction(), 10);
 
 	public List<SemanticTrajectory> read(String[] lines) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.dublin201301", null, null);
@@ -96,6 +98,7 @@ public class DublinBusDataReader {
 						movesData.getTimestamp("end_time").getTime(), //
 						movesData.getInt("begin"), //
 						movesData.getInt("length"), //
+						null,
 						movesData.getDouble("angle"));
 				moves.put(moveId, move);
 			}
@@ -157,7 +160,8 @@ public class DublinBusDataReader {
 			int i = 0;
 			for (DublinBusRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, new TPoint(record.getLatitude(), record.getLongitude()));
+				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
+				s.addData(i, Semantic.GEOGRAPHIC, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, LINE_INFO, record.getLineId());
 				s.addData(i, JOURNEY, record.getJourney_pattern());
@@ -171,6 +175,7 @@ public class DublinBusDataReader {
 				}
 				if(record.getSemanticMoveId() != null) {
 					Move move = moves.get(record.getSemanticMoveId());
+					move.addPoint(point);
 					s.addData(i, MOVE_SEMANTIC, move);
 				}
 				i++;

@@ -21,13 +21,13 @@ import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabRecord;
 public class SanFranciscoCab {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "public.taxicab_sanfrancisco_crawdad", null, "geom");
+		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "taxi.sanfrancisco_taxicab_crawdad", null, "geom");
 		Multimap<Integer, SanFranciscoCabRecord> registers = MultimapBuilder.hashKeys().arrayListValues().build();
 		System.out.println("Connecting...");
 		Connection conn = source.getRetriever().getConnection();
 		System.out.println("Querying...");
-		PreparedStatement ps = conn.prepareStatement("select gid, taxi_id, lat, lon, \"timestamp\", ocupation "//
-				+ "from public.taxicab_sanfrancisco_crawdad order by taxi_id, \"timestamp\"");
+		PreparedStatement ps = conn.prepareStatement("select gid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road "//
+				+ "from taxi.sanfrancisco_taxicab_crawdad order by taxi_id, \"timestamp\"");
 		ResultSet rs = ps.executeQuery();
 		int generatedTid = 0;
 		boolean openTrip = true;
@@ -52,6 +52,9 @@ public class SanFranciscoCab {
 					passengers,
 					rs.getDouble("lon"),
 					rs.getDouble("lat"), 
+					rs.getBoolean("airport"),
+					rs.getBoolean("mall"),
+					rs.getInt("road"),
 					null, null);
 			registers.put(generatedTid, record);
 		}
@@ -59,7 +62,7 @@ public class SanFranciscoCab {
 		rs.close();
 		ps.close();
 		conn.setAutoCommit(false);
-		ps = conn.prepareStatement("update public.taxicab_sanfrancisco_crawdad set tid = ? where gid in (SELECT * FROM unnest(?))");
+		ps = conn.prepareStatement("update taxi.sanfrancisco_taxicab_crawdad set tid = ? where gid in (SELECT * FROM unnest(?))");
 		Set<Integer> tids = registers.keySet();
 		System.out.println("Updating...");
 		for (Integer tid : tids) {

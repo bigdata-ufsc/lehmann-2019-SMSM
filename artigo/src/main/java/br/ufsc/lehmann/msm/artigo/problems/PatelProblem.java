@@ -36,10 +36,14 @@ public class PatelProblem implements Problem {
 		this(table, stopMoveTable);
 		this.random = random;
 	}
-
+	
 	@Override
-	public Problem clone(Random r) {
-		return new PatelProblem(table, stopMoveTable, r);
+	public void initialize(Random r) {
+		if(!random.equals(r)) {
+			random = r;
+			loaded = false;
+			load();
+		}
 	}
 
 	private void load() {

@@ -20,10 +20,12 @@ public class TaxiShangaiProblem implements Problem {
 	private Random random = new Random();
 	
 	@Override
-	public TaxiShangaiProblem clone(Random r) {
-		TaxiShangaiProblem ret = new TaxiShangaiProblem();
-		ret.random = r;
-		return ret;
+	public void initialize(Random r) {
+		if(!random.equals(r)) {
+			random = r;
+			loaded = false;
+			load();
+		}
 	}
 
 	@Override

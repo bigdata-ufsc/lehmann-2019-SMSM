@@ -27,8 +27,10 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.MovePointsSemantic;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
+import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
 public class PatelDataReader {
 	
@@ -44,6 +46,7 @@ public class PatelDataReader {
 	public static final BasicSemantic<String> CLASS = new BasicSemantic<>(4);
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(5, new EuclideanDistanceFunction());
 	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(6);
+	public static final MovePointsSemantic MOVE_POINTS_SEMANTIC = new MovePointsSemantic(6, new EuclideanDistanceFunction(), 50);
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "patel." + table, null, null);
@@ -97,6 +100,7 @@ public class PatelDataReader {
 						movesData.getTimestamp("end_time").getTime(), //
 						movesData.getInt("begin"), //
 						movesData.getInt("length"), //
+						null,
 						movesData.getDouble("angle"));
 				moves.put(moveId, move);
 			}
@@ -142,7 +146,8 @@ public class PatelDataReader {
 			int i = 0;
 			for (PatelRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, new TPoint(record.getLatitude(), record.getLongitude()));
+				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
+				s.addData(i, Semantic.GEOGRAPHIC, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli((long) record.getTime()), Instant.ofEpochMilli((long) record.getTime())));
 				s.addData(i, TID, record.getTid());
 				s.addData(i, CLASS, record.getClazz());
@@ -152,6 +157,7 @@ public class PatelDataReader {
 				}
 				if(record.getMove() != null) {
 					Move move = moves.get(record.getMove());
+					move.addPoint(point);
 					s.addData(i, MOVE_SEMANTIC, move);
 				}
 				i++;

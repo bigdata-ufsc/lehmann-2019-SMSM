@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo;
+package br.ufsc.core;
 
 public interface IMeasureDistance<T> {
 

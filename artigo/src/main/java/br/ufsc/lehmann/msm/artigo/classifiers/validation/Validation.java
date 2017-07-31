@@ -17,9 +17,9 @@ package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 import java.util.stream.IntStream;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.classifier.Binarizer;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;

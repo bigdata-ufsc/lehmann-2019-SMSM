@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import smile.classification.RBFNetwork;
 import smile.math.distance.Metric;
 

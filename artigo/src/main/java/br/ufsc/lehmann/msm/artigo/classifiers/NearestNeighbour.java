@@ -16,7 +16,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
+import br.ufsc.core.IMeasureDistance;
 
 /**
  * 

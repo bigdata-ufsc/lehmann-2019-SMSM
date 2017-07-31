@@ -1,5 +1,6 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,18 +29,33 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.MovePointsSemantic;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
 public class SanFranciscoCabDataReader {
 	
 	public static final BasicSemantic<Integer> TID = new BasicSemantic<>(3);
-	public static final BasicSemantic<Integer> OCCUPATION = new BasicSemantic<>(4);
-	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(5, new LatLongDistanceFunction());
-	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(6);
+	public static final BasicSemantic<Integer> OCUPATION = new BasicSemantic<>(4);
+	public static final BasicSemantic<Integer> ROAD = new BasicSemantic<>(5);
+	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(6, new LatLongDistanceFunction());
+	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(7);
+	public static final MovePointsSemantic MOVE_POINTS_SEMANTIC = new MovePointsSemantic(7, new LatLongDistanceFunction(), 10);
+	private Integer[] roads;
+	private boolean mall;
+	private boolean airport;
+	
+	public SanFranciscoCabDataReader() {
+	}
+
+	public SanFranciscoCabDataReader(Integer[] roads, boolean airport, boolean mall) {
+		this.roads = roads;
+		this.airport = airport;
+		this.mall = mall;
+	}
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "public.taxicab_sanfrancisco_crawdad", null, null);
+		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "taxi.sanfrancisco_taxicab_crawdad", null, null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
 		Connection conn = retriever.getConnection();
@@ -91,14 +107,24 @@ public class SanFranciscoCabDataReader {
 						movesData.getTimestamp("end_time").getTime(), //
 						movesData.getInt("begin"), //
 						movesData.getInt("length"), //
+						null,
 						movesData.getDouble("angle"));
 				moves.put(moveId, move);
 			}
 		}
-		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, semantic_stop_id, semantic_move_id" + //
-				" FROM public.taxicab_sanfrancisco_crawdad" + //
-				" order by tid, \"timestamp\"";
+		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, semantic_stop_id, semantic_move_id" + //
+				" FROM taxi.sanfrancisco_taxicab_crawdad";
+		if(roads != null) {
+			sql += " where road in (SELECT * FROM unnest(?))";
+			sql += " and airport = " + Boolean.toString(airport);
+			sql += " and mall = " + Boolean.toString(mall);
+		}
+		sql +=" order by tid, \"timestamp\"";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
+		if(roads != null) {
+			Array array = conn.createArrayOf("integer", roads);
+			preparedStatement.setArray(1, array);
+		}
 		ResultSet data = preparedStatement.executeQuery();
 		Multimap<Integer, SanFranciscoCabRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		System.out.println("Fetching...");
@@ -119,6 +145,9 @@ public class SanFranciscoCabDataReader {
 				data.getInt("ocupation"),
 				data.getDouble("lon"),
 				data.getDouble("lat"),
+				data.getBoolean("airport"),
+				data.getBoolean("mall"),
+				data.getInt("road"),
 				stop,
 				move
 			);
@@ -131,24 +160,27 @@ public class SanFranciscoCabDataReader {
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 7);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 8);
 			Collection<SanFranciscoCabRecord> collection = records.get(trajId);
-			if(collection.size() < 200) {
-				continue;
-			}
+//			if(collection.size() < 40) {
+//				continue;
+//			}
 			int i = 0;
 			for (SanFranciscoCabRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, new TPoint(record.getLatitude(), record.getLongitude()));
+				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
+				s.addData(i, Semantic.GEOGRAPHIC, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, TID, record.getTid());
-				s.addData(i, OCCUPATION, record.getOccupation());
+				s.addData(i, OCUPATION, record.getOcupation());
+				s.addData(i, ROAD, record.getRoad());
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
 					s.addData(i, STOP_SEMANTIC, stop);
 				}
 				if(record.getSemanticMoveId() != null) {
 					Move move = moves.get(record.getSemanticMoveId());
+					move.addPoint(point);
 					s.addData(i, MOVE_SEMANTIC, move);
 				}
 				i++;

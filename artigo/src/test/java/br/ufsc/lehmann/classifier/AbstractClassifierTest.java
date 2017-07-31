@@ -1,17 +1,13 @@
 package br.ufsc.lehmann.classifier;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,11 +21,10 @@ import org.junit.runners.Parameterized.Parameters;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.EnumProblem;
-import br.ufsc.lehmann.NElementProblem;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;
@@ -48,6 +43,8 @@ import smile.math.Random;
 @RunWith(Parameterized.class)
 public abstract class AbstractClassifierTest {
 	
+	private static final Random RANDOM = new Random(5);
+	
     private static final FDR FDR = new FDR();
 	private static final Fallout FALLOUT = new Fallout();
 	private static final Specificity SPECIFICITY = new Specificity();
@@ -58,7 +55,6 @@ public abstract class AbstractClassifierTest {
 
 	private Problem problem;
 	private Multimap<ClassificationMeasure, String> measureFailures = MultimapBuilder.linkedHashKeys().linkedHashSetValues().build();
-	private Random RANDOM = new Random(5);
 
 	@Rule public TestName name = new TestName();
     

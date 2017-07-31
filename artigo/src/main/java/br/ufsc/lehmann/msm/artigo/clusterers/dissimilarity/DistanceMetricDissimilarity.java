@@ -1,8 +1,8 @@
 
 package br.ufsc.lehmann.msm.artigo.clusterers.dissimilarity;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 
 /**
  * A base class for Dissimilarity measures that are build ontop the use of some {@link DistanceMetric distance metric}. 

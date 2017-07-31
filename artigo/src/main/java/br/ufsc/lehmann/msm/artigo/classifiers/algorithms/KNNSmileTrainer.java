@@ -5,11 +5,10 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import smile.classification.KNN;
-import smile.math.distance.Distance;
 
 public class KNNSmileTrainer<Label> implements ITrainer<Label> {
 
@@ -27,22 +26,7 @@ public class KNNSmileTrainer<Label> implements ITrainer<Label> {
 			y[i] = uniqueLabels.indexOf(labels.get(i));
 		}
 		
-		KNN<SemanticTrajectory> knn = new KNN<>(trainx, y, new SmileDistanceWrapper(measure));
+		KNN<SemanticTrajectory> knn = new KNN<>(trainx, y, new SmileDistanceWrapper<Label>(measure));
 		return new KNNSmileClassifier<Label>(knn, uniqueLabels);
-	}
-	
-	class SmileDistanceWrapper implements Distance<SemanticTrajectory> {
-
-		private IMeasureDistance<SemanticTrajectory> measure;
-
-		public SmileDistanceWrapper(IMeasureDistance<SemanticTrajectory> measure) {
-			this.measure = measure;
-		}
-
-		@Override
-		public double d(SemanticTrajectory x, SemanticTrajectory y) {
-			return measure.distance(x, y);
-		}
-		
 	}
 }

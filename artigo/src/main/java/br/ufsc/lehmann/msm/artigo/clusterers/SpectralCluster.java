@@ -12,12 +12,12 @@ import org.apache.commons.lang3.mutable.MutableLong;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.related.LCSS;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.lehmann.msm.artigo.IClusteringExecutor;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.Trajectories;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
 import br.ufsc.lehmann.msm.artigo.clusterers.dissimilarity.CompleteLinkDissimilarity;

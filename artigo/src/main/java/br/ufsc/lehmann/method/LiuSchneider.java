@@ -1,5 +1,6 @@
 package br.ufsc.lehmann.method;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.base.Point;
 import br.ufsc.core.trajectory.GeographicDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
@@ -7,7 +8,6 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.related.LCSS;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
 import br.ufsc.utils.Distance;
 

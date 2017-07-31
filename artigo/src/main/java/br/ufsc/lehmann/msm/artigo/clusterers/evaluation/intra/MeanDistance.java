@@ -2,8 +2,8 @@ package br.ufsc.lehmann.msm.artigo.clusterers.evaluation.intra;
 
 import java.util.List;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 
 /**
  * Evaluates a cluster's validity by computing the mean distance between all 

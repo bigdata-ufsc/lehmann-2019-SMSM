@@ -24,10 +24,11 @@ public class NElementProblem implements Problem {
 	List<SemanticTrajectory> testing;
 	List<SemanticTrajectory> validating;
 	List<SemanticTrajectory> training;
-	public static BasicSemantic<Number> dataSemantic = new BasicSemantic<>(0);
-	public static BasicSemantic<String> discriminator = new BasicSemantic<>(3);
-	public static StopSemantic stop = new StopSemantic(4, new EuclideanDistanceFunction());
-	public static MoveSemantic move = new MoveSemantic(5);
+	public static final BasicSemantic<Number> dataSemantic = new BasicSemantic<>(0);
+	public static final BasicSemantic<String> discriminator = new BasicSemantic<>(3);
+	public static final StopSemantic stop = new StopSemantic(4, new EuclideanDistanceFunction());
+	public static final MoveSemantic move = new MoveSemantic(5);
+	public static final MovePointsSemantic move_points = new MovePointsSemantic(5, new EuclideanDistanceFunction(), 50);
 	private int elements;
 	private int classes;
 	
@@ -47,9 +48,11 @@ public class NElementProblem implements Problem {
 			Instant now = java.time.Instant.now();
 			long nowMilli = now.toEpochMilli();
 			Stop startStop = null, endStop = null;
+			Move previousMove = null;
 			for (int j = 0; j < 15; j++) {
 				t.addData(j, dataSemantic, k * k);
-				t.addData(j, Semantic.GEOGRAPHIC, new TPoint(k + (j / 20.0), k + (j / 20.0)));
+				TPoint point = new TPoint(k + (j / 20.0), k + (j / 20.0));
+				t.addData(j, Semantic.GEOGRAPHIC, point);
 				t.addData(j, Semantic.TEMPORAL, new TemporalDuration(now.plus(j, ChronoUnit.MINUTES), now.plus(j + 1, ChronoUnit.MINUTES)));
 				t.addData(j, discriminator, String.valueOf(k));
 				long future = now.plus(j, ChronoUnit.MINUTES).toEpochMilli();
@@ -63,9 +66,13 @@ public class NElementProblem implements Problem {
 					int endStopId = Integer.parseInt(i + "0" + (j + 2));
 					endStop = new Stop(endStopId, j, nowMilli, 2, nowMilli, new TPoint(endStopId, endStopId));
 					t.addData(j, stop, startStop);
+					previousMove = null;
 				} else {
 					double angle = AngleInference.getAngle(startStop.getCentroid(), endStop.getCentroid());
-					t.addData(j, move, new Move(id, startStop, endStop, nowMilli, future, j, 2, angle));
+					if(previousMove == null) {
+						previousMove = new Move(id, startStop, endStop, nowMilli, future, j, 2, new TPoint[] {point, new TPoint(k + ((j + 1) / 20.0), k + ((j + 1) / 20.0))}, angle);
+					}
+					t.addData(j, move, previousMove);
 				}
 			}
 			data.add(t);
@@ -83,8 +90,7 @@ public class NElementProblem implements Problem {
 	}
 	
 	@Override
-	public NElementProblem clone(Random r) {
-		return new NElementProblem(elements, classes);
+	public void initialize(Random r) {
 	}
 
 	@Override

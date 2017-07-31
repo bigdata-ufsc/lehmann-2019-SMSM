@@ -3,18 +3,18 @@ package br.ufsc.lehmann.clustering;
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.EnumProblem;
-import br.ufsc.lehmann.method.LiuSchneiderTest;
+import br.ufsc.lehmann.method.MSMMovePointsTest;
 import br.ufsc.lehmann.msm.artigo.Problem;
 
-public class LiuSchneiderClusteringTest extends AbstractClusteringTest implements LiuSchneiderTest {
+public class MSMMovePointsClusteringTest extends AbstractClusteringTest implements MSMMovePointsTest {
 
-	public LiuSchneiderClusteringTest(EnumProblem problemDescriptor) {
+	public MSMMovePointsClusteringTest(EnumProblem problemDescriptor) {
 		super(problemDescriptor);
 	}
 
 	@Override
 	public IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
-		return LiuSchneiderTest.super.measurer(problem);
+		return MSMMovePointsTest.super.measurer(problem);
 	}
 
 }

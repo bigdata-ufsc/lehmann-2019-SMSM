@@ -1,9 +1,9 @@
 package br.ufsc.lehmann.method;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 /**
  * 
  * @author Andre Salvaro Furtado

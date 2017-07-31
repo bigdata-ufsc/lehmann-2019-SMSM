@@ -19,25 +19,25 @@ import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 
-public interface MSMMoveTest {
+public interface MSMMovePointsTest {
 
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		if(problem instanceof NElementProblem) {
 			return new MSMMoveClassifier(//
-					new MSMMoveSemanticParameter(NElementProblem.stop, .5, NElementProblem.move, Thresholds.MOVE_ANGLE, .5),
+					new MSMMoveSemanticParameter(NElementProblem.stop, .5, NElementProblem.move_points, Thresholds.MOVE_INNER_POINTS_PERC, .5),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 0.5, 0.5),//
 					new MSMSemanticParameter<Number, Number>(NElementProblem.dataSemantic, null, 0.5));
 		} else if(problem instanceof NewYorkBusProblem) {
-			return new MSMMoveClassifier(new MSMMoveSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, NewYorkBusDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE, .5),
+			return new MSMMoveClassifier(new MSMMoveSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, NewYorkBusDataReader.MOVE_POINTS_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1));
 		} else if(problem instanceof DublinBusProblem) {
-			return new MSMMoveClassifier(new MSMMoveSemanticParameter(DublinBusDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, DublinBusDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE, .5),
+			return new MSMMoveClassifier(new MSMMoveSemanticParameter(DublinBusDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, DublinBusDataReader.MOVE_POINTS_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1));
 		} else if(problem instanceof PatelProblem) {
-			return new MSMMoveClassifier(new MSMMoveSemanticParameter(PatelDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_EUCLIDEAN, PatelDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE, .5),
+			return new MSMMoveClassifier(new MSMMoveSemanticParameter(PatelDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_EUCLIDEAN, PatelDataReader.MOVE_POINTS_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, 1));
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new MSMMoveClassifier(new MSMMoveSemanticParameter(SanFranciscoCabDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, SanFranciscoCabDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE, .5),
+			return new MSMMoveClassifier(new MSMMoveSemanticParameter(SanFranciscoCabDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, SanFranciscoCabDataReader.MOVE_POINTS_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1));
 		}
 		return null;

@@ -88,6 +88,7 @@ public class TaxiShangaiDataReader {
 						movesData.getTimestamp("end_time").getTime(), //
 						movesData.getInt("begin"), //
 						movesData.getInt("length"), //
+						null,
 						movesData.getDouble("angle"));
 				moves.put(moveId, move);
 			}
@@ -124,7 +125,8 @@ public class TaxiShangaiDataReader {
 			int i = 0;
 			for (TaxiShangaiRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, new TPoint(record.getLatitude(), record.getLongitude()));
+				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
+				s.addData(i, Semantic.GEOGRAPHIC, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, TID, record.getTid());
 				if(record.getStop() != null) {
@@ -133,6 +135,7 @@ public class TaxiShangaiDataReader {
 				}
 				if(record.getMove() != null) {
 					Move move = moves.get(record.getMove());
+					move.addPoint(point);
 					s.addData(i, MOVE_SEMANTIC, move);
 				}
 				i++;

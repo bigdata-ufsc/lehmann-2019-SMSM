@@ -62,7 +62,7 @@ public class FastCBSMoT {
 					for (; j < neighborhood.length && j < i + neighborhood[i] + 1; j++) {
 						gids.add(Semantic.GID.getData(T, j).intValue());
 					}
-					ret.addMove(new Move(mid.incrementAndGet(), ret.lastStop(), null, p1Milli, p2Milli, init, j - init), gids);
+					ret.addMove(new Move(mid.incrementAndGet(), ret.lastStop(), null, p1Milli, p2Milli, init, j - init, null), gids);
 					i += neighborhood[i];
 				}
 			} else {
@@ -74,7 +74,7 @@ public class FastCBSMoT {
 				i = j - 1;
 				Instant p1 = Semantic.TEMPORAL.getData(T, init).getStart();
 				Instant p2 = Semantic.TEMPORAL.getData(T, i).getEnd();
-				Move m = new Move(mid.incrementAndGet(), ret.lastStop(), null, p1.toEpochMilli(), p2.toEpochMilli(), init, j - init);
+				Move m = new Move(mid.incrementAndGet(), ret.lastStop(), null, p1.toEpochMilli(), p2.toEpochMilli(), init, j - init, null);
 				ret.addMove(m, gids);
 			}
 		}

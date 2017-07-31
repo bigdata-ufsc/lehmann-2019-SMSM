@@ -7,7 +7,7 @@ public class ComparableMove extends Move implements Comparable<ComparableMove> {
 	private MoveComparator comparator;
 
 	public ComparableMove(Move move, MoveComparator comparator) {
-		super(move.getMoveId(), move.getStart(), move.getEnd(), move.getStartTime(), move.getEndTime(), move.getBegin(), move.getLength(), move.getAngle());
+		super(move.getMoveId(), move.getStart(), move.getEnd(), move.getStartTime(), move.getEndTime(), move.getBegin(), move.getLength(), move.getPoints(), move.getAngle());
 		this.comparator = comparator;
 	}
 

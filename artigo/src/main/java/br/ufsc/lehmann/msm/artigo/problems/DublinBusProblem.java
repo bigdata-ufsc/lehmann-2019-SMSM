@@ -25,10 +25,12 @@ public class DublinBusProblem implements Problem {
 	}
 	
 	@Override
-	public Problem clone(Random r) {
-		DublinBusProblem ret = new DublinBusProblem(lines);
-		ret.random = r;
-		return ret;
+	public void initialize(Random r) {
+		if(!random.equals(r)) {
+			random = r;
+			loaded = false;
+			load();
+		}
 	}
 
 	@Override

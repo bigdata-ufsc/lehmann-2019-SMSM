@@ -17,5 +17,5 @@ public interface Problem extends Cloneable {
 	
 	String shortDescripton();
 	
-	Problem clone(Random r);
+	void initialize(Random r);
 }

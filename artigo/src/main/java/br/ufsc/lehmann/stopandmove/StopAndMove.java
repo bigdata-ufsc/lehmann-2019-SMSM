@@ -63,7 +63,7 @@ public class StopAndMove {
 		}).collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.counting())).keySet();
 		if(movesToMerge.isEmpty()) {
 			Collection<Integer> stopPoints = stops.removeAll(s);
-			Move move = new Move(mid.getAndIncrement(), previousStop, nextStop, s.getStartTime(), s.getEndTime(), s.getBegin(), stopPoints.size());
+			Move move = new Move(mid.getAndIncrement(), previousStop, nextStop, s.getStartTime(), s.getEndTime(), s.getBegin(), stopPoints.size(), null);
 			moves.putAll(move, stopPoints);
 			return stopPoints;
 		}
@@ -92,7 +92,7 @@ public class StopAndMove {
 		int moveId = (initial == null ? end : initial).getMoveId();
 		double startTime = initial == null ? (previousStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getEnd().toEpochMilli() : previousStop.getEndTime()) : initial.getStartTime();
 		double endTime = end == null ? (nextStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getStart().toEpochMilli() : nextStop.getStartTime()) : end.getEndTime();
-		Move move = new Move(moveId, previousStop, nextStop, startTime, endTime, initialIndex, endIndex - initialIndex);
+		Move move = new Move(moveId, previousStop, nextStop, startTime, endTime, initialIndex, endIndex - initialIndex, null);
 		moves.putAll(move, mergedPoints);
 		stops.removeAll(s);
 		return stopPoints;
@@ -103,7 +103,7 @@ public class StopAndMove {
 			ArrayList<Integer> list = new ArrayList<>(gids);
 			list.addAll(moves.removeAll(uncompletedMove));
 			gids = list;
-			move = new Move(uncompletedMove.getMoveId(), uncompletedMove.getStart(), move.getEnd(), uncompletedMove.getStartTime(), move.getEndTime(), uncompletedMove.getBegin(), uncompletedMove.getLength() + move.getLength());
+			move = new Move(uncompletedMove.getMoveId(), uncompletedMove.getStart(), move.getEnd(), uncompletedMove.getStartTime(), move.getEndTime(), uncompletedMove.getBegin(), uncompletedMove.getLength() + move.getLength(), null);
 		}
 		moves.putAll(move, gids);
 		this.uncompletedMove = move;

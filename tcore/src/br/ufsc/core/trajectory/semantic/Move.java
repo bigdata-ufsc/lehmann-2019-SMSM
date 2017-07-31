@@ -1,5 +1,12 @@
 package br.ufsc.core.trajectory.semantic;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import br.ufsc.core.trajectory.TPoint;
+
 /**
  * 
  * @author André Salvaro Furtado
@@ -15,12 +22,13 @@ public class Move {
 	private int begin;
 	private int length;
 	private double angle;
+	private List<TPoint> points;
 
-	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length) {
-		this(moveId, start, end, startTime, endTime, begin, length, 0.0);
+	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points) {
+		this(moveId, start, end, startTime, endTime, begin, length, points, 0.0);
 	}
 
-	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, double angle) {
+	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points, double angle) {
 		this.moveId = moveId;
 		this.start = start;
 		this.end = end;
@@ -28,6 +36,7 @@ public class Move {
 		this.endTime = endTime;
 		this.begin = begin;
 		this.length = length;
+		this.points = new ArrayList<>(points == null ? Collections.<TPoint>emptyList() : Arrays.asList(points));
 		this.angle = angle;
 	}
 
@@ -121,5 +130,13 @@ public class Move {
 
 	public void setAngle(double angle) {
 		this.angle = angle;
+	}
+
+	public TPoint[] getPoints() {
+		return points.toArray(new TPoint[points.size()]);
+	}
+	
+	public boolean addPoint(TPoint p) {
+		return points.add(p);
 	}
 }

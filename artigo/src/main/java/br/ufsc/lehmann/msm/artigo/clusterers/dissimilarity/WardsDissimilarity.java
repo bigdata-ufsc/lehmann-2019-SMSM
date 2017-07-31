@@ -1,7 +1,7 @@
 package br.ufsc.lehmann.msm.artigo.clusterers.dissimilarity;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 
 /**
  * An implementation of Ward's method for hierarchical clustering. This method 

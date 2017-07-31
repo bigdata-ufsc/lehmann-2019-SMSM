@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
@@ -23,17 +24,18 @@ public class SanFranciscoCabProblem implements Problem {
 	}
 	
 	@Override
-	public SanFranciscoCabProblem clone(Random r) {
-		SanFranciscoCabProblem ret = new SanFranciscoCabProblem();
-		ret.random = r;
-		return ret;
+	public void initialize(Random r) {
+		if(!random.equals(r)) {
+			random = r;
+			loaded = false;
+			load();
+		}
 	}
 
 	@Override
 	public Semantic[] semantics() {
 		return new Semantic[] {
 			 Semantic.GEOGRAPHIC_LATLON, //
-//			 Semantic.TEMPORAL,//
 			SanFranciscoCabDataReader.STOP_SEMANTIC,
 			SanFranciscoCabDataReader.MOVE_SEMANTIC
 		};
@@ -49,7 +51,7 @@ public class SanFranciscoCabProblem implements Problem {
 
 	@Override
 	public Semantic discriminator() {
-		return SanFranciscoCabDataReader.OCCUPATION;
+		return SanFranciscoCabDataReader.OCUPATION;
 	}
 
 	@Override
@@ -101,7 +103,9 @@ public class SanFranciscoCabProblem implements Problem {
 				return random.nextInt();
 			}
 		});
-//		data = data.subList(0, data.size() / 80);
+
+		data = data.stream().filter((SemanticTrajectory t) -> t.length() > 40).collect(Collectors.toList());
+
 		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
 		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));
 		this.validatingData = data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1);

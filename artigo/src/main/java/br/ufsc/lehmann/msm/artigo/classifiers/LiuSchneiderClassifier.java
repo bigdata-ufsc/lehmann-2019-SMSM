@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.method.LiuSchneider;
 import br.ufsc.lehmann.method.LiuSchneider.LiuSchneiderParameters;
-import br.ufsc.lehmann.msm.artigo.IMeasureDistance;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.Climate;

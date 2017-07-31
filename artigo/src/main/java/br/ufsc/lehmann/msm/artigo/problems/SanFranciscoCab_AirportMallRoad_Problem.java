@@ -10,7 +10,7 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import smile.math.Random;
 
-public class TDriveProblem implements Problem {
+public class SanFranciscoCab_AirportMallRoad_Problem extends SanFranciscoCabProblem {
 	
 	private List<SemanticTrajectory> data;
 	private List<SemanticTrajectory> trainingData;
@@ -18,7 +18,16 @@ public class TDriveProblem implements Problem {
 	private List<SemanticTrajectory> validatingData;
 	private boolean loaded;
 	private Random random = new Random();
+	private Integer[] roads;
+	private boolean mall;
+	private boolean airport;
 
+	public SanFranciscoCab_AirportMallRoad_Problem(Integer[] roads, boolean airport, boolean mall) {
+		this.roads = roads;
+		this.airport = airport;
+		this.mall = mall;
+	}
+	
 	@Override
 	public void initialize(Random r) {
 		if(!random.equals(r)) {
@@ -31,9 +40,9 @@ public class TDriveProblem implements Problem {
 	@Override
 	public Semantic[] semantics() {
 		return new Semantic[] {
-				Semantic.GID,
-				Semantic.GEOGRAPHIC_LATLON,
-				Semantic.TEMPORAL
+			 Semantic.GEOGRAPHIC_LATLON, //
+			SanFranciscoCabDataReader.STOP_SEMANTIC,
+			SanFranciscoCabDataReader.MOVE_SEMANTIC
 		};
 	}
 
@@ -47,8 +56,7 @@ public class TDriveProblem implements Problem {
 
 	@Override
 	public Semantic discriminator() {
-		// TODO Auto-generated method stub
-		return null;
+		return SanFranciscoCabDataReader.ROAD;
 	}
 
 	@Override
@@ -77,7 +85,7 @@ public class TDriveProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "T-Drive";
+		return "San Francisco cab (Airport <-> Mall)";
 	}
 	
 	private void load() {
@@ -85,7 +93,7 @@ public class TDriveProblem implements Problem {
 			return;
 		}
 		try {
-			data = new ArrayList<>(new TDriveDataReader().read());
+			data = new ArrayList<>(new SanFranciscoCabDataReader(roads, airport, mall).read());
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -101,9 +109,9 @@ public class TDriveProblem implements Problem {
 			}
 		});
 //		data = data.subList(0, data.size() / 80);
-//		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
-//		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));
-//		this.validatingData = data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1);
+		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
+		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));
+		this.validatingData = data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1);
 		loaded = true;
 	}
 

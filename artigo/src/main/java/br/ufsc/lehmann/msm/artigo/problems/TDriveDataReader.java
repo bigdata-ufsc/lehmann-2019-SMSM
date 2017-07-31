@@ -88,7 +88,8 @@ public class TDriveDataReader {
 						movesData.getTimestamp("start_time").getTime(), //
 						movesData.getTimestamp("end_time").getTime(), //
 						movesData.getInt("begin"), //
-						movesData.getInt("length"));
+						movesData.getInt("length"), //
+						null);
 				moves.put(moveId, move);
 			}
 		}
