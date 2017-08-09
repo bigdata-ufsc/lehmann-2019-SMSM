@@ -33,6 +33,9 @@ public class StopAndMoveExtractor {
 //			}
 //			List<Move> moves = stopAndMove.getMoves();
 //			for (Move move : moves) {
+//				if(move.getBegin() > stopAndMove.getTrajectory().length()) {
+//					System.err.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId());
+//				}
 //				List<Integer> gids = stopAndMove.getGids(move);
 //				moveAndStopPoints += gids.size();
 //			}

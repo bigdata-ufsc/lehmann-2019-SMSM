@@ -27,10 +27,11 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.MoveEllipsesSemantic;
 import br.ufsc.lehmann.MovePointsSemantic;
 import br.ufsc.lehmann.MoveSemantic;
+import br.ufsc.lehmann.MoveSemantic.Fields;
 import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
-import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
 public class PatelDataReader {
 	
@@ -45,8 +46,10 @@ public class PatelDataReader {
 	public static final BasicSemantic<String> TID = new BasicSemantic<>(3);
 	public static final BasicSemantic<String> CLASS = new BasicSemantic<>(4);
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(5, new EuclideanDistanceFunction());
-	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(6);
+	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(6, Fields.ANGLE);
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(6, Fields.DISTANCE);
 	public static final MovePointsSemantic MOVE_POINTS_SEMANTIC = new MovePointsSemantic(6, new EuclideanDistanceFunction(), 50);
+	public static final MoveEllipsesSemantic MOVE_ELLIPSES_SEMANTIC = new MoveEllipsesSemantic(6);
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "patel." + table, null, null);

@@ -12,33 +12,18 @@ import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.util.CreateEllipseMath;
 import br.ufsc.utils.Distance;
 
-//Usado no artigo
 public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
-	// removido o método compute alikeness, mudança de map p/ array
-	// double bScore[];
 
 	public UMS() {
 
 	}
 
 	public double getDistance(ETrajectory E1, ETrajectory E2) {
-		// long start = System.currentTimeMillis();
-		// System.out.println(E1.getTid()+" => "+E2.getTid());
-						
-		Trajectory T1 = E1.getT();
-		Trajectory T2 = E2.getT();
-
-
-		int n = T1.length();
-		int m = T2.length();
+		int n = E1.trajectoryLength();
+		int m = E2.trajectoryLength();
 
 		if (n < 3 || m < 3)
 			return 0;
-
-		//ETrajectory E1 = CreateEllipseMath.createEllipticalTrajectoryFixed(T1);
-		//ETrajectory E2 = CreateEllipseMath.createEllipticalTrajectoryFixed(T2);
-		// System.out.println("n: "+n);
-		// System.out.println("m: "+m);
 
 		List<Integer>[] aMatchSet = new ArrayList[n];
 		List<Integer>[] bMatchSet = new ArrayList[m];
@@ -63,7 +48,6 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 							aMatchSet[i].add(j);
 						}
 						if (shr1[i] != 1.0) {
-							//double score = getShareness2(e1.getF1(), e2);
 							shr1[i] = p1shr > shr1[i] ? p1shr : shr1[i];
 						}
 					}
@@ -79,12 +63,7 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 							aMatchSet[i + 1].add(j);
 						}
 						if (shr1[i + 1] != 1.0) {
-							//double score = getShareness2(e1.getF2(), e2);
-							// if (score != 0) {
-							// aSet.add(j);
-
 							shr1[i + 1] = p2shr > shr1[i + 1] ? p2shr : shr1[i + 1];
-							// }
 						}
 					}
 
@@ -98,8 +77,6 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 							bMatchSet[j].add(i);
 						}
 						if (shr2[j] != 1.0) {
-							//double score = getShareness2(e2.getF1(), e1);
-
 							shr2[j] = q1shr > shr2[j] ? q1shr : shr2[j];
 						}
 					}
@@ -115,12 +92,9 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 							bMatchSet[j + 1].add(i);
 						}
 						if (shr2[j + 1] != 1.0) {
-							//double score = getShareness2(e2.getF2(), e1);
 							shr2[j + 1] = q2shr > shr2[j + 1] ? q2shr : shr2[j + 1];
-
 						}
 					}
-
 				}
 			}
 		}
@@ -150,7 +124,6 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 		for (int j = 0; j < m; j++) {
 			List<Integer> matchingSet = bMatchSet[j];
 			if (j == 0) {
-
 				bContinuity[j] = matchingSet == null ? -1 : Collections.min(bMatchSet[j]);
 			} else {
 				bContinuity[j] = matchingSet == null ? -1 : getContinuityValue(bContinuity[j - 1], matchingSet);
@@ -164,22 +137,9 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 				}
 			}
 		}
-		// end = System.currentTimeMillis();
-		// System.out.println(end-start);
-		// start = System.currentTimeMillis();
-		// System.out.println(Arrays.toString(aContinuity));
-		// System.out.println(aResult);
-		// System.out.println(Arrays.toString(bContinuity));
-		// System.out.println(bResult);
-		// double continuity = ((double)LIS.length(aContinuity) / n) *
-		// ((double)LIS.length(bContinuity) / m);
+		
 		double continuity = (aResult / n) * (bResult / m);
-		// double continuity = ((double)LIS.length(aContinuity) / n) *
-		// ((double)LIS.length(bContinuity) / m);
-
-		// List<Ellipse> E1L = E1.getEllipses();
-		// List<Ellipse> E2L = E2.getEllipses();
-
+		
 		int sum1 = 0;
 		double sum3 = 0;
 		for (int j = 0; j < n; j++) {
@@ -189,10 +149,6 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 			}
 		}
 
-		// System.out.println(Arrays.toString(shr1));
-		// System.out.println(shr1.length);
-		// System.out.println(Arrays.toString(shr2));
-
 		int sum2 = 0;
 		double sum4 = 0;
 		for (int j = 0; j < m; j++) {
@@ -201,22 +157,6 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 				sum4 += shr2[j];
 			}
 		}
-
-		// double aMinSize = Math.min(n, m-1);
-		// double aConsistency1 = aSet.size()>aMinSize ? 1 :
-		// (double)aSet.size()/aMinSize;
-
-		// double aConsistency2 = (double)sum1/n;
-		// System.out.println("aCons2: "+aConsistency2);
-		// double aConsistency = aConsistency1* aConsistency2;
-		// double bMinSize = Math.min(m, n-1);
-		// double bConsistency1 = bSet.size()>bMinSize ? 1 :
-		// (double)bSet.size()/bMinSize;
-		// double bConsistency2 = (double)sum2/m;
-		// double bConsistency = bConsistency1* bConsistency2;
-		// System.out.println("aCons: "+aConsistency);
-		// System.out.println("bCons: "+bConsistency);
-		// double consistency = aConsistency*bConsistency;
 		double alikeness1 = ((double) sum1 / n);// * bConsistency1;
 		double alikeness2 = ((double) sum2 / m);// * aConsistency1;
 
@@ -224,65 +164,8 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 		double shareness2 = sum4 / m;// * bConsistency1;
 
 		double alikeness = (alikeness1 * alikeness2);
-		//double shareness = (shareness1 * shareness2);
 		double shareness = 0.5 * (shareness1 + shareness2);
-
-		// double consistency = 0.5*(aConsistency1+bConsistency1);
-
-		// ((double)aSet.size()/(m-1))*((double)bSet.size()/(n-1));
-
-		//// System.out.println("n3+2: "+(n3+2));
-		//// System.out.println("m3+2: "+(m3+2));
-		//
-
-		//// end = System.currentTimeMillis();
-		// System.out.println(end-start);
-		double similarity = (0.5 * (alikeness + shareness)) * continuity;// *
-																			// consistency;//
-																			// *integrity;
-		// double similarity = (alikeness*shareness) * continuity;//*
-		// consistency;//
-		// if (similarity<1) {
-		// System.out.println("aCons1: "+aConsistency1);
-		// System.out.println("aCons2: "+aConsistency2);
-		// System.out.println("aCons: "+aConsistency);
-		// System.out.println("bCons: "+bConsistency);
-		// System.out.println("aSet: "+aSet.size());
-		// System.out.println(Math.min(n,m-1));
-		// System.out.println("bSet: "+bSet.size());
-		// System.out.println(Math.min(m,n-1));
-		// System.out.println("sum1: "+sum1);
-		// System.out.println("sum2: "+sum2);
-		// System.out.println("sum3: "+sum3);
-		// System.out.println("sum4: "+sum4);
-		// System.out.println("alk1: "+alikeness1);
-		// System.out.println("alk2: "+alikeness2);
-		// System.out.println("shr1: "+shareness1);
-		// System.out.println("shr2: "+shareness2);
-		// System.out.println("cont:"+continuity);
-		// System.out.println("cons: "+consistency);
-		// System.out.println(Arrays.toString(aContinuity));
-		// System.out.println(aResult);
-		// System.out.println(Arrays.toString(bContinuity));
-		// System.out.println(bResult);
-		// System.out.println(Distance.euclidean(E2.getEllipse(m-1).getF2(),E1.getEllipse(n-1).getF2()));
-		// System.out.println(pointInEllipse2F(E2.getEllipse(m-1).getF2(),E1.getEllipse(n-1)));
-		// System.out.println(E1.getEllipse(n-1).getGeom().toText());
-		// System.out.println(E2.getEllipse(m-1).getF2().getWKT());
-		// System.out.println(getShareness2(E2.getEllipse(m-1).getF2(),E1.getEllipse(n-1)));
-		// System.out.println(getShareness2(E2.getEllipse(m-1).getCenter(),E1.getEllipse(n-1)));
-		// System.out.println(Arrays.toString(shr1));
-		// System.out.println(shr1.length);
-		// System.out.println(Arrays.toString(shr2));
-		// System.out.println("alk1: "+alikeness1);
-		// System.out.println("alk2: "+alikeness2);
-		// System.out.println("shr1: "+shareness1);
-		// System.out.println("shr2: "+shareness2);
-		// System.out.println("cont:"+continuity);
-		// }
-		// end = System.currentTimeMillis();
-		// System.out.println(end-start);
-		// double similarity = alikeness * shareness * continuity;
+		double similarity = (0.5 * (alikeness + shareness)) * continuity;
 		return similarity;
 	}
 

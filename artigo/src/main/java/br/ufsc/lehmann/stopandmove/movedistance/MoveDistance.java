@@ -1,10 +1,11 @@
-package br.ufsc.lehmann.stopandmove.angle;
+package br.ufsc.lehmann.stopandmove.movedistance;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
 
+import br.ufsc.core.trajectory.GeographicDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
@@ -12,24 +13,29 @@ import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 
-public class AngleInference {
+public class MoveDistance {
+	
+	private GeographicDistanceFunction func;
+	public MoveDistance(GeographicDistanceFunction func) {
+		this.func = func;
+	}
 
-	public static void extractMovementAngle(String moveTable, Map<Move, SemanticTrajectory> moves)
+	public void extractMovementTraveledDistance(String moveTable, Map<Move, SemanticTrajectory> moves)
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, moveTable, null, "geom");
 		Connection conn = source.getRetriever().getConnection();
 		conn.setAutoCommit(false);
-		PreparedStatement ps = conn.prepareStatement("update "+moveTable+" set angle = ? where move_id = ?");
+		PreparedStatement ps = conn.prepareStatement("update "+moveTable+" set traveled_distance = ? where move_id = ?");
 		int registers = 0;
 		for (Map.Entry<Move, SemanticTrajectory> entry : moves.entrySet()) {
 			registers++;
 			Move move = entry.getKey();
-			TPoint start = Semantic.GEOGRAPHIC.getData(entry.getValue(), move.getBegin());
-			TPoint end = null;
-			int endIndex = move.getBegin() + move.getLength() - 1;
-			end = Semantic.GEOGRAPHIC.getData(entry.getValue(), endIndex);
-			double angle = getAngle(start, end);
-			ps.setDouble(1, angle);
+			TPoint[] points = new TPoint[move.getLength()];
+			for (int i = 0; i < move.getLength(); i++) {
+				points[i] = Semantic.GEOGRAPHIC.getData(entry.getValue(), move.getBegin() + i);
+			}
+			double traveledDistance = getDistance(points);
+			ps.setDouble(1, traveledDistance);
 			ps.setInt(2, move.getMoveId());
 			ps.execute();
 			if(registers % 100 == 0) {
@@ -39,15 +45,12 @@ public class AngleInference {
 		conn.commit();
 		conn.close();
 	}
-
-	public static double getAngle(TPoint p1, TPoint p2) {
-		double angle = Math.toDegrees(Math.atan2(p2.getY() - p1.getY(), p2.getX() - p1.getX()));
-
-	    if(angle < 0){
-	        angle += 360;
-	    }
-
-	    return angle;
+	public double getDistance(TPoint[] points) {
+		double ret = 0;
+		for (int i = 0; i < points.length - 1; i++) {
+			ret += func.distance(points[i], points[i + 1]);
+		}
+	    return ret;
 	}
 
 }

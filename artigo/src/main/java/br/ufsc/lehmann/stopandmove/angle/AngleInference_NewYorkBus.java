@@ -13,7 +13,7 @@ import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 public class AngleInference_NewYorkBus {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		NewYorkBusProblem problem = new NewYorkBusProblem();
+		NewYorkBusProblem problem = new NewYorkBusProblem("MTA NYCT_Q20A", "MTA NYCT_M102");
 		String moveTable = "stops_moves.bus_nyc_20140927_move";
 		List<SemanticTrajectory> trajs = problem.data();
 		Map<Move, SemanticTrajectory> moves = new HashMap<>();

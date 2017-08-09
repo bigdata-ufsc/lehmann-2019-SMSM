@@ -18,7 +18,7 @@ public class FastCBSMoT_DublinBus {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		FastCBSMoT fastCBSMoT = new FastCBSMoT(new LatLongDistanceFunction());
-		DublinBusProblem problem = new DublinBusProblem();
+		DublinBusProblem problem = new DublinBusProblem("017A0002", "00791001");
 		List<SemanticTrajectory> trajs = problem.data();
 		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.bus_dublin_201301_stop", null, "geom");
 

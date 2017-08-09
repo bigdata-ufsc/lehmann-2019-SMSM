@@ -12,7 +12,7 @@ public enum EnumProblem {
 //	NEWYORK_BUS(new NewYorkBusProblem(), 258),// 
 	NEWYORK_BUS_2_LINES(new NewYorkBusProblem("MTA NYCT_Q20A", "MTA NYCT_M102"), 2),// 
 //	DUBLIN_BUS(new DublinBusProblem(), 465),// 
-	DUBLIN_BUS_2_LINES(new DublinBusProblem("017A0002", "00791001"), 2),//
+//	DUBLIN_BUS_2_LINES(new DublinBusProblem("017A0002", "00791001"), 2),//
 //	TDRIVE(new TDriveProblem()),//
 //	NEWYORK_BIKE(new NYBikeProblem()), //
 	PATEL_ANIMALS(new PatelProblem("animal"), 3),//

@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.stopandmove.angle;
+package br.ufsc.lehmann.stopandmove.movedistance;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -9,8 +9,9 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
-public class AngleInference_DublinBus {
+public class MoveDistance_DublinBus {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DublinBusProblem problem = new DublinBusProblem("017A0002", "00791001");
@@ -25,6 +26,6 @@ public class AngleInference_DublinBus {
 				}
 			}
 		}
-		AngleInference.extractMovementAngle(moveTable, moves);
+		new MoveDistance(new LatLongDistanceFunction()).extractMovementTraveledDistance(moveTable, moves);
 	}
 }

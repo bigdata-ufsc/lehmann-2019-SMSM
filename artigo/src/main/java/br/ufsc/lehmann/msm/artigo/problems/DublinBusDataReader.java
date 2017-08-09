@@ -29,8 +29,10 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.MoveEllipsesSemantic;
 import br.ufsc.lehmann.MovePointsSemantic;
 import br.ufsc.lehmann.MoveSemantic;
+import br.ufsc.lehmann.MoveSemantic.Fields;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
 public class DublinBusDataReader {
@@ -42,8 +44,10 @@ public class DublinBusDataReader {
 	public static final BasicSemantic<Integer> STOP = new BasicSemantic<>(7);
 	public static final BasicSemantic<String> OPERATOR = new BasicSemantic<>(8);
 	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(9, new LatLongDistanceFunction());
-	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(10);
+	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(10, Fields.ANGLE);
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(10, Fields.DISTANCE);
 	public static final MovePointsSemantic MOVE_POINTS_SEMANTIC = new MovePointsSemantic(10, new LatLongDistanceFunction(), 10);
+	public static final MoveEllipsesSemantic MOVE_ELLIPSES_SEMANTIC = new MoveEllipsesSemantic(10);
 
 	public List<SemanticTrajectory> read(String[] lines) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.dublin201301", null, null);

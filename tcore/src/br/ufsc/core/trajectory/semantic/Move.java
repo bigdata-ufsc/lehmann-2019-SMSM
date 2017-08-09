@@ -22,6 +22,7 @@ public class Move {
 	private int begin;
 	private int length;
 	private double angle;
+	private double traveledDistance;
 	private List<TPoint> points;
 
 	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points) {
@@ -38,6 +39,11 @@ public class Move {
 		this.length = length;
 		this.points = new ArrayList<>(points == null ? Collections.<TPoint>emptyList() : Arrays.asList(points));
 		this.angle = angle;
+	}
+
+	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance) {
+		this(moveId, start, end, startTime, endTime, begin, length, points, angle);
+		this.traveledDistance = traveledDistance;
 	}
 
 	public int getMoveId() {
@@ -138,5 +144,13 @@ public class Move {
 	
 	public boolean addPoint(TPoint p) {
 		return points.add(p);
+	}
+
+	public double getTraveledDistance() {
+		return traveledDistance;
+	}
+
+	public void setTraveledDistance(double traveledDistance) {
+		this.traveledDistance = traveledDistance;
 	}
 }

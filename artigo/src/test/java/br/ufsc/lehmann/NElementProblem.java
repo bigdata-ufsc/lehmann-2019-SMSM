@@ -12,10 +12,12 @@ import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
+import br.ufsc.lehmann.MoveSemantic.Fields;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
 import br.ufsc.lehmann.stopandmove.angle.AngleInference;
+import br.ufsc.utils.Distance;
 import smile.math.Random;
 
 public class NElementProblem implements Problem {
@@ -27,8 +29,10 @@ public class NElementProblem implements Problem {
 	public static final BasicSemantic<Number> dataSemantic = new BasicSemantic<>(0);
 	public static final BasicSemantic<String> discriminator = new BasicSemantic<>(3);
 	public static final StopSemantic stop = new StopSemantic(4, new EuclideanDistanceFunction());
-	public static final MoveSemantic move = new MoveSemantic(5);
+	public static final MoveSemantic move = new MoveSemantic(5, Fields.ANGLE);
+	public static final MoveSemantic move_distance = new MoveSemantic(5, Fields.DISTANCE);
 	public static final MovePointsSemantic move_points = new MovePointsSemantic(5, new EuclideanDistanceFunction(), 50);
+	public static final MoveEllipsesSemantic move_ellipses = new MoveEllipsesSemantic(5);
 	private int elements;
 	private int classes;
 	
@@ -70,7 +74,9 @@ public class NElementProblem implements Problem {
 				} else {
 					double angle = AngleInference.getAngle(startStop.getCentroid(), endStop.getCentroid());
 					if(previousMove == null) {
-						previousMove = new Move(id, startStop, endStop, nowMilli, future, j, 2, new TPoint[] {point, new TPoint(k + ((j + 1) / 20.0), k + ((j + 1) / 20.0))}, angle);
+						previousMove = new Move(id, startStop, endStop, nowMilli, future, j, 2,//
+										new TPoint[] {point, new TPoint(k + ((j + 1) / 20.0), k + ((j + 1) / 20.0))},//
+										angle, Distance.euclidean(startStop.getCentroid(), endStop.getCentroid()));
 					}
 					t.addData(j, move, previousMove);
 				}

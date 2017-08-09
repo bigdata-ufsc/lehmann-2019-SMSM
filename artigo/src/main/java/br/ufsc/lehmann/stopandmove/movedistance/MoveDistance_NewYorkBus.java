@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.stopandmove.angle;
+package br.ufsc.lehmann.stopandmove.movedistance;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -7,24 +7,25 @@ import java.util.Map;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.semantic.Move;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
+import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
-public class AngleInference_DublinBus {
+public class MoveDistance_NewYorkBus {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DublinBusProblem problem = new DublinBusProblem("017A0002", "00791001");
-		String moveTable = "stops_moves.bus_dublin_201301_move";
+		NewYorkBusProblem problem = new NewYorkBusProblem();
+		String moveTable = "stops_moves.bus_nyc_20140927_move";
 		List<SemanticTrajectory> trajs = problem.data();
 		Map<Move, SemanticTrajectory> moves = new HashMap<>();
 		for (SemanticTrajectory semanticTrajectory : trajs) {
 			for (int j = 0; j < semanticTrajectory.length(); j++) {
-				Move data = DublinBusDataReader.MOVE_SEMANTIC.getData(semanticTrajectory, j);
+				Move data = NewYorkBusDataReader.MOVE_SEMANTIC.getData(semanticTrajectory, j);
 				if(data != null && !moves.containsKey(data)) {
 					moves.put(data, semanticTrajectory);
 				}
 			}
 		}
-		AngleInference.extractMovementAngle(moveTable, moves);
+		new MoveDistance(new LatLongDistanceFunction()).extractMovementTraveledDistance(moveTable, moves);
 	}
 }
