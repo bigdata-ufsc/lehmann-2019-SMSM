@@ -5,11 +5,11 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ MSMMoveDistanceClassifierTest.class, MSMMoveEllipsesClassifierTest.class, 
-//	MSMClassifierTest.class, MSMMoveClassifierTest.class, MSMMovePointsClassifierTest.class, DTWClassifierTest.class, DTWaClassifierTest.class, //
-//	EDRClassifierTest.class, ERPClassifierTest.class, LCSSClassifierTest.class, MSTPClassifierTest.class,//
-//	HCSSClassifierTest.class, CVTIClassifierTest.class, wDFClassifierTest.class, SWALEClassifierTest.class, 
-//	LiuSchneiderClassifierTest.class, /*MTMClassifierTest.class*/
+@SuiteClasses({ MSMMoveDistanceClassifierTest.class, 
+	MSMClassifierTest.class, MSMMoveAngleClassifierTest.class, DTWClassifierTest.class, //
+	EDRClassifierTest.class, ERPClassifierTest.class, LCSSClassifierTest.class, MSTPClassifierTest.class,//
+	HCSSClassifierTest.class, CVTIClassifierTest.class, wDFClassifierTest.class, SWALEClassifierTest.class, 
+	LiuSchneiderClassifierTest.class, MSMMoveEllipsesClassifierTest.class, MSMMovePointsClassifierTest.class, DTWaClassifierTest.class, /*MTMClassifierTest.class*/
 	})
 public class AllClassifierTests {
 
