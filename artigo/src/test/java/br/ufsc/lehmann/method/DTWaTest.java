@@ -14,6 +14,8 @@ import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
 
 public interface DTWaTest {
 
@@ -28,6 +30,8 @@ public interface DTWaTest {
 			return new DTWaClassifier(problem, DublinBusDataReader.STOP_SEMANTIC, DublinBusDataReader.MOVE_SEMANTIC, Semantic.GEOGRAPHIC);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new DTWaClassifier(problem, SanFranciscoCabDataReader.STOP_SEMANTIC, SanFranciscoCabDataReader.MOVE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
+		} else if(problem instanceof SergipeTracksProblem) {
+			return new DTWaClassifier(problem, SergipeTracksDataReader.STOP_SEMANTIC, SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
 		}
 		return null;
 	}

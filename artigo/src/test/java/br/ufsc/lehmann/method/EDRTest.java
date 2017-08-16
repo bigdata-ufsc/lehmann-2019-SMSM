@@ -16,6 +16,8 @@ import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
 
 public interface EDRTest {
 
@@ -45,6 +47,11 @@ public interface EDRTest {
 			return new EDRClassifier(//
 					new EDRSemanticParameter(SanFranciscoCabDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON),//
 					new EDRSemanticParameter(SanFranciscoCabDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE),
+					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
+		} else if(problem instanceof SergipeTracksProblem) {
+			return new EDRClassifier(//
+					new EDRSemanticParameter(SergipeTracksDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON),//
+					new EDRSemanticParameter(SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE),
 					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
 		}
 		return null;

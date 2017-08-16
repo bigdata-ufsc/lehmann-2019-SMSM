@@ -16,6 +16,8 @@ import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
 
 public interface MSTPTest {
 
@@ -46,6 +48,12 @@ public interface MSTPTest {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(SanFranciscoCabDataReader.STOP_SEMANTIC),//
 					new ComparableMoveSemantic(SanFranciscoCabDataReader.MOVE_SEMANTIC),//
+					Semantic.GEOGRAPHIC_LATLON//
+					);
+		} else if(problem instanceof SergipeTracksProblem) {
+			return new MSTPClassifier(//
+					new ComparableStopSemantic(SergipeTracksDataReader.STOP_SEMANTIC),//
+					new ComparableMoveSemantic(SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_LATLON//
 					);
 		}

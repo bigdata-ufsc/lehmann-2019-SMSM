@@ -17,6 +17,8 @@ import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
 
 public interface MSMTest {
 
@@ -48,7 +50,10 @@ public interface MSMTest {
 			return new MSMClassifier(new MSMSemanticParameter(SanFranciscoCabDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, 1/3),
 					new MSMSemanticParameter(SanFranciscoCabDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1/3));
-		}
+		} else if(problem instanceof SergipeTracksProblem) {
+			return new MSMClassifier(new MSMSemanticParameter(SergipeTracksDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, 1/3),
+					new MSMSemanticParameter(SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
+					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1/3));}
 		return null;
 	}
 }

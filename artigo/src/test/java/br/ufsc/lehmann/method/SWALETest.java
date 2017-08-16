@@ -10,6 +10,7 @@ import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
 
 public interface SWALETest {
 
@@ -23,6 +24,8 @@ public interface SWALETest {
 		} else if(problem instanceof PatelProblem) {
 			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.GEOGRAPHIC_EUCLIDEAN, -10, 10));
 		} else if(problem instanceof SanFranciscoCabProblem) {
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.GEOGRAPHIC_LATLON, -10, 10));
+		} else if(problem instanceof SergipeTracksProblem) {
 			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.GEOGRAPHIC_LATLON, -10, 10));
 		}
 		return null;

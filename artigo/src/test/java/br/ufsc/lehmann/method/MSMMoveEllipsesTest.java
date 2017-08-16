@@ -18,6 +18,8 @@ import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
 
 public interface MSMMoveEllipsesTest {
 
@@ -38,6 +40,9 @@ public interface MSMMoveEllipsesTest {
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, 1));
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new MSMMoveClassifier(new MSMMoveSemanticParameter(SanFranciscoCabDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, SanFranciscoCabDataReader.MOVE_ELLIPSES_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5),
+					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1));
+		} else if(problem instanceof SergipeTracksProblem) {
+			return new MSMMoveClassifier(new MSMMoveSemanticParameter(SergipeTracksDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, SergipeTracksDataReader.MOVE_ELLIPSES_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1));
 		}
 		return null;

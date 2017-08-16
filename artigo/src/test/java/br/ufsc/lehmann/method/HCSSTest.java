@@ -16,6 +16,8 @@ import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
 
 public interface HCSSTest {
 
@@ -30,6 +32,8 @@ public interface HCSSTest {
 			return new HCSS(new HCSSSemanticParameter(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN), new WeightSemantic(-1, PatelDataReader.STOP_SEMANTIC));
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new HCSS(new HCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON), new WeightSemantic(-1, SanFranciscoCabDataReader.STOP_SEMANTIC));
+		} else if(problem instanceof SergipeTracksProblem) {
+			return new HCSS(new HCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON), new WeightSemantic(-1, SergipeTracksDataReader.STOP_SEMANTIC));
 		}
 		return null;
 	}

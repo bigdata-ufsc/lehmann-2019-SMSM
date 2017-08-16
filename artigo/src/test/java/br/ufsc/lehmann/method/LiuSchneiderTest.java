@@ -14,6 +14,8 @@ import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
 
 public interface LiuSchneiderTest {
 
@@ -28,7 +30,9 @@ public interface LiuSchneiderTest {
 			return new LiuSchneider(new LiuSchneiderParameters(0.5, PatelDataReader.STOP_SEMANTIC, Thresholds.GEOGRAPHIC_LATLON));
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new LiuSchneider(new LiuSchneiderParameters(0.5, SanFranciscoCabDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON));
-		}
+		} else if(problem instanceof SergipeTracksProblem) {
+			return new LiuSchneider(new LiuSchneiderParameters(0.5, SergipeTracksDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON));
+			}
 		return null;
 	}
 }
