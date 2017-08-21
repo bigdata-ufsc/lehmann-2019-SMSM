@@ -1,20 +1,20 @@
 package br.ufsc.lehmann;
 
 import br.ufsc.lehmann.msm.artigo.Problem;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
-import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
+import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import smile.math.Random;
 
 public enum EnumProblem {
 //	NEWYORK_BUS(new NewYorkBusProblem(), 258),// 
-//	NEWYORK_BUS_2_LINES(new NewYorkBusProblem("MTA NYCT_Q20A", "MTA NYCT_M102"), 2),// 
+	NEWYORK_BUS_2_LINES_STREET_NAME(new NewYorkBusProblem(NewYorkBusDataReader.STOP_STREET_NAME_SEMANTIC, "MTA NYCT_Q20A", "MTA NYCT_M102"), 2),// 
 //	DUBLIN_BUS(new DublinBusProblem(), 465),// 
-	DUBLIN_BUS_2_LINES(new DublinBusProblem("017A0002", "00791001"), 2),//
+//	DUBLIN_BUS_2_LINES(new DublinBusProblem("017A0002", "00791001"), 2),//
+//	DUBLIN_BUS_2_LINES_STREET_NAME(new DublinBusProblem(DublinBusDataReader.STOP_STREET_NAME_SEMANTIC, "017A0002", "00791001"), 2),//
 //	TDRIVE(new TDriveProblem()),//
 //	NEWYORK_BIKE(new NYBikeProblem()), //
-	SERGIPE_TRACKS(new SergipeTracksProblem(), 2),//
-	PISA(new PisaProblem(), 2),//
+//	SERGIPE_TRACKS(new SergipeTracksProblem(), 2),//
+//	PISA(new PisaProblem(), 2),//
 //	PATEL_ANIMALS(new PatelProblem("animal"), 3),//
 //	PATEL_HURRICANE(new PatelProblem("hurricane"), 5),//
 //	PATEL_HURRICANE_1vs4(new PatelProblem("hurricane_1vs4", "hurricane"), 2),//

@@ -18,20 +18,24 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
+import br.ufsc.core.trajectory.EqualsDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.core.trajectory.semantic.AttributeDescriptor;
+import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
-import br.ufsc.lehmann.MoveEllipsesSemantic;
-import br.ufsc.lehmann.MovePointsSemantic;
+import br.ufsc.lehmann.AngleDistance;
+import br.ufsc.lehmann.DTWDistance;
+import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
-import br.ufsc.lehmann.MoveSemantic.Fields;
+import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
 public class SergipeTracksDataReader {
@@ -43,11 +47,13 @@ public class SergipeTracksDataReader {
 	public static final BasicSemantic<String> LINHA = new BasicSemantic<>(7);
 	public static final BasicSemantic<Integer> RATING_BUS = new BasicSemantic<>(8);
 	public static final BasicSemantic<Integer> RATING_WEATHER = new BasicSemantic<>(9);
-	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(10, new LatLongDistanceFunction());
-	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(11, Fields.ANGLE);
-	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(11, Fields.DISTANCE);
-	public static final MovePointsSemantic MOVE_POINTS_SEMANTIC = new MovePointsSemantic(11, new LatLongDistanceFunction(), 10);
-	public static final MoveEllipsesSemantic MOVE_ELLIPSES_SEMANTIC = new MoveEllipsesSemantic(11);
+	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(10, new AttributeDescriptor<Stop>(AttributeType.STOP_CENTROID, new LatLongDistanceFunction()));
+	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(10, new AttributeDescriptor<Stop>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction()));
+	
+	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new DTWDistance(new LatLongDistanceFunction(), 10)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "sergipe.tracks", null, null);
@@ -74,7 +80,8 @@ public class SergipeTracksDataReader {
 						stopsData.getInt("begin"), //
 						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
 						stopsData.getInt("length"), //
-						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon"))//
+						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")),//
+						null//
 				);
 				stops.put(stopId, stop);
 			}
@@ -168,11 +175,11 @@ public class SergipeTracksDataReader {
 				s.addData(i, DISTANCE, record.getTraveledDistance());
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
-					s.addData(i, STOP_SEMANTIC, stop);
+					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
 				}
 				if(record.getSemanticMoveId() != null) {
 					Move move = moves.get(record.getSemanticMoveId());
-					move.addPoint(point);
+					((List<TPoint>) move.getAttribute(AttributeType.MOVE_POINTS)).add(point);
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 				}
 				i++;

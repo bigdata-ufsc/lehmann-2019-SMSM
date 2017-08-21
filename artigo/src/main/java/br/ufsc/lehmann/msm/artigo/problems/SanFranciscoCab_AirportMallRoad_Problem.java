@@ -7,7 +7,6 @@ import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.lehmann.msm.artigo.Problem;
 import smile.math.Random;
 
 public class SanFranciscoCab_AirportMallRoad_Problem extends SanFranciscoCabProblem {
@@ -35,15 +34,6 @@ public class SanFranciscoCab_AirportMallRoad_Problem extends SanFranciscoCabProb
 			loaded = false;
 			load();
 		}
-	}
-
-	@Override
-	public Semantic[] semantics() {
-		return new Semantic[] {
-			 Semantic.GEOGRAPHIC_LATLON, //
-			SanFranciscoCabDataReader.STOP_SEMANTIC,
-			SanFranciscoCabDataReader.MOVE_SEMANTIC
-		};
 	}
 
 	@Override

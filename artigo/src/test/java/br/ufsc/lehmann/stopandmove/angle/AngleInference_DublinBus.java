@@ -19,7 +19,7 @@ public class AngleInference_DublinBus {
 		Map<Move, SemanticTrajectory> moves = new HashMap<>();
 		for (SemanticTrajectory semanticTrajectory : trajs) {
 			for (int j = 0; j < semanticTrajectory.length(); j++) {
-				Move data = DublinBusDataReader.MOVE_SEMANTIC.getData(semanticTrajectory, j);
+				Move data = DublinBusDataReader.MOVE_ANGLE_SEMANTIC.getData(semanticTrajectory, j);
 				if(data != null && !moves.containsKey(data)) {
 					moves.put(data, semanticTrajectory);
 				}

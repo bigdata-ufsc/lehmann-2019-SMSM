@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,20 +21,24 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
+import br.ufsc.core.trajectory.EqualsDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.core.trajectory.semantic.AttributeDescriptor;
+import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
-import br.ufsc.lehmann.MoveEllipsesSemantic;
-import br.ufsc.lehmann.MovePointsSemantic;
+import br.ufsc.lehmann.AngleDistance;
+import br.ufsc.lehmann.DTWDistance;
+import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
-import br.ufsc.lehmann.MoveSemantic.Fields;
+import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 
 public class NewYorkBusDataReader {
@@ -44,11 +50,13 @@ public class NewYorkBusDataReader {
 	public static final BasicSemantic<String> PHASE = new BasicSemantic<>(7);
 	public static final BasicSemantic<Double> NEXT_STOP_DISTANCE = new BasicSemantic<>(8);
 	public static final BasicSemantic<String> NEXT_STOP_ID = new BasicSemantic<>(9);
-	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(10, new LatLongDistanceFunction());
-	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(11, Fields.ANGLE);
-	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(11, Fields.DISTANCE);
-	public static final MovePointsSemantic MOVE_POINTS_SEMANTIC = new MovePointsSemantic(11, new LatLongDistanceFunction(), 10);
-	public static final MoveEllipsesSemantic MOVE_ELLIPSES_SEMANTIC = new MoveEllipsesSemantic(11);
+	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(10, new AttributeDescriptor<Stop>(AttributeType.STOP_CENTROID, new LatLongDistanceFunction()));
+	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(10, new AttributeDescriptor<Stop>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction()));
+	
+	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new DTWDistance(new LatLongDistanceFunction(), 10)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 
 	public List<SemanticTrajectory> read(String[] lines) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.nyc_20140927", null, null);
@@ -61,7 +69,7 @@ public class NewYorkBusDataReader {
 
 		ResultSet stopsData = st.executeQuery(
 				"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
-						"centroid_lon, start_time, end_time " + //
+						"centroid_lon, start_time, end_time, street " + //
 						"FROM stops_moves.bus_nyc_20140927_stop");
 		Map<Integer, Stop> stops = new HashMap<>();
 		while (stopsData.next()) {
@@ -75,7 +83,8 @@ public class NewYorkBusDataReader {
 						stopsData.getInt("begin"), //
 						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
 						stopsData.getInt("length"), //
-						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon"))//
+						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")),//
+						stopsData.getString("street")//
 				);
 				stops.put(stopId, stop);
 			}
@@ -193,12 +202,15 @@ public class NewYorkBusDataReader {
 				s.addData(i, PHASE, record.getPhase());
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
-					s.addData(i, STOP_SEMANTIC, stop);
+					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
 				}
 				if(record.getSemanticMoveId() != null) {
 					Move move = moves.get(record.getSemanticMoveId());
-					move.addPoint(point);
-					s.addData(i, MOVE_SEMANTIC, move);
+					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
+					a.add(point);
+					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 				}
 				i++;
 			}

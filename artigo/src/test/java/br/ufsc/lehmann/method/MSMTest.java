@@ -30,28 +30,28 @@ public interface MSMTest {
 					new MSMSemanticParameter<Number, Number>(NElementProblem.dataSemantic, null, 0.25));
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new MSMClassifier(//
-					new MSMSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, 1/3),
-					new MSMSemanticParameter(NewYorkBusDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
+					new MSMSemanticParameter(((NewYorkBusProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON, 1/3),
+					new MSMSemanticParameter(NewYorkBusDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 0.25)
 					);
 		} else if(problem instanceof DublinBusProblem) {
 			return new MSMClassifier(//
-					new MSMSemanticParameter(DublinBusDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, 1/3),
-					new MSMSemanticParameter(DublinBusDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
+					new MSMSemanticParameter(((DublinBusProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON, 1/3),
+					new MSMSemanticParameter(DublinBusDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1/3)
 					);
 		} else if(problem instanceof PatelProblem) {
 			return new MSMClassifier(//
-					new MSMSemanticParameter(PatelDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_EUCLIDEAN, 1/3),
-					new MSMSemanticParameter(PatelDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
+					new MSMSemanticParameter(PatelDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_EUCLIDEAN, 1/3),
+					new MSMSemanticParameter(PatelDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN, 1/3)
 					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new MSMClassifier(new MSMSemanticParameter(SanFranciscoCabDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, 1/3),
-					new MSMSemanticParameter(SanFranciscoCabDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
+			return new MSMClassifier(new MSMSemanticParameter(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, 1/3),
+					new MSMSemanticParameter(SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1/3));
 		} else if(problem instanceof SergipeTracksProblem) {
-			return new MSMClassifier(new MSMSemanticParameter(SergipeTracksDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, 1/3),
+			return new MSMClassifier(new MSMSemanticParameter(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, 1/3),
 					new MSMSemanticParameter(SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1/3));}
 		return null;

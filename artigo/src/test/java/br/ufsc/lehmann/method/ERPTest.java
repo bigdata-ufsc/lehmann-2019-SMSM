@@ -4,9 +4,7 @@ import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.msm.artigo.Problem;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
@@ -21,15 +19,15 @@ public interface ERPTest {
 		if(problem instanceof NElementProblem) {
 			return new ERP(null, NElementProblem.dataSemantic);
 		} else if(problem instanceof NewYorkBusProblem) {
-			return new ERP(null, NewYorkBusDataReader.STOP_SEMANTIC);
+			return new ERP(null, ((NewYorkBusProblem) problem).stopSemantic());
 		} else if(problem instanceof DublinBusProblem) {
-			return new ERP(null, DublinBusDataReader.STOP_SEMANTIC);
+			return new ERP(null, ((DublinBusProblem) problem).stopSemantic());
 		} else if(problem instanceof PatelProblem) {
-			return new ERP(null, PatelDataReader.STOP_SEMANTIC);
+			return new ERP(null, PatelDataReader.STOP_CENTROID_SEMANTIC);
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new ERP(null, SanFranciscoCabDataReader.STOP_SEMANTIC);
+			return new ERP(null, SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC);
 		} else if(problem instanceof SergipeTracksProblem) {
-			return new ERP(null, SergipeTracksDataReader.STOP_SEMANTIC);
+			return new ERP(null, SergipeTracksDataReader.STOP_CENTROID_SEMANTIC);
 		}
 		return null;
 	

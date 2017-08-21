@@ -47,13 +47,4 @@ public class DTWaClassifier<Label> extends TrajectorySimilarityCalculator<Semant
 	public String name() {
 		return "DTWa";
 	}
-
-	public static void main(String[] args) throws IOException, InterruptedException, InstantiationException, IllegalAccessException,
-			ClassNotFoundException, SQLException, ExecutionException {
-		MultiThreadClassificationExecutor executor = new MultiThreadClassificationExecutor();
-		DublinBusProblem problem = new DublinBusProblem();
-		// NYBikeProblem problem = new NYBikeProblem();
-		executor.classifyProblem(problem, new DTWaClassifier<>(problem, problem.semantics()));
-	}
-
 }

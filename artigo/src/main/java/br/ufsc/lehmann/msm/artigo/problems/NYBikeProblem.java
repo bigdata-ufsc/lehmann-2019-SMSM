@@ -57,17 +57,6 @@ public class NYBikeProblem implements Problem {
 	}
 
 	@Override
-	public Semantic[] semantics() {
-		return new Semantic[] {
-				Semantic.GEOGRAPHIC, //
-				Semantic.TEMPORAL,//
-				BikeDataReader.USER,//
-				BikeDataReader.GENDER,//
-				BikeDataReader.BIRTH_YEAR
-		};
-	}
-
-	@Override
 	public List<SemanticTrajectory> data() {
 		if(!loaded) {
 			load();

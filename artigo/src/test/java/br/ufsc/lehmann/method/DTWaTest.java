@@ -23,15 +23,15 @@ public interface DTWaTest {
 		if(problem instanceof NElementProblem) {
 			return new DTWaClassifier(problem, NElementProblem.dataSemantic, Semantic.GEOGRAPHIC);
 		} else if(problem instanceof PatelProblem) {
-			return new DTWaClassifier(problem, PatelDataReader.STOP_SEMANTIC, PatelDataReader.MOVE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
+			return new DTWaClassifier(problem, PatelDataReader.STOP_CENTROID_SEMANTIC, PatelDataReader.MOVE_ANGLE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
 		} else if(problem instanceof NewYorkBusProblem) {
-			return new DTWaClassifier(problem, NewYorkBusDataReader.STOP_SEMANTIC, NewYorkBusDataReader.MOVE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
+			return new DTWaClassifier(problem, ((NewYorkBusProblem) problem).stopSemantic(), NewYorkBusDataReader.MOVE_ANGLE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
 		} else if(problem instanceof DublinBusProblem) {
-			return new DTWaClassifier(problem, DublinBusDataReader.STOP_SEMANTIC, DublinBusDataReader.MOVE_SEMANTIC, Semantic.GEOGRAPHIC);
+			return new DTWaClassifier(problem, ((DublinBusProblem) problem).stopSemantic(), DublinBusDataReader.MOVE_ANGLE_SEMANTIC, Semantic.GEOGRAPHIC);
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new DTWaClassifier(problem, SanFranciscoCabDataReader.STOP_SEMANTIC, SanFranciscoCabDataReader.MOVE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
+			return new DTWaClassifier(problem, SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
 		} else if(problem instanceof SergipeTracksProblem) {
-			return new DTWaClassifier(problem, SergipeTracksDataReader.STOP_SEMANTIC, SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
+			return new DTWaClassifier(problem, SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
 		}
 		return null;
 	}

@@ -27,8 +27,8 @@ public class NewYorkBusStopsDataReader {
 		st.setFetchSize(1000);
 		ResultSet stopsData = st.executeQuery(
 				"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
-						"centroid_lon, start_time, end_time " + //
-						"FROM stops_moves.bus_nyc_20140927");
+						"centroid_lon, start_time, end_time, street " + //
+						"FROM stops_moves.bus_nyc_20140927_stop");
 		Map<Integer, Stop> stops = new HashMap<>();
 		while(stopsData.next()) {
 			int stopId = stopsData.getInt("stop_id");
@@ -41,7 +41,8 @@ public class NewYorkBusStopsDataReader {
 						stopsData.getInt("begin"),//
 						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
 						stopsData.getInt("length"),//
-						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon"))//
+						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")),//
+						stopsData.getString("street")//
 						);
 				stops.put(stopId, stop);
 			}

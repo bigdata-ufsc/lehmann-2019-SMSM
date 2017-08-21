@@ -17,11 +17,10 @@ import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 
-public class DublinReverseGeocoding {
+public class NewYorkReverseGeocoding {
 
 	public static void main(String[] args) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.dublin_201301", null,
+		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.nyc_20140927", null,
 				null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
@@ -32,10 +31,10 @@ public class DublinReverseGeocoding {
 
 		ResultSet stopsData = st.executeQuery("SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
 				"centroid_lon, start_time, end_time, street " + //
-				"FROM stops_moves.bus_dublin_201301_stop "//
-				+ "where street is null");
+				"FROM stops_moves.bus_nyc_20140927_stop "//
+				+ "where street is null "//
+				+ "and stop_id in (select semantic_stop_id from bus.nyc_20140927 where trim(infered_route_id) in ('MTA NYCT_Q20A', 'MTA NYCT_M102'))");
 		Map<Integer, Stop> stops = new HashMap<>();
-		System.out.println("Fetching...");
 		while (stopsData.next()) {
 			int stopId = stopsData.getInt("stop_id");
 			Stop stop = stops.get(stopId);
@@ -53,8 +52,7 @@ public class DublinReverseGeocoding {
 				stops.put(stopId, stop);
 			}
 		}
-		System.out.println("Updating...");
-		PreparedStatement ps = conn.prepareStatement("update stops_moves.bus_dublin_201301_stop set street = ? where stop_id = ?");
+		PreparedStatement ps = conn.prepareStatement("update stops_moves.bus_nyc_20140927_stop set street = ? where stop_id = ?");
 		ReverseGeocoding geocoding = new ReverseGeocoding();
 		int registers = 0, counter = 0;
 		DefaultAsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();

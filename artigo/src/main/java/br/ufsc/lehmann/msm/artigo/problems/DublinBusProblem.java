@@ -7,6 +7,7 @@ import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import smile.math.Random;
 
@@ -19,8 +20,14 @@ public class DublinBusProblem implements Problem {
 	private boolean loaded;
 	private String[] lines;
 	private Random random = new Random();
+	private StopSemantic stopSemantic;
 
 	public DublinBusProblem(String... lines) {
+		this(DublinBusDataReader.STOP_CENTROID_SEMANTIC, lines);
+	}
+
+	public DublinBusProblem(StopSemantic stopSemantic, String... lines) {
+		this.stopSemantic = stopSemantic;
 		this.lines = lines;
 	}
 	
@@ -34,17 +41,6 @@ public class DublinBusProblem implements Problem {
 	}
 
 	@Override
-	public Semantic[] semantics() {
-		return new Semantic[] {
-			 Semantic.GEOGRAPHIC_LATLON, //
-			 Semantic.TEMPORAL,//
-			// DublinBusDataReader.OPERATOR,
-			DublinBusDataReader.STOP_SEMANTIC,
-			DublinBusDataReader.MOVE_SEMANTIC
-		};
-	}
-
-	@Override
 	public List<SemanticTrajectory> data() {
 		if(!loaded) {
 			load();
@@ -55,6 +51,10 @@ public class DublinBusProblem implements Problem {
 	@Override
 	public Semantic discriminator() {
 		return DublinBusDataReader.LINE_INFO;
+	}
+	
+	public StopSemantic stopSemantic() {
+		return stopSemantic;
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class DublinBusProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "Dublin bus" + (lines != null ? "(lines=" + lines.length + ")" : "");
+		return "Dublin bus" + (lines != null ? "(lines=" + lines.length + ")" : "") + "[" + stopSemantic.name() + "]";
 	}
 
 	private void load() {

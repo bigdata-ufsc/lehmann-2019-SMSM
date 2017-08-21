@@ -1,14 +1,15 @@
 package br.ufsc.core.trajectory;
 
+import br.ufsc.core.trajectory.semantic.AttributeDescriptor;
 import br.ufsc.core.trajectory.semantic.Stop;
 
 public class StopSemantic extends Semantic<Stop, Number> {
 
-	private GeographicDistanceFunction function;
+	private AttributeDescriptor<Stop> desc;
 
-	public StopSemantic(int index, GeographicDistanceFunction distance) {
+	public StopSemantic(int index, AttributeDescriptor<Stop> desc) {
 		super(index);
-		this.function = distance;
+		this.desc = desc;
 	}
 
 	@Override
@@ -24,7 +25,7 @@ public class StopSemantic extends Semantic<Stop, Number> {
 		if (d1 == null || d2 == null) {
 			return Double.MAX_VALUE;
 		}
-		return function.distance(d1.getCentroid(), d2.getCentroid());
+		return desc.distance(d1, d2);
 	}
 
 	@Override
@@ -37,7 +38,11 @@ public class StopSemantic extends Semantic<Stop, Number> {
 		if (threshold == null) {
 			return distance == 0;
 		}
-		return distance <= function.convert(threshold.doubleValue());
+		return distance <= desc.convertThreshold(threshold.doubleValue());
+	}
+	
+	public String name() {
+		return desc.attributeName();
 	}
 
 }

@@ -73,16 +73,6 @@ public class PatelProblem implements Problem {
 	}
 
 	@Override
-	public Semantic[] semantics() {
-		return new Semantic[] {
-			 Semantic.GEOGRAPHIC, //
-			 Semantic.TEMPORAL,//
-				PatelDataReader.STOP_SEMANTIC,//
-				PatelDataReader.MOVE_SEMANTIC
-		};
-	}
-
-	@Override
 	public List<SemanticTrajectory> data() {
 		if(!loaded) {
 			load();

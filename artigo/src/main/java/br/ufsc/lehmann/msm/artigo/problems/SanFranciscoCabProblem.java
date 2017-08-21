@@ -33,15 +33,6 @@ public class SanFranciscoCabProblem implements Problem {
 	}
 
 	@Override
-	public Semantic[] semantics() {
-		return new Semantic[] {
-			 Semantic.GEOGRAPHIC_LATLON, //
-			SanFranciscoCabDataReader.STOP_SEMANTIC,
-			SanFranciscoCabDataReader.MOVE_SEMANTIC
-		};
-	}
-
-	@Override
 	public List<SemanticTrajectory> data() {
 		if(!loaded) {
 			load();

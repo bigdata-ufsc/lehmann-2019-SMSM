@@ -19,7 +19,7 @@ public class AngleInference_Trucks {
 		Map<Move, SemanticTrajectory> moves = new HashMap<>();
 		for (SemanticTrajectory semanticTrajectory : trajs) {
 			for (int j = 0; j < semanticTrajectory.length(); j++) {
-				Move data = PatelDataReader.MOVE_SEMANTIC.getData(semanticTrajectory, j);
+				Move data = PatelDataReader.MOVE_ANGLE_SEMANTIC.getData(semanticTrajectory, j);
 				if(data != null && !moves.containsKey(data)) {
 					moves.put(data, semanticTrajectory);
 				}

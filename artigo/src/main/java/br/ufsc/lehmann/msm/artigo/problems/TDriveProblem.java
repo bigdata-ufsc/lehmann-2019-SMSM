@@ -29,15 +29,6 @@ public class TDriveProblem implements Problem {
 	}
 
 	@Override
-	public Semantic[] semantics() {
-		return new Semantic[] {
-				Semantic.GID,
-				Semantic.GEOGRAPHIC_LATLON,
-				Semantic.TEMPORAL
-		};
-	}
-
-	@Override
 	public List<SemanticTrajectory> data() {
 		if(!loaded) {
 			load();

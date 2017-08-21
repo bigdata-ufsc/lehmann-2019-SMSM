@@ -28,31 +28,31 @@ public interface MSTPTest {
 					);
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new MSTPClassifier(//
-					new ComparableStopSemantic(NewYorkBusDataReader.STOP_SEMANTIC),//
-					new ComparableMoveSemantic(NewYorkBusDataReader.MOVE_SEMANTIC),//
+					new ComparableStopSemantic(((NewYorkBusProblem) problem).stopSemantic()),//
+					new ComparableMoveSemantic(NewYorkBusDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_LATLON//
 					);
 		} else if(problem instanceof DublinBusProblem) {
 			return new MSTPClassifier(//
-					new ComparableStopSemantic(DublinBusDataReader.STOP_SEMANTIC),//
-					new ComparableMoveSemantic(DublinBusDataReader.MOVE_SEMANTIC),//
+					new ComparableStopSemantic(((DublinBusProblem) problem).stopSemantic()),//
+					new ComparableMoveSemantic(DublinBusDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_LATLON//
 					);
 		} else if(problem instanceof PatelProblem) {
 			return new MSTPClassifier(//
-					new ComparableStopSemantic(PatelDataReader.STOP_SEMANTIC),//
-					new ComparableMoveSemantic(PatelDataReader.MOVE_SEMANTIC),//
+					new ComparableStopSemantic(PatelDataReader.STOP_CENTROID_SEMANTIC),//
+					new ComparableMoveSemantic(PatelDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC//
 					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new MSTPClassifier(//
-					new ComparableStopSemantic(SanFranciscoCabDataReader.STOP_SEMANTIC),//
-					new ComparableMoveSemantic(SanFranciscoCabDataReader.MOVE_SEMANTIC),//
+					new ComparableStopSemantic(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC),//
+					new ComparableMoveSemantic(SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_LATLON//
 					);
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new MSTPClassifier(//
-					new ComparableStopSemantic(SergipeTracksDataReader.STOP_SEMANTIC),//
+					new ComparableStopSemantic(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC),//
 					new ComparableMoveSemantic(SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_LATLON//
 					);

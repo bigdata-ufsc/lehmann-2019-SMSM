@@ -1,6 +1,8 @@
 package br.ufsc.core.trajectory.semantic;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import br.ufsc.core.trajectory.TPoint;
@@ -23,8 +25,10 @@ public class Stop {
 	private TPoint centroid;
 	private TPoint startPoint;
 	private TPoint endPoint;
+	
+	private List<Attribute> attributes;
 
-	public Stop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, int beginIndex, TPoint endPoint, int length, TPoint centroid) {
+	public Stop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, int beginIndex, TPoint endPoint, int length, TPoint centroid, String streetName) {
 		this.stopId = stopId;
 		this.stopName = stopName;
 		this.startTime = startTime;
@@ -34,6 +38,7 @@ public class Stop {
 		this.centroid = centroid;
 		this.begin = beginIndex;
 		this.length = length;
+		attributes = Arrays.asList(new Attribute(AttributeType.STOP_STREET_NAME, streetName));
 	}
 	
 	public Stop(int stopId, int beginIndex, long startTime, int length, long endTime) {
@@ -41,12 +46,7 @@ public class Stop {
 	}
 
 	public Stop(int stopId, int beginIndex, long startTime, int length, long endTime, TPoint centroid) {
-		this.begin = beginIndex;
-		this.length = length;
-		this.stopId = stopId;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.centroid = centroid;
+		this(stopId, null, startTime, endTime, null, beginIndex, null, length, centroid, null);
 	}
 
 	public int getStopId() {
@@ -77,12 +77,12 @@ public class Stop {
 		points.add(point);
 	}
 
-	public void setCentroid(TPoint p) {
-		this.centroid = p;
-	}
-
 	public TPoint getCentroid() {
 		return centroid;
+	}
+	
+	public String getStreetName() {
+		return (String) getAttribute(AttributeType.STOP_STREET_NAME);
 	}
 
 	public void setEndTime(long endTime) {
@@ -114,10 +114,21 @@ public class Stop {
 		return length;
 	}
 
-	@Override
-	public String toString() {
-		return "Stop [stopId=" + stopId + ", stopName=" + stopName + ", startTime=" + startTime + ", endTime=" + endTime + ", avg="
-				+ avg + ", centroid=" + centroid + ", startPoint=" + startPoint + ", endPoint=" + endPoint + "]";
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	public void setCentroid(TPoint centroid) {
+		this.centroid = centroid;
+	}
+	
+	public Object getAttribute(AttributeType type) {
+		for (Attribute attribute : attributes) {
+			if(attribute.getType() == type) {
+				return attribute.getValue();
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -134,7 +145,10 @@ public class Stop {
 		return true;
 	}
 
-	public void setLength(int length) {
-		this.length = length;
+	@Override
+	public String toString() {
+		return "Stop [stopId=" + stopId + ", stopName=" + stopName + ", startTime=" + startTime + ", endTime=" + endTime + ", avg=" + avg + ", begin="
+				+ begin + ", length=" + length + ", points=" + points + ", startPoint=" + startPoint + ", endPoint=" + endPoint + ", attributes="
+				+ attributes + "]";
 	}
 }

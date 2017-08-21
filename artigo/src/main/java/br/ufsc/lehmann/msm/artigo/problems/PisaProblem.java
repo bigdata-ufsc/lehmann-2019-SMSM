@@ -32,16 +32,6 @@ public class PisaProblem implements Problem {
 	}
 
 	@Override
-	public Semantic[] semantics() {
-		return new Semantic[] {
-			Semantic.GEOGRAPHIC_LATLON, //
-			Semantic.TEMPORAL,//
-			PisaDataReader.STOP_SEMANTIC,
-			PisaDataReader.MOVE_SEMANTIC
-		};
-	}
-
-	@Override
 	public List<SemanticTrajectory> data() {
 		if(!loaded) {
 			load();

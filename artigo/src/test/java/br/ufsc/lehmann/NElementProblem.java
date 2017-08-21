@@ -10,9 +10,10 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.core.trajectory.semantic.AttributeDescriptor;
+import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
-import br.ufsc.lehmann.MoveSemantic.Fields;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
@@ -28,11 +29,12 @@ public class NElementProblem implements Problem {
 	List<SemanticTrajectory> training;
 	public static final BasicSemantic<Number> dataSemantic = new BasicSemantic<>(0);
 	public static final BasicSemantic<String> discriminator = new BasicSemantic<>(3);
-	public static final StopSemantic stop = new StopSemantic(4, new EuclideanDistanceFunction());
-	public static final MoveSemantic move = new MoveSemantic(5, Fields.ANGLE);
-	public static final MoveSemantic move_distance = new MoveSemantic(5, Fields.DISTANCE);
-	public static final MovePointsSemantic move_points = new MovePointsSemantic(5, new EuclideanDistanceFunction(), 50);
-	public static final MoveEllipsesSemantic move_ellipses = new MoveEllipsesSemantic(5);
+	public static final StopSemantic stop = new StopSemantic(4, new AttributeDescriptor<Stop>(AttributeType.STOP_CENTROID, new EuclideanDistanceFunction()));
+	
+	public static final MoveSemantic move = new MoveSemantic(5, new AttributeDescriptor<Move>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic move_distance = new MoveSemantic(5, new AttributeDescriptor<Move>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic move_points = new MoveSemantic(5, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new DTWDistance(new EuclideanDistanceFunction(), 10)));
+	public static final MoveSemantic move_ellipses = new MoveSemantic(5, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 	private int elements;
 	private int classes;
 	
@@ -97,16 +99,6 @@ public class NElementProblem implements Problem {
 	
 	@Override
 	public void initialize(Random r) {
-	}
-
-	@Override
-	public Semantic[] semantics() {
-		return new Semantic[] {
-			dataSemantic,
-			Semantic.GEOGRAPHIC,
-			stop,
-			move
-		};
 	}
 
 	@Override

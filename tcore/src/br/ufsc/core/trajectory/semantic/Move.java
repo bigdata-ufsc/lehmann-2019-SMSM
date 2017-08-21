@@ -1,8 +1,6 @@
 package br.ufsc.core.trajectory.semantic;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import br.ufsc.core.trajectory.TPoint;
@@ -21,15 +19,18 @@ public class Move {
 	private Stop end;
 	private int begin;
 	private int length;
-	private double angle;
-	private double traveledDistance;
-	private List<TPoint> points;
-
+	
+	private List<Attribute> attributes;
+	
 	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points) {
 		this(moveId, start, end, startTime, endTime, begin, length, points, 0.0);
 	}
 
 	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points, double angle) {
+		this(moveId, start, end, startTime, endTime, begin, length, points, angle, 0.0);
+	}
+
+	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance) {
 		this.moveId = moveId;
 		this.start = start;
 		this.end = end;
@@ -37,13 +38,10 @@ public class Move {
 		this.endTime = endTime;
 		this.begin = begin;
 		this.length = length;
-		this.points = new ArrayList<>(points == null ? Collections.<TPoint>emptyList() : Arrays.asList(points));
-		this.angle = angle;
-	}
-
-	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance) {
-		this(moveId, start, end, startTime, endTime, begin, length, points, angle);
-		this.traveledDistance = traveledDistance;
+		attributes = Arrays.asList(//
+				new Attribute(AttributeType.MOVE_POINTS, points)//
+				, new Attribute(AttributeType.MOVE_ANGLE, angle)//
+				, new Attribute(AttributeType.MOVE_TRAVELLED_DISTANCE, traveledDistance));
 	}
 
 	public int getMoveId() {
@@ -102,10 +100,33 @@ public class Move {
 		this.length = length;
 	}
 
-	@Override
-	public String toString() {
-		return "Move [moveId=" + moveId + ", startTime=" + startTime + ", endTime=" + endTime + ", start=" + start + ", end=" + end
-				+ ", begin=" + begin + ", length=" + length + "]";
+	public TPoint[] getPoints() {
+		return (TPoint[]) getAttribute(AttributeType.MOVE_POINTS);
+	}
+
+	public double getAngle() {
+		return (double) getAttribute(AttributeType.MOVE_ANGLE);
+	}
+
+	public double getTravelledDistance() {
+		return (double) getAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE);
+	}
+	
+	public Object getAttribute(AttributeType type) {
+		for (Attribute attribute : attributes) {
+			if(attribute.getType() == type) {
+				return attribute.getValue();
+			}
+		}
+		return null;
+	}
+	
+	public void setAttribute(AttributeType type, Object value) {
+		for (Attribute attribute : attributes) {
+			if(attribute.getType() == type) {
+				attribute.setValue(value);
+			}
+		}
 	}
 
 	@Override
@@ -130,27 +151,9 @@ public class Move {
 		return true;
 	}
 
-	public double getAngle() {
-		return angle;
-	}
-
-	public void setAngle(double angle) {
-		this.angle = angle;
-	}
-
-	public TPoint[] getPoints() {
-		return points.toArray(new TPoint[points.size()]);
-	}
-	
-	public boolean addPoint(TPoint p) {
-		return points.add(p);
-	}
-
-	public double getTraveledDistance() {
-		return traveledDistance;
-	}
-
-	public void setTraveledDistance(double traveledDistance) {
-		this.traveledDistance = traveledDistance;
+	@Override
+	public String toString() {
+		return "Move [moveId=" + moveId + ", startTime=" + startTime + ", endTime=" + endTime + ", start=" + start + ", end=" + end + ", begin="
+				+ begin + ", length=" + length + ", attributes=" + attributes + "]";
 	}
 }

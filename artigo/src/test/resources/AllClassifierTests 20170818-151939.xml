@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="AllClassifierTests" project="artigo" tests="4" started="4" failures="0" errors="0" ignored="0">
+  <testsuite name="br.ufsc.lehmann.classifier.AllClassifierTests" time="89167.58">
+    <testsuite name="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="54309.87">
+      <testsuite name="[Dublin bus(lines=2)[STOP_STREET_NAME]]" time="54309.87">
+        <testcase name="validation_accuracy[Dublin bus(lines=2)[STOP_STREET_NAME]]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="26614.862"/>
+        <testcase name="validation_precision_recall[Dublin bus(lines=2)[STOP_STREET_NAME]]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="27695.008"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.MSMMovePointsClassifierTest" time="34857.71">
+      <testsuite name="[Dublin bus(lines=2)[STOP_STREET_NAME]]" time="34857.71">
+        <testcase name="validation_accuracy[Dublin bus(lines=2)[STOP_STREET_NAME]]" classname="br.ufsc.lehmann.classifier.MSMMovePointsClassifierTest" time="17628.772"/>
+        <testcase name="validation_precision_recall[Dublin bus(lines=2)[STOP_STREET_NAME]]" classname="br.ufsc.lehmann.classifier.MSMMovePointsClassifierTest" time="17228.938"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testrun>

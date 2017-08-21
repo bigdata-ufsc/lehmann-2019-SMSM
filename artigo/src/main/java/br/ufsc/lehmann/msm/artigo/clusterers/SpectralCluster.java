@@ -74,9 +74,9 @@ public class SpectralCluster implements IClusteringExecutor {
 		NewYorkBusProblem problem = new NewYorkBusProblem();
 		List<SemanticTrajectory> data = problem.data();
 		LCSSClassifier lcssClassifier = new LCSSClassifier(new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, 50),
-				new LCSSSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100));
+				new LCSSSemanticParameter(NewYorkBusDataReader.STOP_CENTROID_SEMANTIC, 100));
 		LCSS lcss = new LCSS(new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, 50),
-				new LCSSSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, 100));
+				new LCSSSemanticParameter(NewYorkBusDataReader.STOP_CENTROID_SEMANTIC, 100));
 		SpectralCluster spectralCluster = new SpectralCluster(2);
 		ClusteringResult clusteringResult = spectralCluster.cluster(problem.data(), lcssClassifier);
 		List<List<SemanticTrajectory>> clusteres = clusteringResult.getClusteres();

@@ -29,16 +29,6 @@ public class SergipeTracksProblem implements Problem {
 	}
 
 	@Override
-	public Semantic[] semantics() {
-		return new Semantic[] {
-			 Semantic.GEOGRAPHIC_LATLON, //
-//			 Semantic.TEMPORAL,//
-			// NewYorkBusDataReader.OPERATOR,
-			SergipeTracksDataReader.STOP_SEMANTIC
-		};
-	}
-
-	@Override
 	public List<SemanticTrajectory> data() {
 		if(!loaded) {
 			load();

@@ -8,7 +8,6 @@ import smile.math.Random;
 
 public interface Problem extends Cloneable {
 
-	Semantic[] semantics();
 	List<SemanticTrajectory> data();
 	Semantic discriminator();
 	List<SemanticTrajectory> trainingData();

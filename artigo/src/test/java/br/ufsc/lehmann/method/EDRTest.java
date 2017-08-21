@@ -30,27 +30,27 @@ public interface EDRTest {
 					new EDRSemanticParameter(NElementProblem.dataSemantic, null));
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new EDRClassifier(//
-					new EDRSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON),//
-					new EDRSemanticParameter(NewYorkBusDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE),
+					new EDRSemanticParameter(((NewYorkBusProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON),//
+					new EDRSemanticParameter(NewYorkBusDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE),
 					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
 		} else if(problem instanceof DublinBusProblem) {
 			return new EDRClassifier(//
-					new EDRSemanticParameter(DublinBusDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON),//
-					new EDRSemanticParameter(DublinBusDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE),
+					new EDRSemanticParameter(((DublinBusProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON),//
+					new EDRSemanticParameter(DublinBusDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE),
 					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
 		} else if(problem instanceof PatelProblem) {
 			return new EDRClassifier(//
-					new EDRSemanticParameter(PatelDataReader.STOP_SEMANTIC, Thresholds.GEOGRAPHIC_LATLON),//
-					new EDRSemanticParameter(PatelDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE),
+					new EDRSemanticParameter(PatelDataReader.STOP_CENTROID_SEMANTIC, Thresholds.GEOGRAPHIC_LATLON),//
+					new EDRSemanticParameter(PatelDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE),
 					new EDRSemanticParameter(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN));
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new EDRClassifier(//
-					new EDRSemanticParameter(SanFranciscoCabDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON),//
-					new EDRSemanticParameter(SanFranciscoCabDataReader.MOVE_SEMANTIC, Thresholds.MOVE_ANGLE),
+					new EDRSemanticParameter(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON),//
+					new EDRSemanticParameter(SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE),
 					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new EDRClassifier(//
-					new EDRSemanticParameter(SergipeTracksDataReader.STOP_SEMANTIC, Thresholds.STOP_CENTROID_LATLON),//
+					new EDRSemanticParameter(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON),//
 					new EDRSemanticParameter(SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE),
 					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
 		}
