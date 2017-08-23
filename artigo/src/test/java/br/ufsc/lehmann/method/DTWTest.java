@@ -9,10 +9,11 @@ import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
+import br.ufsc.lehmann.prototype.PrototypeDataReader;
+import br.ufsc.lehmann.prototype.PrototypeProblem;
 
 public interface DTWTest {
 
@@ -26,9 +27,11 @@ public interface DTWTest {
 		} else if(problem instanceof DublinBusProblem) {
 			return new DTWClassifier(((DublinBusProblem) problem).stopSemantic());
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new DTWClassifier(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC);
+			return new DTWClassifier(((SanFranciscoCabProblem) problem).stopSemantic());
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new DTWClassifier(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC);
+		} else if(problem instanceof PrototypeProblem) {
+			return new DTWClassifier(PrototypeDataReader.STOP_SEMANTIC);
 		}
 		return null;
 	}

@@ -18,6 +18,8 @@ import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
+import br.ufsc.lehmann.prototype.PrototypeDataReader;
+import br.ufsc.lehmann.prototype.PrototypeProblem;
 
 public interface LCSSTest {
 
@@ -49,7 +51,7 @@ public interface LCSSTest {
 					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new LCSSClassifier(//
-					new LCSSSemanticParameter(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON),//
+					new LCSSSemanticParameter(((SanFranciscoCabProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON),//
 					new LCSSSemanticParameter(SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE),//
 					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)//
 					);
@@ -58,6 +60,12 @@ public interface LCSSTest {
 					new LCSSSemanticParameter(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON),//
 					new LCSSSemanticParameter(SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE),//
 					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)//
+					);
+		} else if(problem instanceof PrototypeProblem) {
+			return new LCSSClassifier(//
+					new LCSSSemanticParameter(PrototypeDataReader.STOP_SEMANTIC, null),//
+					new LCSSSemanticParameter(PrototypeDataReader.MOVE_SEMANTIC, null),//
+					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN)//
 					);
 		}
 		return null;

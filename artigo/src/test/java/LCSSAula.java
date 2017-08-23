@@ -1,5 +1,3 @@
-import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
-
 public class LCSSAula {
 
 	public static void main(String[] args) {

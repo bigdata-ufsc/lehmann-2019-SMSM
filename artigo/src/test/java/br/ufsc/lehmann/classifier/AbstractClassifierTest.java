@@ -125,9 +125,11 @@ public abstract class AbstractClassifierTest {
 		System.out.println(testingAccuracy);
 		assertMeasure(ACCURACY, "Testing = " + testingAccuracy, testingAccuracy > .8);
 //		
-		double validationAccuracy = validation.<Object> cv(5, trainer, allData, allLabelData, ACCURACY);
-		System.out.println(validationAccuracy);
-		assertMeasure(ACCURACY, "Validating = " + validationAccuracy, validationAccuracy > .8);
+		if(allData.length >= 5) {
+			double validationAccuracy = validation.<Object> cv(5, trainer, allData, allLabelData, ACCURACY);
+			System.out.println(validationAccuracy);
+			assertMeasure(ACCURACY, "Validating = " + validationAccuracy, validationAccuracy > .8);
+		}
 	}
 	
 	@Test
@@ -176,14 +178,16 @@ public abstract class AbstractClassifierTest {
 		assertMeasure(FALLOUT, "Testing = " + testingMensures[4], testingMensures[4] < .2);
 		assertMeasure(FDR, "Testing = " + testingMensures[5], testingMensures[5] < .2);
 		
-		double[] validationAccuracy = validation.<Object> cv(5, trainer, allData, allLabelData, new Binarizer(allLabelData[0]), measures);
-		System.out.println(Arrays.toString(validationAccuracy));
-		assertMeasure(PRECISION, "Validation = " + validationAccuracy[0], validationAccuracy[0] > .8);
-		assertMeasure(RECALL, "Validation = " + validationAccuracy[1], validationAccuracy[1] > .8);
-		assertMeasure(F_MEASURE, "Validation = " + validationAccuracy[2], validationAccuracy[2] > .8);
-		assertMeasure(SPECIFICITY, "Validation = " + validationAccuracy[3], validationAccuracy[3] > .8);
-		assertMeasure(FALLOUT, "Validation = " + validationAccuracy[4], validationAccuracy[4] < .2);
-		assertMeasure(FDR, "Validation = " + validationAccuracy[5], validationAccuracy[5] < .2);
+		if(allData.length >= 5) {
+			double[] validationAccuracy = validation.<Object> cv(5, trainer, allData, allLabelData, new Binarizer(allLabelData[0]), measures);
+			System.out.println(Arrays.toString(validationAccuracy));
+			assertMeasure(PRECISION, "Validation = " + validationAccuracy[0], validationAccuracy[0] > .8);
+			assertMeasure(RECALL, "Validation = " + validationAccuracy[1], validationAccuracy[1] > .8);
+			assertMeasure(F_MEASURE, "Validation = " + validationAccuracy[2], validationAccuracy[2] > .8);
+			assertMeasure(SPECIFICITY, "Validation = " + validationAccuracy[3], validationAccuracy[3] > .8);
+			assertMeasure(FALLOUT, "Validation = " + validationAccuracy[4], validationAccuracy[4] < .2);
+			assertMeasure(FDR, "Validation = " + validationAccuracy[5], validationAccuracy[5] < .2);
+		}
 	}
 	
 	public void assertMeasure(ClassificationMeasure measure, double expected, double actual, double delta) {

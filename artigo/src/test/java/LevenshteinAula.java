@@ -3,6 +3,7 @@ public class LevenshteinAula {
 	public static void main(String[] args) {
 		String A = "What tensions you";
 		String B = "O a tem som de u";
+		
 		double distance = distance(A, B);
 		System.out.println("Distance: " + distance);
 		System.out.println("Similarity: " + (1 - (distance / (Math.max(A.length(), B.length())))));
@@ -40,7 +41,7 @@ public class LevenshteinAula {
             // Step 4
             for (j = 1; j <= m; j++) {
                 // Step 5
-                cost = 1;
+                cost = s.charAt(i - 1) == t.charAt(j - 1) ? 0 : 1;
 
                 // Step 6
                 d[i][j] = Math.min(d[i - 1][j] + 1, Math.min(d[i][j - 1] + 1, d[i - 1][j - 1] + cost));

@@ -16,6 +16,8 @@ import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
+import br.ufsc.lehmann.prototype.PrototypeDataReader;
+import br.ufsc.lehmann.prototype.PrototypeProblem;
 
 public interface DTWaTest {
 
@@ -29,9 +31,11 @@ public interface DTWaTest {
 		} else if(problem instanceof DublinBusProblem) {
 			return new DTWaClassifier(problem, ((DublinBusProblem) problem).stopSemantic(), DublinBusDataReader.MOVE_ANGLE_SEMANTIC, Semantic.GEOGRAPHIC);
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new DTWaClassifier(problem, SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
+			return new DTWaClassifier(problem, ((SanFranciscoCabProblem) problem).stopSemantic(), SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new DTWaClassifier(problem, SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
+		} else if(problem instanceof PrototypeProblem) {
+			return new DTWaClassifier(problem, PrototypeDataReader.STOP_SEMANTIC, PrototypeDataReader.MOVE_SEMANTIC, Semantic.GEOGRAPHIC_EUCLIDEAN);
 		}
 		return null;
 	}

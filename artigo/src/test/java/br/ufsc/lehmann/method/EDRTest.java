@@ -18,6 +18,8 @@ import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
+import br.ufsc.lehmann.prototype.PrototypeDataReader;
+import br.ufsc.lehmann.prototype.PrototypeProblem;
 
 public interface EDRTest {
 
@@ -45,7 +47,7 @@ public interface EDRTest {
 					new EDRSemanticParameter(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN));
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new EDRClassifier(//
-					new EDRSemanticParameter(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON),//
+					new EDRSemanticParameter(((SanFranciscoCabProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON),//
 					new EDRSemanticParameter(SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE),
 					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
 		} else if(problem instanceof SergipeTracksProblem) {
@@ -53,6 +55,11 @@ public interface EDRTest {
 					new EDRSemanticParameter(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON),//
 					new EDRSemanticParameter(SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE),
 					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
+		} else if(problem instanceof PrototypeProblem) {
+			return new EDRClassifier(//
+					new EDRSemanticParameter(PrototypeDataReader.STOP_SEMANTIC, null),//
+					new EDRSemanticParameter(PrototypeDataReader.MOVE_SEMANTIC, null),
+					new EDRSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN));
 		}
 		return null;
 	}

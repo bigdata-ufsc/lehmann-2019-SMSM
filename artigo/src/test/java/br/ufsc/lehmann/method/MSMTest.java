@@ -19,6 +19,8 @@ import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
+import br.ufsc.lehmann.prototype.PrototypeDataReader;
+import br.ufsc.lehmann.prototype.PrototypeProblem;
 
 public interface MSMTest {
 
@@ -47,13 +49,18 @@ public interface MSMTest {
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN, 1/3)
 					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new MSMClassifier(new MSMSemanticParameter(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, 1/3),
+			return new MSMClassifier(new MSMSemanticParameter(((SanFranciscoCabProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON, 1/3),
 					new MSMSemanticParameter(SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
 					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1/3));
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new MSMClassifier(new MSMSemanticParameter(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, 1/3),
 					new MSMSemanticParameter(SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, 1/3),
-					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1/3));}
+					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1/3));
+		} else if(problem instanceof PrototypeProblem) {
+			return new MSMClassifier(new MSMSemanticParameter(PrototypeDataReader.STOP_SEMANTIC, null, 1/3),
+					new MSMSemanticParameter(PrototypeDataReader.MOVE_SEMANTIC, null, 1/3),
+					new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, 1/3));
+		}
 		return null;
 	}
 }

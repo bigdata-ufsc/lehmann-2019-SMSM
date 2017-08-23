@@ -18,6 +18,8 @@ import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
+import br.ufsc.lehmann.prototype.PrototypeDataReader;
+import br.ufsc.lehmann.prototype.PrototypeProblem;
 
 public interface MSTPTest {
 
@@ -46,7 +48,7 @@ public interface MSTPTest {
 					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new MSTPClassifier(//
-					new ComparableStopSemantic(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC),//
+					new ComparableStopSemantic(((SanFranciscoCabProblem) problem).stopSemantic()),//
 					new ComparableMoveSemantic(SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_LATLON//
 					);
@@ -55,6 +57,12 @@ public interface MSTPTest {
 					new ComparableStopSemantic(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC),//
 					new ComparableMoveSemantic(SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_LATLON//
+					);
+		} else if(problem instanceof PrototypeProblem) {
+			return new MSTPClassifier(//
+					new ComparableStopSemantic(PrototypeDataReader.STOP_SEMANTIC),//
+					new ComparableMoveSemantic(PrototypeDataReader.MOVE_SEMANTIC),//
+					Semantic.GEOGRAPHIC_EUCLIDEAN//
 					);
 		}
 		return null;
