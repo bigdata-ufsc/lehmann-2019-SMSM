@@ -26,8 +26,8 @@ public class NewYorkFillDupesReverseGeocoding {
 
 		ResultSet stopsData = st.executeQuery("SELECT to_fill.stop_id, trim(filled.street) " //
 				+ "FROM stops_moves.bus_nyc_20140927_stop to_fill inner join "//
-				+ "stops_moves.bus_nyc_20140927_stop filled on ST_DWithin(ST_Transform(ST_SetSRID(ST_Point(to_fill.centroid_lat,to_fill.centroid_lon), 4326), 3857), "//
-				+ "ST_Transform(ST_SetSRID(ST_Point(filled.centroid_lat,filled.centroid_lon), 4326), 3857), 5) "//
+				+ "stops_moves.bus_nyc_20140927_stop filled on ST_DWithin(ST_Transform(ST_SetSRID(ST_Point(to_fill.centroid_lon,to_fill.centroid_lat), 4326), 3857), "//
+				+ "ST_Transform(ST_SetSRID(ST_Point(filled.centroid_lon,filled.centroid_lat), 4326), 3857), 5) "//
 				+ "where to_fill.stop_id <> filled.stop_id "
 				+ "and to_fill.street is null "
 				+ "and filled.street is not null "
