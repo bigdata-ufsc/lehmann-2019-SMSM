@@ -21,13 +21,19 @@ public class NewYorkBusProblem implements Problem {
 	private String[] lines;
 	private Random random = new Random();
 	private StopSemantic stopSemantic;
+	private boolean onlyStops;
 	
 	public NewYorkBusProblem(String... lines) {
 		this(NewYorkBusDataReader.STOP_CENTROID_SEMANTIC, lines);
 	}
 	
 	public NewYorkBusProblem(StopSemantic stopSemantic, String... lines) {
+		this(stopSemantic, false, lines);
+	}
+	
+	public NewYorkBusProblem(StopSemantic stopSemantic, boolean onlyStops, String... lines) {
 		this.stopSemantic = stopSemantic;
+		this.onlyStops = onlyStops;
 		this.lines = lines;
 	}
 	
@@ -91,7 +97,7 @@ public class NewYorkBusProblem implements Problem {
 			return;
 		}
 		try {
-			data = new ArrayList<>(new NewYorkBusDataReader().read(lines));
+			data = new ArrayList<>(new NewYorkBusDataReader(onlyStops).read(lines));
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}

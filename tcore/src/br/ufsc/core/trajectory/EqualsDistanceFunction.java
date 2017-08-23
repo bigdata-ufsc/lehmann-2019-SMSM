@@ -10,7 +10,7 @@ public class EqualsDistanceFunction implements IDistanceFunction<String> {
 		if (p == null || d == null) {
 			return Double.MAX_VALUE;
 		}
-		return p.compareTo(d);
+		return p.equals(d) ? 0 : Double.MAX_VALUE;
 	}
 
 	@Override

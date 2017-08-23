@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -191,7 +193,10 @@ public class SanFranciscoCabDataReader {
 				}
 				if(record.getSemanticMoveId() != null) {
 					Move move = moves.get(record.getSemanticMoveId());
-					((List<TPoint>) move.getAttribute(AttributeType.MOVE_POINTS)).add(point);
+					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
+					a.add(point);
+					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 				}
 				i++;

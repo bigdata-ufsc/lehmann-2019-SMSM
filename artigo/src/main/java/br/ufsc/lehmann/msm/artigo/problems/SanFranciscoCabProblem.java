@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import smile.math.Random;
 
@@ -19,8 +20,13 @@ public class SanFranciscoCabProblem implements Problem {
 	private List<SemanticTrajectory> validatingData;
 	private boolean loaded;
 	private Random random = new Random();
+	private StopSemantic stopSemantic;
 
 	public SanFranciscoCabProblem() {
+	}
+
+	public SanFranciscoCabProblem(StopSemantic stopSemantic) {
+		this.stopSemantic = stopSemantic;
 	}
 	
 	@Override
@@ -43,6 +49,10 @@ public class SanFranciscoCabProblem implements Problem {
 	@Override
 	public Semantic discriminator() {
 		return SanFranciscoCabDataReader.OCUPATION;
+	}
+	
+	public StopSemantic stopSemantic() {
+		return stopSemantic;
 	}
 
 	@Override

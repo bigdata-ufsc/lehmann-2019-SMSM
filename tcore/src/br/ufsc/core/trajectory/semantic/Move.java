@@ -31,6 +31,10 @@ public class Move {
 	}
 
 	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance) {
+		this(moveId, start, end, startTime, endTime, begin, length, points, angle, 0.0, null);
+	}
+
+	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance, String streetName) {
 		this.moveId = moveId;
 		this.start = start;
 		this.end = end;
@@ -41,7 +45,8 @@ public class Move {
 		attributes = Arrays.asList(//
 				new Attribute(AttributeType.MOVE_POINTS, points)//
 				, new Attribute(AttributeType.MOVE_ANGLE, angle)//
-				, new Attribute(AttributeType.MOVE_TRAVELLED_DISTANCE, traveledDistance));
+				, new Attribute(AttributeType.MOVE_TRAVELLED_DISTANCE, traveledDistance)//
+				, new Attribute(AttributeType.MOVE_STREET_NAME, streetName));
 	}
 
 	public int getMoveId() {
@@ -110,6 +115,10 @@ public class Move {
 
 	public double getTravelledDistance() {
 		return (double) getAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE);
+	}
+
+	public String getStreetName() {
+		return (String) getAttribute(AttributeType.MOVE_STREET_NAME);
 	}
 	
 	public Object getAttribute(AttributeType type) {

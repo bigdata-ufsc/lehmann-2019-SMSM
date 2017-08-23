@@ -7,6 +7,7 @@ import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.StopSemantic;
 import smile.math.Random;
 
 public class SanFranciscoCab_AirportMallRoad_Problem extends SanFranciscoCabProblem {
@@ -22,6 +23,11 @@ public class SanFranciscoCab_AirportMallRoad_Problem extends SanFranciscoCabProb
 	private boolean airport;
 
 	public SanFranciscoCab_AirportMallRoad_Problem(Integer[] roads, boolean airport, boolean mall) {
+		this(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, roads, airport, mall);
+	}
+
+	public SanFranciscoCab_AirportMallRoad_Problem(StopSemantic stopSemantic, Integer[] roads, boolean airport, boolean mall) {
+		super(stopSemantic);
 		this.roads = roads;
 		this.airport = airport;
 		this.mall = mall;

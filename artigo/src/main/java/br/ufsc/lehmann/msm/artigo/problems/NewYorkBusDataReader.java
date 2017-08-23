@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,6 +58,11 @@ public class NewYorkBusDataReader {
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new DTWDistance(new LatLongDistanceFunction(), 10)));
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
+	private boolean onlyStops;
+
+	public NewYorkBusDataReader(boolean onlyStops) {
+		this.onlyStops = onlyStops;
+	}
 
 	public List<SemanticTrajectory> read(String[] lines) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.nyc_20140927", null, null);
@@ -117,6 +123,119 @@ public class NewYorkBusDataReader {
 				moves.put(moveId, move);
 			}
 		}
+		st.close();
+		if(onlyStops) {
+			return readStopsTrajectories(lines, conn, stops, moves);
+		}
+		return readRawPoints(lines, conn, stops, moves);
+	}
+
+	private List<SemanticTrajectory> readStopsTrajectories(String[] lines, Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
+		String sql = "select gid, time_received as \"time\", vehicle_id, trim(infered_route_id) as route, "
+		/**/+ "trim(infered_trip_id) as trip_id, longitude, latitude, distance_along_trip, infered_direction_id, "
+		/**/+ "trim(infered_phase) as phase, next_scheduled_stop_distance, next_scheduled_stop_id, semantic_stop_id, semantic_move_id "
+		+ "from bus.nyc_20140927 "//
+		+ "where infered_trip_id is not null ";//
+		if(lines != null && lines.length > 0) {
+			sql += "and infered_route_id in (SELECT * FROM unnest(?)) ";
+		}
+		sql += "order by time_received";
+		PreparedStatement preparedStatement = conn.prepareStatement(sql);
+		if(lines != null && lines.length > 0) {
+			Array array = conn.createArrayOf("varchar", lines);
+			preparedStatement.setArray(1, array);
+		}
+		ResultSet data = preparedStatement.executeQuery();
+		Multimap<String, NewYorkBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
+		System.out.println("Fetching...");
+		while(data.next()) {
+			Integer stop = data.getInt("semantic_stop_id");
+			if(data.wasNull()) {
+				stop = null;
+			}
+			Integer move = data.getInt("semantic_move_id");
+			if(data.wasNull()) {
+				move = null;
+			}
+			NewYorkBusRecord record = new NewYorkBusRecord(
+				data.getInt("gid"),
+				data.getTimestamp("time"),
+				data.getInt("vehicle_id"),
+				data.getString("route"),
+				data.getString("trip_id"),
+				data.getDouble("longitude"),
+				data.getDouble("latitude"),
+				data.getDouble("distance_along_trip"),
+				data.getInt("infered_direction_id"),
+				data.getString("phase"),
+				data.getDouble("next_scheduled_stop_distance"),
+				data.getString("next_scheduled_stop_id"),
+				stop,
+				move
+			);
+			records.put(record.getTripId(), record);
+		}
+		System.out.printf("Loaded %d GPS points from database\n", records.size());
+		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
+		List<SemanticTrajectory> ret = new ArrayList<>();
+		Set<String> keys = records.keySet();
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		for (String trajId : keys) {
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 12);
+			Collection<NewYorkBusRecord> collection = records.get(trajId);
+			int i = 0;
+			for (NewYorkBusRecord record : collection) {
+				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
+				if(record.getSemanticStop() != null) {
+					Stop stop = stops.remove(record.getSemanticStop());
+					if(stop == null) {
+						continue;
+					}
+					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+				} else if(record.getSemanticMoveId() != null) {
+					Move move = moves.remove(record.getSemanticMoveId());
+					if(move == null) {
+						for (int j = 0; j < i; j++) {
+							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
+							if(move != null) {
+								break;
+							}
+						}
+						if(move != null) {
+							TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+							List<TPoint> a = new ArrayList<TPoint>(Arrays.asList(points));
+							a.add(point);
+							move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+							continue;
+						}
+					}
+					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
+					a.add(point);
+					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+				}
+				s.addData(i, Semantic.GID, record.getGid());
+				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
+				s.addData(i, DIRECTION, record.getDirection());
+				s.addData(i, ROUTE, record.getRoute());
+				s.addData(i, DISTANCE, record.getDistanceAlongTrip());
+				s.addData(i, VEHICLE, record.getVehicleId());
+				s.addData(i, NEXT_STOP_DISTANCE, record.getNextStopDistance());
+				s.addData(i, NEXT_STOP_ID, record.getNextStopId());
+				s.addData(i, PHASE, record.getPhase());
+				i++;
+			}
+			stats.addValue(s.length());
+			ret.add(s);
+		}
+		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
+		return ret;
+	}
+
+	private List<SemanticTrajectory> readRawPoints(String[] lines, Connection conn, Map<Integer, Stop> stops,
+			Map<Integer, Move> moves) throws SQLException {
 		String sql = "select gid, time_received as \"time\", vehicle_id, trim(infered_route_id) as route, "
 		/**/+ "trim(infered_trip_id) as trip_id, longitude, latitude, distance_along_trip, infered_direction_id, "
 		/**/+ "trim(infered_phase) as phase, next_scheduled_stop_distance, next_scheduled_stop_id, semantic_stop_id, semantic_move_id "
@@ -178,7 +297,6 @@ public class NewYorkBusDataReader {
 			);
 			records.put(record.getTripId(), record);
 		}
-		st.close();
 		System.out.printf("Loaded %d GPS points from database\n", records.size());
 		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
 		List<SemanticTrajectory> ret = new ArrayList<>();

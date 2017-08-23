@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import smile.math.Random;
 
@@ -22,6 +23,7 @@ public class PatelProblem implements Problem {
 	private String stopMoveTable;
 	private boolean loaded;
 	private Random random = new Random();
+	private StopSemantic stopSemantic;
 
 	public PatelProblem(String table) {
 		this(table, table);
@@ -33,7 +35,13 @@ public class PatelProblem implements Problem {
 	}
 
 	public PatelProblem(String table, String stopMoveTable, Random random) {
-		this(table, stopMoveTable);
+		this(PatelDataReader.STOP_CENTROID_SEMANTIC, table, stopMoveTable, random);
+	}
+
+	public PatelProblem(StopSemantic stopSemantic, String table, String stopMoveTable, Random random) {
+		this.stopSemantic = stopSemantic;
+		this.table = table;
+		this.stopMoveTable = stopMoveTable;
 		this.random = random;
 	}
 	
@@ -84,6 +92,10 @@ public class PatelProblem implements Problem {
 	public Semantic discriminator() {
 		return PatelDataReader.CLASS;
 	}
+	
+	public StopSemantic stopSemantic() {
+		return stopSemantic;
+	}
 
 	@Override
 	public List<SemanticTrajectory> trainingData() {
@@ -111,7 +123,7 @@ public class PatelProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "Patel's " + StringUtils.capitalize(table);
+		return "Patel's " + StringUtils.capitalize(table) + "[" + stopSemantic.name() + "]";
 	}
 
 }

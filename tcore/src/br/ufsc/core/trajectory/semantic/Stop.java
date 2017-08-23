@@ -15,7 +15,6 @@ import br.ufsc.core.trajectory.TPoint;
 public class Stop {
 
 	private int stopId;
-	private String stopName;
 	private long startTime;
 	private long endTime;
 	private double avg;
@@ -30,7 +29,6 @@ public class Stop {
 
 	public Stop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, int beginIndex, TPoint endPoint, int length, TPoint centroid, String streetName) {
 		this.stopId = stopId;
-		this.stopName = stopName;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.startPoint = startPoint;
@@ -38,7 +36,8 @@ public class Stop {
 		this.centroid = centroid;
 		this.begin = beginIndex;
 		this.length = length;
-		attributes = Arrays.asList(new Attribute(AttributeType.STOP_STREET_NAME, streetName));
+		attributes = Arrays.asList(new Attribute(AttributeType.STOP_NAME, stopName),
+				new Attribute(AttributeType.STOP_STREET_NAME, streetName));
 	}
 	
 	public Stop(int stopId, int beginIndex, long startTime, int length, long endTime) {
@@ -51,10 +50,6 @@ public class Stop {
 
 	public int getStopId() {
 		return stopId;
-	}
-
-	public String getStopName() {
-		return stopName;
 	}
 
 	public long getStartTime() {
@@ -83,6 +78,10 @@ public class Stop {
 	
 	public String getStreetName() {
 		return (String) getAttribute(AttributeType.STOP_STREET_NAME);
+	}
+	
+	public String getStopName() {
+		return (String) getAttribute(AttributeType.STOP_NAME);
 	}
 
 	public void setEndTime(long endTime) {
@@ -147,7 +146,7 @@ public class Stop {
 
 	@Override
 	public String toString() {
-		return "Stop [stopId=" + stopId + ", stopName=" + stopName + ", startTime=" + startTime + ", endTime=" + endTime + ", avg=" + avg + ", begin="
+		return "Stop [stopId=" + stopId + ", startTime=" + startTime + ", endTime=" + endTime + ", avg=" + avg + ", begin="
 				+ begin + ", length=" + length + ", points=" + points + ", startPoint=" + startPoint + ", endPoint=" + endPoint + ", attributes="
 				+ attributes + "]";
 	}
