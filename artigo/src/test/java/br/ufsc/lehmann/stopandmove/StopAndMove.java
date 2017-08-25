@@ -63,7 +63,7 @@ public class StopAndMove {
 		}).collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.counting())).keySet();
 		if(movesToMerge.isEmpty()) {
 			Collection<Integer> stopPoints = stops.removeAll(s);
-			Move move = new Move(mid.getAndIncrement(), previousStop, nextStop, s.getStartTime(), s.getEndTime(), s.getBegin(), stopPoints.size(), null);
+			Move move = new Move(mid.incrementAndGet(), previousStop, nextStop, s.getStartTime(), s.getEndTime(), s.getBegin(), stopPoints.size(), null);
 			moves.putAll(move, stopPoints);
 			return stopPoints;
 		}

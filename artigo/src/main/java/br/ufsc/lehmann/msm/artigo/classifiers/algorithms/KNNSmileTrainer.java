@@ -22,6 +22,9 @@ public class KNNSmileTrainer<Label> implements ITrainer<Label> {
 		}
 		int[] y = new int[labels.size()];
 		List<Label> uniqueLabels = new ArrayList<>(new LinkedHashSet<>(labels));
+		if(uniqueLabels.size() == 1) {
+			throw new IllegalStateException("Only one class");
+		}
 		for (int i = 0; i < y.length; i++) {
 			y[i] = uniqueLabels.indexOf(labels.get(i));
 		}

@@ -85,7 +85,7 @@ public class SanFranciscoCab_AirportMallRoad_Problem extends SanFranciscoCabProb
 
 	@Override
 	public String shortDescripton() {
-		return "San Francisco cab (Airport <-> Mall)";
+		return "San Francisco cab (Airport <-> Mall)[" + getStopSemantic().name() + "][onlyStops=" + onlyStop + "]";
 	}
 	
 	private void load() {

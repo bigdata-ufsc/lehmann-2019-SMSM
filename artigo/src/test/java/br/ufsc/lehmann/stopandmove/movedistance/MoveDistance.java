@@ -15,14 +15,19 @@ import br.ufsc.db.source.DataSourceType;
 
 public class MoveDistance {
 	
+	private final String database;
 	private GeographicDistanceFunction func;
 	public MoveDistance(GeographicDistanceFunction func) {
+		this("postgis", func);
+	}
+	public MoveDistance(String database, GeographicDistanceFunction func) {
+		this.database = database;
 		this.func = func;
 	}
 
 	public void extractMovementTraveledDistance(String moveTable, Map<Move, SemanticTrajectory> moves)
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, moveTable, null, "geom");
+		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, database, DataSourceType.PGSQL, moveTable, null, "geom");
 		Connection conn = source.getRetriever().getConnection();
 		conn.setAutoCommit(false);
 		PreparedStatement ps = conn.prepareStatement("update "+moveTable+" set traveled_distance = ? where move_id = ?");

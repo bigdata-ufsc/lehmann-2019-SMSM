@@ -124,7 +124,7 @@ public class PatelProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "Patel's " + StringUtils.capitalize(table) + "[" + stopSemantic.name() + "]";
+		return "Patel's " + StringUtils.capitalize(table) + "[" + stopSemantic.name() + "][onlyStops=" + onlyStops + "]";
 	}
 
 }

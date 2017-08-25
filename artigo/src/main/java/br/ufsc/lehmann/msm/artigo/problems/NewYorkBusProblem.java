@@ -89,7 +89,7 @@ public class NewYorkBusProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "New York bus" + (lines != null ? "(lines=" + lines.length + ")" : "") + "[" + stopSemantic.name() + "]";
+		return "New York bus" + (lines != null ? "(lines=" + lines.length + ")" : "") + "[" + stopSemantic.name() + "][onlyStops=" + onlyStops + "]";
 	}
 	
 	private void load() {

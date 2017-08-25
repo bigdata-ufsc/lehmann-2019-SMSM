@@ -15,6 +15,9 @@
  *******************************************************************************/
 package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import br.ufsc.core.IMeasureDistance;
@@ -220,22 +223,50 @@ public class Validation {
         }
         
         int n = x.length;
+		double result = 0.0;
         
-        CrossValidation cv = new CrossValidation(n, k, this.random);
-        double result = 0.0;
+        CrossValidation cv = null;
+        SemanticTrajectory[][] trains = null;
+		for (int t = 0; t < 10; t++) {
+			try {
+				cv = new CrossValidation(n, k, this.random);
+				trains = new SemanticTrajectory[k][];
+				for (int i = 0; i < k; i++) {
+					SemanticTrajectory[] trainx = Math.slice(x, cv.train[i]);
+
+					List<Label> labels = new ArrayList<>();
+					for (SemanticTrajectory traj : trainx) {
+						Label data = (Label) problem.discriminator().getData(traj, 0);
+						labels.add(data);
+					}
+					List<Label> uniqueLabels = new ArrayList<>(new LinkedHashSet<>(labels));
+					if (uniqueLabels.size() == 1) {
+						throw new IllegalStateException("Only one class");
+					}
+					trains[i] = trainx;
+				}
+			} catch (IllegalStateException e) {
+				System.err.println("Error generating CV");
+				cv = null;
+			}
+		}
+		if(cv == null) {
+			throw new RuntimeException("Impossibru generate CVs");
+		}
+		CrossValidation finalCV = cv;
         for (int i = 0; i < k; i++) {
         	final int finalI = i;
-            SemanticTrajectory[] trainx = Math.slice(x, cv.train[i]);
-            
-            IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
-
-            Object[] predictions = new Object[cv.test[i].length];
-            Object[] real = new Object[cv.test[i].length];
-            IntStream.iterate(0, l -> l + 1).limit(cv.test[i].length).parallel().forEach((l) -> {
-            	predictions[l] = classifier.classify(x[cv.test[finalI][l]]);
-            	real[l] = y[cv.test[finalI][l]];
-            });
-            result += measure.measure(real, predictions);
+            SemanticTrajectory[] trainx = trains[i];
+        	
+        	IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
+        	
+        	Object[] predictions = new Object[cv.test[i].length];
+        	Object[] real = new Object[cv.test[i].length];
+        	IntStream.iterate(0, l -> l + 1).limit(cv.test[i].length).parallel().forEach((l) -> {
+        		predictions[l] = classifier.classify(x[finalCV.test[finalI][l]]);
+        		real[l] = y[finalCV.test[finalI][l]];
+        	});
+        	result += measure.measure(real, predictions);
         }
         
         return result / k;

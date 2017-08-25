@@ -115,4 +115,12 @@ public class SanFranciscoCabProblem implements Problem {
 		loaded = true;
 	}
 
+	public StopSemantic getStopSemantic() {
+		return stopSemantic;
+	}
+
+	public void setStopSemantic(StopSemantic stopSemantic) {
+		this.stopSemantic = stopSemantic;
+	}
+
 }

@@ -89,7 +89,7 @@ public class DublinBusProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "Dublin bus" + (lines != null ? "(lines=" + lines.length + ")" : "") + "[" + stopSemantic.name() + "]";
+		return "Dublin bus" + (lines != null ? "(lines=" + lines.length + ")" : "") + "[" + stopSemantic.name() + "][onlyStops=" + onlyStops + "]";
 	}
 
 	private void load() {

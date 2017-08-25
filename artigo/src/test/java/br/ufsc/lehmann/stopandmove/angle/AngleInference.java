@@ -13,13 +13,22 @@ import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 
 public class AngleInference {
+	private final String database;
 
-	public static void extractMovementAngle(String moveTable, Map<Move, SemanticTrajectory> moves)
+	public AngleInference() {
+		this("postgis");
+	}
+
+	public AngleInference(String database) {
+		this.database = database;
+	}
+
+	public void extract(String moveTable, Map<Move, SemanticTrajectory> moves)
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, moveTable, null, "geom");
+		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, database, DataSourceType.PGSQL, moveTable, null, "geom");
 		Connection conn = source.getRetriever().getConnection();
 		conn.setAutoCommit(false);
-		PreparedStatement ps = conn.prepareStatement("update "+moveTable+" set angle = ? where move_id = ?");
+		PreparedStatement ps = conn.prepareStatement("update " + moveTable + " set angle = ? where move_id = ?");
 		int registers = 0;
 		for (Map.Entry<Move, SemanticTrajectory> entry : moves.entrySet()) {
 			registers++;
@@ -32,7 +41,7 @@ public class AngleInference {
 			ps.setDouble(1, angle);
 			ps.setInt(2, move.getMoveId());
 			ps.execute();
-			if(registers % 100 == 0) {
+			if (registers % 100 == 0) {
 				conn.commit();
 			}
 		}
@@ -40,14 +49,19 @@ public class AngleInference {
 		conn.close();
 	}
 
+	public static void extractMovementAngle(String moveTable, Map<Move, SemanticTrajectory> moves)
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		new AngleInference().extract(moveTable, moves);
+	}
+
 	public static double getAngle(TPoint p1, TPoint p2) {
 		double angle = Math.toDegrees(Math.atan2(p2.getY() - p1.getY(), p2.getX() - p1.getX()));
 
-	    if(angle < 0){
-	        angle += 360;
-	    }
+		if (angle < 0) {
+			angle += 360;
+		}
 
-	    return angle;
+		return angle;
 	}
 
 }
