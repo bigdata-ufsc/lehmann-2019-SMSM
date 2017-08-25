@@ -7,6 +7,8 @@ import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.StopSemantic;
+import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import smile.math.Random;
 
@@ -18,8 +20,20 @@ public class PisaProblem implements Problem {
 	private List<SemanticTrajectory> validatingData;
 	private boolean loaded;
 	private Random random = new Random();
+	private boolean onlyStops;
+	private StopSemantic stopSemantic;
 
 	public PisaProblem() {
+		this(false);
+	}
+
+	public PisaProblem(boolean onlyStops) {
+		this(PisaDataReader.STOP_CENTROID_SEMANTIC, onlyStops);
+	}
+
+	public PisaProblem(StopSemantic stopSemantic,boolean onlyStops) {
+		this.stopSemantic = stopSemantic;
+		this.onlyStops = onlyStops;
 	}
 	
 	@Override
@@ -41,7 +55,11 @@ public class PisaProblem implements Problem {
 
 	@Override
 	public Semantic discriminator() {
-		return PisaDataReader.TRANSPORTATION;
+		return PisaDataReader.GOAL;
+	}
+
+	public StopSemantic stopSemantic() {
+		return stopSemantic;
 	}
 
 	@Override
@@ -70,7 +88,7 @@ public class PisaProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "Pisa";
+		return "Pisa [" + stopSemantic.name() + "][onlyStops=" + onlyStops + "]";
 	}
 
 	private void load() {
@@ -78,7 +96,7 @@ public class PisaProblem implements Problem {
 			return;
 		}
 		try {
-			data = new ArrayList<>(new PisaDataReader().read());
+			data = new ArrayList<>(new PisaDataReader(onlyStops).read());
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}

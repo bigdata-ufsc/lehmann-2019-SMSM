@@ -12,6 +12,7 @@ import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
+import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
@@ -35,6 +36,8 @@ public interface HCSSTest {
 			return new HCSS(new HCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON), new WeightSemantic(-1, SergipeTracksDataReader.STOP_CENTROID_SEMANTIC));
 		} else if(problem instanceof PrototypeProblem) {
 			return new HCSS(new HCSSSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN), new WeightSemantic(-1, PrototypeDataReader.STOP_SEMANTIC));
+		} else if(problem instanceof PisaProblem) {
+			return new HCSS(new HCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON), new WeightSemantic(-1, ((PisaProblem) problem).stopSemantic()));
 		}
 		return null;
 	}

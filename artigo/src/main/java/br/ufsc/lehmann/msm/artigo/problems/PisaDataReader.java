@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +58,11 @@ public class PisaDataReader {
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(13, new AttributeDescriptor<Move>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(13, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new DTWDistance(new LatLongDistanceFunction(), 10)));
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(13, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
+	private boolean onlyStops;
+
+	public PisaDataReader(boolean onlyStops) {
+		this.onlyStops = onlyStops;
+	}
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "pisa", DataSourceType.PGSQL, "public.semanticpoint", null, null);
@@ -94,7 +101,7 @@ public class PisaDataReader {
 						"FROM stops_moves.pisa_move");
 		while(movesData.next()) {
 			int moveId = movesData.getInt("move_id");
-				Move move = moves.get(moveId);
+			Move move = moves.get(moveId);
 			if (move == null) {
 				int startStopId = movesData.getInt("start_stop_id");
 				if (movesData.wasNull()) {
@@ -114,10 +121,12 @@ public class PisaDataReader {
 						null,
 						movesData.getDouble("angle"));
 				moves.put(moveId, move);
+			} else {
+				System.err.println(moveId);
 			}
 		}
 
-		String sql = "select gid, tid, \"time\", is_stop, geom, lat, lon, ele, weather, temperature, "
+		String sql = "select gid, tid, dailytid, \"time\", is_stop, geom, lat, lon, ele, weather, temperature, "
         + "user_id, place, goal, subgoal, transportation, event, dailytid, semantic_stop_id, semantic_move_id "
 		+ "from public.semanticpoint ";
 		sql += "order by tid, dailytid, \"time\"";
@@ -140,7 +149,7 @@ public class PisaDataReader {
 					data.getInt("user_id"),
 				data.getInt("gid"),
 				data.getInt("tid"),
-				data.getInt("daily_tid"),
+				data.getInt("dailytid"),
 				data.getDouble("lat"),
 				data.getDouble("lon"),
 				data.getDouble("ele"),
@@ -154,11 +163,80 @@ public class PisaDataReader {
 				stop,
 				move
 			);
-			records.put(record.getTid() + "" + record.getDaily_tid(), record);
+			records.put(record.getTid() + "_" + record.getDaily_tid(), record);
 		}
 		st.close();
 		System.out.printf("Loaded %d GPS points from database\n", records.size());
 		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
+		if(onlyStops) {
+			return readOnlyStops(stops, moves, records);
+		}
+		return readRawPoints(stops, moves, records);
+	}
+
+	private List<SemanticTrajectory> readOnlyStops(Map<Integer, Stop> stops, Map<Integer, Move> moves, Multimap<String, PisaRecord> records) {
+		List<SemanticTrajectory> ret = new ArrayList<>();
+		Set<String> keys = records.keySet();
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		for (String trajId : keys) {
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 14);
+			Collection<PisaRecord> collection = records.get(trajId);
+			int i = 0;
+			for (PisaRecord record : collection) {
+				TPoint point = new TPoint(record.getLat(), record.getLon());
+				if(record.getSemanticStopId() != null) {
+					Stop stop = stops.remove(record.getSemanticStopId());
+					if(stop == null) {
+						continue;
+					}
+					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+				} else if(record.getSemanticMoveId() != null) {
+					Move move = moves.remove(record.getSemanticMoveId());
+					if(move == null) {
+						for (int j = 0; j < i; j++) {
+							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
+							if(move != null) {
+								break;
+							}
+						}
+						if(move != null) {
+							TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+							List<TPoint> a = new ArrayList<TPoint>(Arrays.asList(points));
+							a.add(point);
+							move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+							continue;
+						} else {
+							throw new RuntimeException("Move does not found");
+						}
+					}
+					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
+					a.add(point);
+					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+				}
+				s.addData(i, Semantic.GID, record.getGid());
+				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
+				s.addData(i, ELEVATION, record.getEle());
+				s.addData(i, WEATHER, record.getWeather());
+				s.addData(i, TEMPERATURE, record.getTemperature());
+				s.addData(i, USER_ID, record.getUser_id());
+				s.addData(i, PLACE, record.getPlace());
+				s.addData(i, GOAL, record.getGoal());
+				s.addData(i, SUBGOAL, record.getSubGoal());
+				s.addData(i, TRANSPORTATION, record.getTransportation());
+				s.addData(i, EVENT, record.getEvent());
+				i++;
+			}
+			stats.addValue(s.length());
+			ret.add(s);
+		}
+		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
+		return ret;
+	}
+
+	private List<SemanticTrajectory> readRawPoints(Map<Integer, Stop> stops, Map<Integer, Move> moves, Multimap<String, PisaRecord> records) {
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
@@ -186,7 +264,10 @@ public class PisaDataReader {
 				}
 				if(record.getSemanticMoveId() != null) {
 					Move move = moves.get(record.getSemanticMoveId());
-					((List<TPoint>) move.getAttribute(AttributeType.MOVE_POINTS)).add(point);
+					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
+					a.add(point);
+					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 				}
 				i++;

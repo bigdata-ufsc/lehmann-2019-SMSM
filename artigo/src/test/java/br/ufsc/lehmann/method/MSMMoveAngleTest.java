@@ -16,6 +16,8 @@ import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
+import br.ufsc.lehmann.msm.artigo.problems.PisaDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
@@ -55,6 +57,10 @@ public interface MSMMoveAngleTest {
 		} else if(problem instanceof PrototypeProblem) {
 			return new MSMMoveClassifier(new MSMMoveSemanticParameter(PrototypeDataReader.STOP_SEMANTIC, null, PrototypeDataReader.MOVE_SEMANTIC, null, .5)
 					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, 1)
+					);
+		} else if(problem instanceof PisaProblem) {
+			return new MSMMoveClassifier(new MSMMoveSemanticParameter(((PisaProblem) problem).stopSemantic(), null, PisaDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, .5)
+					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1)
 					);
 		}
 		return null;

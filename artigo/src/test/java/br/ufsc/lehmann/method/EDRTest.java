@@ -14,6 +14,8 @@ import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
+import br.ufsc.lehmann.msm.artigo.problems.PisaDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
@@ -60,6 +62,11 @@ public interface EDRTest {
 					new EDRSemanticParameter(PrototypeDataReader.STOP_SEMANTIC, null),//
 					new EDRSemanticParameter(PrototypeDataReader.MOVE_SEMANTIC, null),
 					new EDRSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN));
+		} else if(problem instanceof PisaProblem) {
+			return new EDRClassifier(//
+					new EDRSemanticParameter(((PisaProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON),//
+					new EDRSemanticParameter(PisaDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE),
+					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
 		}
 		return null;
 	}

@@ -43,7 +43,7 @@ import smile.math.Random;
 @RunWith(Parameterized.class)
 public abstract class AbstractClassifierTest {
 	
-	private static final Random RANDOM = new Random(5);
+	private Random random;
 	
     private static final FDR FDR = new FDR();
 	private static final Fallout FALLOUT = new Fallout();
@@ -64,7 +64,8 @@ public abstract class AbstractClassifierTest {
     }
 	
 	public AbstractClassifierTest(EnumProblem problemDescriptor) {
-		problem = problemDescriptor.problem(RANDOM);
+		random = new Random(5);
+		problem = problemDescriptor.problem(random);
 	}
 	
 	@Before
@@ -90,6 +91,7 @@ public abstract class AbstractClassifierTest {
 			}
 			Assert.fail(sw.toString());
 		}
+		random = new Random(5);
 	}
 	
 	@Test
@@ -117,7 +119,7 @@ public abstract class AbstractClassifierTest {
 			testLabelData[i] = discriminator.getData(testData[i], 0);
 		}
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		Validation validation = new Validation(problem, classifier, RANDOM);
+		Validation validation = new Validation(problem, classifier, random);
 
 		ITrainer<Object> trainer = new KNNSmileTrainer<>();
 		IClassifier<Object> train = trainer.train(trainData, discriminator, classifier);
@@ -157,7 +159,7 @@ public abstract class AbstractClassifierTest {
 			testLabelData[i] = discriminator.getData(testData[i], 0);
 		}
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		Validation validation = new Validation(problem, classifier, RANDOM);
+		Validation validation = new Validation(problem, classifier, random);
 		ClassificationMeasure[] measures = new ClassificationMeasure[] {//
 				PRECISION,//
 				RECALL,//

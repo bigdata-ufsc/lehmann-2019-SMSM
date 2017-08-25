@@ -10,6 +10,7 @@ import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
+import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
@@ -33,6 +34,8 @@ public interface LiuSchneiderTest {
 			return new LiuSchneider(new LiuSchneiderParameters(0.5, SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON));
 		} else if(problem instanceof PrototypeProblem) {
 			return new LiuSchneider(new LiuSchneiderParameters(0.5, PrototypeDataReader.STOP_SEMANTIC, null));
+		} else if(problem instanceof PisaProblem) {
+			return new LiuSchneider(new LiuSchneiderParameters(0.5, ((PisaProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON));
 		}
 		return null;
 	}

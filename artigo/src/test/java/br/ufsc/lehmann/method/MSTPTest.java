@@ -14,6 +14,8 @@ import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
+import br.ufsc.lehmann.msm.artigo.problems.PisaDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
@@ -63,6 +65,12 @@ public interface MSTPTest {
 					new ComparableStopSemantic(PrototypeDataReader.STOP_SEMANTIC),//
 					new ComparableMoveSemantic(PrototypeDataReader.MOVE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_EUCLIDEAN//
+					);
+		} else if(problem instanceof PisaProblem) {
+			return new MSTPClassifier(//
+					new ComparableStopSemantic(((PisaProblem) problem).stopSemantic()),//
+					new ComparableMoveSemantic(PisaDataReader.MOVE_ANGLE_SEMANTIC),//
+					Semantic.GEOGRAPHIC_LATLON//
 					);
 		}
 		return null;
