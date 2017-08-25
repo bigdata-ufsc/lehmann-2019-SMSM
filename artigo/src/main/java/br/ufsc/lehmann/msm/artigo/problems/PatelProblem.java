@@ -22,27 +22,28 @@ public class PatelProblem implements Problem {
 	private String table;
 	private String stopMoveTable;
 	private boolean loaded;
-	private Random random = new Random();
+	private Random random;
 	private StopSemantic stopSemantic;
+	private boolean onlyStops;
 
 	public PatelProblem(String table) {
 		this(table, table);
 	}
 
 	public PatelProblem(String dataTable, String stopMoveTable) {
-		this.table = dataTable;
-		this.stopMoveTable = stopMoveTable;
+		this(PatelDataReader.STOP_CENTROID_SEMANTIC, dataTable, stopMoveTable);
 	}
 
-	public PatelProblem(String table, String stopMoveTable, Random random) {
-		this(PatelDataReader.STOP_CENTROID_SEMANTIC, table, stopMoveTable, random);
+	public PatelProblem(StopSemantic stopSemantic, String table, String stopMoveTable) {
+		this(stopSemantic, false, table, stopMoveTable);
 	}
 
-	public PatelProblem(StopSemantic stopSemantic, String table, String stopMoveTable, Random random) {
+	public PatelProblem(StopSemantic stopSemantic, boolean onlyStops, String table, String stopMoveTable) {
 		this.stopSemantic = stopSemantic;
+		this.onlyStops = onlyStops;
 		this.table = table;
 		this.stopMoveTable = stopMoveTable;
-		this.random = random;
+		this.random = new Random();
 	}
 	
 	@Override
@@ -59,7 +60,7 @@ public class PatelProblem implements Problem {
 			return;
 		}
 		try {
-			data = new ArrayList<>(new PatelDataReader(table, stopMoveTable).read());
+			data = new ArrayList<>(new PatelDataReader(onlyStops, table, stopMoveTable).read());
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}

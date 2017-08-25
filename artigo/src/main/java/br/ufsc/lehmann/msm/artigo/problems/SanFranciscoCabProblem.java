@@ -21,12 +21,14 @@ public class SanFranciscoCabProblem implements Problem {
 	private boolean loaded;
 	private Random random = new Random();
 	private StopSemantic stopSemantic;
+	protected boolean onlyStop;
 
 	public SanFranciscoCabProblem() {
 	}
 
-	public SanFranciscoCabProblem(StopSemantic stopSemantic) {
+	public SanFranciscoCabProblem(StopSemantic stopSemantic, boolean onlyStop) {
 		this.stopSemantic = stopSemantic;
+		this.onlyStop = onlyStop;
 	}
 	
 	@Override
@@ -89,7 +91,7 @@ public class SanFranciscoCabProblem implements Problem {
 			return;
 		}
 		try {
-			data = new ArrayList<>(new SanFranciscoCabDataReader().read());
+			data = new ArrayList<>(new SanFranciscoCabDataReader(onlyStop).read());
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}

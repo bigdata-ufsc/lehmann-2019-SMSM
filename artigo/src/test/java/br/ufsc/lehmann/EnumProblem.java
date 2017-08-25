@@ -1,13 +1,10 @@
 package br.ufsc.lehmann;
 
 import br.ufsc.lehmann.msm.artigo.Problem;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCab_AirportMallRoad_Problem;
-import br.ufsc.lehmann.prototype.PrototypeProblem;
 import smile.math.Random;
 
 public enum EnumProblem {
@@ -16,11 +13,9 @@ public enum EnumProblem {
 	 */
 //	NEWYORK_BUS(new NewYorkBusProblem(), 258),// 
 //	NEWYORK_BUS_2_LINES_STREET_NAME(new NewYorkBusProblem(NewYorkBusDataReader.STOP_STREET_NAME_SEMANTIC, "MTA NYCT_Q20A", "MTA NYCT_M102"), 2),//
-	NEWYORK_BUS_2_LINES_ONLY_STOPS_STREET_NAME(new NewYorkBusProblem(NewYorkBusDataReader.STOP_STREET_NAME_SEMANTIC, true, "MTA NYCT_Q20A", "MTA NYCT_M102"), 2),// 
 //	DUBLIN_BUS(new DublinBusProblem(), 465),// 
 //	DUBLIN_BUS_2_LINES(new DublinBusProblem("017A0002", "00791001"), 2),//
 //	DUBLIN_BUS_2_LINES_STREET_NAME(new DublinBusProblem(DublinBusDataReader.STOP_STREET_NAME_SEMANTIC, "017A0002", "00791001"), 2),//
-	DUBLIN_BUS_2_LINES_ONLY_STOPS_STREET_NAME(new DublinBusProblem(DublinBusDataReader.STOP_STREET_NAME_SEMANTIC, true, "017A0002", "00791001"), 2),//
 //	TDRIVE(new TDriveProblem()),//
 //	NEWYORK_BIKE(new NYBikeProblem()), //
 //	SERGIPE_TRACKS(new SergipeTracksProblem(), 2),//
@@ -36,11 +31,15 @@ public enum EnumProblem {
 //	TAXI_SANFRANCISCO(new SanFranciscoCabProblem(), 2),//
 //	PATEL_VEHICLE_URBAN(new PatelProblem("vehicle_urban", "vehicle"), 2),//
 //	PATEL_VEHICLE_URBAN_STREET_NAME(new PatelProblem(PatelDataReader.STOP_STREET_NAME_SEMANTIC, "vehicle_urban", "vehicle"), 2),//
-	PROTOTYPE(new PrototypeProblem(), 2),
-//	SYNTHETIC(new NElementProblem(50, 5), 5)
+//	SYNTHETIC(new NElementProblem(50, 5), 5),
 	/**
 	 * Trajectories constructed with only Stops&Moves
 	 */
+//	NEWYORK_BUS_2_LINES_ONLY_STOPS_STREET_NAME(new NewYorkBusProblem(NewYorkBusDataReader.STOP_STREET_NAME_SEMANTIC, true, "MTA NYCT_Q20A", "MTA NYCT_M102"), 2),// 
+//	DUBLIN_BUS_2_LINES_ONLY_STOPS_STREET_NAME(new DublinBusProblem(DublinBusDataReader.STOP_STREET_NAME_SEMANTIC, true, "017A0002", "00791001"), 2),//
+	TAXI_SANFRANCISCO_AIRPORT_MALL_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_AirportMallRoad_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new Integer[] {101, 280}, true, true), 2),//
+	PATEL_VEHICLE_URBAN_ONLY_STOPS_STREET_NAME(new PatelProblem(PatelDataReader.STOP_STREET_NAME_SEMANTIC, true, "vehicle_urban", "vehicle"), 2),//
+//	PROTOTYPE(new PrototypeProblem(), 2)
 	;
 	private Problem p;
 	private int numClasses;

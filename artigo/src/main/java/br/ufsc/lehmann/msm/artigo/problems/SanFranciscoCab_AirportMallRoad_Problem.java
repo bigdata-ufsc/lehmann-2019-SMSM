@@ -27,7 +27,11 @@ public class SanFranciscoCab_AirportMallRoad_Problem extends SanFranciscoCabProb
 	}
 
 	public SanFranciscoCab_AirportMallRoad_Problem(StopSemantic stopSemantic, Integer[] roads, boolean airport, boolean mall) {
-		super(stopSemantic);
+		this(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, false, roads, airport, mall);
+	}
+	
+	public SanFranciscoCab_AirportMallRoad_Problem(StopSemantic stopSemantic, boolean onlyStop, Integer[] roads, boolean airport, boolean mall) {
+		super(stopSemantic, onlyStop);
 		this.roads = roads;
 		this.airport = airport;
 		this.mall = mall;
@@ -89,7 +93,7 @@ public class SanFranciscoCab_AirportMallRoad_Problem extends SanFranciscoCabProb
 			return;
 		}
 		try {
-			data = new ArrayList<>(new SanFranciscoCabDataReader(roads, airport, mall).read());
+			data = new ArrayList<>(new SanFranciscoCabDataReader(onlyStop, roads, airport, mall).read());
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}

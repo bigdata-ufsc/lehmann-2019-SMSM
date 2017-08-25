@@ -56,11 +56,14 @@ public class SanFranciscoCabDataReader {
 	private Integer[] roads;
 	private boolean mall;
 	private boolean airport;
+	private boolean onlyStops;
 	
-	public SanFranciscoCabDataReader() {
+	public SanFranciscoCabDataReader(boolean onlyStop) {
+		this.onlyStops = onlyStop;
 	}
 
-	public SanFranciscoCabDataReader(Integer[] roads, boolean airport, boolean mall) {
+	public SanFranciscoCabDataReader(boolean onlyStop, Integer[] roads, boolean airport, boolean mall) {
+		this(onlyStop);
 		this.roads = roads;
 		this.airport = airport;
 		this.mall = mall;
@@ -125,6 +128,14 @@ public class SanFranciscoCabDataReader {
 				moves.put(moveId, move);
 			}
 		}
+		st.close();
+		if(onlyStops) {
+			return readStopsTrajectories(conn, stops, moves);
+		}
+		return loadRawPoints(conn, stops, moves);
+	}
+
+	private List<SemanticTrajectory> readStopsTrajectories(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
 		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, semantic_stop_id, semantic_move_id" + //
 				" FROM taxi.sanfrancisco_taxicab_crawdad";
 		if(roads != null) {
@@ -166,7 +177,6 @@ public class SanFranciscoCabDataReader {
 			);
 			records.put(record.getTid(), record);
 		}
-		st.close();
 		System.out.printf("Loaded %d GPS points from database\n", records.size());
 		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
 		List<SemanticTrajectory> ret = new ArrayList<>();
@@ -175,9 +185,104 @@ public class SanFranciscoCabDataReader {
 		for (Integer trajId : keys) {
 			SemanticTrajectory s = new SemanticTrajectory(trajId, 8);
 			Collection<SanFranciscoCabRecord> collection = records.get(trajId);
-//			if(collection.size() < 40) {
-//				continue;
-//			}
+			int i = 0;
+			for (SanFranciscoCabRecord record : collection) {
+				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
+				if(record.getSemanticStop() != null) {
+					Stop stop = stops.remove(record.getSemanticStop());
+					if(stop == null) {
+						continue;
+					}
+					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+				} else if(record.getSemanticMoveId() != null) {
+					Move move = moves.remove(record.getSemanticMoveId());
+					if(move == null) {
+						for (int j = 0; j < i; j++) {
+							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
+							if(move != null) {
+								break;
+							}
+						}
+						if(move != null) {
+							TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+							List<TPoint> a = new ArrayList<TPoint>(Arrays.asList(points));
+							a.add(point);
+							move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+							continue;
+						}
+					}
+					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
+					a.add(point);
+					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+				}
+				s.addData(i, Semantic.GID, record.getGid());
+				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
+				s.addData(i, TID, record.getTid());
+				s.addData(i, OCUPATION, record.getOcupation());
+				s.addData(i, ROAD, record.getRoad());
+				i++;
+			}
+			stats.addValue(s.length());
+			ret.add(s);
+		}
+		System.out.printf("Loaded %d trajectories (filtered)\n", ret.size());
+		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
+		return ret;
+	}
+
+	private List<SemanticTrajectory> loadRawPoints(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
+		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, semantic_stop_id, semantic_move_id" + //
+				" FROM taxi.sanfrancisco_taxicab_crawdad";
+		if(roads != null) {
+			sql += " where road in (SELECT * FROM unnest(?))";
+			sql += " and airport = " + Boolean.toString(airport);
+			sql += " and mall = " + Boolean.toString(mall);
+		}
+		sql +=" order by tid, \"timestamp\"";
+		PreparedStatement preparedStatement = conn.prepareStatement(sql);
+		if(roads != null) {
+			Array array = conn.createArrayOf("integer", roads);
+			preparedStatement.setArray(1, array);
+		}
+		ResultSet data = preparedStatement.executeQuery();
+		Multimap<Integer, SanFranciscoCabRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
+		System.out.println("Fetching...");
+		while(data.next()) {
+			Integer stop = data.getInt("semantic_stop_id");
+			if(data.wasNull()) {
+				stop = null;
+			}
+			Integer move = data.getInt("semantic_move_id");
+			if(data.wasNull()) {
+				move = null;
+			}
+			SanFranciscoCabRecord record = new SanFranciscoCabRecord(
+					data.getInt("tid"),
+				data.getInt("gid"),
+				data.getInt("taxi_id"),
+				data.getTimestamp("timestamp"),
+				data.getInt("ocupation"),
+				data.getDouble("lon"),
+				data.getDouble("lat"),
+				data.getBoolean("airport"),
+				data.getBoolean("mall"),
+				data.getInt("road"),
+				stop,
+				move
+			);
+			records.put(record.getTid(), record);
+		}
+		System.out.printf("Loaded %d GPS points from database\n", records.size());
+		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
+		List<SemanticTrajectory> ret = new ArrayList<>();
+		Set<Integer> keys = records.keySet();
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		for (Integer trajId : keys) {
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 8);
+			Collection<SanFranciscoCabRecord> collection = records.get(trajId);
 			int i = 0;
 			for (SanFranciscoCabRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());

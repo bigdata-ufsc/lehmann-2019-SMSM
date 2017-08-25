@@ -6,7 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,8 +43,10 @@ public class PatelDataReader {
 	
 	private String table;
 	private String stopMoveTable;
+	private boolean onlyStops;
 
-	public PatelDataReader(String table, String stopMoveTable) {
+	public PatelDataReader(boolean onlyStops, String table, String stopMoveTable) {
+		this.onlyStops = onlyStops;
 		this.table = table;
 		this.stopMoveTable = stopMoveTable;
 	}
@@ -145,6 +149,69 @@ public class PatelDataReader {
 			records.put(record.getTid().trim(), record);
 		}
 		st.close();
+		if(onlyStops) {
+			return readStopsTrajectories(stops, moves, records);
+		}
+		return readRawPoints(stops, moves, records);
+	}
+
+	private List<SemanticTrajectory> readStopsTrajectories(Map<Integer, Stop> stops, Map<Integer, Move> moves,
+			Multimap<String, PatelRecord> records) {
+		System.out.printf("Loaded %d GPS points from database\n", records.size());
+		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
+		List<SemanticTrajectory> ret = new ArrayList<>();
+		Set<String> keys = records.keySet();
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		for (String trajId : keys) {
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 7);
+			Collection<PatelRecord> collection = records.get(trajId);
+			int i = 0;
+			for (PatelRecord record : collection) {
+				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
+				if(record.getStop() != null) {
+					Stop stop = stops.remove(record.getStop());
+					if(stop == null) {
+						continue;
+					}
+					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+				} else if(record.getMove() != null) {
+					Move move = moves.remove(record.getMove());
+					if(move == null) {
+						for (int j = 0; j < i; j++) {
+							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
+							if(move != null) {
+								break;
+							}
+						}
+						if(move != null) {
+							TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+							List<TPoint> a = new ArrayList<TPoint>(Arrays.asList(points));
+							a.add(point);
+							move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+							continue;
+						}
+					}
+					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
+					a.add(point);
+					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+				}
+				s.addData(i, Semantic.GID, record.getGid());
+				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli((long) record.getTime()), Instant.ofEpochMilli((long) record.getTime())));
+				s.addData(i, TID, record.getTid());
+				s.addData(i, CLASS, record.getClazz());
+				i++;
+			}
+			stats.addValue(s.length());
+			ret.add(s);
+		}
+		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
+		return ret;
+	}
+
+	private List<SemanticTrajectory> readRawPoints(Map<Integer, Stop> stops, Map<Integer, Move> moves, Multimap<String, PatelRecord> records) {
 		System.out.printf("Loaded %d GPS points from database\n", records.size());
 		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
 		List<SemanticTrajectory> ret = new ArrayList<>();
@@ -167,7 +234,11 @@ public class PatelDataReader {
 				}
 				if(record.getMove() != null) {
 					Move move = moves.get(record.getMove());
-					((List<TPoint>) move.getAttribute(AttributeType.MOVE_POINTS)).add(point);
+					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
+					a.add(point);
+					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 				}
 				i++;
