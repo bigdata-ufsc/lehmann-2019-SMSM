@@ -1,0 +1,259 @@
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+MSMMoveDistanceClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+0.6666666666666666
+0.8457142857142858
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+MSMMoveDistanceClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.875, 0.875, 0.875, 0.75, 0.25, 0.125]
+[0.8528571428571429, 0.96, 0.8980952380952381, 0.65, 0.35, 0.14714285714285716]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+MSMClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.6666666666666666
+0.6828571428571429
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+MSMClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.6666666666666666, 1.0, 0.8, 0.0, 1.0, 0.3333333333333333]
+[0.74, 0.8, 0.6359879336349923, 0.2, 0.8, 0.25999999999999995]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+MSMMoveAngleClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.6666666666666666
+0.8171428571428571
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+MSMMoveAngleClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.875, 0.875, 0.875, 0.75, 0.25, 0.125]
+[0.8428571428571429, 0.9199999999999999, 0.8714285714285713, 0.65, 0.35, 0.15714285714285714]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+DTWClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.6666666666666666
+0.6828571428571429
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+DTWClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.6666666666666666, 1.0, 0.8, 0.0, 1.0, 0.3333333333333333]
+[0.74, 0.8, 0.6359879336349923, 0.2, 0.8, 0.25999999999999995]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+EDRClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.5833333333333334
+0.7514285714285713
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+EDRClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[1.0, 0.5, 0.6666666666666666, 1.0, 0.0, 0.0]
+[1.0, 0.6114285714285714, 0.7446153846153846, 1.0, 0.0, 0.0]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+ERPClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.6666666666666666
+0.6828571428571429
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+ERPClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.6666666666666666, 1.0, 0.8, 0.0, 1.0, 0.3333333333333333]
+[0.74, 0.8, 0.6359879336349923, 0.2, 0.8, 0.25999999999999995]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+LCSSClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.75
+0.6542857142857142
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+LCSSClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.8, 1.0, 0.888888888888889, 0.5, 0.5, 0.2]
+[0.7166666666666668, 0.7914285714285716, 0.7466666666666668, 0.31666666666666665, 0.6833333333333333, 0.2833333333333333]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+MSTPClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.6666666666666666
+0.6828571428571429
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+MSTPClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.6666666666666666, 1.0, 0.8, 0.0, 1.0, 0.3333333333333333]
+[0.74, 0.8, 0.6359879336349923, 0.2, 0.8, 0.25999999999999995]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+HCSSClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.4166666666666667
+0.5599999999999999
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+HCSSClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.6666666666666666, 0.5, 0.5714285714285715, 0.5, 0.5, 0.3333333333333333]
+[0.7728571428571429, 0.5295238095238095, 0.5361904761904761, 0.6166666666666667, 0.38333333333333336, 0.22714285714285715]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+CVTIClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.6666666666666666
+0.6828571428571429
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+CVTIClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.6666666666666666, 1.0, 0.8, 0.0, 1.0, 0.3333333333333333]
+[0.74, 0.8, 0.6359879336349923, 0.2, 0.8, 0.25999999999999995]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+wDFClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.5833333333333334
+0.6828571428571429
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+wDFClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.6363636363636364, 0.875, 0.7368421052631579, 0.0, 1.0, 0.36363636363636365]
+[0.7255555555555555, 0.8133333333333332, 0.7471212121212121, 0.31666666666666665, 0.6833333333333333, 0.27444444444444444]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+SWALEClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.5
+0.6057142857142856
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+SWALEClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.75, 0.75, 0.75, 0.5, 0.5, 0.25]
+[0.7233333333333334, 0.519047619047619, 0.5404761904761904, 0.5666666666666667, 0.4333333333333334, 0.27666666666666667]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+LiuSchneiderClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.5833333333333334
+0.4228571428571429
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+LiuSchneiderClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.7142857142857143, 0.625, 0.6666666666666666, 0.5, 0.5, 0.2857142857142857]
+[0.8266666666666668, 0.4742857142857143, 0.5164102564102564, 0.7166666666666667, 0.2833333333333333, 0.17333333333333334]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+MSMMoveEllipsesClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.6666666666666666
+0.8457142857142858
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+MSMMoveEllipsesClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.875, 0.875, 0.875, 0.75, 0.25, 0.125]
+[0.8528571428571429, 0.96, 0.8980952380952381, 0.65, 0.35, 0.14714285714285716]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+MSMMovePointsClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.6666666666666666
+0.8171428571428571
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+MSMMovePointsClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.875, 0.875, 0.875, 0.75, 0.25, 0.125]
+[0.8142857142857143, 0.9199999999999999, 0.8560439560439559, 0.45, 0.55, 0.18571428571428572]
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+DTWaClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true]]
+0.6666666666666666
+0.6828571428571429
+Executing SQL...
+Fetching...
+Loaded 141663 GPS points from database
+Loaded 38 trajectories from database
+Semantic Trajectories statistics: mean - 33,66, min - 9,00, max - 134,00, sd - 23,88
+DTWaClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true]]
+[0.6666666666666666, 1.0, 0.8, 0.0, 1.0, 0.3333333333333333]
+[0.74, 0.8, 0.6359879336349923, 0.2, 0.8, 0.25999999999999995]

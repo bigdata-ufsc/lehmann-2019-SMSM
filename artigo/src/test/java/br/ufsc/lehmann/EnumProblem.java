@@ -18,7 +18,7 @@ public enum EnumProblem {
 //	NEWYORK_BIKE(new NYBikeProblem()), //
 //	SERGIPE_TRACKS(new SergipeTracksProblem(), 2),//
 //	PISA(new PisaProblem(), 2),//
-	PISA_STREET_NAME(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, false), 7),//
+//	PISA_STREET_NAME(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, false), 7),//
 //	PATEL_ANIMALS(new PatelProblem("animal"), 3),//
 //	PATEL_HURRICANE(new PatelProblem("hurricane"), 5),//
 //	PATEL_HURRICANE_1vs4(new PatelProblem("hurricane_1vs4", "hurricane"), 2),//
