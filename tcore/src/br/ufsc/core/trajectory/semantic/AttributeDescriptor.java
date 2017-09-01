@@ -2,12 +2,12 @@ package br.ufsc.core.trajectory.semantic;
 
 import br.ufsc.core.trajectory.IDistanceFunction;
 
-public class AttributeDescriptor<T> {
+public class AttributeDescriptor<T, Y> {
 	
 	private AttributeType type;
-	private IDistanceFunction function;
+	private IDistanceFunction<Y> function;
 
-	public AttributeDescriptor(AttributeType type, IDistanceFunction function) {
+	public AttributeDescriptor(AttributeType type, IDistanceFunction<Y> function) {
 		this.type = type;
 		this.function = function;
 	}

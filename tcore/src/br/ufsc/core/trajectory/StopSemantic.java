@@ -5,9 +5,9 @@ import br.ufsc.core.trajectory.semantic.Stop;
 
 public class StopSemantic extends Semantic<Stop, Number> {
 
-	private AttributeDescriptor<Stop> desc;
+	private AttributeDescriptor<Stop, ? extends Object> desc;
 
-	public StopSemantic(int index, AttributeDescriptor<Stop> desc) {
+	public StopSemantic(int index, AttributeDescriptor<Stop, ? extends Object> desc) {
 		super(index);
 		this.desc = desc;
 	}
