@@ -11,4 +11,5 @@ public interface Thresholds {
 	public static final int MOVE_ANGLE = 10;
 	public static final int MOVE_DISTANCE = 150;
 	public static final double MOVE_INNER_POINTS_PERC = .75;
+	public static final double STOP_MOVE = .5;
 }

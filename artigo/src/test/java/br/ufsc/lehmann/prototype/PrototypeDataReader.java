@@ -23,16 +23,21 @@ import br.ufsc.core.trajectory.semantic.AttributeDescriptor;
 import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
+import br.ufsc.core.trajectory.semantic.StopMove;
 import br.ufsc.lehmann.MoveSemantic;
+import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 
 public class PrototypeDataReader {
 	
 	public static final BasicSemantic<Object> USER_ID = new BasicSemantic<>(5);
 	
-	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(3, new AttributeDescriptor<Stop>(AttributeType.STOP_NAME, new EqualsDistanceFunction()));
+	public static final StopSemantic STOP_SEMANTIC = new StopSemantic(3, new AttributeDescriptor<Stop, String>(AttributeType.STOP_NAME, new EqualsDistanceFunction<String>()));
 	
-	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(4, new AttributeDescriptor<Move>(AttributeType.MOVE_STREET_NAME, new EqualsDistanceFunction()));
+	public static final MoveSemantic MOVE_SEMANTIC = new MoveSemantic(4, new AttributeDescriptor<Move, String>(AttributeType.MOVE_STREET_NAME, new EqualsDistanceFunction<String>()));
+	
+	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(PrototypeDataReader.STOP_SEMANTIC, PrototypeDataReader.MOVE_SEMANTIC, 
+			new AttributeDescriptor<StopMove, String>(AttributeType.STOP_NAME_MOVE_STREET_NAME, new EqualsDistanceFunction<String>()));
 
 	public List<SemanticTrajectory> read() throws IOException {
 		CSVParser prototypeParser = CSVParser.parse(//
