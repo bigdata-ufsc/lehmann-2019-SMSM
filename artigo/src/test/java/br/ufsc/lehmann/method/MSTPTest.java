@@ -33,43 +33,36 @@ public interface MSTPTest {
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(((NewYorkBusProblem) problem).stopSemantic()),//
-					new ComparableMoveSemantic(NewYorkBusDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_LATLON//
 					);
 		} else if(problem instanceof DublinBusProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(((DublinBusProblem) problem).stopSemantic()),//
-					new ComparableMoveSemantic(DublinBusDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_LATLON//
 					);
 		} else if(problem instanceof PatelProblem) {
 			return new MSTPClassifier(//
-					new ComparableStopSemantic(PatelDataReader.STOP_CENTROID_SEMANTIC),//
-					new ComparableMoveSemantic(PatelDataReader.MOVE_ANGLE_SEMANTIC),//
+					new ComparableStopSemantic(((PatelProblem) problem).stopSemantic()),//
 					Semantic.GEOGRAPHIC//
 					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(((SanFranciscoCabProblem) problem).stopSemantic()),//
-					new ComparableMoveSemantic(SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_LATLON//
 					);
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC),//
-					new ComparableMoveSemantic(SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_LATLON//
 					);
 		} else if(problem instanceof PrototypeProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(PrototypeDataReader.STOP_SEMANTIC),//
-					new ComparableMoveSemantic(PrototypeDataReader.MOVE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_EUCLIDEAN//
 					);
 		} else if(problem instanceof PisaProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(((PisaProblem) problem).stopSemantic()),//
-					new ComparableMoveSemantic(PisaDataReader.MOVE_ANGLE_SEMANTIC),//
 					Semantic.GEOGRAPHIC_LATLON//
 					);
 		}

@@ -7,7 +7,6 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.DTWClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
@@ -22,7 +21,7 @@ public interface DTWTest {
 		if(problem instanceof NElementProblem) {
 			return new DTWClassifier(NElementProblem.dataSemantic);
 		} else if(problem instanceof PatelProblem) {
-			return new DTWClassifier(PatelDataReader.STOP_CENTROID_SEMANTIC);
+			return new DTWClassifier(((PatelProblem) problem).stopSemantic());
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new DTWClassifier(((NewYorkBusProblem) problem).stopSemantic());
 		} else if(problem instanceof DublinBusProblem) {

@@ -29,7 +29,7 @@ public interface HCSSTest {
 		} else if(problem instanceof DublinBusProblem) {
 			return new HCSS(new HCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON), new WeightSemantic(-1, ((DublinBusProblem) problem).stopSemantic()));
 		} else if(problem instanceof PatelProblem) {
-			return new HCSS(new HCSSSemanticParameter(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN), new WeightSemantic(-1, PatelDataReader.STOP_CENTROID_SEMANTIC));
+			return new HCSS(new HCSSSemanticParameter(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN), new WeightSemantic(-1, ((PatelProblem) problem).stopSemantic()));
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new HCSS(new HCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON), new WeightSemantic(-1, ((SanFranciscoCabProblem) problem).stopSemantic()));
 		} else if(problem instanceof SergipeTracksProblem) {
