@@ -6,7 +6,6 @@ import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
@@ -25,7 +24,7 @@ public interface ERPTest {
 		} else if(problem instanceof DublinBusProblem) {
 			return new ERP(null, ((DublinBusProblem) problem).stopSemantic());
 		} else if(problem instanceof PatelProblem) {
-			return new ERP(null, PatelDataReader.STOP_CENTROID_SEMANTIC);
+			return new ERP(null, ((PatelProblem) problem).stopSemantic());
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new ERP(null, ((SanFranciscoCabProblem) problem).stopSemantic());
 		} else if(problem instanceof SergipeTracksProblem) {
