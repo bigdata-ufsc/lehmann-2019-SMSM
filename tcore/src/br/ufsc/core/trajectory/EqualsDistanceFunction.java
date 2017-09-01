@@ -1,9 +1,9 @@
 package br.ufsc.core.trajectory;
 
-public class EqualsDistanceFunction implements IDistanceFunction<String> {
+public class EqualsDistanceFunction<T extends Object> implements IDistanceFunction<T> {
 
 	@Override
-	public double distance(String p, String d) {
+	public double distance(T p, T d) {
 		if(p == d) {
 			return 0;
 		}

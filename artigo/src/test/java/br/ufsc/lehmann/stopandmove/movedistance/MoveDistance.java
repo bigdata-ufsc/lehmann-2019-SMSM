@@ -39,7 +39,7 @@ public class MoveDistance {
 			for (int i = 0; i < move.getLength(); i++) {
 				points[i] = Semantic.GEOGRAPHIC.getData(entry.getValue(), move.getBegin() + i);
 			}
-			double traveledDistance = getDistance(points);
+			double traveledDistance = getDistance(points, func);
 			ps.setDouble(1, traveledDistance);
 			ps.setInt(2, move.getMoveId());
 			ps.execute();
@@ -50,7 +50,7 @@ public class MoveDistance {
 		conn.commit();
 		conn.close();
 	}
-	public double getDistance(TPoint[] points) {
+	public static double getDistance(TPoint[] points, GeographicDistanceFunction func) {
 		double ret = 0;
 		for (int i = 0; i < points.length - 1; i++) {
 			ret += func.distance(points[i], points[i + 1]);
