@@ -31,6 +31,7 @@ import br.ufsc.core.trajectory.semantic.AttributeDescriptor;
 import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
+import br.ufsc.core.trajectory.semantic.StopMove;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
@@ -39,9 +40,13 @@ import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
+import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
+import br.ufsc.lehmann.stopandmove.angle.AngleInference;
+import br.ufsc.lehmann.stopandmove.movedistance.MoveDistance;
 
 public class DublinBusDataReader {
+	private static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
 	
 	public static final BasicSemantic<Integer> LINE_INFO = new BasicSemantic<>(3);
 	public static final BasicSemantic<String> JOURNEY = new BasicSemantic<>(4);
@@ -50,13 +55,15 @@ public class DublinBusDataReader {
 	public static final BasicSemantic<Integer> STOP = new BasicSemantic<>(7);
 	public static final BasicSemantic<String> OPERATOR = new BasicSemantic<>(8);
 	
-	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(9, new AttributeDescriptor<Stop>(AttributeType.STOP_CENTROID, new LatLongDistanceFunction()));
-	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(9, new AttributeDescriptor<Stop>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction()));
+	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(9, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, new LatLongDistanceFunction()));
+	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(9, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
 	
-	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move>(AttributeType.MOVE_ANGLE, new AngleDistance()));
-	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
-	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new DTWDistance(new LatLongDistanceFunction(), 10)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
+	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(new LatLongDistanceFunction(), 10)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
+	
+	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 	private boolean onlyStops;
 
 	public DublinBusDataReader(boolean onlyStops) {
@@ -117,20 +124,24 @@ public class DublinBusDataReader {
 						movesData.getTimestamp("end_time").getTime(), //
 						movesData.getInt("begin"), //
 						movesData.getInt("length"), //
-						null,
-						movesData.getDouble("angle"));
+						null);
 				moves.put(moveId, move);
 			}
 		}
 		st.close();
 
+		List<Move> usedMoves = new ArrayList<Move>();
+		List<SemanticTrajectory> ret = null;
 		if(onlyStops) {
-			return readStopsTrajectories(lines, conn, stops, moves);
+			ret = readStopsTrajectories(lines, conn, stops, moves, usedMoves);
+		} else {
+			ret = loadRawPoints(lines, conn, stops, moves);
 		}
-		return readRawPoints(lines, conn, stops, moves);
+		compute(usedMoves);
+		return ret;
 	}
 
-	private List<SemanticTrajectory> readStopsTrajectories(String[] lines, Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
+	private List<SemanticTrajectory> readStopsTrajectories(String[] lines, Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws SQLException {
 		String sql = "select gid, to_timestamp(time_in_seconds / 1000000) as \"time\", line_id, trim(journey_pattern) as journey_pattern, "
 		/**/+ "vehicle_journey, trim(operator) as operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id, "
 		/**/+ "semantic_stop_id, semantic_move_id "
@@ -191,9 +202,23 @@ public class DublinBusDataReader {
 					if(stop == null) {
 						continue;
 					}
-					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+					if(i > 0) {
+						Stop previousStop = STOP_CENTROID_SEMANTIC.getData(s, i - 1);
+						if(previousStop != null) {
+							Move move = new Move(-1, previousStop, stop, (double) previousStop.getEndTime(), (double) stop.getStartTime(), stop.getBegin() - 1, 0, new TPoint[0], 
+									AngleInference.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
+									MoveDistance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
+							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+							//injecting a move between two consecutives stops
+							stops.put(record.getSemanticStopId(), stop);
+						} else {
+							s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+						}
+					} else {
+						s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+					}
 				} else if(record.getSemanticMoveId() != null) {
-					Move move = moves.get(record.getSemanticMoveId());
+					Move move = moves.remove(record.getSemanticMoveId());
 					if(move == null) {
 						for (int j = 0; j < i; j++) {
 							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
@@ -208,6 +233,8 @@ public class DublinBusDataReader {
 							move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
 							continue;
 						}
+					} else {
+						usedMoves.add(move);
 					}
 					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
 					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
@@ -233,7 +260,7 @@ public class DublinBusDataReader {
 		return ret;
 	}
 
-	private List<SemanticTrajectory> readRawPoints(String[] lines, Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves)
+	private List<SemanticTrajectory> loadRawPoints(String[] lines, Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves)
 			throws SQLException {
 		String sql = "select gid, to_timestamp(time_in_seconds / 1000000) as \"time\", line_id, trim(journey_pattern) as journey_pattern, "
 		/**/+ "vehicle_journey, trim(operator) as operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id, "
@@ -318,5 +345,22 @@ public class DublinBusDataReader {
 		}
 		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
 		return ret;
+	}
+
+	private void compute(Collection<Move> moves) {
+		for (Move move : moves) {
+			List<TPoint> points = new ArrayList<>();
+			if(move.getStart() != null) {
+				points.add(move.getStart().getEndPoint());
+			}
+			if(move.getPoints() != null) {
+				points.addAll(Arrays.asList(move.getPoints()));
+			}
+			if(move.getEnd() != null) {
+				points.add(move.getEnd().getStartPoint());
+			}
+			move.setAttribute(AttributeType.MOVE_ANGLE, AngleInference.getAngle(points.get(0), points.get(points.size() - 1)));
+			move.setAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE, MoveDistance.getDistance(points.toArray(new TPoint[points.size()]), DISTANCE_FUNCTION));
+		}
 	}
 }

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.Multimap;
@@ -31,6 +32,7 @@ import br.ufsc.core.trajectory.semantic.AttributeDescriptor;
 import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
+import br.ufsc.core.trajectory.semantic.StopMove;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
@@ -39,20 +41,26 @@ import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
+import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
+import br.ufsc.lehmann.stopandmove.angle.AngleInference;
+import br.ufsc.lehmann.stopandmove.movedistance.MoveDistance;
 
 public class SanFranciscoCabDataReader {
 	
+	private static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
 	public static final BasicSemantic<Integer> TID = new BasicSemantic<>(3);
 	public static final BasicSemantic<Integer> OCUPATION = new BasicSemantic<>(4);
 	public static final BasicSemantic<Integer> ROAD = new BasicSemantic<>(5);
-	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop>(AttributeType.STOP_CENTROID, new LatLongDistanceFunction()));
-	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction()));
+	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
+	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
 	
-	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move>(AttributeType.MOVE_ANGLE, new AngleDistance()));
-	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
-	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new DTWDistance(new LatLongDistanceFunction(), 10)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
+	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, 10)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
+	
+	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 	private Integer[] roads;
 	private boolean mall;
 	private boolean airport;
@@ -116,23 +124,29 @@ public class SanFranciscoCabDataReader {
 				if (movesData.wasNull()) {
 					endStopId = -1;
 				}
+				Stop startStop = stops.get(startStopId);
+				Stop endStop = stops.get(endStopId);
 				move = new Move(moveId, //
-						stops.get(startStopId), //
-						stops.get(endStopId), //
+						startStop, //
+						endStop, //
 						movesData.getTimestamp("start_time").getTime(), //
 						movesData.getTimestamp("end_time").getTime(), //
 						movesData.getInt("begin"), //
 						movesData.getInt("length"), //
-						null,
-						movesData.getDouble("angle"));
+						null);
 				moves.put(moveId, move);
 			}
 		}
 		st.close();
+		List<Move> allMoves = new ArrayList<>(moves.values());
+		List<SemanticTrajectory> ret = null;
 		if(onlyStops) {
-			return readStopsTrajectories(conn, stops, moves);
+			ret = readStopsTrajectories(conn, stops, moves);
+		} else {
+			ret = loadRawPoints(conn, stops, moves);
 		}
-		return loadRawPoints(conn, stops, moves);
+		compute(CollectionUtils.removeAll(allMoves, moves.values()));
+		return ret;
 	}
 
 	private List<SemanticTrajectory> readStopsTrajectories(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
@@ -193,7 +207,21 @@ public class SanFranciscoCabDataReader {
 					if(stop == null) {
 						continue;
 					}
-					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+					if(i > 0) {
+						Stop previousStop = STOP_CENTROID_SEMANTIC.getData(s, i - 1);
+						if(previousStop != null) {
+							Move move = new Move(-1, previousStop, stop, (double) previousStop.getEndTime(), (double) stop.getStartTime(), stop.getBegin() - 1, 0, new TPoint[0], 
+									AngleInference.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
+									MoveDistance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
+							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+							//injecting a move between two consecutives stops
+							stops.put(record.getSemanticStop(), stop);
+						} else {
+							s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+						}
+					} else {
+						s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+					}
 				} else if(record.getSemanticMoveId() != null) {
 					Move move = moves.remove(record.getSemanticMoveId());
 					if(move == null) {
@@ -207,14 +235,16 @@ public class SanFranciscoCabDataReader {
 							TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
 							List<TPoint> a = new ArrayList<TPoint>(Arrays.asList(points));
 							a.add(point);
-							move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+							points = a.toArray(new TPoint[a.size()]);
+							move.setAttribute(AttributeType.MOVE_POINTS, points);
 							continue;
 						}
 					}
 					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
 					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
 					a.add(point);
-					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+					points = a.toArray(new TPoint[a.size()]);
+					move.setAttribute(AttributeType.MOVE_POINTS, points);
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 				}
 				s.addData(i, Semantic.GID, record.getGid());
@@ -312,5 +342,22 @@ public class SanFranciscoCabDataReader {
 		System.out.printf("Loaded %d trajectories (filtered)\n", ret.size());
 		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
 		return ret;
+	}
+
+	private void compute(Collection<Move> moves) {
+		for (Move move : moves) {
+			List<TPoint> points = new ArrayList<>();
+			if(move.getStart() != null) {
+				points.add(move.getStart().getEndPoint());
+			}
+			if(move.getPoints() != null) {
+				points.addAll(Arrays.asList(move.getPoints()));
+			}
+			if(move.getEnd() != null) {
+				points.add(move.getEnd().getStartPoint());
+			}
+			move.setAttribute(AttributeType.MOVE_ANGLE, AngleInference.getAngle(points.get(0), points.get(points.size() - 1)));
+			move.setAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE, MoveDistance.getDistance(points.toArray(new TPoint[points.size()]), DISTANCE_FUNCTION));
+		}
 	}
 }

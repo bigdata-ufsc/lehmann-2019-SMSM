@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufsc.core.trajectory.EqualsDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
@@ -14,7 +15,9 @@ import br.ufsc.core.trajectory.semantic.AttributeDescriptor;
 import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
+import br.ufsc.core.trajectory.semantic.StopMove;
 import br.ufsc.lehmann.msm.artigo.Problem;
+import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
 import br.ufsc.lehmann.stopandmove.angle.AngleInference;
@@ -29,12 +32,14 @@ public class NElementProblem implements Problem {
 	List<SemanticTrajectory> training;
 	public static final BasicSemantic<Number> dataSemantic = new BasicSemantic<>(0);
 	public static final BasicSemantic<String> discriminator = new BasicSemantic<>(3);
-	public static final StopSemantic stop = new StopSemantic(4, new AttributeDescriptor<Stop>(AttributeType.STOP_CENTROID, new EuclideanDistanceFunction()));
+	public static final StopSemantic stop = new StopSemantic(4, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, new EuclideanDistanceFunction()));
 	
-	public static final MoveSemantic move = new MoveSemantic(5, new AttributeDescriptor<Move>(AttributeType.MOVE_ANGLE, new AngleDistance()));
-	public static final MoveSemantic move_distance = new MoveSemantic(5, new AttributeDescriptor<Move>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
-	public static final MoveSemantic move_points = new MoveSemantic(5, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new DTWDistance(new EuclideanDistanceFunction(), 10)));
-	public static final MoveSemantic move_ellipses = new MoveSemantic(5, new AttributeDescriptor<Move>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
+	public static final MoveSemantic move = new MoveSemantic(5, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic move_distance = new MoveSemantic(5, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic move_points = new MoveSemantic(5, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(new EuclideanDistanceFunction(), 10)));
+	public static final MoveSemantic move_ellipses = new MoveSemantic(5, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
+	
+	public static final StopMoveSemantic stopmove = new StopMoveSemantic(stop, move, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 	private int elements;
 	private int classes;
 	

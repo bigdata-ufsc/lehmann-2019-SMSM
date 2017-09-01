@@ -2,6 +2,7 @@ package br.ufsc.lehmann.msm.artigo.problems;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,18 +23,20 @@ public class PisaProblem implements Problem {
 	private Random random = new Random();
 	private boolean onlyStops;
 	private StopSemantic stopSemantic;
+	private Integer[] users;
 
-	public PisaProblem() {
-		this(false);
+	public PisaProblem(Integer... users) {
+		this(false, users);
 	}
 
-	public PisaProblem(boolean onlyStops) {
-		this(PisaDataReader.STOP_CENTROID_SEMANTIC, onlyStops);
+	public PisaProblem(boolean onlyStops, Integer... users) {
+		this(PisaDataReader.STOP_CENTROID_SEMANTIC, onlyStops, users);
 	}
 
-	public PisaProblem(StopSemantic stopSemantic,boolean onlyStops) {
+	public PisaProblem(StopSemantic stopSemantic,boolean onlyStops, Integer... users) {
 		this.stopSemantic = stopSemantic;
 		this.onlyStops = onlyStops;
+		this.users = users;
 	}
 	
 	@Override
@@ -55,7 +58,7 @@ public class PisaProblem implements Problem {
 
 	@Override
 	public Semantic discriminator() {
-		return PisaDataReader.GOAL;
+		return PisaDataReader.USER_ID;
 	}
 
 	public StopSemantic stopSemantic() {
@@ -88,7 +91,7 @@ public class PisaProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "Pisa [" + stopSemantic.name() + "][onlyStops=" + onlyStops + "]";
+		return "Pisa [" + stopSemantic.name() + "][onlyStops=" + onlyStops + "]" + (users != null ? "(Users " + Arrays.toString(users) + ")" : "");
 	}
 
 	private void load() {
@@ -96,7 +99,7 @@ public class PisaProblem implements Problem {
 			return;
 		}
 		try {
-			data = new ArrayList<>(new PisaDataReader(onlyStops).read());
+			data = new ArrayList<>(new PisaDataReader(onlyStops).read(users));
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}
