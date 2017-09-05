@@ -1,0 +1,1569 @@
+dataset;measure;classification-measure;test-type;value
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;accuracy;holdout;0.5
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;accuracy;cross-validation;0.15428571428571428
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;precision;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;specificity;holdout;0.9
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;fall-out;holdout;0.09999999999999998
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;false-discovery-rate;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;precision;cross-validation;0.1
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;recall;cross-validation;0.26666666666666666
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;f-measure;cross-validation;0.13714285714285715
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;specificity;cross-validation;0.5476190476190477
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;fall-out;cross-validation;0.4523809523809524
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveDistanceClassifierTest;false-discovery-rate;cross-validation;0.9
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;accuracy;holdout;0.5833333333333334
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;accuracy;cross-validation;0.07714285714285714
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;precision;holdout;0.5
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;recall;holdout;0.5
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;f-measure;holdout;0.5
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;specificity;holdout;0.9
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;fall-out;holdout;0.09999999999999998
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;false-discovery-rate;holdout;0.5
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;precision;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;recall;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;specificity;cross-validation;0.480952380952381
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;fall-out;cross-validation;0.5190476190476192
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveAngleClassifierTest;false-discovery-rate;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;accuracy;holdout;0.25
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;accuracy;cross-validation;0.18285714285714283
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;precision;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;specificity;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;fall-out;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;precision;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;recall;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;accuracy;holdout;0.25
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;accuracy;cross-validation;0.18285714285714283
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;precision;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;specificity;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;fall-out;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;precision;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;recall;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;accuracy;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;accuracy;cross-validation;0.05714285714285714
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;precision;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;specificity;holdout;0.9
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;fall-out;holdout;0.09999999999999998
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;false-discovery-rate;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;precision;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;recall;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;specificity;cross-validation;0.6447619047619048
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;fall-out;cross-validation;0.35523809523809524
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);EDRClassifierTest;false-discovery-rate;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;accuracy;holdout;0.25
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;accuracy;cross-validation;0.18285714285714283
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;precision;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;specificity;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;fall-out;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;precision;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;recall;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);ERPClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;accuracy;holdout;0.25
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;accuracy;cross-validation;0.13714285714285715
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;precision;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;specificity;holdout;0.8
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;fall-out;holdout;0.19999999999999996
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;false-discovery-rate;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;precision;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;recall;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;specificity;cross-validation;0.5828571428571429
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;fall-out;cross-validation;0.41714285714285715
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LCSSClassifierTest;false-discovery-rate;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;accuracy;holdout;0.25
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;accuracy;cross-validation;0.18285714285714283
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;precision;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;specificity;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;fall-out;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;precision;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;recall;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSTPClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;accuracy;holdout;0.3333333333333333
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;accuracy;cross-validation;0.18285714285714283
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;precision;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;specificity;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;fall-out;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;precision;cross-validation;0.26666666666666666
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;recall;cross-validation;0.36666666666666664
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;f-measure;cross-validation;0.27999999999999997
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;specificity;cross-validation;0.7180952380952381
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;fall-out;cross-validation;0.2819047619047619
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);HCSSClassifierTest;false-discovery-rate;cross-validation;0.7333333333333333
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;accuracy;holdout;0.25
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;accuracy;cross-validation;0.18285714285714283
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;precision;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;specificity;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;fall-out;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;precision;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;recall;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);CVTIClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;accuracy;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;accuracy;cross-validation;0.18285714285714283
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;precision;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;specificity;holdout;0.7
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;fall-out;holdout;0.30000000000000004
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;false-discovery-rate;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;precision;cross-validation;0.33333333333333337
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;recall;cross-validation;0.26666666666666666
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;f-measure;cross-validation;0.13714285714285715
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;specificity;cross-validation;0.6914285714285715
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;fall-out;cross-validation;0.30857142857142855
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);wDFClassifierTest;false-discovery-rate;cross-validation;0.6666666666666667
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;accuracy;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;accuracy;cross-validation;0.10571428571428572
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;precision;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;specificity;holdout;0.6
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;fall-out;holdout;0.4
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;false-discovery-rate;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;precision;cross-validation;0.07333333333333333
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;recall;cross-validation;0.26666666666666666
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;f-measure;cross-validation;0.10714285714285714
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;specificity;cross-validation;0.6057142857142856
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;fall-out;cross-validation;0.39428571428571424
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);SWALEClassifierTest;false-discovery-rate;cross-validation;0.9266666666666667
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;accuracy;holdout;0.16666666666666666
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;accuracy;cross-validation;0.15428571428571428
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;precision;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;specificity;holdout;0.7
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;fall-out;holdout;0.30000000000000004
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;false-discovery-rate;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;precision;cross-validation;0.8
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;recall;cross-validation;0.1
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;f-measure;cross-validation;0.13333333333333333
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;specificity;cross-validation;0.9199999999999999
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;fall-out;cross-validation;0.08
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);LiuSchneiderClassifierTest;false-discovery-rate;cross-validation;0.2
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;accuracy;holdout;0.5
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;accuracy;cross-validation;0.12571428571428572
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;precision;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;specificity;holdout;0.9
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;fall-out;holdout;0.09999999999999998
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;false-discovery-rate;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;precision;cross-validation;0.05
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;recall;cross-validation;0.06666666666666667
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;f-measure;cross-validation;0.05714285714285715
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;specificity;cross-validation;0.5476190476190477
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;fall-out;cross-validation;0.4523809523809524
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMoveEllipsesClassifierTest;false-discovery-rate;cross-validation;0.95
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;accuracy;holdout;0.5
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;accuracy;cross-validation;0.15428571428571428
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;precision;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;specificity;holdout;0.9
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;fall-out;holdout;0.09999999999999998
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;false-discovery-rate;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;precision;cross-validation;0.05
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;recall;cross-validation;0.06666666666666667
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;f-measure;cross-validation;0.05714285714285715
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;specificity;cross-validation;0.5476190476190477
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;fall-out;cross-validation;0.4523809523809524
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);MSMMovePointsClassifierTest;false-discovery-rate;cross-validation;0.95
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;accuracy;holdout;0.25
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;accuracy;cross-validation;0.18285714285714283
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;precision;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;recall;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;f-measure;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;specificity;holdout;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;fall-out;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;precision;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;recall;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [1, 2, 3, 4, 5, 6, 7]);DTWaClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;accuracy;holdout;1.0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;accuracy;cross-validation;0.9333333333333333
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;recall;holdout;1.0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;f-measure;holdout;1.0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;precision;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;f-measure;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;specificity;cross-validation;0.6
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;accuracy;holdout;1.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;accuracy;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;recall;holdout;1.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;f-measure;holdout;1.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;precision;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;f-measure;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;specificity;cross-validation;0.6
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;accuracy;holdout;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;accuracy;cross-validation;0.3333333333333333
+Pisa (Users [4, 6]);MSMClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);MSMClassifierTest;recall;holdout;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;f-measure;holdout;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;precision;cross-validation;0.5333333333333333
+Pisa (Users [4, 6]);MSMClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);MSMClassifierTest;f-measure;cross-validation;0.5599999999999999
+Pisa (Users [4, 6]);MSMClassifierTest;specificity;cross-validation;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;fall-out;cross-validation;0.6
+Pisa (Users [4, 6]);MSMClassifierTest;false-discovery-rate;cross-validation;0.4666666666666667
+Pisa (Users [4, 6]);DTWClassifierTest;accuracy;holdout;0.0
+Pisa (Users [4, 6]);DTWClassifierTest;accuracy;cross-validation;0.3333333333333333
+Pisa (Users [4, 6]);DTWClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);DTWClassifierTest;recall;holdout;0.0
+Pisa (Users [4, 6]);DTWClassifierTest;f-measure;holdout;0.0
+Pisa (Users [4, 6]);DTWClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);DTWClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);DTWClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);DTWClassifierTest;precision;cross-validation;0.5333333333333333
+Pisa (Users [4, 6]);DTWClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);DTWClassifierTest;f-measure;cross-validation;0.5599999999999999
+Pisa (Users [4, 6]);DTWClassifierTest;specificity;cross-validation;0.0
+Pisa (Users [4, 6]);DTWClassifierTest;fall-out;cross-validation;0.6
+Pisa (Users [4, 6]);DTWClassifierTest;false-discovery-rate;cross-validation;0.4666666666666667
+Pisa (Users [4, 6]);EDRClassifierTest;accuracy;holdout;1.0
+Pisa (Users [4, 6]);EDRClassifierTest;accuracy;cross-validation;0.5333333333333333
+Pisa (Users [4, 6]);EDRClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);EDRClassifierTest;recall;holdout;1.0
+Pisa (Users [4, 6]);EDRClassifierTest;f-measure;holdout;1.0
+Pisa (Users [4, 6]);EDRClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);EDRClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);EDRClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);EDRClassifierTest;precision;cross-validation;0.5333333333333333
+Pisa (Users [4, 6]);EDRClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);EDRClassifierTest;f-measure;cross-validation;0.5599999999999999
+Pisa (Users [4, 6]);EDRClassifierTest;specificity;cross-validation;0.0
+Pisa (Users [4, 6]);EDRClassifierTest;fall-out;cross-validation;0.6
+Pisa (Users [4, 6]);EDRClassifierTest;false-discovery-rate;cross-validation;0.4666666666666667
+Pisa (Users [4, 6]);ERPClassifierTest;accuracy;holdout;0.0
+Pisa (Users [4, 6]);ERPClassifierTest;accuracy;cross-validation;0.3333333333333333
+Pisa (Users [4, 6]);ERPClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);ERPClassifierTest;recall;holdout;0.0
+Pisa (Users [4, 6]);ERPClassifierTest;f-measure;holdout;0.0
+Pisa (Users [4, 6]);ERPClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);ERPClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);ERPClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);ERPClassifierTest;precision;cross-validation;0.5333333333333333
+Pisa (Users [4, 6]);ERPClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);ERPClassifierTest;f-measure;cross-validation;0.5599999999999999
+Pisa (Users [4, 6]);ERPClassifierTest;specificity;cross-validation;0.0
+Pisa (Users [4, 6]);ERPClassifierTest;fall-out;cross-validation;0.6
+Pisa (Users [4, 6]);ERPClassifierTest;false-discovery-rate;cross-validation;0.4666666666666667
+Pisa (Users [4, 6]);LCSSClassifierTest;accuracy;holdout;1.0
+Pisa (Users [4, 6]);LCSSClassifierTest;accuracy;cross-validation;0.8666666666666666
+Pisa (Users [4, 6]);LCSSClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);LCSSClassifierTest;recall;holdout;1.0
+Pisa (Users [4, 6]);LCSSClassifierTest;f-measure;holdout;1.0
+Pisa (Users [4, 6]);LCSSClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);LCSSClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);LCSSClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);LCSSClassifierTest;precision;cross-validation;1.0
+Pisa (Users [4, 6]);LCSSClassifierTest;recall;cross-validation;0.9
+Pisa (Users [4, 6]);LCSSClassifierTest;f-measure;cross-validation;0.9333333333333333
+Pisa (Users [4, 6]);LCSSClassifierTest;specificity;cross-validation;0.6
+Pisa (Users [4, 6]);LCSSClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [4, 6]);LCSSClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [4, 6]);MSTPClassifierTest;accuracy;holdout;0.0
+Pisa (Users [4, 6]);MSTPClassifierTest;accuracy;cross-validation;0.3333333333333333
+Pisa (Users [4, 6]);MSTPClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);MSTPClassifierTest;recall;holdout;0.0
+Pisa (Users [4, 6]);MSTPClassifierTest;f-measure;holdout;0.0
+Pisa (Users [4, 6]);MSTPClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);MSTPClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);MSTPClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);MSTPClassifierTest;precision;cross-validation;0.5333333333333333
+Pisa (Users [4, 6]);MSTPClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);MSTPClassifierTest;f-measure;cross-validation;0.5599999999999999
+Pisa (Users [4, 6]);MSTPClassifierTest;specificity;cross-validation;0.0
+Pisa (Users [4, 6]);MSTPClassifierTest;fall-out;cross-validation;0.6
+Pisa (Users [4, 6]);MSTPClassifierTest;false-discovery-rate;cross-validation;0.4666666666666667
+Pisa (Users [4, 6]);HCSSClassifierTest;accuracy;holdout;1.0
+Pisa (Users [4, 6]);HCSSClassifierTest;accuracy;cross-validation;0.8666666666666666
+Pisa (Users [4, 6]);HCSSClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);HCSSClassifierTest;recall;holdout;1.0
+Pisa (Users [4, 6]);HCSSClassifierTest;f-measure;holdout;1.0
+Pisa (Users [4, 6]);HCSSClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);HCSSClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);HCSSClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);HCSSClassifierTest;precision;cross-validation;1.0
+Pisa (Users [4, 6]);HCSSClassifierTest;recall;cross-validation;0.9
+Pisa (Users [4, 6]);HCSSClassifierTest;f-measure;cross-validation;0.9333333333333333
+Pisa (Users [4, 6]);HCSSClassifierTest;specificity;cross-validation;0.6
+Pisa (Users [4, 6]);HCSSClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [4, 6]);HCSSClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [4, 6]);CVTIClassifierTest;accuracy;holdout;0.0
+Pisa (Users [4, 6]);CVTIClassifierTest;accuracy;cross-validation;0.3333333333333333
+Pisa (Users [4, 6]);CVTIClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);CVTIClassifierTest;recall;holdout;0.0
+Pisa (Users [4, 6]);CVTIClassifierTest;f-measure;holdout;0.0
+Pisa (Users [4, 6]);CVTIClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);CVTIClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);CVTIClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);CVTIClassifierTest;precision;cross-validation;0.5333333333333333
+Pisa (Users [4, 6]);CVTIClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);CVTIClassifierTest;f-measure;cross-validation;0.5599999999999999
+Pisa (Users [4, 6]);CVTIClassifierTest;specificity;cross-validation;0.0
+Pisa (Users [4, 6]);CVTIClassifierTest;fall-out;cross-validation;0.6
+Pisa (Users [4, 6]);CVTIClassifierTest;false-discovery-rate;cross-validation;0.4666666666666667
+Pisa (Users [4, 6]);wDFClassifierTest;accuracy;holdout;0.0
+Pisa (Users [4, 6]);wDFClassifierTest;accuracy;cross-validation;0.13333333333333333
+Pisa (Users [4, 6]);wDFClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);wDFClassifierTest;recall;holdout;0.0
+Pisa (Users [4, 6]);wDFClassifierTest;f-measure;holdout;0.0
+Pisa (Users [4, 6]);wDFClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);wDFClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);wDFClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);wDFClassifierTest;precision;cross-validation;0.5
+Pisa (Users [4, 6]);wDFClassifierTest;recall;cross-validation;0.9
+Pisa (Users [4, 6]);wDFClassifierTest;f-measure;cross-validation;0.5
+Pisa (Users [4, 6]);wDFClassifierTest;specificity;cross-validation;0.0
+Pisa (Users [4, 6]);wDFClassifierTest;fall-out;cross-validation;0.6
+Pisa (Users [4, 6]);wDFClassifierTest;false-discovery-rate;cross-validation;0.5
+Pisa (Users [4, 6]);SWALEClassifierTest;accuracy;holdout;1.0
+Pisa (Users [4, 6]);SWALEClassifierTest;accuracy;cross-validation;0.4
+Pisa (Users [4, 6]);SWALEClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);SWALEClassifierTest;recall;holdout;1.0
+Pisa (Users [4, 6]);SWALEClassifierTest;f-measure;holdout;1.0
+Pisa (Users [4, 6]);SWALEClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);SWALEClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);SWALEClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);SWALEClassifierTest;precision;cross-validation;0.5
+Pisa (Users [4, 6]);SWALEClassifierTest;recall;cross-validation;0.7
+Pisa (Users [4, 6]);SWALEClassifierTest;f-measure;cross-validation;0.3
+Pisa (Users [4, 6]);SWALEClassifierTest;specificity;cross-validation;0.0
+Pisa (Users [4, 6]);SWALEClassifierTest;fall-out;cross-validation;0.6
+Pisa (Users [4, 6]);SWALEClassifierTest;false-discovery-rate;cross-validation;0.5
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;accuracy;holdout;1.0
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;accuracy;cross-validation;0.6
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;recall;holdout;1.0
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;f-measure;holdout;1.0
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;precision;cross-validation;0.6
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;f-measure;cross-validation;0.6
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;specificity;cross-validation;0.2
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;fall-out;cross-validation;0.4
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;false-discovery-rate;cross-validation;0.4
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;accuracy;holdout;1.0
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;accuracy;cross-validation;0.9333333333333333
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;recall;holdout;1.0
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;f-measure;holdout;1.0
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;precision;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;f-measure;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;specificity;cross-validation;0.6
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;accuracy;holdout;1.0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;accuracy;cross-validation;0.9333333333333333
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;recall;holdout;1.0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;f-measure;holdout;1.0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;precision;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;f-measure;cross-validation;1.0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;specificity;cross-validation;0.6
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [4, 6]);DTWaClassifierTest;accuracy;holdout;0.0
+Pisa (Users [4, 6]);DTWaClassifierTest;accuracy;cross-validation;0.3333333333333333
+Pisa (Users [4, 6]);DTWaClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);DTWaClassifierTest;recall;holdout;0.0
+Pisa (Users [4, 6]);DTWaClassifierTest;f-measure;holdout;0.0
+Pisa (Users [4, 6]);DTWaClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);DTWaClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);DTWaClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);DTWaClassifierTest;precision;cross-validation;0.5333333333333333
+Pisa (Users [4, 6]);DTWaClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);DTWaClassifierTest;f-measure;cross-validation;0.5599999999999999
+Pisa (Users [4, 6]);DTWaClassifierTest;specificity;cross-validation;0.0
+Pisa (Users [4, 6]);DTWaClassifierTest;fall-out;cross-validation;0.6
+Pisa (Users [4, 6]);DTWaClassifierTest;false-discovery-rate;cross-validation;0.4666666666666667
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;accuracy;holdout;0.7298850574712644
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;accuracy;cross-validation;0.7091284815813117
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;precision;holdout;0.8130841121495327
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;recall;holdout;0.7631578947368421
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;f-measure;holdout;0.7873303167420815
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;specificity;holdout;0.6666666666666666
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;fall-out;holdout;0.33333333333333337
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;false-discovery-rate;holdout;0.18691588785046728
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;precision;cross-validation;0.7735321490139137
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;recall;cross-validation;0.7399044615599946
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;f-measure;cross-validation;0.7548446685877537
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;specificity;cross-validation;0.6355284167350919
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;fall-out;cross-validation;0.36447158326490803
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;false-discovery-rate;cross-validation;0.22646785098608638
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;accuracy;holdout;0.6954022988505747
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;accuracy;cross-validation;0.7148607367475293
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;precision;holdout;0.7850467289719626
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;recall;holdout;0.7368421052631579
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;f-measure;holdout;0.7601809954751131
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;specificity;holdout;0.6166666666666667
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;fall-out;holdout;0.3833333333333333
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;false-discovery-rate;holdout;0.21495327102803738
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;precision;cross-validation;0.7699389613288867
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;recall;cross-validation;0.7699664475184573
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;f-measure;cross-validation;0.769102094738736
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;specificity;cross-validation;0.6155352785391297
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;fall-out;cross-validation;0.38446472146087035
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;false-discovery-rate;cross-validation;0.23006103867111333
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;accuracy;holdout;0.6551724137931034
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;accuracy;cross-validation;0.4526684636118598
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;precision;holdout;0.6551724137931034
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;recall;holdout;1.0
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;f-measure;holdout;0.7916666666666666
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;specificity;holdout;0.0
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;fall-out;holdout;1.0
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;false-discovery-rate;holdout;0.3448275862068966
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;precision;cross-validation;0.9295238095238094
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;recall;cross-validation;0.2
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;f-measure;cross-validation;0.15722543352601157
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;specificity;cross-validation;0.8
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;fall-out;cross-validation;0.2
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;false-discovery-rate;cross-validation;0.07047619047619048
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;accuracy;holdout;0.5689655172413793
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;accuracy;cross-validation;0.6369272237196765
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;precision;holdout;0.6511627906976745
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;recall;holdout;0.7368421052631579
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;f-measure;holdout;0.6913580246913581
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;specificity;holdout;0.25
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;fall-out;holdout;0.75
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;false-discovery-rate;holdout;0.3488372093023256
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;precision;cross-validation;0.6646476303753298
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;recall;cross-validation;0.7533300250664835
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;f-measure;cross-validation;0.7045814324342642
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;specificity;cross-validation;0.36538185168480414
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;fall-out;cross-validation;0.6346181483151957
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;false-discovery-rate;cross-validation;0.3353523696246701
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;accuracy;holdout;0.6839080459770115
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;accuracy;cross-validation;0.6958131176999102
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;precision;holdout;0.7657657657657657
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;recall;holdout;0.7456140350877193
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;f-measure;holdout;0.7555555555555554
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;specificity;holdout;0.5666666666666667
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;fall-out;holdout;0.43333333333333335
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;false-discovery-rate;holdout;0.23423423423423423
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;precision;cross-validation;0.7150033540252049
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;recall;cross-validation;0.7590421099303797
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;f-measure;cross-validation;0.7342462970045366
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;specificity;cross-validation;0.4955289178780835
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;fall-out;cross-validation;0.5044710821219165
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;false-discovery-rate;cross-validation;0.28499664597479507
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;accuracy;holdout;0.5862068965517241
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;accuracy;cross-validation;0.6253728661275831
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;precision;holdout;0.6438356164383562
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;recall;holdout;0.8245614035087719
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;f-measure;holdout;0.7230769230769231
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;specificity;holdout;0.13333333333333333
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;fall-out;holdout;0.8666666666666667
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;false-discovery-rate;holdout;0.3561643835616438
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;precision;cross-validation;0.6598332194121668
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;recall;cross-validation;0.7607488722040007
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;f-measure;cross-validation;0.7060955795425433
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;specificity;cross-validation;0.3450620839067566
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;fall-out;cross-validation;0.6549379160932434
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;false-discovery-rate;cross-validation;0.3401667805878332
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;accuracy;holdout;0.5862068965517241
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;accuracy;cross-validation;0.5947888589398024
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;precision;holdout;0.6810344827586207
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;recall;holdout;0.6929824561403509
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;f-measure;holdout;0.6869565217391305
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;specificity;holdout;0.38333333333333336
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;fall-out;holdout;0.6166666666666667
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;false-discovery-rate;holdout;0.31896551724137934
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;precision;cross-validation;0.6253188700268729
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;recall;cross-validation;0.7103555212331025
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;f-measure;cross-validation;0.6648846253564947
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;specificity;cross-validation;0.2896171267544823
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;fall-out;cross-validation;0.7103828732455177
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;false-discovery-rate;cross-validation;0.3746811299731271
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;accuracy;holdout;0.6551724137931034
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;accuracy;cross-validation;0.4564600179694519
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;precision;holdout;0.6551724137931034
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;recall;holdout;1.0
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;f-measure;holdout;0.7916666666666666
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;specificity;holdout;0.0
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;fall-out;holdout;1.0
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;false-discovery-rate;holdout;0.3448275862068966
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;precision;cross-validation;0.9295238095238094
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;recall;cross-validation;0.2028985507246377
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;f-measure;cross-validation;0.1629397192402973
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;specificity;cross-validation;0.8
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;fall-out;cross-validation;0.2
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;false-discovery-rate;cross-validation;0.07047619047619048
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;accuracy;holdout;0.6149425287356322
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;accuracy;cross-validation;0.5702246181491464
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;precision;holdout;0.6821705426356589
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;recall;holdout;0.7719298245614035
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;f-measure;holdout;0.7242798353909464
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;specificity;holdout;0.31666666666666665
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;fall-out;holdout;0.6833333333333333
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;false-discovery-rate;holdout;0.3178294573643411
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;precision;cross-validation;0.6173788724910605
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;recall;cross-validation;0.7324861135988365
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;f-measure;cross-validation;0.6690923884561989
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;specificity;cross-validation;0.2386956018920076
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;fall-out;cross-validation;0.7613043981079926
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;false-discovery-rate;cross-validation;0.3826211275089396
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;accuracy;holdout;0.6551724137931034
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;accuracy;cross-validation;0.4526684636118598
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;precision;holdout;0.6551724137931034
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;recall;holdout;1.0
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;f-measure;holdout;0.7916666666666666
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;specificity;holdout;0.0
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;fall-out;holdout;1.0
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;false-discovery-rate;holdout;0.3448275862068966
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;precision;cross-validation;0.9295238095238094
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;recall;cross-validation;0.2
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;f-measure;cross-validation;0.15722543352601157
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;specificity;cross-validation;0.8
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;fall-out;cross-validation;0.2
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;false-discovery-rate;cross-validation;0.07047619047619048
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;accuracy;holdout;0.7873563218390804
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;accuracy;cross-validation;0.8040970350404312
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;precision;holdout;0.8347826086956521
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;recall;holdout;0.8421052631578947
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;f-measure;holdout;0.8384279475982531
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;specificity;holdout;0.6833333333333333
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;fall-out;holdout;0.31666666666666665
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;false-discovery-rate;holdout;0.16521739130434782
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;precision;cross-validation;0.844291495807183
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;recall;cross-validation;0.8371360196851665
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;f-measure;cross-validation;0.8396126101207418
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;specificity;cross-validation;0.7395225263774685
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;fall-out;cross-validation;0.2604774736225314
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;false-discovery-rate;cross-validation;0.15570850419281707
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;accuracy;holdout;0.5
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;accuracy;cross-validation;0.6216711590296496
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;precision;holdout;0.6216216216216216
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;recall;holdout;0.6052631578947368
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;f-measure;holdout;0.6133333333333333
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;specificity;holdout;0.3
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;fall-out;holdout;0.7
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;false-discovery-rate;holdout;0.3783783783783784
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;precision;cross-validation;0.6371202889104532
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;recall;cross-validation;0.6947731341326027
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;f-measure;cross-validation;0.6621501066197371
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;specificity;cross-validation;0.34573064720689883
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;fall-out;cross-validation;0.6542693527931011
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;false-discovery-rate;cross-validation;0.36287971108954675
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;accuracy;holdout;0.5459770114942529
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;accuracy;cross-validation;0.47511230907457314
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;precision;holdout;0.8571428571428571
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;recall;holdout;0.3684210526315789
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;f-measure;holdout;0.5153374233128835
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;specificity;holdout;0.8833333333333333
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;fall-out;holdout;0.1166666666666667
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;false-discovery-rate;holdout;0.14285714285714285
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;precision;cross-validation;0.7705860805860807
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;recall;cross-validation;0.406666001098188
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;f-measure;cross-validation;0.46776960480433194
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;specificity;cross-validation;0.7198202824133504
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;fall-out;cross-validation;0.2801797175866496
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;false-discovery-rate;cross-validation;0.22941391941391945
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;accuracy;holdout;0.7068965517241379
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;accuracy;cross-validation;0.6844204851752022
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;precision;holdout;0.8118811881188119
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;recall;holdout;0.7192982456140351
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;f-measure;holdout;0.7627906976744186
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;specificity;holdout;0.6833333333333333
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;fall-out;holdout;0.31666666666666665
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;false-discovery-rate;holdout;0.18811881188118812
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;precision;cross-validation;0.7845685998458427
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;recall;cross-validation;0.7421406346195444
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;f-measure;cross-validation;0.7612272793279794
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;specificity;cross-validation;0.6584260640614941
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;fall-out;cross-validation;0.3415739359385059
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;false-discovery-rate;cross-validation;0.21543140015415724
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;accuracy;holdout;0.735632183908046
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;accuracy;cross-validation;0.714806828391734
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;precision;holdout;0.84
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;recall;holdout;0.7368421052631579
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;f-measure;holdout;0.7850467289719626
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;specificity;holdout;0.7333333333333333
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;fall-out;holdout;0.2666666666666667
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;false-discovery-rate;holdout;0.16
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;precision;cross-validation;0.7960032416722558
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;recall;cross-validation;0.7583371065193412
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;f-measure;cross-validation;0.7746583818903728
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;specificity;cross-validation;0.6727203583557884
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;fall-out;cross-validation;0.3272796416442116
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;false-discovery-rate;cross-validation;0.20399675832774428
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;accuracy;holdout;0.735632183908046
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;accuracy;cross-validation;0.7318778077268643
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;precision;holdout;0.7931034482758621
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;recall;holdout;0.8070175438596491
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;f-measure;holdout;0.8
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;specificity;holdout;0.6
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;fall-out;holdout;0.4
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;false-discovery-rate;holdout;0.20689655172413793
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;precision;cross-validation;0.78133357680763
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;recall;cross-validation;0.7898156962580369
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;f-measure;cross-validation;0.7833871546803743
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;specificity;cross-validation;0.6321408828597532
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;fall-out;cross-validation;0.3678591171402468
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;false-discovery-rate;cross-validation;0.21866642319236984
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;accuracy;holdout;0.984
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;accuracy;cross-validation;0.9814683544303797
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;precision;holdout;0.9534883720930233
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;recall;holdout;1.0
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;f-measure;holdout;0.9761904761904763
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;specificity;holdout;0.9761904761904762
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;fall-out;holdout;0.023809523809523836
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;false-discovery-rate;holdout;0.046511627906976744
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;precision;cross-validation;0.9521872863978128
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;recall;cross-validation;1.0
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;f-measure;cross-validation;0.9751959570564221
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;specificity;cross-validation;0.9817243059756671
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;fall-out;cross-validation;0.018275694024332868
+Patel's Vehicle_urban;MSMMoveDistanceClassifierTest;false-discovery-rate;cross-validation;0.047812713602187286
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;accuracy;holdout;0.992
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;accuracy;cross-validation;0.984
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;precision;holdout;1.0
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;recall;holdout;0.975609756097561
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;f-measure;holdout;0.9876543209876543
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;specificity;holdout;1.0
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;fall-out;holdout;0.0
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;false-discovery-rate;holdout;0.0
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;precision;cross-validation;0.9521872863978128
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;recall;cross-validation;0.9913043478260869
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;f-measure;cross-validation;0.9707515126119777
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;specificity;cross-validation;0.9817243059756671
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;fall-out;cross-validation;0.018275694024332868
+Patel's Vehicle_urban;MSMMoveAngleClassifierTest;false-discovery-rate;cross-validation;0.047812713602187286
+Patel's Vehicle_urban;MSMClassifierTest;accuracy;holdout;0.328
+Patel's Vehicle_urban;MSMClassifierTest;accuracy;cross-validation;0.35250632911392404
+Patel's Vehicle_urban;MSMClassifierTest;precision;holdout;0.328
+Patel's Vehicle_urban;MSMClassifierTest;recall;holdout;1.0
+Patel's Vehicle_urban;MSMClassifierTest;f-measure;holdout;0.4939759036144578
+Patel's Vehicle_urban;MSMClassifierTest;specificity;holdout;0.0
+Patel's Vehicle_urban;MSMClassifierTest;fall-out;holdout;1.0
+Patel's Vehicle_urban;MSMClassifierTest;false-discovery-rate;holdout;0.672
+Patel's Vehicle_urban;MSMClassifierTest;precision;cross-validation;1.0
+Patel's Vehicle_urban;MSMClassifierTest;recall;cross-validation;0.0
+Patel's Vehicle_urban;MSMClassifierTest;f-measure;cross-validation;0.0
+Patel's Vehicle_urban;MSMClassifierTest;specificity;cross-validation;1.0
+Patel's Vehicle_urban;MSMClassifierTest;fall-out;cross-validation;0.0
+Patel's Vehicle_urban;MSMClassifierTest;false-discovery-rate;cross-validation;0.0
+Patel's Vehicle_urban;DTWClassifierTest;accuracy;holdout;0.336
+Patel's Vehicle_urban;DTWClassifierTest;accuracy;cross-validation;0.3630379746835443
+Patel's Vehicle_urban;DTWClassifierTest;precision;holdout;0.33064516129032256
+Patel's Vehicle_urban;DTWClassifierTest;recall;holdout;1.0
+Patel's Vehicle_urban;DTWClassifierTest;f-measure;holdout;0.49696969696969695
+Patel's Vehicle_urban;DTWClassifierTest;specificity;holdout;0.011904761904761904
+Patel's Vehicle_urban;DTWClassifierTest;fall-out;holdout;0.9880952380952381
+Patel's Vehicle_urban;DTWClassifierTest;false-discovery-rate;holdout;0.6693548387096774
+Patel's Vehicle_urban;DTWClassifierTest;precision;cross-validation;1.0
+Patel's Vehicle_urban;DTWClassifierTest;recall;cross-validation;0.018518518518518517
+Patel's Vehicle_urban;DTWClassifierTest;f-measure;cross-validation;0.035338345864661655
+Patel's Vehicle_urban;DTWClassifierTest;specificity;cross-validation;1.0
+Patel's Vehicle_urban;DTWClassifierTest;fall-out;cross-validation;0.0
+Patel's Vehicle_urban;DTWClassifierTest;false-discovery-rate;cross-validation;0.0
+Patel's Vehicle_urban;EDRClassifierTest;accuracy;holdout;0.96
+Patel's Vehicle_urban;EDRClassifierTest;accuracy;cross-validation;0.9761350210970464
+Patel's Vehicle_urban;EDRClassifierTest;precision;holdout;0.95
+Patel's Vehicle_urban;EDRClassifierTest;recall;holdout;0.926829268292683
+Patel's Vehicle_urban;EDRClassifierTest;f-measure;holdout;0.9382716049382716
+Patel's Vehicle_urban;EDRClassifierTest;specificity;holdout;0.9761904761904762
+Patel's Vehicle_urban;EDRClassifierTest;fall-out;holdout;0.023809523809523836
+Patel's Vehicle_urban;EDRClassifierTest;false-discovery-rate;holdout;0.05
+Patel's Vehicle_urban;EDRClassifierTest;precision;cross-validation;0.9568888888888889
+Patel's Vehicle_urban;EDRClassifierTest;recall;cross-validation;0.9619737750172532
+Patel's Vehicle_urban;EDRClassifierTest;f-measure;cross-validation;0.9586933797909408
+Patel's Vehicle_urban;EDRClassifierTest;specificity;cross-validation;0.9822660098522167
+Patel's Vehicle_urban;EDRClassifierTest;fall-out;cross-validation;0.017733990147783252
+Patel's Vehicle_urban;EDRClassifierTest;false-discovery-rate;cross-validation;0.043111111111111114
+Patel's Vehicle_urban;ERPClassifierTest;accuracy;holdout;0.336
+Patel's Vehicle_urban;ERPClassifierTest;accuracy;cross-validation;0.36570464135021097
+Patel's Vehicle_urban;ERPClassifierTest;precision;holdout;0.33064516129032256
+Patel's Vehicle_urban;ERPClassifierTest;recall;holdout;1.0
+Patel's Vehicle_urban;ERPClassifierTest;f-measure;holdout;0.49696969696969695
+Patel's Vehicle_urban;ERPClassifierTest;specificity;holdout;0.011904761904761904
+Patel's Vehicle_urban;ERPClassifierTest;fall-out;holdout;0.9880952380952381
+Patel's Vehicle_urban;ERPClassifierTest;false-discovery-rate;holdout;0.6693548387096774
+Patel's Vehicle_urban;ERPClassifierTest;precision;cross-validation;1.0
+Patel's Vehicle_urban;ERPClassifierTest;recall;cross-validation;0.018518518518518517
+Patel's Vehicle_urban;ERPClassifierTest;f-measure;cross-validation;0.035338345864661655
+Patel's Vehicle_urban;ERPClassifierTest;specificity;cross-validation;1.0
+Patel's Vehicle_urban;ERPClassifierTest;fall-out;cross-validation;0.0
+Patel's Vehicle_urban;ERPClassifierTest;false-discovery-rate;cross-validation;0.0
+Patel's Vehicle_urban;LCSSClassifierTest;accuracy;holdout;0.968
+Patel's Vehicle_urban;LCSSClassifierTest;accuracy;cross-validation;0.9814683544303799
+Patel's Vehicle_urban;LCSSClassifierTest;precision;holdout;1.0
+Patel's Vehicle_urban;LCSSClassifierTest;recall;holdout;0.9024390243902439
+Patel's Vehicle_urban;LCSSClassifierTest;f-measure;holdout;0.9487179487179488
+Patel's Vehicle_urban;LCSSClassifierTest;specificity;holdout;1.0
+Patel's Vehicle_urban;LCSSClassifierTest;fall-out;holdout;0.0
+Patel's Vehicle_urban;LCSSClassifierTest;false-discovery-rate;holdout;0.0
+Patel's Vehicle_urban;LCSSClassifierTest;precision;cross-validation;0.9717460317460317
+Patel's Vehicle_urban;LCSSClassifierTest;recall;cross-validation;0.9722567287784679
+Patel's Vehicle_urban;LCSSClassifierTest;f-measure;cross-validation;0.9715707598634428
+Patel's Vehicle_urban;LCSSClassifierTest;specificity;cross-validation;0.9886813537675607
+Patel's Vehicle_urban;LCSSClassifierTest;fall-out;cross-validation;0.011318646232439344
+Patel's Vehicle_urban;LCSSClassifierTest;false-discovery-rate;cross-validation;0.028253968253968254
+Patel's Vehicle_urban;MSTPClassifierTest;accuracy;holdout;0.328
+Patel's Vehicle_urban;MSTPClassifierTest;accuracy;cross-validation;0.36037130801687767
+Patel's Vehicle_urban;MSTPClassifierTest;precision;holdout;0.328
+Patel's Vehicle_urban;MSTPClassifierTest;recall;holdout;1.0
+Patel's Vehicle_urban;MSTPClassifierTest;f-measure;holdout;0.4939759036144578
+Patel's Vehicle_urban;MSTPClassifierTest;specificity;holdout;0.0
+Patel's Vehicle_urban;MSTPClassifierTest;fall-out;holdout;1.0
+Patel's Vehicle_urban;MSTPClassifierTest;false-discovery-rate;holdout;0.672
+Patel's Vehicle_urban;MSTPClassifierTest;precision;cross-validation;1.0
+Patel's Vehicle_urban;MSTPClassifierTest;recall;cross-validation;0.0
+Patel's Vehicle_urban;MSTPClassifierTest;f-measure;cross-validation;0.0
+Patel's Vehicle_urban;MSTPClassifierTest;specificity;cross-validation;1.0
+Patel's Vehicle_urban;MSTPClassifierTest;fall-out;cross-validation;0.0
+Patel's Vehicle_urban;MSTPClassifierTest;false-discovery-rate;cross-validation;0.0
+Patel's Vehicle_urban;HCSSClassifierTest;accuracy;holdout;0.896
+Patel's Vehicle_urban;HCSSClassifierTest;accuracy;cross-validation;0.8864135021097047
+Patel's Vehicle_urban;HCSSClassifierTest;precision;holdout;0.9666666666666667
+Patel's Vehicle_urban;HCSSClassifierTest;recall;holdout;0.7073170731707317
+Patel's Vehicle_urban;HCSSClassifierTest;f-measure;holdout;0.8169014084507042
+Patel's Vehicle_urban;HCSSClassifierTest;specificity;holdout;0.9880952380952381
+Patel's Vehicle_urban;HCSSClassifierTest;fall-out;holdout;0.011904761904761862
+Patel's Vehicle_urban;HCSSClassifierTest;false-discovery-rate;holdout;0.03333333333333333
+Patel's Vehicle_urban;HCSSClassifierTest;precision;cross-validation;0.9818181818181818
+Patel's Vehicle_urban;HCSSClassifierTest;recall;cross-validation;0.6127011190949809
+Patel's Vehicle_urban;HCSSClassifierTest;f-measure;cross-validation;0.7475189786059352
+Patel's Vehicle_urban;HCSSClassifierTest;specificity;cross-validation;0.9965517241379309
+Patel's Vehicle_urban;HCSSClassifierTest;fall-out;cross-validation;0.0034482758620689724
+Patel's Vehicle_urban;HCSSClassifierTest;false-discovery-rate;cross-validation;0.01818181818181818
+Patel's Vehicle_urban;CVTIClassifierTest;accuracy;holdout;0.328
+Patel's Vehicle_urban;CVTIClassifierTest;accuracy;cross-validation;0.35250632911392404
+Patel's Vehicle_urban;CVTIClassifierTest;precision;holdout;0.328
+Patel's Vehicle_urban;CVTIClassifierTest;recall;holdout;1.0
+Patel's Vehicle_urban;CVTIClassifierTest;f-measure;holdout;0.4939759036144578
+Patel's Vehicle_urban;CVTIClassifierTest;specificity;holdout;0.0
+Patel's Vehicle_urban;CVTIClassifierTest;fall-out;holdout;1.0
+Patel's Vehicle_urban;CVTIClassifierTest;false-discovery-rate;holdout;0.672
+Patel's Vehicle_urban;CVTIClassifierTest;precision;cross-validation;1.0
+Patel's Vehicle_urban;CVTIClassifierTest;recall;cross-validation;0.0
+Patel's Vehicle_urban;CVTIClassifierTest;f-measure;cross-validation;0.0
+Patel's Vehicle_urban;CVTIClassifierTest;specificity;cross-validation;1.0
+Patel's Vehicle_urban;CVTIClassifierTest;fall-out;cross-validation;0.0
+Patel's Vehicle_urban;CVTIClassifierTest;false-discovery-rate;cross-validation;0.0
+Patel's Vehicle_urban;wDFClassifierTest;accuracy;holdout;0.752
+Patel's Vehicle_urban;wDFClassifierTest;accuracy;cross-validation;0.8074936708860759
+Patel's Vehicle_urban;wDFClassifierTest;precision;holdout;0.625
+Patel's Vehicle_urban;wDFClassifierTest;recall;holdout;0.6097560975609756
+Patel's Vehicle_urban;wDFClassifierTest;f-measure;holdout;0.6172839506172839
+Patel's Vehicle_urban;wDFClassifierTest;specificity;holdout;0.8214285714285714
+Patel's Vehicle_urban;wDFClassifierTest;fall-out;holdout;0.1785714285714286
+Patel's Vehicle_urban;wDFClassifierTest;false-discovery-rate;holdout;0.375
+Patel's Vehicle_urban;wDFClassifierTest;precision;cross-validation;0.6425928457507405
+Patel's Vehicle_urban;wDFClassifierTest;recall;cross-validation;0.6288731917887929
+Patel's Vehicle_urban;wDFClassifierTest;f-measure;cross-validation;0.6270334928229666
+Patel's Vehicle_urban;wDFClassifierTest;specificity;cross-validation;0.8605164731752752
+Patel's Vehicle_urban;wDFClassifierTest;fall-out;cross-validation;0.13948352682472467
+Patel's Vehicle_urban;wDFClassifierTest;false-discovery-rate;cross-validation;0.3574071542492595
+Patel's Vehicle_urban;SWALEClassifierTest;accuracy;holdout;0.984
+Patel's Vehicle_urban;SWALEClassifierTest;accuracy;cross-validation;0.9920000000000002
+Patel's Vehicle_urban;SWALEClassifierTest;precision;holdout;0.975609756097561
+Patel's Vehicle_urban;SWALEClassifierTest;recall;holdout;0.975609756097561
+Patel's Vehicle_urban;SWALEClassifierTest;f-measure;holdout;0.975609756097561
+Patel's Vehicle_urban;SWALEClassifierTest;specificity;holdout;0.9880952380952381
+Patel's Vehicle_urban;SWALEClassifierTest;fall-out;holdout;0.011904761904761862
+Patel's Vehicle_urban;SWALEClassifierTest;false-discovery-rate;holdout;0.024390243902439025
+Patel's Vehicle_urban;SWALEClassifierTest;precision;cross-validation;0.9800000000000001
+Patel's Vehicle_urban;SWALEClassifierTest;recall;cross-validation;0.9826086956521738
+Patel's Vehicle_urban;SWALEClassifierTest;f-measure;cross-validation;0.9803827751196172
+Patel's Vehicle_urban;SWALEClassifierTest;specificity;cross-validation;0.9929824561403509
+Patel's Vehicle_urban;SWALEClassifierTest;fall-out;cross-validation;0.007017543859649122
+Patel's Vehicle_urban;SWALEClassifierTest;false-discovery-rate;cross-validation;0.02
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;accuracy;holdout;0.736
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;accuracy;cross-validation;0.7645569620253164
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;precision;holdout;0.6428571428571429
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;recall;holdout;0.43902439024390244
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;f-measure;holdout;0.5217391304347826
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;specificity;holdout;0.8809523809523809
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;fall-out;holdout;0.11904761904761907
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;false-discovery-rate;holdout;0.35714285714285715
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;precision;cross-validation;0.7383838383838384
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;recall;cross-validation;0.439058715273549
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;f-measure;cross-validation;0.543754724111867
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;specificity;cross-validation;0.9489074698239852
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;fall-out;cross-validation;0.05109253017601474
+Patel's Vehicle_urban;LiuSchneiderClassifierTest;false-discovery-rate;cross-validation;0.2616161616161616
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;accuracy;holdout;0.992
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;accuracy;cross-validation;0.9813333333333334
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;precision;holdout;0.9761904761904762
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;recall;holdout;1.0
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;f-measure;holdout;0.9879518072289156
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;specificity;holdout;0.9880952380952381
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;fall-out;holdout;0.011904761904761862
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;false-discovery-rate;holdout;0.023809523809523808
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;precision;cross-validation;0.9627136021872864
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;recall;cross-validation;0.9913043478260869
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;f-measure;cross-validation;0.9761569180173831
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;specificity;cross-validation;0.9852330779054916
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;fall-out;cross-validation;0.014766922094508295
+Patel's Vehicle_urban;MSMMoveEllipsesClassifierTest;false-discovery-rate;cross-validation;0.037286397812713604
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;accuracy;holdout;0.992
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;accuracy;cross-validation;0.9813333333333334
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;precision;holdout;1.0
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;recall;holdout;0.975609756097561
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;f-measure;holdout;0.9876543209876543
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;specificity;holdout;1.0
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;fall-out;holdout;0.0
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;false-discovery-rate;holdout;0.0
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;precision;cross-validation;0.9627136021872864
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;recall;cross-validation;0.9913043478260869
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;f-measure;cross-validation;0.9761569180173831
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;specificity;cross-validation;0.9852330779054916
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;fall-out;cross-validation;0.014766922094508295
+Patel's Vehicle_urban;MSMMovePointsClassifierTest;false-discovery-rate;cross-validation;0.037286397812713604
+Patel's Vehicle_urban;DTWaClassifierTest;accuracy;holdout;0.336
+Patel's Vehicle_urban;DTWaClassifierTest;accuracy;cross-validation;0.3630379746835443
+Patel's Vehicle_urban;DTWaClassifierTest;precision;holdout;0.33064516129032256
+Patel's Vehicle_urban;DTWaClassifierTest;recall;holdout;1.0
+Patel's Vehicle_urban;DTWaClassifierTest;f-measure;holdout;0.49696969696969695
+Patel's Vehicle_urban;DTWaClassifierTest;specificity;holdout;0.011904761904761904
+Patel's Vehicle_urban;DTWaClassifierTest;fall-out;holdout;0.9880952380952381
+Patel's Vehicle_urban;DTWaClassifierTest;false-discovery-rate;holdout;0.6693548387096774
+Patel's Vehicle_urban;DTWaClassifierTest;precision;cross-validation;1.0
+Patel's Vehicle_urban;DTWaClassifierTest;recall;cross-validation;0.018518518518518517
+Patel's Vehicle_urban;DTWaClassifierTest;f-measure;cross-validation;0.035338345864661655
+Patel's Vehicle_urban;DTWaClassifierTest;specificity;cross-validation;1.0
+Patel's Vehicle_urban;DTWaClassifierTest;fall-out;cross-validation;0.0
+Patel's Vehicle_urban;DTWaClassifierTest;false-discovery-rate;cross-validation;0.0
+New York bus(lines=2);MSMMoveDistanceClassifierTest;accuracy;holdout;0.991304347826087
+New York bus(lines=2);MSMMoveDistanceClassifierTest;accuracy;cross-validation;0.9886507450500102
+New York bus(lines=2);MSMMoveDistanceClassifierTest;precision;holdout;1.0
+New York bus(lines=2);MSMMoveDistanceClassifierTest;recall;holdout;0.984375
+New York bus(lines=2);MSMMoveDistanceClassifierTest;f-measure;holdout;0.9921259842519685
+New York bus(lines=2);MSMMoveDistanceClassifierTest;specificity;holdout;1.0
+New York bus(lines=2);MSMMoveDistanceClassifierTest;fall-out;holdout;0.0
+New York bus(lines=2);MSMMoveDistanceClassifierTest;false-discovery-rate;holdout;0.0
+New York bus(lines=2);MSMMoveDistanceClassifierTest;precision;cross-validation;0.9894736842105264
+New York bus(lines=2);MSMMoveDistanceClassifierTest;recall;cross-validation;0.9843644155664617
+New York bus(lines=2);MSMMoveDistanceClassifierTest;f-measure;cross-validation;0.9868171231753321
+New York bus(lines=2);MSMMoveDistanceClassifierTest;specificity;cross-validation;0.9882352941176471
+New York bus(lines=2);MSMMoveDistanceClassifierTest;fall-out;cross-validation;0.011764705882352944
+New York bus(lines=2);MSMMoveDistanceClassifierTest;false-discovery-rate;cross-validation;0.010526315789473684
+New York bus(lines=2);MSMMoveAngleClassifierTest;accuracy;holdout;1.0
+New York bus(lines=2);MSMMoveAngleClassifierTest;accuracy;cross-validation;0.9942845478669117
+New York bus(lines=2);MSMMoveAngleClassifierTest;precision;holdout;1.0
+New York bus(lines=2);MSMMoveAngleClassifierTest;recall;holdout;1.0
+New York bus(lines=2);MSMMoveAngleClassifierTest;f-measure;holdout;1.0
+New York bus(lines=2);MSMMoveAngleClassifierTest;specificity;holdout;1.0
+New York bus(lines=2);MSMMoveAngleClassifierTest;fall-out;holdout;0.0
+New York bus(lines=2);MSMMoveAngleClassifierTest;false-discovery-rate;holdout;0.0
+New York bus(lines=2);MSMMoveAngleClassifierTest;precision;cross-validation;0.9945945945945945
+New York bus(lines=2);MSMMoveAngleClassifierTest;recall;cross-validation;0.9945945945945945
+New York bus(lines=2);MSMMoveAngleClassifierTest;f-measure;cross-validation;0.9945945945945945
+New York bus(lines=2);MSMMoveAngleClassifierTest;specificity;cross-validation;0.9941176470588236
+New York bus(lines=2);MSMMoveAngleClassifierTest;fall-out;cross-validation;0.005882352941176472
+New York bus(lines=2);MSMMoveAngleClassifierTest;false-discovery-rate;cross-validation;0.005405405405405406
+New York bus(lines=2);MSMClassifierTest;accuracy;holdout;0.5565217391304348
+New York bus(lines=2);MSMClassifierTest;accuracy;cross-validation;0.45793018983466016
+New York bus(lines=2);MSMClassifierTest;precision;holdout;0.5565217391304348
+New York bus(lines=2);MSMClassifierTest;recall;holdout;1.0
+New York bus(lines=2);MSMClassifierTest;f-measure;holdout;0.7150837988826816
+New York bus(lines=2);MSMClassifierTest;specificity;holdout;0.0
+New York bus(lines=2);MSMClassifierTest;fall-out;holdout;1.0
+New York bus(lines=2);MSMClassifierTest;false-discovery-rate;holdout;0.4434782608695652
+New York bus(lines=2);MSMClassifierTest;precision;cross-validation;0.8985507246376813
+New York bus(lines=2);MSMClassifierTest;recall;cross-validation;0.2
+New York bus(lines=2);MSMClassifierTest;f-measure;cross-validation;0.13203883495145632
+New York bus(lines=2);MSMClassifierTest;specificity;cross-validation;0.8
+New York bus(lines=2);MSMClassifierTest;fall-out;cross-validation;0.2
+New York bus(lines=2);MSMClassifierTest;false-discovery-rate;cross-validation;0.10144927536231885
+New York bus(lines=2);DTWClassifierTest;accuracy;holdout;0.5478260869565217
+New York bus(lines=2);DTWClassifierTest;accuracy;cross-validation;0.4897325984894877
+New York bus(lines=2);DTWClassifierTest;precision;holdout;0.5535714285714286
+New York bus(lines=2);DTWClassifierTest;recall;holdout;0.96875
+New York bus(lines=2);DTWClassifierTest;f-measure;holdout;0.7045454545454546
+New York bus(lines=2);DTWClassifierTest;specificity;holdout;0.0196078431372549
+New York bus(lines=2);DTWClassifierTest;fall-out;holdout;0.9803921568627451
+New York bus(lines=2);DTWClassifierTest;false-discovery-rate;holdout;0.44642857142857145
+New York bus(lines=2);DTWClassifierTest;precision;cross-validation;0.7395877754086709
+New York bus(lines=2);DTWClassifierTest;recall;cross-validation;0.27521726011428527
+New York bus(lines=2);DTWClassifierTest;f-measure;cross-validation;0.2647857252660286
+New York bus(lines=2);DTWClassifierTest;specificity;cross-validation;0.787983494473058
+New York bus(lines=2);DTWClassifierTest;fall-out;cross-validation;0.21201650552694193
+New York bus(lines=2);DTWClassifierTest;false-discovery-rate;cross-validation;0.26041222459132907
+New York bus(lines=2);EDRClassifierTest;accuracy;holdout;0.7130434782608696
+New York bus(lines=2);EDRClassifierTest;accuracy;cross-validation;0.8992855684833639
+New York bus(lines=2);EDRClassifierTest;precision;holdout;1.0
+New York bus(lines=2);EDRClassifierTest;recall;holdout;0.484375
+New York bus(lines=2);EDRClassifierTest;f-measure;holdout;0.6526315789473685
+New York bus(lines=2);EDRClassifierTest;specificity;holdout;1.0
+New York bus(lines=2);EDRClassifierTest;fall-out;holdout;0.0
+New York bus(lines=2);EDRClassifierTest;false-discovery-rate;holdout;0.0
+New York bus(lines=2);EDRClassifierTest;precision;cross-validation;0.838728744802976
+New York bus(lines=2);EDRClassifierTest;recall;cross-validation;1.0
+New York bus(lines=2);EDRClassifierTest;f-measure;cross-validation;0.9105764124729856
+New York bus(lines=2);EDRClassifierTest;specificity;cross-validation;0.7801298939398106
+New York bus(lines=2);EDRClassifierTest;fall-out;cross-validation;0.2198701060601894
+New York bus(lines=2);EDRClassifierTest;false-discovery-rate;cross-validation;0.161271255197024
+New York bus(lines=2);ERPClassifierTest;accuracy;holdout;0.45217391304347826
+New York bus(lines=2);ERPClassifierTest;accuracy;cross-validation;0.5477036129822412
+New York bus(lines=2);ERPClassifierTest;precision;holdout;0.6666666666666666
+New York bus(lines=2);ERPClassifierTest;recall;holdout;0.03125
+New York bus(lines=2);ERPClassifierTest;f-measure;holdout;0.05970149253731343
+New York bus(lines=2);ERPClassifierTest;specificity;holdout;0.9803921568627451
+New York bus(lines=2);ERPClassifierTest;fall-out;holdout;0.019607843137254943
+New York bus(lines=2);ERPClassifierTest;false-discovery-rate;holdout;0.3333333333333333
+New York bus(lines=2);ERPClassifierTest;precision;cross-validation;0.5433268440406662
+New York bus(lines=2);ERPClassifierTest;recall;cross-validation;0.9741727998020904
+New York bus(lines=2);ERPClassifierTest;f-measure;cross-validation;0.6950524820712981
+New York bus(lines=2);ERPClassifierTest;specificity;cross-validation;0.032140729129426435
+New York bus(lines=2);ERPClassifierTest;fall-out;cross-validation;0.9678592708705736
+New York bus(lines=2);ERPClassifierTest;false-discovery-rate;cross-validation;0.4566731559593338
+New York bus(lines=2);LCSSClassifierTest;accuracy;holdout;0.991304347826087
+New York bus(lines=2);LCSSClassifierTest;accuracy;cross-validation;0.945417432129006
+New York bus(lines=2);LCSSClassifierTest;precision;holdout;0.9846153846153847
+New York bus(lines=2);LCSSClassifierTest;recall;holdout;1.0
+New York bus(lines=2);LCSSClassifierTest;f-measure;holdout;0.9922480620155039
+New York bus(lines=2);LCSSClassifierTest;specificity;holdout;0.9803921568627451
+New York bus(lines=2);LCSSClassifierTest;fall-out;holdout;0.019607843137254943
+New York bus(lines=2);LCSSClassifierTest;false-discovery-rate;holdout;0.015384615384615385
+New York bus(lines=2);LCSSClassifierTest;precision;cross-validation;0.9506706482518353
+New York bus(lines=2);LCSSClassifierTest;recall;cross-validation;0.9663248448953119
+New York bus(lines=2);LCSSClassifierTest;f-measure;cross-validation;0.9562641499294109
+New York bus(lines=2);LCSSClassifierTest;specificity;cross-validation;0.9290982592195363
+New York bus(lines=2);LCSSClassifierTest;fall-out;cross-validation;0.07090174078046367
+New York bus(lines=2);LCSSClassifierTest;false-discovery-rate;cross-validation;0.04932935174816474
+New York bus(lines=2);MSTPClassifierTest;accuracy;holdout;0.5565217391304348
+New York bus(lines=2);MSTPClassifierTest;accuracy;cross-validation;0.46646254337619925
+New York bus(lines=2);MSTPClassifierTest;precision;holdout;0.5565217391304348
+New York bus(lines=2);MSTPClassifierTest;recall;holdout;1.0
+New York bus(lines=2);MSTPClassifierTest;f-measure;holdout;0.7150837988826816
+New York bus(lines=2);MSTPClassifierTest;specificity;holdout;0.0
+New York bus(lines=2);MSTPClassifierTest;fall-out;holdout;1.0
+New York bus(lines=2);MSTPClassifierTest;false-discovery-rate;holdout;0.4434782608695652
+New York bus(lines=2);MSTPClassifierTest;precision;cross-validation;0.8985507246376813
+New York bus(lines=2);MSTPClassifierTest;recall;cross-validation;0.21672916936074832
+New York bus(lines=2);MSTPClassifierTest;f-measure;cross-validation;0.16458626687969322
+New York bus(lines=2);MSTPClassifierTest;specificity;cross-validation;0.8
+New York bus(lines=2);MSTPClassifierTest;fall-out;cross-validation;0.2
+New York bus(lines=2);MSTPClassifierTest;false-discovery-rate;cross-validation;0.10144927536231885
+New York bus(lines=2);HCSSClassifierTest;accuracy;holdout;0.9739130434782609
+New York bus(lines=2);HCSSClassifierTest;accuracy;cross-validation;0.743498673198612
+New York bus(lines=2);HCSSClassifierTest;precision;holdout;0.9692307692307692
+New York bus(lines=2);HCSSClassifierTest;recall;holdout;0.984375
+New York bus(lines=2);HCSSClassifierTest;f-measure;holdout;0.9767441860465116
+New York bus(lines=2);HCSSClassifierTest;specificity;holdout;0.9607843137254902
+New York bus(lines=2);HCSSClassifierTest;fall-out;holdout;0.039215686274509776
+New York bus(lines=2);HCSSClassifierTest;false-discovery-rate;holdout;0.03076923076923077
+New York bus(lines=2);HCSSClassifierTest;precision;cross-validation;0.7227772332536115
+New York bus(lines=2);HCSSClassifierTest;recall;cross-validation;0.92785361261603
+New York bus(lines=2);HCSSClassifierTest;f-measure;cross-validation;0.8032142857142857
+New York bus(lines=2);HCSSClassifierTest;specificity;cross-validation;0.5075672157596091
+New York bus(lines=2);HCSSClassifierTest;fall-out;cross-validation;0.49243278424039094
+New York bus(lines=2);HCSSClassifierTest;false-discovery-rate;cross-validation;0.2772227667463885
+New York bus(lines=2);CVTIClassifierTest;accuracy;holdout;0.5565217391304348
+New York bus(lines=2);CVTIClassifierTest;accuracy;cross-validation;0.45793018983466016
+New York bus(lines=2);CVTIClassifierTest;precision;holdout;0.5565217391304348
+New York bus(lines=2);CVTIClassifierTest;recall;holdout;1.0
+New York bus(lines=2);CVTIClassifierTest;f-measure;holdout;0.7150837988826816
+New York bus(lines=2);CVTIClassifierTest;specificity;holdout;0.0
+New York bus(lines=2);CVTIClassifierTest;fall-out;holdout;1.0
+New York bus(lines=2);CVTIClassifierTest;false-discovery-rate;holdout;0.4434782608695652
+New York bus(lines=2);CVTIClassifierTest;precision;cross-validation;0.8985507246376813
+New York bus(lines=2);CVTIClassifierTest;recall;cross-validation;0.2
+New York bus(lines=2);CVTIClassifierTest;f-measure;cross-validation;0.13203883495145632
+New York bus(lines=2);CVTIClassifierTest;specificity;cross-validation;0.8
+New York bus(lines=2);CVTIClassifierTest;fall-out;cross-validation;0.2
+New York bus(lines=2);CVTIClassifierTest;false-discovery-rate;cross-validation;0.10144927536231885
+New York bus(lines=2);wDFClassifierTest;accuracy;holdout;1.0
+New York bus(lines=2);wDFClassifierTest;accuracy;cross-validation;0.9914676464584609
+New York bus(lines=2);wDFClassifierTest;precision;holdout;1.0
+New York bus(lines=2);wDFClassifierTest;recall;holdout;1.0
+New York bus(lines=2);wDFClassifierTest;f-measure;holdout;1.0
+New York bus(lines=2);wDFClassifierTest;specificity;holdout;1.0
+New York bus(lines=2);wDFClassifierTest;fall-out;holdout;0.0
+New York bus(lines=2);wDFClassifierTest;false-discovery-rate;holdout;0.0
+New York bus(lines=2);wDFClassifierTest;precision;cross-validation;1.0
+New York bus(lines=2);wDFClassifierTest;recall;cross-validation;0.9832708306392517
+New York bus(lines=2);wDFClassifierTest;f-measure;cross-validation;0.9915166842290131
+New York bus(lines=2);wDFClassifierTest;specificity;cross-validation;1.0
+New York bus(lines=2);wDFClassifierTest;fall-out;cross-validation;0.0
+New York bus(lines=2);wDFClassifierTest;false-discovery-rate;cross-validation;0.0
+New York bus(lines=2);SWALEClassifierTest;accuracy;holdout;0.6695652173913044
+New York bus(lines=2);SWALEClassifierTest;accuracy;cross-validation;0.6282098387426005
+New York bus(lines=2);SWALEClassifierTest;precision;holdout;0.6756756756756757
+New York bus(lines=2);SWALEClassifierTest;recall;holdout;0.78125
+New York bus(lines=2);SWALEClassifierTest;f-measure;holdout;0.7246376811594203
+New York bus(lines=2);SWALEClassifierTest;specificity;holdout;0.5294117647058824
+New York bus(lines=2);SWALEClassifierTest;fall-out;holdout;0.47058823529411764
+New York bus(lines=2);SWALEClassifierTest;false-discovery-rate;holdout;0.32432432432432434
+New York bus(lines=2);SWALEClassifierTest;precision;cross-validation;0.6365207046758486
+New York bus(lines=2);SWALEClassifierTest;recall;cross-validation;0.6655594997094527
+New York bus(lines=2);SWALEClassifierTest;f-measure;cross-validation;0.6463611968838765
+New York bus(lines=2);SWALEClassifierTest;specificity;cross-validation;0.5146491004068762
+New York bus(lines=2);SWALEClassifierTest;fall-out;cross-validation;0.4853508995931238
+New York bus(lines=2);SWALEClassifierTest;false-discovery-rate;cross-validation;0.36347929532415135
+New York bus(lines=2);LiuSchneiderClassifierTest;accuracy;holdout;0.5565217391304348
+New York bus(lines=2);LiuSchneiderClassifierTest;accuracy;cross-validation;0.5187997550520513
+New York bus(lines=2);LiuSchneiderClassifierTest;precision;holdout;0.5565217391304348
+New York bus(lines=2);LiuSchneiderClassifierTest;recall;holdout;1.0
+New York bus(lines=2);LiuSchneiderClassifierTest;f-measure;holdout;0.7150837988826816
+New York bus(lines=2);LiuSchneiderClassifierTest;specificity;holdout;0.0
+New York bus(lines=2);LiuSchneiderClassifierTest;fall-out;holdout;1.0
+New York bus(lines=2);LiuSchneiderClassifierTest;false-discovery-rate;holdout;0.4434782608695652
+New York bus(lines=2);LiuSchneiderClassifierTest;precision;cross-validation;0.896875
+New York bus(lines=2);LiuSchneiderClassifierTest;recall;cross-validation;0.19376114081996437
+New York bus(lines=2);LiuSchneiderClassifierTest;f-measure;cross-validation;0.1392636229749632
+New York bus(lines=2);LiuSchneiderClassifierTest;specificity;cross-validation;0.8166666666666668
+New York bus(lines=2);LiuSchneiderClassifierTest;fall-out;cross-validation;0.18333333333333332
+New York bus(lines=2);LiuSchneiderClassifierTest;false-discovery-rate;cross-validation;0.103125
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;accuracy;holdout;0.991304347826087
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;accuracy;cross-validation;0.9914676464584609
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;precision;holdout;1.0
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;recall;holdout;0.984375
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;f-measure;holdout;0.9921259842519685
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;specificity;holdout;1.0
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;fall-out;holdout;0.0
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;false-discovery-rate;holdout;0.0
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;precision;cross-validation;0.9947368421052631
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;recall;cross-validation;0.9882352941176471
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;f-measure;cross-validation;0.9912727272727272
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;specificity;cross-validation;0.9941176470588236
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;fall-out;cross-validation;0.005882352941176472
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;false-discovery-rate;cross-validation;0.005263157894736842
+New York bus(lines=2);MSMMovePointsClassifierTest;accuracy;holdout;1.0
+New York bus(lines=2);MSMMovePointsClassifierTest;accuracy;cross-validation;0.9914676464584609
+New York bus(lines=2);MSMMovePointsClassifierTest;precision;holdout;1.0
+New York bus(lines=2);MSMMovePointsClassifierTest;recall;holdout;1.0
+New York bus(lines=2);MSMMovePointsClassifierTest;f-measure;holdout;1.0
+New York bus(lines=2);MSMMovePointsClassifierTest;specificity;holdout;1.0
+New York bus(lines=2);MSMMovePointsClassifierTest;fall-out;holdout;0.0
+New York bus(lines=2);MSMMovePointsClassifierTest;false-discovery-rate;holdout;0.0
+New York bus(lines=2);MSMMovePointsClassifierTest;precision;cross-validation;0.9947368421052631
+New York bus(lines=2);MSMMovePointsClassifierTest;recall;cross-validation;0.9941176470588236
+New York bus(lines=2);MSMMovePointsClassifierTest;f-measure;cross-validation;0.9943482587064676
+New York bus(lines=2);MSMMovePointsClassifierTest;specificity;cross-validation;0.9941176470588236
+New York bus(lines=2);MSMMovePointsClassifierTest;fall-out;cross-validation;0.005882352941176472
+New York bus(lines=2);MSMMovePointsClassifierTest;false-discovery-rate;cross-validation;0.005263157894736842
+New York bus(lines=2);DTWaClassifierTest;accuracy;holdout;0.5652173913043478
+New York bus(lines=2);DTWaClassifierTest;accuracy;cross-validation;0.4953664013063891
+New York bus(lines=2);DTWaClassifierTest;precision;holdout;0.5614035087719298
+New York bus(lines=2);DTWaClassifierTest;recall;holdout;1.0
+New York bus(lines=2);DTWaClassifierTest;f-measure;holdout;0.7191011235955056
+New York bus(lines=2);DTWaClassifierTest;specificity;holdout;0.0196078431372549
+New York bus(lines=2);DTWaClassifierTest;fall-out;holdout;0.9803921568627451
+New York bus(lines=2);DTWaClassifierTest;false-discovery-rate;holdout;0.43859649122807015
+New York bus(lines=2);DTWaClassifierTest;precision;cross-validation;0.8729211087420042
+New York bus(lines=2);DTWaClassifierTest;recall;cross-validation;0.2656062761325919
+New York bus(lines=2);DTWaClassifierTest;f-measure;cross-validation;0.25015130084437015
+New York bus(lines=2);DTWaClassifierTest;specificity;cross-validation;0.8055462184873949
+New York bus(lines=2);DTWaClassifierTest;fall-out;cross-validation;0.19445378151260503
+New York bus(lines=2);DTWaClassifierTest;false-discovery-rate;cross-validation;0.12707889125799574
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;accuracy;holdout;0.9871794871794872
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;accuracy;cross-validation;0.9916630481980026
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;precision;holdout;1.0
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;recall;holdout;0.9859154929577465
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;f-measure;holdout;0.9929078014184397
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;specificity;holdout;1.0
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;fall-out;holdout;0.0
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;false-discovery-rate;holdout;0.0
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;precision;cross-validation;0.9909043927648579
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;recall;cross-validation;0.9953488372093023
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;f-measure;cross-validation;0.9931016461980663
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;specificity;cross-validation;0.9099999999999999
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;fall-out;cross-validation;0.09
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;false-discovery-rate;cross-validation;0.00909560723514212
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;accuracy;holdout;1.0
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;accuracy;cross-validation;1.0
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;precision;holdout;1.0
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;f-measure;holdout;1.0
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;specificity;holdout;1.0
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;fall-out;holdout;0.0
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;false-discovery-rate;holdout;0.0
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;precision;cross-validation;1.0
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;recall;cross-validation;0.9955555555555555
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;f-measure;cross-validation;0.997752808988764
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;specificity;cross-validation;1.0
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;fall-out;cross-validation;0.0
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;false-discovery-rate;cross-validation;0.0
+Dublin bus(lines=2);MSMClassifierTest;accuracy;holdout;0.9102564102564102
+Dublin bus(lines=2);MSMClassifierTest;accuracy;cross-validation;0.9028224055579679
+Dublin bus(lines=2);MSMClassifierTest;precision;holdout;0.9102564102564102
+Dublin bus(lines=2);MSMClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);MSMClassifierTest;f-measure;holdout;0.953020134228188
+Dublin bus(lines=2);MSMClassifierTest;specificity;holdout;0.0
+Dublin bus(lines=2);MSMClassifierTest;fall-out;holdout;1.0
+Dublin bus(lines=2);MSMClassifierTest;false-discovery-rate;holdout;0.08974358974358974
+Dublin bus(lines=2);MSMClassifierTest;precision;cross-validation;0.9029960920538429
+Dublin bus(lines=2);MSMClassifierTest;recall;cross-validation;1.0
+Dublin bus(lines=2);MSMClassifierTest;f-measure;cross-validation;0.9487378695793843
+Dublin bus(lines=2);MSMClassifierTest;specificity;cross-validation;0.0
+Dublin bus(lines=2);MSMClassifierTest;fall-out;cross-validation;1.0
+Dublin bus(lines=2);MSMClassifierTest;false-discovery-rate;cross-validation;0.09700390794615718
+Dublin bus(lines=2);DTWClassifierTest;accuracy;holdout;0.9358974358974359
+Dublin bus(lines=2);DTWClassifierTest;accuracy;cross-validation;0.9111593573599652
+Dublin bus(lines=2);DTWClassifierTest;precision;holdout;0.9342105263157895
+Dublin bus(lines=2);DTWClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);DTWClassifierTest;f-measure;holdout;0.9659863945578232
+Dublin bus(lines=2);DTWClassifierTest;specificity;holdout;0.2857142857142857
+Dublin bus(lines=2);DTWClassifierTest;fall-out;holdout;0.7142857142857143
+Dublin bus(lines=2);DTWClassifierTest;false-discovery-rate;holdout;0.06578947368421052
+Dublin bus(lines=2);DTWClassifierTest;precision;cross-validation;0.904718483137936
+Dublin bus(lines=2);DTWClassifierTest;recall;cross-validation;0.9804878048780488
+Dublin bus(lines=2);DTWClassifierTest;f-measure;cross-validation;0.9406874862277961
+Dublin bus(lines=2);DTWClassifierTest;specificity;cross-validation;0.03333333333333333
+Dublin bus(lines=2);DTWClassifierTest;fall-out;cross-validation;0.9666666666666668
+Dublin bus(lines=2);DTWClassifierTest;false-discovery-rate;cross-validation;0.09528151686206396
+Dublin bus(lines=2);EDRClassifierTest;accuracy;holdout;1.0
+Dublin bus(lines=2);EDRClassifierTest;accuracy;cross-validation;0.9748154580981329
+Dublin bus(lines=2);EDRClassifierTest;precision;holdout;1.0
+Dublin bus(lines=2);EDRClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);EDRClassifierTest;f-measure;holdout;1.0
+Dublin bus(lines=2);EDRClassifierTest;specificity;holdout;1.0
+Dublin bus(lines=2);EDRClassifierTest;fall-out;holdout;0.0
+Dublin bus(lines=2);EDRClassifierTest;false-discovery-rate;holdout;0.0
+Dublin bus(lines=2);EDRClassifierTest;precision;cross-validation;0.9645278875713658
+Dublin bus(lines=2);EDRClassifierTest;recall;cross-validation;0.9902439024390244
+Dublin bus(lines=2);EDRClassifierTest;f-measure;cross-validation;0.9767546102278422
+Dublin bus(lines=2);EDRClassifierTest;specificity;cross-validation;0.61
+Dublin bus(lines=2);EDRClassifierTest;fall-out;cross-validation;0.39
+Dublin bus(lines=2);EDRClassifierTest;false-discovery-rate;cross-validation;0.03547211242863417
+Dublin bus(lines=2);ERPClassifierTest;accuracy;holdout;0.9102564102564102
+Dublin bus(lines=2);ERPClassifierTest;accuracy;cross-validation;0.9028224055579679
+Dublin bus(lines=2);ERPClassifierTest;precision;holdout;0.9102564102564102
+Dublin bus(lines=2);ERPClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);ERPClassifierTest;f-measure;holdout;0.953020134228188
+Dublin bus(lines=2);ERPClassifierTest;specificity;holdout;0.0
+Dublin bus(lines=2);ERPClassifierTest;fall-out;holdout;1.0
+Dublin bus(lines=2);ERPClassifierTest;false-discovery-rate;holdout;0.08974358974358974
+Dublin bus(lines=2);ERPClassifierTest;precision;cross-validation;0.91852800694746
+Dublin bus(lines=2);ERPClassifierTest;recall;cross-validation;0.8926829268292682
+Dublin bus(lines=2);ERPClassifierTest;f-measure;cross-validation;0.8869643971501742
+Dublin bus(lines=2);ERPClassifierTest;specificity;cross-validation;0.16666666666666669
+Dublin bus(lines=2);ERPClassifierTest;fall-out;cross-validation;0.8333333333333333
+Dublin bus(lines=2);ERPClassifierTest;false-discovery-rate;cross-validation;0.08147199305254016
+Dublin bus(lines=2);LCSSClassifierTest;accuracy;holdout;0.9743589743589743
+Dublin bus(lines=2);LCSSClassifierTest;accuracy;cross-validation;0.9874077290490664
+Dublin bus(lines=2);LCSSClassifierTest;precision;holdout;0.9726027397260274
+Dublin bus(lines=2);LCSSClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);LCSSClassifierTest;f-measure;holdout;0.9861111111111112
+Dublin bus(lines=2);LCSSClassifierTest;specificity;holdout;0.7142857142857143
+Dublin bus(lines=2);LCSSClassifierTest;fall-out;holdout;0.2857142857142857
+Dublin bus(lines=2);LCSSClassifierTest;false-discovery-rate;holdout;0.0273972602739726
+Dublin bus(lines=2);LCSSClassifierTest;precision;cross-validation;0.9861522198731502
+Dublin bus(lines=2);LCSSClassifierTest;recall;cross-validation;1.0
+Dublin bus(lines=2);LCSSClassifierTest;f-measure;cross-validation;0.9929392446633827
+Dublin bus(lines=2);LCSSClassifierTest;specificity;cross-validation;0.8833333333333332
+Dublin bus(lines=2);LCSSClassifierTest;fall-out;cross-validation;0.11666666666666667
+Dublin bus(lines=2);LCSSClassifierTest;false-discovery-rate;cross-validation;0.013847780126849896
+Dublin bus(lines=2);MSTPClassifierTest;accuracy;holdout;0.9230769230769231
+Dublin bus(lines=2);MSTPClassifierTest;accuracy;cross-validation;0.9450282240555797
+Dublin bus(lines=2);MSTPClassifierTest;precision;holdout;0.922077922077922
+Dublin bus(lines=2);MSTPClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);MSTPClassifierTest;f-measure;holdout;0.9594594594594594
+Dublin bus(lines=2);MSTPClassifierTest;specificity;holdout;0.14285714285714285
+Dublin bus(lines=2);MSTPClassifierTest;fall-out;holdout;0.8571428571428572
+Dublin bus(lines=2);MSTPClassifierTest;false-discovery-rate;holdout;0.07792207792207792
+Dublin bus(lines=2);MSTPClassifierTest;precision;cross-validation;0.9473643410852712
+Dublin bus(lines=2);MSTPClassifierTest;recall;cross-validation;1.0
+Dublin bus(lines=2);MSTPClassifierTest;f-measure;cross-validation;0.9726946629373323
+Dublin bus(lines=2);MSTPClassifierTest;specificity;cross-validation;0.54
+Dublin bus(lines=2);MSTPClassifierTest;fall-out;cross-validation;0.45999999999999996
+Dublin bus(lines=2);MSTPClassifierTest;false-discovery-rate;cross-validation;0.05263565891472868
+Dublin bus(lines=2);HCSSClassifierTest;accuracy;holdout;0.9743589743589743
+Dublin bus(lines=2);HCSSClassifierTest;accuracy;cross-validation;0.9703864524533218
+Dublin bus(lines=2);HCSSClassifierTest;precision;holdout;0.9726027397260274
+Dublin bus(lines=2);HCSSClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);HCSSClassifierTest;f-measure;holdout;0.9861111111111112
+Dublin bus(lines=2);HCSSClassifierTest;specificity;holdout;0.7142857142857143
+Dublin bus(lines=2);HCSSClassifierTest;fall-out;holdout;0.2857142857142857
+Dublin bus(lines=2);HCSSClassifierTest;false-discovery-rate;holdout;0.0273972602739726
+Dublin bus(lines=2);HCSSClassifierTest;precision;cross-validation;0.9688213441404931
+Dublin bus(lines=2);HCSSClassifierTest;recall;cross-validation;1.0
+Dublin bus(lines=2);HCSSClassifierTest;f-measure;cross-validation;0.9840418617527051
+Dublin bus(lines=2);HCSSClassifierTest;specificity;cross-validation;0.7133333333333334
+Dublin bus(lines=2);HCSSClassifierTest;fall-out;cross-validation;0.2866666666666666
+Dublin bus(lines=2);HCSSClassifierTest;false-discovery-rate;cross-validation;0.03117865585950692
+Dublin bus(lines=2);CVTIClassifierTest;accuracy;holdout;0.9102564102564102
+Dublin bus(lines=2);CVTIClassifierTest;accuracy;cross-validation;0.9028224055579679
+Dublin bus(lines=2);CVTIClassifierTest;precision;holdout;0.9102564102564102
+Dublin bus(lines=2);CVTIClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);CVTIClassifierTest;f-measure;holdout;0.953020134228188
+Dublin bus(lines=2);CVTIClassifierTest;specificity;holdout;0.0
+Dublin bus(lines=2);CVTIClassifierTest;fall-out;holdout;1.0
+Dublin bus(lines=2);CVTIClassifierTest;false-discovery-rate;holdout;0.08974358974358974
+Dublin bus(lines=2);CVTIClassifierTest;precision;cross-validation;0.9029960920538429
+Dublin bus(lines=2);CVTIClassifierTest;recall;cross-validation;1.0
+Dublin bus(lines=2);CVTIClassifierTest;f-measure;cross-validation;0.9487378695793843
+Dublin bus(lines=2);CVTIClassifierTest;specificity;cross-validation;0.0
+Dublin bus(lines=2);CVTIClassifierTest;fall-out;cross-validation;1.0
+Dublin bus(lines=2);CVTIClassifierTest;false-discovery-rate;cross-validation;0.09700390794615718
+Dublin bus(lines=2);wDFClassifierTest;accuracy;holdout;0.9871794871794872
+Dublin bus(lines=2);wDFClassifierTest;accuracy;cross-validation;0.974641771602258
+Dublin bus(lines=2);wDFClassifierTest;precision;holdout;0.9861111111111112
+Dublin bus(lines=2);wDFClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);wDFClassifierTest;f-measure;holdout;0.993006993006993
+Dublin bus(lines=2);wDFClassifierTest;specificity;holdout;0.8571428571428571
+Dublin bus(lines=2);wDFClassifierTest;fall-out;holdout;0.1428571428571429
+Dublin bus(lines=2);wDFClassifierTest;false-discovery-rate;holdout;0.013888888888888888
+Dublin bus(lines=2);wDFClassifierTest;precision;cross-validation;0.9726118326118327
+Dublin bus(lines=2);wDFClassifierTest;recall;cross-validation;1.0
+Dublin bus(lines=2);wDFClassifierTest;f-measure;cross-validation;0.9859854963304228
+Dublin bus(lines=2);wDFClassifierTest;specificity;cross-validation;0.7766666666666667
+Dublin bus(lines=2);wDFClassifierTest;fall-out;cross-validation;0.22333333333333333
+Dublin bus(lines=2);wDFClassifierTest;false-discovery-rate;cross-validation;0.02738816738816739
+Dublin bus(lines=2);SWALEClassifierTest;accuracy;holdout;0.8974358974358975
+Dublin bus(lines=2);SWALEClassifierTest;accuracy;cross-validation;0.8269214068606165
+Dublin bus(lines=2);SWALEClassifierTest;precision;holdout;0.92
+Dublin bus(lines=2);SWALEClassifierTest;recall;holdout;0.971830985915493
+Dublin bus(lines=2);SWALEClassifierTest;f-measure;holdout;0.9452054794520549
+Dublin bus(lines=2);SWALEClassifierTest;specificity;holdout;0.14285714285714285
+Dublin bus(lines=2);SWALEClassifierTest;fall-out;holdout;0.8571428571428572
+Dublin bus(lines=2);SWALEClassifierTest;false-discovery-rate;holdout;0.08
+Dublin bus(lines=2);SWALEClassifierTest;precision;cross-validation;0.8980909931881256
+Dublin bus(lines=2);SWALEClassifierTest;recall;cross-validation;0.9441100740817134
+Dublin bus(lines=2);SWALEClassifierTest;f-measure;cross-validation;0.9200190509249925
+Dublin bus(lines=2);SWALEClassifierTest;specificity;cross-validation;0.0
+Dublin bus(lines=2);SWALEClassifierTest;fall-out;cross-validation;1.0
+Dublin bus(lines=2);SWALEClassifierTest;false-discovery-rate;cross-validation;0.10190900681187454
+Dublin bus(lines=2);LiuSchneiderClassifierTest;accuracy;holdout;0.9102564102564102
+Dublin bus(lines=2);LiuSchneiderClassifierTest;accuracy;cross-validation;0.8262266608771169
+Dublin bus(lines=2);LiuSchneiderClassifierTest;precision;holdout;0.9102564102564102
+Dublin bus(lines=2);LiuSchneiderClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);LiuSchneiderClassifierTest;f-measure;holdout;0.953020134228188
+Dublin bus(lines=2);LiuSchneiderClassifierTest;specificity;holdout;0.0
+Dublin bus(lines=2);LiuSchneiderClassifierTest;fall-out;holdout;1.0
+Dublin bus(lines=2);LiuSchneiderClassifierTest;false-discovery-rate;holdout;0.08974358974358974
+Dublin bus(lines=2);LiuSchneiderClassifierTest;precision;cross-validation;0.9029960920538429
+Dublin bus(lines=2);LiuSchneiderClassifierTest;recall;cross-validation;1.0
+Dublin bus(lines=2);LiuSchneiderClassifierTest;f-measure;cross-validation;0.9487378695793843
+Dublin bus(lines=2);LiuSchneiderClassifierTest;specificity;cross-validation;0.0
+Dublin bus(lines=2);LiuSchneiderClassifierTest;fall-out;cross-validation;1.0
+Dublin bus(lines=2);LiuSchneiderClassifierTest;false-discovery-rate;cross-validation;0.09700390794615718
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;accuracy;holdout;1.0
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;accuracy;cross-validation;0.9916630481980026
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;precision;holdout;1.0
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;f-measure;holdout;1.0
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;specificity;holdout;1.0
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;fall-out;holdout;0.0
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;false-discovery-rate;holdout;0.0
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;precision;cross-validation;0.9910101010101011
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;recall;cross-validation;0.9951219512195122
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;f-measure;cross-validation;0.9929848226115823
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;specificity;cross-validation;0.9099999999999999
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;fall-out;cross-validation;0.09
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;false-discovery-rate;cross-validation;0.008989898989898989
+Dublin bus(lines=2);MSMMovePointsClassifierTest;accuracy;holdout;1.0
+Dublin bus(lines=2);MSMMovePointsClassifierTest;accuracy;cross-validation;1.0
+Dublin bus(lines=2);MSMMovePointsClassifierTest;precision;holdout;1.0
+Dublin bus(lines=2);MSMMovePointsClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);MSMMovePointsClassifierTest;f-measure;holdout;1.0
+Dublin bus(lines=2);MSMMovePointsClassifierTest;specificity;holdout;1.0
+Dublin bus(lines=2);MSMMovePointsClassifierTest;fall-out;holdout;0.0
+Dublin bus(lines=2);MSMMovePointsClassifierTest;false-discovery-rate;holdout;0.0
+Dublin bus(lines=2);MSMMovePointsClassifierTest;precision;cross-validation;1.0
+Dublin bus(lines=2);MSMMovePointsClassifierTest;recall;cross-validation;0.9951219512195122
+Dublin bus(lines=2);MSMMovePointsClassifierTest;f-measure;cross-validation;0.9975308641975309
+Dublin bus(lines=2);MSMMovePointsClassifierTest;specificity;cross-validation;1.0
+Dublin bus(lines=2);MSMMovePointsClassifierTest;fall-out;cross-validation;0.0
+Dublin bus(lines=2);MSMMovePointsClassifierTest;false-discovery-rate;cross-validation;0.0
+Dublin bus(lines=2);DTWaClassifierTest;accuracy;holdout;0.9615384615384616
+Dublin bus(lines=2);DTWaClassifierTest;accuracy;cross-validation;0.9407729049066434
+Dublin bus(lines=2);DTWaClassifierTest;precision;holdout;0.9594594594594594
+Dublin bus(lines=2);DTWaClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);DTWaClassifierTest;f-measure;holdout;0.9793103448275862
+Dublin bus(lines=2);DTWaClassifierTest;specificity;holdout;0.5714285714285714
+Dublin bus(lines=2);DTWaClassifierTest;fall-out;holdout;0.4285714285714286
+Dublin bus(lines=2);DTWaClassifierTest;false-discovery-rate;holdout;0.04054054054054054
+Dublin bus(lines=2);DTWaClassifierTest;precision;cross-validation;0.9304265597697606
+Dublin bus(lines=2);DTWaClassifierTest;recall;cross-validation;1.0
+Dublin bus(lines=2);DTWaClassifierTest;f-measure;cross-validation;0.963673769176018
+Dublin bus(lines=2);DTWaClassifierTest;specificity;cross-validation;0.2866666666666666
+Dublin bus(lines=2);DTWaClassifierTest;fall-out;cross-validation;0.7133333333333334
+Dublin bus(lines=2);DTWaClassifierTest;false-discovery-rate;cross-validation;0.06957344023023948
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;accuracy;holdout;0.6
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;accuracy;cross-validation;0.3466666666666667
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;precision;holdout;0.75
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;recall;holdout;0.75
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;f-measure;holdout;0.75
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;specificity;holdout;0.0
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;fall-out;holdout;1.0
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;false-discovery-rate;holdout;0.25
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;precision;cross-validation;0.7
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;recall;cross-validation;0.2
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;f-measure;cross-validation;0.13333333333333333
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;specificity;cross-validation;0.7
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;fall-out;cross-validation;0.3
+Pisa (Users [2, 3]);MSMMoveDistanceClassifierTest;false-discovery-rate;cross-validation;0.3
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;accuracy;holdout;0.6
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;accuracy;cross-validation;0.4133333333333333
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;precision;holdout;0.75
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;recall;holdout;0.75
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;f-measure;holdout;0.75
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;specificity;holdout;0.0
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;fall-out;holdout;1.0
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;false-discovery-rate;holdout;0.25
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;precision;cross-validation;0.6666666666666666
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;recall;cross-validation;0.2
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;f-measure;cross-validation;0.1
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;specificity;cross-validation;0.6
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;fall-out;cross-validation;0.4
+Pisa (Users [2, 3]);MSMMoveAngleClassifierTest;false-discovery-rate;cross-validation;0.3333333333333333
+Pisa (Users [2, 3]);MSMClassifierTest;accuracy;holdout;0.2
+Pisa (Users [2, 3]);MSMClassifierTest;accuracy;cross-validation;0.6133333333333333
+Pisa (Users [2, 3]);MSMClassifierTest;precision;holdout;1.0
+Pisa (Users [2, 3]);MSMClassifierTest;recall;holdout;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;f-measure;holdout;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;specificity;holdout;1.0
+Pisa (Users [2, 3]);MSMClassifierTest;fall-out;holdout;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;precision;cross-validation;1.0
+Pisa (Users [2, 3]);MSMClassifierTest;recall;cross-validation;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [2, 3]);MSMClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [2, 3]);DTWClassifierTest;accuracy;holdout;0.2
+Pisa (Users [2, 3]);DTWClassifierTest;accuracy;cross-validation;0.6133333333333333
+Pisa (Users [2, 3]);DTWClassifierTest;precision;holdout;1.0
+Pisa (Users [2, 3]);DTWClassifierTest;recall;holdout;0.0
+Pisa (Users [2, 3]);DTWClassifierTest;f-measure;holdout;0.0
+Pisa (Users [2, 3]);DTWClassifierTest;specificity;holdout;1.0
+Pisa (Users [2, 3]);DTWClassifierTest;fall-out;holdout;0.0
+Pisa (Users [2, 3]);DTWClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [2, 3]);DTWClassifierTest;precision;cross-validation;1.0
+Pisa (Users [2, 3]);DTWClassifierTest;recall;cross-validation;0.0
+Pisa (Users [2, 3]);DTWClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [2, 3]);DTWClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [2, 3]);DTWClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [2, 3]);DTWClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [2, 3]);EDRClassifierTest;accuracy;holdout;0.2
+Pisa (Users [2, 3]);EDRClassifierTest;accuracy;cross-validation;0.3866666666666666
+Pisa (Users [2, 3]);EDRClassifierTest;precision;holdout;0.5
+Pisa (Users [2, 3]);EDRClassifierTest;recall;holdout;0.25
+Pisa (Users [2, 3]);EDRClassifierTest;f-measure;holdout;0.3333333333333333
+Pisa (Users [2, 3]);EDRClassifierTest;specificity;holdout;0.0
+Pisa (Users [2, 3]);EDRClassifierTest;fall-out;holdout;1.0
+Pisa (Users [2, 3]);EDRClassifierTest;false-discovery-rate;holdout;0.5
+Pisa (Users [2, 3]);EDRClassifierTest;precision;cross-validation;0.5166666666666666
+Pisa (Users [2, 3]);EDRClassifierTest;recall;cross-validation;0.6
+Pisa (Users [2, 3]);EDRClassifierTest;f-measure;cross-validation;0.5
+Pisa (Users [2, 3]);EDRClassifierTest;specificity;cross-validation;0.2
+Pisa (Users [2, 3]);EDRClassifierTest;fall-out;cross-validation;0.8
+Pisa (Users [2, 3]);EDRClassifierTest;false-discovery-rate;cross-validation;0.4833333333333333
+Pisa (Users [2, 3]);ERPClassifierTest;accuracy;holdout;0.2
+Pisa (Users [2, 3]);ERPClassifierTest;accuracy;cross-validation;0.6133333333333333
+Pisa (Users [2, 3]);ERPClassifierTest;precision;holdout;1.0
+Pisa (Users [2, 3]);ERPClassifierTest;recall;holdout;0.0
+Pisa (Users [2, 3]);ERPClassifierTest;f-measure;holdout;0.0
+Pisa (Users [2, 3]);ERPClassifierTest;specificity;holdout;1.0
+Pisa (Users [2, 3]);ERPClassifierTest;fall-out;holdout;0.0
+Pisa (Users [2, 3]);ERPClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [2, 3]);ERPClassifierTest;precision;cross-validation;1.0
+Pisa (Users [2, 3]);ERPClassifierTest;recall;cross-validation;0.0
+Pisa (Users [2, 3]);ERPClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [2, 3]);ERPClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [2, 3]);ERPClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [2, 3]);ERPClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [2, 3]);LCSSClassifierTest;accuracy;holdout;0.4
+Pisa (Users [2, 3]);LCSSClassifierTest;accuracy;cross-validation;0.43999999999999995
+Pisa (Users [2, 3]);LCSSClassifierTest;precision;holdout;0.6666666666666666
+Pisa (Users [2, 3]);LCSSClassifierTest;recall;holdout;0.5
+Pisa (Users [2, 3]);LCSSClassifierTest;f-measure;holdout;0.5714285714285715
+Pisa (Users [2, 3]);LCSSClassifierTest;specificity;holdout;0.0
+Pisa (Users [2, 3]);LCSSClassifierTest;fall-out;holdout;1.0
+Pisa (Users [2, 3]);LCSSClassifierTest;false-discovery-rate;holdout;0.3333333333333333
+Pisa (Users [2, 3]);LCSSClassifierTest;precision;cross-validation;0.3
+Pisa (Users [2, 3]);LCSSClassifierTest;recall;cross-validation;0.5
+Pisa (Users [2, 3]);LCSSClassifierTest;f-measure;cross-validation;0.36
+Pisa (Users [2, 3]);LCSSClassifierTest;specificity;cross-validation;0.13333333333333333
+Pisa (Users [2, 3]);LCSSClassifierTest;fall-out;cross-validation;0.8666666666666666
+Pisa (Users [2, 3]);LCSSClassifierTest;false-discovery-rate;cross-validation;0.7
+Pisa (Users [2, 3]);MSTPClassifierTest;accuracy;holdout;0.2
+Pisa (Users [2, 3]);MSTPClassifierTest;accuracy;cross-validation;0.6133333333333333
+Pisa (Users [2, 3]);MSTPClassifierTest;precision;holdout;1.0
+Pisa (Users [2, 3]);MSTPClassifierTest;recall;holdout;0.0
+Pisa (Users [2, 3]);MSTPClassifierTest;f-measure;holdout;0.0
+Pisa (Users [2, 3]);MSTPClassifierTest;specificity;holdout;1.0
+Pisa (Users [2, 3]);MSTPClassifierTest;fall-out;holdout;0.0
+Pisa (Users [2, 3]);MSTPClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [2, 3]);MSTPClassifierTest;precision;cross-validation;1.0
+Pisa (Users [2, 3]);MSTPClassifierTest;recall;cross-validation;0.0
+Pisa (Users [2, 3]);MSTPClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [2, 3]);MSTPClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [2, 3]);MSTPClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [2, 3]);MSTPClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [2, 3]);HCSSClassifierTest;accuracy;holdout;0.6
+Pisa (Users [2, 3]);HCSSClassifierTest;accuracy;cross-validation;0.5733333333333334
+Pisa (Users [2, 3]);HCSSClassifierTest;precision;holdout;1.0
+Pisa (Users [2, 3]);HCSSClassifierTest;recall;holdout;0.5
+Pisa (Users [2, 3]);HCSSClassifierTest;f-measure;holdout;0.6666666666666666
+Pisa (Users [2, 3]);HCSSClassifierTest;specificity;holdout;1.0
+Pisa (Users [2, 3]);HCSSClassifierTest;fall-out;holdout;0.0
+Pisa (Users [2, 3]);HCSSClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [2, 3]);HCSSClassifierTest;precision;cross-validation;0.4666666666666667
+Pisa (Users [2, 3]);HCSSClassifierTest;recall;cross-validation;0.6
+Pisa (Users [2, 3]);HCSSClassifierTest;f-measure;cross-validation;0.47333333333333333
+Pisa (Users [2, 3]);HCSSClassifierTest;specificity;cross-validation;0.26666666666666666
+Pisa (Users [2, 3]);HCSSClassifierTest;fall-out;cross-validation;0.7333333333333334
+Pisa (Users [2, 3]);HCSSClassifierTest;false-discovery-rate;cross-validation;0.5333333333333333
+Pisa (Users [2, 3]);CVTIClassifierTest;accuracy;holdout;0.2
+Pisa (Users [2, 3]);CVTIClassifierTest;accuracy;cross-validation;0.6133333333333333
+Pisa (Users [2, 3]);CVTIClassifierTest;precision;holdout;1.0
+Pisa (Users [2, 3]);CVTIClassifierTest;recall;holdout;0.0
+Pisa (Users [2, 3]);CVTIClassifierTest;f-measure;holdout;0.0
+Pisa (Users [2, 3]);CVTIClassifierTest;specificity;holdout;1.0
+Pisa (Users [2, 3]);CVTIClassifierTest;fall-out;holdout;0.0
+Pisa (Users [2, 3]);CVTIClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [2, 3]);CVTIClassifierTest;precision;cross-validation;1.0
+Pisa (Users [2, 3]);CVTIClassifierTest;recall;cross-validation;0.0
+Pisa (Users [2, 3]);CVTIClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [2, 3]);CVTIClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [2, 3]);CVTIClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [2, 3]);CVTIClassifierTest;false-discovery-rate;cross-validation;0.0
+Pisa (Users [2, 3]);wDFClassifierTest;accuracy;holdout;0.4
+Pisa (Users [2, 3]);wDFClassifierTest;accuracy;cross-validation;0.4533333333333333
+Pisa (Users [2, 3]);wDFClassifierTest;precision;holdout;1.0
+Pisa (Users [2, 3]);wDFClassifierTest;recall;holdout;0.25
+Pisa (Users [2, 3]);wDFClassifierTest;f-measure;holdout;0.4
+Pisa (Users [2, 3]);wDFClassifierTest;specificity;holdout;1.0
+Pisa (Users [2, 3]);wDFClassifierTest;fall-out;holdout;0.0
+Pisa (Users [2, 3]);wDFClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [2, 3]);wDFClassifierTest;precision;cross-validation;0.7666666666666667
+Pisa (Users [2, 3]);wDFClassifierTest;recall;cross-validation;0.4
+Pisa (Users [2, 3]);wDFClassifierTest;f-measure;cross-validation;0.38
+Pisa (Users [2, 3]);wDFClassifierTest;specificity;cross-validation;0.6666666666666667
+Pisa (Users [2, 3]);wDFClassifierTest;fall-out;cross-validation;0.33333333333333337
+Pisa (Users [2, 3]);wDFClassifierTest;false-discovery-rate;cross-validation;0.2333333333333333
+Pisa (Users [2, 3]);SWALEClassifierTest;accuracy;holdout;0.4
+Pisa (Users [2, 3]);SWALEClassifierTest;accuracy;cross-validation;0.3466666666666667
+Pisa (Users [2, 3]);SWALEClassifierTest;precision;holdout;1.0
+Pisa (Users [2, 3]);SWALEClassifierTest;recall;holdout;0.25
+Pisa (Users [2, 3]);SWALEClassifierTest;f-measure;holdout;0.4
+Pisa (Users [2, 3]);SWALEClassifierTest;specificity;holdout;1.0
+Pisa (Users [2, 3]);SWALEClassifierTest;fall-out;holdout;0.0
+Pisa (Users [2, 3]);SWALEClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [2, 3]);SWALEClassifierTest;precision;cross-validation;0.4133333333333333
+Pisa (Users [2, 3]);SWALEClassifierTest;recall;cross-validation;0.6
+Pisa (Users [2, 3]);SWALEClassifierTest;f-measure;cross-validation;0.4742857142857143
+Pisa (Users [2, 3]);SWALEClassifierTest;specificity;cross-validation;0.0
+Pisa (Users [2, 3]);SWALEClassifierTest;fall-out;cross-validation;1.0
+Pisa (Users [2, 3]);SWALEClassifierTest;false-discovery-rate;cross-validation;0.5866666666666667
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;accuracy;holdout;0.4
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;accuracy;cross-validation;0.4133333333333333
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;precision;holdout;0.6666666666666666
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;recall;holdout;0.5
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;f-measure;holdout;0.5714285714285715
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;specificity;holdout;0.0
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;fall-out;holdout;1.0
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;false-discovery-rate;holdout;0.3333333333333333
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;precision;cross-validation;0.36666666666666664
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;recall;cross-validation;0.3
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;f-measure;cross-validation;0.2
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;specificity;cross-validation;0.26666666666666666
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;fall-out;cross-validation;0.7333333333333334
+Pisa (Users [2, 3]);LiuSchneiderClassifierTest;false-discovery-rate;cross-validation;0.6333333333333333
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;accuracy;holdout;0.6
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;accuracy;cross-validation;0.3466666666666667
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;precision;holdout;0.75
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;recall;holdout;0.75
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;f-measure;holdout;0.75
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;specificity;holdout;0.0
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;fall-out;holdout;1.0
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;false-discovery-rate;holdout;0.25
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;precision;cross-validation;0.7
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;recall;cross-validation;0.2
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;f-measure;cross-validation;0.13333333333333333
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;specificity;cross-validation;0.7
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;fall-out;cross-validation;0.3
+Pisa (Users [2, 3]);MSMMoveEllipsesClassifierTest;false-discovery-rate;cross-validation;0.3
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;accuracy;holdout;0.6
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;accuracy;cross-validation;0.3466666666666667
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;precision;holdout;0.75
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;recall;holdout;0.75
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;f-measure;holdout;0.75
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;specificity;holdout;0.0
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;fall-out;holdout;1.0
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;false-discovery-rate;holdout;0.25
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;precision;cross-validation;0.7
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;recall;cross-validation;0.2
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;f-measure;cross-validation;0.13333333333333333
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;specificity;cross-validation;0.7
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;fall-out;cross-validation;0.3
+Pisa (Users [2, 3]);MSMMovePointsClassifierTest;false-discovery-rate;cross-validation;0.3
+Pisa (Users [2, 3]);DTWaClassifierTest;accuracy;holdout;0.2
+Pisa (Users [2, 3]);DTWaClassifierTest;accuracy;cross-validation;0.6133333333333333
+Pisa (Users [2, 3]);DTWaClassifierTest;precision;holdout;1.0
+Pisa (Users [2, 3]);DTWaClassifierTest;recall;holdout;0.0
+Pisa (Users [2, 3]);DTWaClassifierTest;f-measure;holdout;0.0
+Pisa (Users [2, 3]);DTWaClassifierTest;specificity;holdout;1.0
+Pisa (Users [2, 3]);DTWaClassifierTest;fall-out;holdout;0.0
+Pisa (Users [2, 3]);DTWaClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [2, 3]);DTWaClassifierTest;precision;cross-validation;1.0
+Pisa (Users [2, 3]);DTWaClassifierTest;recall;cross-validation;0.0
+Pisa (Users [2, 3]);DTWaClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [2, 3]);DTWaClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [2, 3]);DTWaClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [2, 3]);DTWaClassifierTest;false-discovery-rate;cross-validation;0.0

@@ -1,0 +1,85 @@
+dataset;measure;classification-measure;test-type;value
+Pisa (Users [4, 6]);MSMClassifierTest;accuracy;holdout;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;accuracy;cross-validation;0.3333333333333333
+Pisa (Users [4, 6]);MSMClassifierTest;precision;holdout;1.0
+Pisa (Users [4, 6]);MSMClassifierTest;recall;holdout;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;f-measure;holdout;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;specificity;holdout;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;fall-out;holdout;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;precision;cross-validation;0.5333333333333333
+Pisa (Users [4, 6]);MSMClassifierTest;recall;cross-validation;1.0
+Pisa (Users [4, 6]);MSMClassifierTest;f-measure;cross-validation;0.5599999999999999
+Pisa (Users [4, 6]);MSMClassifierTest;specificity;cross-validation;0.0
+Pisa (Users [4, 6]);MSMClassifierTest;fall-out;cross-validation;0.6
+Pisa (Users [4, 6]);MSMClassifierTest;false-discovery-rate;cross-validation;0.4666666666666667
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;accuracy;holdout;0.6551724137931034
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;accuracy;cross-validation;0.4526684636118598
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;precision;holdout;0.6551724137931034
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;recall;holdout;1.0
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;f-measure;holdout;0.7916666666666666
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;specificity;holdout;0.0
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;fall-out;holdout;1.0
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;false-discovery-rate;holdout;0.3448275862068966
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;precision;cross-validation;0.9295238095238094
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;recall;cross-validation;0.2
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;f-measure;cross-validation;0.15722543352601157
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;specificity;cross-validation;0.8
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;fall-out;cross-validation;0.2
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;false-discovery-rate;cross-validation;0.07047619047619048
+Patel's Vehicle_urban;MSMClassifierTest;accuracy;holdout;0.328
+Patel's Vehicle_urban;MSMClassifierTest;accuracy;cross-validation;0.35250632911392404
+Patel's Vehicle_urban;MSMClassifierTest;precision;holdout;0.328
+Patel's Vehicle_urban;MSMClassifierTest;recall;holdout;1.0
+Patel's Vehicle_urban;MSMClassifierTest;f-measure;holdout;0.4939759036144578
+Patel's Vehicle_urban;MSMClassifierTest;specificity;holdout;0.0
+Patel's Vehicle_urban;MSMClassifierTest;fall-out;holdout;1.0
+Patel's Vehicle_urban;MSMClassifierTest;false-discovery-rate;holdout;0.672
+Patel's Vehicle_urban;MSMClassifierTest;precision;cross-validation;1.0
+Patel's Vehicle_urban;MSMClassifierTest;recall;cross-validation;0.0
+Patel's Vehicle_urban;MSMClassifierTest;f-measure;cross-validation;0.0
+Patel's Vehicle_urban;MSMClassifierTest;specificity;cross-validation;1.0
+Patel's Vehicle_urban;MSMClassifierTest;fall-out;cross-validation;0.0
+Patel's Vehicle_urban;MSMClassifierTest;false-discovery-rate;cross-validation;0.0
+New York bus(lines=2);MSMClassifierTest;accuracy;holdout;0.5565217391304348
+New York bus(lines=2);MSMClassifierTest;accuracy;cross-validation;0.45793018983466016
+New York bus(lines=2);MSMClassifierTest;precision;holdout;0.5565217391304348
+New York bus(lines=2);MSMClassifierTest;recall;holdout;1.0
+New York bus(lines=2);MSMClassifierTest;f-measure;holdout;0.7150837988826816
+New York bus(lines=2);MSMClassifierTest;specificity;holdout;0.0
+New York bus(lines=2);MSMClassifierTest;fall-out;holdout;1.0
+New York bus(lines=2);MSMClassifierTest;false-discovery-rate;holdout;0.4434782608695652
+New York bus(lines=2);MSMClassifierTest;precision;cross-validation;0.8985507246376813
+New York bus(lines=2);MSMClassifierTest;recall;cross-validation;0.2
+New York bus(lines=2);MSMClassifierTest;f-measure;cross-validation;0.13203883495145632
+New York bus(lines=2);MSMClassifierTest;specificity;cross-validation;0.8
+New York bus(lines=2);MSMClassifierTest;fall-out;cross-validation;0.2
+New York bus(lines=2);MSMClassifierTest;false-discovery-rate;cross-validation;0.10144927536231885
+Dublin bus(lines=2);MSMClassifierTest;accuracy;holdout;0.9102564102564102
+Dublin bus(lines=2);MSMClassifierTest;accuracy;cross-validation;0.9028224055579679
+Dublin bus(lines=2);MSMClassifierTest;precision;holdout;0.9102564102564102
+Dublin bus(lines=2);MSMClassifierTest;recall;holdout;1.0
+Dublin bus(lines=2);MSMClassifierTest;f-measure;holdout;0.953020134228188
+Dublin bus(lines=2);MSMClassifierTest;specificity;holdout;0.0
+Dublin bus(lines=2);MSMClassifierTest;fall-out;holdout;1.0
+Dublin bus(lines=2);MSMClassifierTest;false-discovery-rate;holdout;0.08974358974358974
+Dublin bus(lines=2);MSMClassifierTest;precision;cross-validation;0.9029960920538429
+Dublin bus(lines=2);MSMClassifierTest;recall;cross-validation;1.0
+Dublin bus(lines=2);MSMClassifierTest;f-measure;cross-validation;0.9487378695793843
+Dublin bus(lines=2);MSMClassifierTest;specificity;cross-validation;0.0
+Dublin bus(lines=2);MSMClassifierTest;fall-out;cross-validation;1.0
+Dublin bus(lines=2);MSMClassifierTest;false-discovery-rate;cross-validation;0.09700390794615718
+Pisa (Users [2, 3]);MSMClassifierTest;accuracy;holdout;0.2
+Pisa (Users [2, 3]);MSMClassifierTest;accuracy;cross-validation;0.6133333333333333
+Pisa (Users [2, 3]);MSMClassifierTest;precision;holdout;1.0
+Pisa (Users [2, 3]);MSMClassifierTest;recall;holdout;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;f-measure;holdout;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;specificity;holdout;1.0
+Pisa (Users [2, 3]);MSMClassifierTest;fall-out;holdout;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;false-discovery-rate;holdout;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;precision;cross-validation;1.0
+Pisa (Users [2, 3]);MSMClassifierTest;recall;cross-validation;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;f-measure;cross-validation;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;specificity;cross-validation;1.0
+Pisa (Users [2, 3]);MSMClassifierTest;fall-out;cross-validation;0.0
+Pisa (Users [2, 3]);MSMClassifierTest;false-discovery-rate;cross-validation;0.0
