@@ -150,6 +150,9 @@ public class StopAndMoveExtractor {
 								List<Stop> stops = stopAndMove.getStops();
 								stopsCount += stops.size();
 							}
+							if(stopsCount > trajs.size()) {
+								System.out.println(String.format("%d-%d-%d-%d-%d", finalI, finalJ, finalK, l, m) + "->" + stopsCount);
+							}
 							bestCombinations.put(String.format("%d-%d-%d-%d-%d", finalI, finalJ, finalK, l, m), stopsCount);
 						}
 					});

@@ -33,7 +33,7 @@ public class SanFranciscoTaxi_AirportMall_ReverseGeocoding {
 				"centroid_lon, start_time, end_time, street " + //
 				"FROM stops_moves.taxi_sanfrancisco_stop "//
 				+ "where street is null "//
-				+ "and stop_id in (select semantic_stop_id from taxi.sanfrancisco_taxicab_crawdad where road in (101, 280))"
+				+ "and stop_id in (select semantic_stop_id from taxi.sanfrancisco_taxicab_crawdad where road in (101, 280) and mall = true and airport = true)"
 				);
 		Map<Integer, Stop> stops = new HashMap<>();
 		System.out.println("Fetching...");

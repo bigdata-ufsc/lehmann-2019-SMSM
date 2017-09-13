@@ -13,7 +13,7 @@ import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 public class AngleInference_DublinBus {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DublinBusProblem problem = new DublinBusProblem("017A0002", "00791001");
+		DublinBusProblem problem = new DublinBusProblem("00671001", "00431001");
 		String moveTable = "stops_moves.bus_dublin_201301_move";
 		List<SemanticTrajectory> trajs = problem.data();
 		Map<Move, SemanticTrajectory> moves = new HashMap<>();

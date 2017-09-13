@@ -31,7 +31,8 @@ public class DublinFillDupesReverseGeocoding {
 				+ "where to_fill.stop_id <> filled.stop_id "
 				+ "and to_fill.street is null "
 				+ "and filled.street is not null "
-				+ "and filled.stop_id in (select semantic_stop_id from bus.dublin_201301 where trim(journey_pattern) in ('017A0002', '00791001'))");
+				+ "and filled.stop_id in (select semantic_stop_id from bus.dublin_201301 where trim(journey_pattern) in ('017A1003', '00791001'))"
+				+ "and to_fill.stop_id in (select semantic_stop_id from bus.dublin_201301 where trim(journey_pattern) in ('017A1003', '00791001'))");
 		Map<Integer, String> toFill = new HashMap<>();
 		System.out.println("Fetching...");
 		while(stopsData.next()) {

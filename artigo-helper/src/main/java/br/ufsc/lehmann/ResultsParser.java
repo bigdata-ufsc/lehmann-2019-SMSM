@@ -26,6 +26,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import com.google.common.io.LineReader;
 
 @RunWith(Parameterized.class)
@@ -39,7 +41,7 @@ public class ResultsParser {
     
     @Parameters(name="{0}")
     public static Collection<Path> data() throws IOException {
-    	List<Path> files = Files.list(Paths.get(new File("./src/test/resources/only-stops").toURI())).filter((Path p) -> {
+    	List<Path> files = Files.list(Paths.get(new File("./src/main/resources/only-stops").toURI())).filter((Path p) -> {
     		return p.getFileName().toString().endsWith(".out");
     	}).collect(Collectors.toList());
         return files;
@@ -77,38 +79,40 @@ public class ResultsParser {
 				}
 			}
 		}
-		File csvOutput = new File(fileName.toFile().getAbsolutePath().toString().replaceFirst("\\.out", ".csv"));
-		FileWriter out = new FileWriter(csvOutput);
-		CSVPrinter printer = new CSVPrinter(out, CSVFormat.EXCEL.withDelimiter(';'));
-		printer.printRecord("dataset", "measure", "classification-measure", "test-type", "value");
+		CSVData csv = new CSVData();
 		for (Iterator i = datasets.entrySet().iterator(); i.hasNext();) {
 			Map.Entry<String, ExperimentData> entry = (Map.Entry<String, ExperimentData>) i.next();
 			ExperimentData data = entry.getValue();
 			for (Experiment exp : data.tests) {
 				Matcher matcher = MULTIPLE_MEASURES_PATTERN.matcher(exp.holdout);
 				if(matcher.find()) {
-					printer.printRecord(entry.getKey(), exp.method, "precision", "holdout", matcher.group(1));
-					printer.printRecord(entry.getKey(), exp.method, "recall", "holdout", matcher.group(2));
-					printer.printRecord(entry.getKey(), exp.method, "f-measure", "holdout", matcher.group(3));
-					printer.printRecord(entry.getKey(), exp.method, "specificity", "holdout", matcher.group(4));
-					printer.printRecord(entry.getKey(), exp.method, "fall-out", "holdout", matcher.group(5));
-					printer.printRecord(entry.getKey(), exp.method, "false-discovery-rate", "holdout", matcher.group(6));
+					csv.add(entry.getKey(), exp.method, "precision", "holdout", matcher.group(1));
+					csv.add(entry.getKey(), exp.method, "recall", "holdout", matcher.group(2));
+					csv.add(entry.getKey(), exp.method, "f-measure", "holdout", matcher.group(3));
+					csv.add(entry.getKey(), exp.method, "specificity", "holdout", matcher.group(4));
+					csv.add(entry.getKey(), exp.method, "fall-out", "holdout", matcher.group(5));
+					csv.add(entry.getKey(), exp.method, "false-discovery-rate", "holdout", matcher.group(6));
 				} else {
-					printer.printRecord(entry.getKey(), exp.method, "accuracy", "holdout", exp.holdout);
+					csv.add(entry.getKey(), exp.method, "accuracy", "holdout", exp.holdout);
 				}
 				matcher = MULTIPLE_MEASURES_PATTERN.matcher(exp.cv);
 				if(matcher.find()) {
-					printer.printRecord(entry.getKey(), exp.method, "precision", "cross-validation", matcher.group(1));
-					printer.printRecord(entry.getKey(), exp.method, "recall", "cross-validation", matcher.group(2));
-					printer.printRecord(entry.getKey(), exp.method, "f-measure", "cross-validation", matcher.group(3));
-					printer.printRecord(entry.getKey(), exp.method, "specificity", "cross-validation", matcher.group(4));
-					printer.printRecord(entry.getKey(), exp.method, "fall-out", "cross-validation", matcher.group(5));
-					printer.printRecord(entry.getKey(), exp.method, "false-discovery-rate", "cross-validation", matcher.group(6));
+					csv.add(entry.getKey(), exp.method, "precision", "cross-validation", matcher.group(1));
+					csv.add(entry.getKey(), exp.method, "recall", "cross-validation", matcher.group(2));
+					csv.add(entry.getKey(), exp.method, "f-measure", "cross-validation", matcher.group(3));
+					csv.add(entry.getKey(), exp.method, "specificity", "cross-validation", matcher.group(4));
+					csv.add(entry.getKey(), exp.method, "fall-out", "cross-validation", matcher.group(5));
+					csv.add(entry.getKey(), exp.method, "false-discovery-rate", "cross-validation", matcher.group(6));
 				} else {
-					printer.printRecord(entry.getKey(), exp.method, "accuracy", "cross-validation", exp.cv);
+					csv.add(entry.getKey(), exp.method, "accuracy", "cross-validation", exp.cv);
 				}
 			}
 		}
+		File csvOutput = new File(fileName.toFile().getAbsolutePath().toString().replaceFirst("\\.out", ".csv"));
+		FileWriter out = new FileWriter(csvOutput);
+		CSVPrinter printer = new CSVPrinter(out, CSVFormat.EXCEL.withDelimiter(';'));
+		printer.printRecord("dataset", "measure", "test-type", "Accuracy", "Precision", "Recall", "F-Measure", "Specificity", "Fall-out", "FDR");
+		csv.printTo(printer);
 		printer.flush();
 		printer.close();
 	}
@@ -116,6 +120,41 @@ public class ResultsParser {
 	@Test
 	public void parseExecutionTime() throws Exception {
 		
+	}
+	
+	private static class CSVData {
+		Multimap<String, CSVMeasureData> data = MultimapBuilder.hashKeys().arrayListValues().build();
+		
+		public void add(String dataset, String method, String measure, String testType, String value) {
+			data.put(dataset + "<&>" + method+ "<&>" +  testType, new CSVMeasureData(measure, value));
+		}
+
+		public void printTo(CSVPrinter printer) {
+			data.asMap().forEach((String key, Collection<CSVMeasureData> measures) -> {
+				Map<String, String> values = new HashMap<>();
+				for (CSVMeasureData measureData : measures) {
+					values.put(measureData.measure, measureData.value);
+				}
+				String dataset = key.substring(0, key.indexOf("<&>"));
+				String measure = key.substring(key.indexOf("<&>") + 3, key.lastIndexOf("<&>"));
+				String type = key.substring(key.lastIndexOf("<&>") + 3);
+				try {
+					printer.printRecord(dataset, measure, type, values.get("accuracy"), values.get("precision"), values.get("recall"), values.get("f-measure"), values.get("specificity"), values.get("fall-out"), values.get("false-discovery-rate"));
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			});
+		}
+	}
+	
+	private static class CSVMeasureData {
+		private String measure;
+		private String value;
+
+		public CSVMeasureData(String measure, String value) {
+			this.measure = measure;
+			this.value = value;
+		}
 	}
 	
 	private static class ExperimentData {

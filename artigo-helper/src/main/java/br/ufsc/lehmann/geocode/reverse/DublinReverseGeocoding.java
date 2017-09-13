@@ -16,6 +16,7 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 
 public class DublinReverseGeocoding {
 
@@ -33,7 +34,8 @@ public class DublinReverseGeocoding {
 		ResultSet stopsData = st.executeQuery("SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
 				"centroid_lon, start_time, end_time, street " + //
 				"FROM stops_moves.bus_dublin_201301_stop "//
-				+ "where street is null");
+				+ "where stop_id in (select distinct semantic_stop_id from bus.dublin_201301 " +
+"where trim(journey_pattern) in ('00671001', '00431001')) and street is null");
 		Map<Integer, Stop> stops = new HashMap<>();
 		System.out.println("Fetching...");
 		while (stopsData.next()) {

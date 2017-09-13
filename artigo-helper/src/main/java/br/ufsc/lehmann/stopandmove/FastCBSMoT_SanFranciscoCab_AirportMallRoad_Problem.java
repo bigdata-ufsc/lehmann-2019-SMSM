@@ -23,7 +23,7 @@ public class FastCBSMoT_SanFranciscoCab_AirportMallRoad_Problem {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		FastCBSMoT fastCBSMoT = new FastCBSMoT(new LatLongDistanceFunction());
-		SanFranciscoCab_AirportMallRoad_Problem problem = new SanFranciscoCab_AirportMallRoad_Problem(new Integer[] {101, 280}, true, true);
+		SanFranciscoCab_AirportMallRoad_Problem problem = new SanFranciscoCab_AirportMallRoad_Problem(new String[] {"101", "280"});
 		List<SemanticTrajectory> trajs = problem.data();
 		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.taxi_sanfrancisco_stop", null, "geom");
 

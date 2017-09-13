@@ -32,7 +32,7 @@ public class SanFranciscoTaxiReverseGeocoding {
 		ResultSet stopsData = st.executeQuery("SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
 				"centroid_lon, start_time, end_time, street " + //
 				"FROM stops_moves.taxi_sanfrancisco_stop "//
-				+ "where street is null ");
+				+ "where street is null");
 		Map<Integer, Stop> stops = new HashMap<>();
 		System.out.println("Fetching...");
 		while (stopsData.next()) {
