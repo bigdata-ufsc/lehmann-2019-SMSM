@@ -13,8 +13,8 @@ import br.ufsc.core.trajectory.TPoint;
 public class Move {
 	
 	private int moveId;
-	private double startTime;
-	private double endTime;
+	private long startTime;
+	private long endTime;
 	private Stop start;
 	private Stop end;
 	private int begin;
@@ -22,19 +22,19 @@ public class Move {
 	
 	private List<Attribute> attributes;
 	
-	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points) {
+	public Move(int moveId, Stop start, Stop end, long startTime, long endTime, int begin, int length, TPoint[] points) {
 		this(moveId, start, end, startTime, endTime, begin, length, points, 0.0);
 	}
 
-	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points, double angle) {
+	public Move(int moveId, Stop start, Stop end, long startTime, long endTime, int begin, int length, TPoint[] points, double angle) {
 		this(moveId, start, end, startTime, endTime, begin, length, points, angle, 0.0);
 	}
 
-	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance) {
+	public Move(int moveId, Stop start, Stop end, long startTime, long endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance) {
 		this(moveId, start, end, startTime, endTime, begin, length, points, angle, 0.0, null);
 	}
 
-	public Move(int moveId, Stop start, Stop end, double startTime, double endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance, String streetName) {
+	public Move(int moveId, Stop start, Stop end, long startTime, long endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance, String streetName) {
 		this.moveId = moveId;
 		this.start = start;
 		this.end = end;
@@ -53,11 +53,11 @@ public class Move {
 		return moveId;
 	}
 
-	public double getStartTime() {
+	public long getStartTime() {
 		return startTime;
 	}
 
-	public double getEndTime() {
+	public long getEndTime() {
 		return endTime;
 	}
 
@@ -81,11 +81,11 @@ public class Move {
 		this.moveId = moveId;
 	}
 
-	public void setStartTime(double startTime) {
+	public void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
 
-	public void setEndTime(double endTime) {
+	public void setEndTime(long endTime) {
 		this.endTime = endTime;
 	}
 

@@ -4,6 +4,7 @@ import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
+import br.ufsc.core.trajectory.TemporalDuration;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 import br.ufsc.lehmann.SMSM.SMSMSemanticParameter;
 import br.ufsc.lehmann.NElementProblem;
@@ -31,36 +32,44 @@ public interface MSMMoveAngleTest {
 		if(problem instanceof NElementProblem) {
 			return new MSMMoveClassifier(//
 					new SMSMSemanticParameter(NElementProblem.stop, .5, NElementProblem.move, Thresholds.MOVE_ANGLE, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 0.5, 0.5),//
-					new MSMSemanticParameter<Number, Number>(NElementProblem.dataSemantic, null, 0.5)
+					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 0.5, 1/3),//
+					new MSMSemanticParameter<Number, Number>(NElementProblem.dataSemantic, null, 1/3),
+					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, 1/3)
 					);
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new MSMMoveClassifier(new SMSMSemanticParameter(((NewYorkBusProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON, NewYorkBusDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1)
+					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, .5),
+					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
 					);
 		} else if(problem instanceof DublinBusProblem) {
 			return new MSMMoveClassifier(new SMSMSemanticParameter(((DublinBusProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON, DublinBusDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1)
+					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, .5),
+					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
 					);
 		} else if(problem instanceof PatelProblem) {
 			return new MSMMoveClassifier(new SMSMSemanticParameter(((PatelProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_EUCLIDEAN, PatelDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, 1)
+					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, .5),
+					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
 					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new MSMMoveClassifier(new SMSMSemanticParameter(((SanFranciscoCabProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON, SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1)
+					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, .5),
+					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
 					);
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new MSMMoveClassifier(new SMSMSemanticParameter(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1)
+					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, .5),
+					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
 					);
 		} else if(problem instanceof PrototypeProblem) {
 			return new MSMMoveClassifier(new SMSMSemanticParameter(PrototypeDataReader.STOP_SEMANTIC, null, PrototypeDataReader.MOVE_SEMANTIC, null, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, 1)
+					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, .5),
+					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
 					);
 		} else if(problem instanceof PisaProblem) {
 			return new MSMMoveClassifier(new SMSMSemanticParameter(((PisaProblem) problem).stopSemantic(), null, PisaDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, 1)
+					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, .5),
+					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
 					);
 		}
 		return null;

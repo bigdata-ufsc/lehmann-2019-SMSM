@@ -1,21 +1,26 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.sql.Array;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.Multimap;
@@ -32,9 +37,6 @@ import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.core.trajectory.semantic.StopMove;
-import br.ufsc.db.source.DataRetriever;
-import br.ufsc.db.source.DataSource;
-import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.AngleDistance;
 import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
@@ -44,6 +46,7 @@ import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 import br.ufsc.lehmann.stopandmove.angle.AngleInference;
 import br.ufsc.lehmann.stopandmove.movedistance.MoveDistance;
+import cc.mallet.util.IoUtils;
 
 public class DublinBusDataReader {
 	private static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
@@ -70,124 +73,69 @@ public class DublinBusDataReader {
 		this.onlyStops = onlyStops;
 	}
 
-	public List<SemanticTrajectory> read(String[] lines) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.dublin201301", null, null);
-		DataRetriever retriever = source.getRetriever();
-		System.out.println("Executing SQL...");
-		Connection conn = retriever.getConnection();
-		conn.setAutoCommit(false);
-		Statement st = conn.createStatement();
-		st.setFetchSize(1000);
+	public List<SemanticTrajectory> read(String[] lines) throws ZipException, IOException, NumberFormatException, ParseException {
+		System.out.println("Reading file...");
+		ZipFile zipFile = new ZipFile(this.getClass().getClassLoader().getResource("./datasets/dublin.data.zip").getFile());
+		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("bus.dublin_201301.csv")));
+		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
+				CSVFormat.EXCEL.withHeader("gid", "time", "line_id", "journey_pattern", "vehicle_journey", "operator", "congestion", "longitude", "latitude", "block_journey_id", "vehicle_id", "stop_id", "semantic_stop_id", "semantic_move_id").withDelimiter(';'));
+		
+		InputStreamReader rawStopsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.bus_dublin_201301_stop.csv")));
+		CSVParser stopsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawStopsEntry).toString(), 
+				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "begin", "end_lat", "end_lon", "length", "centroid_lat", "centroid_lon", "start_time", "end_time", "street").withDelimiter(';'));
+		
+		InputStreamReader rawMovesEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.bus_dublin_201301_move.csv")));
+		CSVParser movesParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawMovesEntry).toString(), 
+				CSVFormat.EXCEL.withHeader("move_id", "start_time", "start_stop_id", "begin", "end_time", "end_stop_id", "length", "angle", "traveled_distance").withDelimiter(';'));
 
-		ResultSet stopsData = st.executeQuery(
-				"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
-						"centroid_lon, start_time, end_time, street " + //
-						"FROM stops_moves.bus_dublin_201301_stop");
-		Map<Integer, Stop> stops = new HashMap<>();
-		while (stopsData.next()) {
-			int stopId = stopsData.getInt("stop_id");
-			Stop stop = stops.get(stopId);
-			if (stop == null) {
-				stop = new Stop(stopId, null, //
-						stopsData.getTimestamp("start_time").getTime(), //
-						stopsData.getTimestamp("end_time").getTime(), //
-						new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
-						stopsData.getInt("begin"), //
-						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
-						stopsData.getInt("length"), //
-						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")),//
-						stopsData.getString("street")//
-				);
-				stops.put(stopId, stop);
-			}
-		}
-		Map<Integer, Move> moves = new HashMap<>();
-		ResultSet movesData = st.executeQuery(
-				"SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length, angle " + //
-						"FROM stops_moves.bus_dublin_201301_move");
-		while(movesData.next()) {
-			int moveId = movesData.getInt("move_id");
-				Move move = moves.get(moveId);
-			if (move == null) {
-				int startStopId = movesData.getInt("start_stop_id");
-				if (movesData.wasNull()) {
-					startStopId = -1;
-				}
-				int endStopId = movesData.getInt("end_stop_id");
-				if (movesData.wasNull()) {
-					endStopId = -1;
-				}
-				move = new Move(moveId, //
-						stops.get(startStopId), //
-						stops.get(endStopId), //
-						movesData.getTimestamp("start_time").getTime(), //
-						movesData.getTimestamp("end_time").getTime(), //
-						movesData.getInt("begin"), //
-						movesData.getInt("length"), //
-						null);
-				moves.put(moveId, move);
-			}
-		}
-		st.close();
+		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser);
+		Map<Integer, Move> moves = StopMoveCSVReader.moveCsvRead(movesParser, stops);
 
 		List<Move> usedMoves = new ArrayList<Move>();
 		List<SemanticTrajectory> ret = null;
 		if(onlyStops) {
-			ret = readStopsTrajectories(lines, conn, stops, moves, usedMoves);
+			ret = readStopsTrajectories(lines, pointsParser, stops, moves, usedMoves);
 		} else {
-			ret = loadRawPoints(lines, conn, stops, moves);
+			ret = loadRawPoints(lines, pointsParser, stops, moves);
 		}
 		compute(usedMoves);
+		zipFile.close();
 		return ret;
 	}
 
-	private List<SemanticTrajectory> readStopsTrajectories(String[] lines, Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws SQLException {
-		String sql = "select gid, to_timestamp(time_in_seconds / 1000000) as \"time\", line_id, trim(journey_pattern) as journey_pattern, "
-		/**/+ "vehicle_journey, trim(operator) as operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id, "
-		/**/+ "semantic_stop_id, semantic_move_id "
-		+ "from bus.dublin_201301 ";
-		//sql += "where date_frame between '2013-01-27' and '2013-01-31'";
-		if(lines != null && lines.length > 0) {
-			sql += "where trim(journey_pattern) in (SELECT * FROM unnest(?)) ";
-		}
-		sql += "order by time_in_seconds";
-		PreparedStatement preparedStatement = conn.prepareStatement(sql);
-		if(lines != null && lines.length > 0) {
-			Array array = conn.createArrayOf("varchar", lines);
-			preparedStatement.setArray(1, array);
-		}
-		ResultSet data = preparedStatement.executeQuery();
+	private List<SemanticTrajectory> readStopsTrajectories(String[] lines, CSVParser pointsParser, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws NumberFormatException, ParseException, IOException {
+		List<CSVRecord> csvRecords = pointsParser.getRecords();
+		Iterator<CSVRecord> pointsData = csvRecords.subList(1, csvRecords.size()).iterator();
 		Multimap<Integer, DublinBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		System.out.println("Fetching...");
-		while(data.next()) {
-			Integer stop = data.getInt("semantic_stop_id");
-			if(data.wasNull()) {
-				stop = null;
-			}
-			Integer move = data.getInt("semantic_move_id");
-			if(data.wasNull()) {
-				move = null;
+		while(pointsData.hasNext()) {
+			CSVRecord data = pointsData.next();
+			String stop = data.get("semantic_stop_id");
+			String move = data.get("semantic_move_id");
+			String line = data.get("journey_pattern");
+			if(!ArrayUtils.isEmpty(lines) && !ArrayUtils.contains(lines, line)) {
+				continue;
 			}
 			DublinBusRecord record = new DublinBusRecord(
-				data.getInt("gid"),
-				data.getTimestamp("time"),
-				data.getInt("line_id"),
-				data.getString("journey_pattern"),
-				data.getInt("vehicle_journey"),
-				data.getString("operator"),
-				data.getBoolean("congestion"),
-				data.getDouble("longitude"),
-				data.getDouble("latitude"),
-				data.getInt("block_journey_id"),
-				data.getInt("vehicle_id"),
-				data.getInt("stop_id"),
-				stop,
-				move
+				Integer.parseInt(data.get("gid")),
+				new Timestamp(StopMoveCSVReader.TIMESTAMP.parse(data.get("time")).getTime()),
+				Integer.parseInt(data.get("line_id")),
+				line,
+				Integer.parseInt(data.get("vehicle_journey")),
+				data.get("operator"),
+				"1".equals(data.get("congestion")),
+				Double.parseDouble(data.get("longitude")),
+				Double.parseDouble(data.get("latitude")),
+				Integer.parseInt(data.get("block_journey_id")),
+				Integer.parseInt(data.get("vehicle_id")),
+				StringUtils.isEmpty(data.get("stop_id")) ? 0 : Integer.parseInt(data.get("stop_id")),
+				StringUtils.isEmpty(stop) ? null : Integer.parseInt(stop),
+				StringUtils.isEmpty(move) ? null : Integer.parseInt(move)
 			);
 			records.put(record.getVehicle_journey(), record);
 		}
-		System.out.printf("Loaded %d GPS points from database\n", records.size());
-		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
+		System.out.printf("Loaded %d GPS points from dataset\n", records.size());
+		System.out.printf("Loaded %d trajectories from dataset\n", records.keySet().size());
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
@@ -205,7 +153,7 @@ public class DublinBusDataReader {
 					if(i > 0) {
 						Stop previousStop = STOP_CENTROID_SEMANTIC.getData(s, i - 1);
 						if(previousStop != null) {
-							Move move = new Move(-1, previousStop, stop, (double) previousStop.getEndTime(), (double) stop.getStartTime(), stop.getBegin() - 1, 0, new TPoint[0], 
+							Move move = new Move(-1, previousStop, stop, previousStop.getEndTime(), stop.getStartTime(), stop.getBegin() - 1, 0, new TPoint[0], 
 									AngleInference.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
 									MoveDistance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
 							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
@@ -260,54 +208,38 @@ public class DublinBusDataReader {
 		return ret;
 	}
 
-	private List<SemanticTrajectory> loadRawPoints(String[] lines, Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves)
-			throws SQLException {
-		String sql = "select gid, to_timestamp(time_in_seconds / 1000000) as \"time\", line_id, trim(journey_pattern) as journey_pattern, "
-		/**/+ "vehicle_journey, trim(operator) as operator, congestion, longitude, latitude, block_journey_id, vehicle_id, stop_id, "
-		/**/+ "semantic_stop_id, semantic_move_id "
-		+ "from bus.dublin_201301 ";
-		//sql += "where date_frame between '2013-01-27' and '2013-01-31'";
-		if(lines != null && lines.length > 0) {
-			sql += "where trim(journey_pattern) in (SELECT * FROM unnest(?)) ";
-		}
-		sql += "order by time_in_seconds";
-		PreparedStatement preparedStatement = conn.prepareStatement(sql);
-		if(lines != null && lines.length > 0) {
-			Array array = conn.createArrayOf("varchar", lines);
-			preparedStatement.setArray(1, array);
-		}
-		ResultSet data = preparedStatement.executeQuery();
+	private List<SemanticTrajectory> loadRawPoints(String[] lines, CSVParser pointsParser, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws NumberFormatException, ParseException {
+		Iterator<CSVRecord> pointsData = pointsParser.iterator();
 		Multimap<Integer, DublinBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		System.out.println("Fetching...");
-		while(data.next()) {
-			Integer stop = data.getInt("semantic_stop_id");
-			if(data.wasNull()) {
-				stop = null;
-			}
-			Integer move = data.getInt("semantic_move_id");
-			if(data.wasNull()) {
-				move = null;
+		while(pointsData.hasNext()) {
+			CSVRecord data = pointsData.next();
+			String stop = data.get("semantic_stop_id");
+			String move = data.get("semantic_move_id");
+			String line = data.get("journey_pattern");
+			if(!ArrayUtils.isEmpty(lines) && !ArrayUtils.contains(lines, line)) {
+				continue;
 			}
 			DublinBusRecord record = new DublinBusRecord(
-				data.getInt("gid"),
-				data.getTimestamp("time"),
-				data.getInt("line_id"),
-				data.getString("journey_pattern"),
-				data.getInt("vehicle_journey"),
-				data.getString("operator"),
-				data.getBoolean("congestion"),
-				data.getDouble("longitude"),
-				data.getDouble("latitude"),
-				data.getInt("block_journey_id"),
-				data.getInt("vehicle_id"),
-				data.getInt("stop_id"),
-				stop,
-				move
+				Integer.parseInt(data.get("gid")),
+				new Timestamp(StopMoveCSVReader.TIMESTAMP.parse(data.get("time")).getTime()),
+				Integer.parseInt(data.get("line_id")),
+				line,
+				Integer.parseInt(data.get("vehicle_journey")),
+				data.get("operator"),
+				"1".equals(data.get("congestion")),
+				Double.parseDouble(data.get("longitude")),
+				Double.parseDouble(data.get("latitude")),
+				Integer.parseInt(data.get("block_journey_id")),
+				Integer.parseInt(data.get("vehicle_id")),
+				StringUtils.isEmpty(data.get("stop_id")) ? 0 : Integer.parseInt(data.get("stop_id")),
+				StringUtils.isEmpty(stop) ? null : Integer.parseInt(stop),
+				StringUtils.isEmpty(move) ? null : Integer.parseInt(move)
 			);
 			records.put(record.getVehicle_journey(), record);
 		}
-		System.out.printf("Loaded %d GPS points from database\n", records.size());
-		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
+		System.out.printf("Loaded %d GPS points from dataset\n", records.size());
+		System.out.printf("Loaded %d trajectories from dataset\n", records.keySet().size());
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();

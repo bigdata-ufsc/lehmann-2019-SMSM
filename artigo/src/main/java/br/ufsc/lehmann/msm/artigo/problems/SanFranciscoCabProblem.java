@@ -1,6 +1,8 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -92,9 +94,14 @@ public class SanFranciscoCabProblem implements Problem {
 		}
 		try {
 			data = new ArrayList<>(new SanFranciscoCabDataReader(onlyStop).read());
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+		} catch (IOException | ParseException e) {
 			throw new RuntimeException(e);
 		}
+//		try {
+//			data = new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop).read());
+//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+//			throw new RuntimeException(e);
+//		}
 		Collections.shuffle(data, new java.util.Random() {
 			@Override
 			public int nextInt(int bound) {

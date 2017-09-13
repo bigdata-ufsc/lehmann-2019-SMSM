@@ -32,35 +32,43 @@ public interface EDRTest {
 			return new EDRClassifier(//
 					new EDRSemanticParameter(NElementProblem.stop, 0.5),
 					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
-					new EDRSemanticParameter(NElementProblem.dataSemantic, null));
+					new EDRSemanticParameter(NElementProblem.dataSemantic, null),
+					new EDRSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL));
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter(((NewYorkBusProblem) problem).stopSemantic(), calculateThreshold(((NewYorkBusProblem) problem).stopSemantic())),//
-					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
+					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
+					new EDRSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL));
 		} else if(problem instanceof DublinBusProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter(((DublinBusProblem) problem).stopSemantic(), calculateThreshold(((DublinBusProblem) problem).stopSemantic())),//
-					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
+					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
+					new EDRSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL));
 		} else if(problem instanceof PatelProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter(((PatelProblem) problem).stopSemantic(), calculateThreshold(((PatelProblem) problem).stopSemantic())),//
-					new EDRSemanticParameter(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN));
+					new EDRSemanticParameter(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN),
+					new EDRSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL));
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter(((SanFranciscoCabProblem) problem).stopSemantic(), calculateThreshold(((SanFranciscoCabProblem) problem).stopSemantic())),//
-					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
+					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
+					new EDRSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL));
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, calculateThreshold(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC)),//
-					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
+					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
+					new EDRSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL));
 		} else if(problem instanceof PrototypeProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter(PrototypeDataReader.STOP_SEMANTIC, null),//
-					new EDRSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN));
+					new EDRSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN),
+					new EDRSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL));
 		} else if(problem instanceof PisaProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter(((PisaProblem) problem).stopSemantic(), calculateThreshold(((PisaProblem) problem).stopSemantic())),//
-					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON));
+					new EDRSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
+					new EDRSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL));
 		}
 		return null;
 	}

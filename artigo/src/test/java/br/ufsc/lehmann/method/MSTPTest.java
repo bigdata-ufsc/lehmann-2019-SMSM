@@ -33,37 +33,44 @@ public interface MSTPTest {
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(((NewYorkBusProblem) problem).stopSemantic()),//
-					Semantic.GEOGRAPHIC_LATLON//
+					Semantic.GEOGRAPHIC_LATLON,//
+					Semantic.TEMPORAL//
 					);
 		} else if(problem instanceof DublinBusProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(((DublinBusProblem) problem).stopSemantic()),//
-					Semantic.GEOGRAPHIC_LATLON//
+					Semantic.GEOGRAPHIC_LATLON,//
+					Semantic.TEMPORAL//
 					);
 		} else if(problem instanceof PatelProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(((PatelProblem) problem).stopSemantic()),//
-					Semantic.GEOGRAPHIC//
+					Semantic.GEOGRAPHIC,//
+					Semantic.TEMPORAL//
 					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(((SanFranciscoCabProblem) problem).stopSemantic()),//
-					Semantic.GEOGRAPHIC_LATLON//
+					Semantic.GEOGRAPHIC_LATLON,//
+					Semantic.TEMPORAL//
 					);
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC),//
-					Semantic.GEOGRAPHIC_LATLON//
+					Semantic.GEOGRAPHIC_LATLON,//
+					Semantic.TEMPORAL//
 					);
 		} else if(problem instanceof PrototypeProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(PrototypeDataReader.STOP_SEMANTIC),//
-					Semantic.GEOGRAPHIC_EUCLIDEAN//
+					Semantic.GEOGRAPHIC_EUCLIDEAN,//
+					Semantic.TEMPORAL//
 					);
 		} else if(problem instanceof PisaProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(((PisaProblem) problem).stopSemantic()),//
-					Semantic.GEOGRAPHIC_LATLON//
+					Semantic.GEOGRAPHIC_LATLON,//
+					Semantic.TEMPORAL//
 					);
 		}
 		return null;

@@ -1,6 +1,8 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -98,9 +100,14 @@ public class DublinBusProblem implements Problem {
 		}
 		try {
 			data = new ArrayList<>(new DublinBusDataReader(onlyStops).read(lines));
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+		} catch (NumberFormatException | IOException | ParseException e) {
 			throw new RuntimeException(e);
 		}
+//		try {
+//			data = new ArrayList<>(new DublinBusDatabaseReader(onlyStops).read(lines));
+//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+//			throw new RuntimeException(e);
+//		}
 		Collections.shuffle(data, new java.util.Random() {
 			@Override
 			public int nextInt(int bound) {

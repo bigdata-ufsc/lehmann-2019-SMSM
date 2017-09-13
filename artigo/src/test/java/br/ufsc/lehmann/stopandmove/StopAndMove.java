@@ -90,8 +90,8 @@ public class StopAndMove {
 			moves.removeAll(it);
 		}
 		int moveId = (initial == null ? end : initial).getMoveId();
-		double startTime = initial == null ? (previousStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getEnd().toEpochMilli() : previousStop.getEndTime()) : initial.getStartTime();
-		double endTime = end == null ? (nextStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getStart().toEpochMilli() : nextStop.getStartTime()) : end.getEndTime();
+		long startTime = initial == null ? (previousStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getEnd().toEpochMilli() : previousStop.getEndTime()) : initial.getStartTime();
+		long endTime = end == null ? (nextStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getStart().toEpochMilli() : nextStop.getStartTime()) : end.getEndTime();
 		Move move = new Move(moveId, previousStop, nextStop, startTime, endTime, initialIndex, endIndex - initialIndex, null);
 		moves.putAll(move, mergedPoints);
 		stops.removeAll(s);

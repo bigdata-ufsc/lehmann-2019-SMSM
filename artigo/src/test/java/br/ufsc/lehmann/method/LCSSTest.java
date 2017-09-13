@@ -32,42 +32,50 @@ public interface LCSSTest {
 			return new LCSSClassifier(
 					new LCSSSemanticParameter(NElementProblem.stop, 0.5),
 					new LCSSSemanticParameter(Semantic.GEOGRAPHIC, 0.5),
-					new LCSSSemanticParameter(NElementProblem.dataSemantic, null)
+					new LCSSSemanticParameter(NElementProblem.dataSemantic, null),
+					new LCSSSemanticParameter(Semantic.TEMPORAL, 1)
 					);
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new LCSSClassifier(//
 					new LCSSSemanticParameter(((NewYorkBusProblem) problem).stopSemantic(), calculateThreshold(((NewYorkBusProblem) problem).stopSemantic())),//
-					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)//
+					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
+					new LCSSSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		} else if(problem instanceof DublinBusProblem) {
 			return new LCSSClassifier(//
 					new LCSSSemanticParameter(((DublinBusProblem) problem).stopSemantic(), calculateThreshold(((DublinBusProblem) problem).stopSemantic())),//
-					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)//
+					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
+					new LCSSSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		} else if(problem instanceof PatelProblem) {
 			return new LCSSClassifier(//
 					new LCSSSemanticParameter(((PatelProblem) problem).stopSemantic(), calculateThreshold(((PatelProblem) problem).stopSemantic())),//
-					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN)//
+					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN),
+					new LCSSSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new LCSSClassifier(//
 					new LCSSSemanticParameter(((SanFranciscoCabProblem) problem).stopSemantic(), calculateThreshold(((SanFranciscoCabProblem) problem).stopSemantic())),//
-					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)//
+					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
+					new LCSSSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new LCSSClassifier(//
 					new LCSSSemanticParameter(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, calculateThreshold(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC)),//
-					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)//
+					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
+					new LCSSSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		} else if(problem instanceof PrototypeProblem) {
 			return new LCSSClassifier(//
 					new LCSSSemanticParameter(PrototypeDataReader.STOP_SEMANTIC, null),//
-					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN)//
+					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN),
+					new LCSSSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		} else if(problem instanceof PisaProblem) {
 			return new LCSSClassifier(//
 					new LCSSSemanticParameter(((PisaProblem) problem).stopSemantic(), calculateThreshold(((PisaProblem) problem).stopSemantic())),//
-					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)//
+					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
+					new LCSSSemanticParameter(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		}
 		return null;

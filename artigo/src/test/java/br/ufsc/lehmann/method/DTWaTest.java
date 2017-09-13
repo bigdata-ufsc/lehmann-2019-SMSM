@@ -25,21 +25,21 @@ public interface DTWaTest {
 
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		if(problem instanceof NElementProblem) {
-			return new DTWaClassifier(problem, NElementProblem.dataSemantic, Semantic.GEOGRAPHIC);
+			return new DTWaClassifier(problem, NElementProblem.dataSemantic, Semantic.GEOGRAPHIC, Semantic.TEMPORAL);
 		} else if(problem instanceof PatelProblem) {
-			return new DTWaClassifier(problem, ((PatelProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON);
+			return new DTWaClassifier(problem, ((PatelProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON, Semantic.TEMPORAL);
 		} else if(problem instanceof NewYorkBusProblem) {
-			return new DTWaClassifier(problem, ((NewYorkBusProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON);
+			return new DTWaClassifier(problem, ((NewYorkBusProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON, Semantic.TEMPORAL);
 		} else if(problem instanceof DublinBusProblem) {
-			return new DTWaClassifier(problem, ((DublinBusProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC);
+			return new DTWaClassifier(problem, ((DublinBusProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC, Semantic.TEMPORAL);
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new DTWaClassifier(problem, ((SanFranciscoCabProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON);
+			return new DTWaClassifier(problem, ((SanFranciscoCabProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON, Semantic.TEMPORAL);
 		} else if(problem instanceof SergipeTracksProblem) {
-			return new DTWaClassifier(problem, SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Semantic.GEOGRAPHIC_LATLON);
+			return new DTWaClassifier(problem, SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Semantic.GEOGRAPHIC_LATLON, Semantic.TEMPORAL);
 		} else if(problem instanceof PrototypeProblem) {
-			return new DTWaClassifier(problem, PrototypeDataReader.STOP_SEMANTIC, Semantic.GEOGRAPHIC_EUCLIDEAN);
+			return new DTWaClassifier(problem, PrototypeDataReader.STOP_SEMANTIC, Semantic.GEOGRAPHIC_EUCLIDEAN, Semantic.TEMPORAL);
 		} else if(problem instanceof PisaProblem) {
-			return new DTWaClassifier(problem, ((PisaProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON);
+			return new DTWaClassifier(problem, ((PisaProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON, Semantic.TEMPORAL);
 		}
 		return null;
 	}
