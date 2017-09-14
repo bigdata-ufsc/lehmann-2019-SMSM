@@ -1,6 +1,8 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -100,9 +102,14 @@ public class PisaProblem implements Problem {
 		}
 		try {
 			data = new ArrayList<>(new PisaDataReader(onlyStops).read(users));
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+		} catch (NumberFormatException | ParseException | IOException e) {
 			throw new RuntimeException(e);
 		}
+//		try {
+//			data = new ArrayList<>(new PisaDatabaseReader(onlyStops).read(users));
+//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+//			throw new RuntimeException(e);
+//		}
 		Collections.shuffle(data, new java.util.Random() {
 			@Override
 			public int nextInt(int bound) {

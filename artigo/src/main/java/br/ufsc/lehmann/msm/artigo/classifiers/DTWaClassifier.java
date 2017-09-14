@@ -1,20 +1,15 @@
 package br.ufsc.lehmann.msm.artigo.classifiers;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.method.DTWa;
-import br.ufsc.lehmann.msm.artigo.MultiThreadClassificationExecutor;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 
 public class DTWaClassifier<Label> extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 

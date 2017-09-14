@@ -21,6 +21,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.Multimap;
@@ -122,7 +123,7 @@ public class SanFranciscoCabDataReader {
 					Integer.parseInt(data.get("tid")),
 					Integer.parseInt(data.get("gid")),
 							Integer.parseInt(data.get("taxi_id")),
-				new Timestamp(StopMoveCSVReader.TIMESTAMP.parse(data.get("timestamp")).getTime()),
+				new Timestamp(DateUtils.parseDate(data.get("timestamp"), StopMoveCSVReader.TIMESTAMP).getTime()),
 				Integer.parseInt(data.get("ocupation")),
 				Double.parseDouble(data.get("lon")),
 				Double.parseDouble(data.get("lat")),
@@ -223,7 +224,7 @@ public class SanFranciscoCabDataReader {
 					Integer.parseInt(data.get("tid")),
 					Integer.parseInt(data.get("gid")),
 							Integer.parseInt(data.get("taxi_id")),
-				new Timestamp(StopMoveCSVReader.TIMESTAMP.parse(data.get("timestamp")).getTime()),
+				new Timestamp(DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP).getTime()),
 				Integer.parseInt(data.get("ocupation")),
 				Double.parseDouble(data.get("lon")),
 				Double.parseDouble(data.get("lat")),

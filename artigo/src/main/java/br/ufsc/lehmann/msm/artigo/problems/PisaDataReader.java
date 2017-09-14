@@ -1,22 +1,26 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.sql.Array;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipFile;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.Multimap;
@@ -33,9 +37,6 @@ import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.core.trajectory.semantic.StopMove;
-import br.ufsc.db.source.DataRetriever;
-import br.ufsc.db.source.DataSource;
-import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.AngleDistance;
 import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
@@ -45,6 +46,7 @@ import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 import br.ufsc.lehmann.stopandmove.angle.AngleInference;
 import br.ufsc.lehmann.stopandmove.movedistance.MoveDistance;
+import cc.mallet.util.IoUtils;
 
 public class PisaDataReader {
 	
@@ -73,117 +75,56 @@ public class PisaDataReader {
 		this.onlyStops = onlyStops;
 	}
 
-	public List<SemanticTrajectory> read(Integer... users) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "pisa", DataSourceType.PGSQL, "public.semanticpoint", null, null);
-		DataRetriever retriever = source.getRetriever();
-		System.out.println("Executing SQL...");
-		Connection conn = retriever.getConnection();
-		conn.setAutoCommit(false);
-		Statement st = conn.createStatement();
-		st.setFetchSize(1000);
-
-		ResultSet stopsData = st.executeQuery(
-				"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
-						"centroid_lon, start_time, end_time, street " + //
-						"FROM stops_moves.pisa_stop");
-		Map<Integer, Stop> stops = new HashMap<>();
-		while (stopsData.next()) {
-			int stopId = stopsData.getInt("stop_id");
-			Stop stop = stops.get(stopId);
-			if (stop == null) {
-				stop = new Stop(stopId, null, //
-						stopsData.getTimestamp("start_time").getTime(), //
-						stopsData.getTimestamp("end_time").getTime(), //
-						new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
-						stopsData.getInt("begin"), //
-						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
-						stopsData.getInt("length"), //
-						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")),//
-						stopsData.getString("street")//
-				);
-				stops.put(stopId, stop);
-			}
-		}
-		Map<Integer, Move> moves = new HashMap<>();
-		ResultSet movesData = st.executeQuery(
-				"SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length, angle " + //
-						"FROM stops_moves.pisa_move");
-		while(movesData.next()) {
-			int moveId = movesData.getInt("move_id");
-			Move move = moves.get(moveId);
-			if (move == null) {
-				int startStopId = movesData.getInt("start_stop_id");
-				if (movesData.wasNull()) {
-					startStopId = -1;
-				}
-				int endStopId = movesData.getInt("end_stop_id");
-				if (movesData.wasNull()) {
-					endStopId = -1;
-				}
-				move = new Move(moveId, //
-						stops.get(startStopId), //
-						stops.get(endStopId), //
-						movesData.getTimestamp("start_time").getTime(), //
-						movesData.getTimestamp("end_time").getTime(), //
-						movesData.getInt("begin"), //
-						movesData.getInt("length"), //
-						null,
-						movesData.getDouble("angle"));
-				moves.put(moveId, move);
-			} else {
-				System.err.println(moveId);
-			}
-		}
-
-		String sql = "select gid, tid, dailytid, \"time\", is_stop, geom, lat, lon, ele, weather, temperature, "
-        + "user_id, place, goal, subgoal, transportation, event, dailytid, semantic_stop_id, semantic_move_id "
-		+ "from public.semanticpoint ";
-		if(users != null && users.length > 0) {
-			sql += "where user_id in (SELECT * FROM unnest(?)) ";
-		}
-		sql += "order by tid, dailytid, \"time\"";
-		PreparedStatement preparedStatement = conn.prepareStatement(sql);
-		if(users != null && users.length > 0) {
-			Array array = conn.createArrayOf("integer", users);
-			preparedStatement.setArray(1, array);
-		}
-		ResultSet data = preparedStatement.executeQuery();
-		Multimap<String, PisaRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
+	public List<SemanticTrajectory> read(Integer... users) throws IOException, NumberFormatException, ParseException  {
+		System.out.println("Reading file...");
+		ZipFile zipFile = new ZipFile(this.getClass().getClassLoader().getResource("./datasets/pisa.data.zip").getFile());
+		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("public.pisa.csv")));
+		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
+				CSVFormat.EXCEL.withHeader("gid", "tid", "time", "is_stop", "geom", "lat", "lon", "ele", "weather", "temperature", "user_id", "place", "goal", "subgoal", "transportation", "event", "dailytid", "semantic_stop_id", "semantic_move_id").withDelimiter(';'));
+		
+		InputStreamReader rawStopsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.pisa_stop.csv")));
+		CSVParser stopsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawStopsEntry).toString(), 
+				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "end_lat", "end_lon", "centroid_lat", "centroid_lon", "start_time", "end_time", "begin", "length", "street").withDelimiter(';'));
+		
+		InputStreamReader rawMovesEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.pisa_move.csv")));
+		CSVParser movesParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawMovesEntry).toString(), 
+				CSVFormat.EXCEL.withHeader("move_id", "start_time", "start_stop_id", "begin", "end_time", "end_stop_id", "length", "end_lon").withDelimiter(';'));
+		
+		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS");
+		Map<Integer, Move> moves = StopMoveCSVReader.moveCsvRead(movesParser, stops, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS");
+		List<CSVRecord> csvRecords = pointsParser.getRecords();
+		Iterator<CSVRecord> pointsData = csvRecords.subList(1, csvRecords.size()).iterator();
 		System.out.println("Fetching...");
-		while(data.next()) {
-			Integer stop = data.getInt("semantic_stop_id");
-			if(data.wasNull()) {
-				stop = null;
-			}
-			Integer move = data.getInt("semantic_move_id");
-			if(data.wasNull()) {
-				move = null;
-			}
+		Multimap<String, PisaRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
+		while(pointsData.hasNext()) {
+			CSVRecord data = pointsData.next();
+			String stop = data.get("semantic_stop_id");
+			String move = data.get("semantic_move_id");
 			PisaRecord record = new PisaRecord(
-					data.getTimestamp("time"),
-					data.getInt("is_stop"),
-					data.getInt("user_id"),
-				data.getInt("gid"),
-				data.getInt("tid"),
-				data.getInt("dailytid"),
-				data.getDouble("lat"),
-				data.getDouble("lon"),
-				data.getDouble("ele"),
-				data.getDouble("temperature"),
-				data.getString("weather"),
-				data.getString("place"),
-				data.getString("goal"),
-				data.getString("subgoal"),
-				data.getString("transportation"),
-				data.getString("event"),
-				stop,
-				move
+				new Timestamp(
+						DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS").getTime()),
+						Integer.parseInt(data.get("is_stop")),
+						Integer.parseInt(data.get("user_id")),
+						Integer.parseInt(data.get("gid")),
+						Integer.parseInt(data.get("tid")),
+						Integer.parseInt(data.get("dailytid")),
+						Double.parseDouble(data.get("lat")),
+						Double.parseDouble(data.get("lon")),
+						Double.parseDouble(data.get("ele")),
+						Double.parseDouble(data.get("temperature")),
+						data.get("weather"),
+						data.get("place"),
+						data.get("goal"),
+						data.get("subgoal"),
+						data.get("transportation"),
+						data.get("event"),
+						StringUtils.isEmpty(stop) ? null : Integer.parseInt(stop),
+						StringUtils.isEmpty(move) ? null : Integer.parseInt(move)
 			);
 			records.put(record.getTid() + "_" + record.getDaily_tid(), record);
 		}
-		st.close();
-		System.out.printf("Loaded %d GPS points from database\n", records.size());
-		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
+		System.out.printf("Loaded %d GPS points from dataset\n", records.size());
+		System.out.printf("Loaded %d trajectories from dataset\n", records.keySet().size());
 
 		List<Move> allMoves = new ArrayList<>(moves.values());
 		List<SemanticTrajectory> ret = null;
@@ -193,6 +134,7 @@ public class PisaDataReader {
 			ret = readRawPoints(stops, moves, records);
 		}
 		compute(CollectionUtils.removeAll(allMoves, moves.values()));
+		zipFile.close();
 		return ret;
 	}
 

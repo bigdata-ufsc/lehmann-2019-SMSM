@@ -21,6 +21,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.Multimap;
@@ -118,7 +119,7 @@ public class DublinBusDataReader {
 			}
 			DublinBusRecord record = new DublinBusRecord(
 				Integer.parseInt(data.get("gid")),
-				new Timestamp(StopMoveCSVReader.TIMESTAMP.parse(data.get("time")).getTime()),
+				new Timestamp(DateUtils.parseDate(data.get("time"), "yyyy-MM-dd HH:mm:ssX").getTime()),
 				Integer.parseInt(data.get("line_id")),
 				line,
 				Integer.parseInt(data.get("vehicle_journey")),
@@ -222,7 +223,7 @@ public class DublinBusDataReader {
 			}
 			DublinBusRecord record = new DublinBusRecord(
 				Integer.parseInt(data.get("gid")),
-				new Timestamp(StopMoveCSVReader.TIMESTAMP.parse(data.get("time")).getTime()),
+				new Timestamp(DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP).getTime()),
 				Integer.parseInt(data.get("line_id")),
 				line,
 				Integer.parseInt(data.get("vehicle_journey")),

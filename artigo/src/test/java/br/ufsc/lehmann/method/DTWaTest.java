@@ -6,18 +6,14 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.DTWaClassifier;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PisaDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
+import br.ufsc.lehmann.msm.artigo.problems.VehicleProblem;
 import br.ufsc.lehmann.prototype.PrototypeDataReader;
 import br.ufsc.lehmann.prototype.PrototypeProblem;
 
@@ -28,6 +24,8 @@ public interface DTWaTest {
 			return new DTWaClassifier(problem, NElementProblem.dataSemantic, Semantic.GEOGRAPHIC, Semantic.TEMPORAL);
 		} else if(problem instanceof PatelProblem) {
 			return new DTWaClassifier(problem, ((PatelProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON, Semantic.TEMPORAL);
+		} else if(problem instanceof VehicleProblem) {
+			return new DTWaClassifier(problem, ((VehicleProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON, Semantic.TEMPORAL);
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new DTWaClassifier(problem, ((NewYorkBusProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON, Semantic.TEMPORAL);
 		} else if(problem instanceof DublinBusProblem) {

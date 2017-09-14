@@ -4,22 +4,17 @@ import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.NElementProblem;
-import br.ufsc.lehmann.msm.artigo.ComparableMoveSemantic;
 import br.ufsc.lehmann.msm.artigo.ComparableStopSemantic;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSTPClassifier;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PisaDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
+import br.ufsc.lehmann.msm.artigo.problems.VehicleProblem;
 import br.ufsc.lehmann.prototype.PrototypeDataReader;
 import br.ufsc.lehmann.prototype.PrototypeProblem;
 
@@ -45,6 +40,12 @@ public interface MSTPTest {
 		} else if(problem instanceof PatelProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(((PatelProblem) problem).stopSemantic()),//
+					Semantic.GEOGRAPHIC,//
+					Semantic.TEMPORAL//
+					);
+		} else if(problem instanceof VehicleProblem) {
+			return new MSTPClassifier(//
+					new ComparableStopSemantic(((VehicleProblem) problem).stopSemantic()),//
 					Semantic.GEOGRAPHIC,//
 					Semantic.TEMPORAL//
 					);

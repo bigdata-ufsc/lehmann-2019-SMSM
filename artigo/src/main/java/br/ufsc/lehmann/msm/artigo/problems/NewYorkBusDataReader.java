@@ -19,6 +19,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.Multimap;
@@ -112,7 +113,7 @@ public class NewYorkBusDataReader {
 			String move = data.get("semantic_move_id");
 			NewYorkBusRecord record = new NewYorkBusRecord(
 				Integer.parseInt(data.get("gid")),
-				new Timestamp(StopMoveCSVReader.TIMESTAMP.parse(data.get("time")).getTime()),
+				new Timestamp(DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP).getTime()),
 				Integer.parseInt(data.get("vehicle_id")),
 				data.get("route"),
 				data.get("trip_id"),
@@ -215,7 +216,7 @@ public class NewYorkBusDataReader {
 			String move = data.get("semantic_move_id");
 			NewYorkBusRecord record = new NewYorkBusRecord(
 				Integer.parseInt(data.get("gid")),
-				new Timestamp(StopMoveCSVReader.TIMESTAMP.parse(data.get("time")).getTime()),
+				new Timestamp(DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP).getTime()),
 				Integer.parseInt(data.get("vehicle_id")),
 				data.get("route"),
 				data.get("trip_id"),

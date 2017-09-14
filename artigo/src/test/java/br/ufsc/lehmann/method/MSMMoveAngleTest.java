@@ -6,8 +6,8 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
-import br.ufsc.lehmann.SMSM.SMSMSemanticParameter;
 import br.ufsc.lehmann.NElementProblem;
+import br.ufsc.lehmann.SMSM.SMSMSemanticParameter;
 import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMMoveClassifier;
@@ -23,6 +23,7 @@ import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
+import br.ufsc.lehmann.msm.artigo.problems.VehicleProblem;
 import br.ufsc.lehmann.prototype.PrototypeDataReader;
 import br.ufsc.lehmann.prototype.PrototypeProblem;
 
@@ -48,6 +49,11 @@ public interface MSMMoveAngleTest {
 					);
 		} else if(problem instanceof PatelProblem) {
 			return new MSMMoveClassifier(new SMSMSemanticParameter(((PatelProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_EUCLIDEAN, PatelDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, .5)
+					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, .5),
+					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
+					);
+		} else if(problem instanceof VehicleProblem) {
+			return new MSMMoveClassifier(new SMSMSemanticParameter(((VehicleProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_EUCLIDEAN, PatelDataReader.MOVE_ANGLE_SEMANTIC, Thresholds.MOVE_ANGLE, .5)
 					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, .5),
 					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
 					);
