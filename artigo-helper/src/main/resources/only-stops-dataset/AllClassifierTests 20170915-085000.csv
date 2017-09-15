@@ -1,0 +1,161 @@
+dataset;measure;test-type;Accuracy;Precision;Recall;F-Measure;Specificity;Fall-out;FDR
+Pisa (Users [4, 6]);DTWaClassifierTest;holdout;0;1;0;0;0;0;0
+New York bus(lines=2);LCSSClassifierTest;cross-validation;0.954194734;0.925869565;0.994117647;0.957249002;0.900097627;0.099902373;0.074130435
+Dublin bus(lines=2);DTWClassifierTest;cross-validation;0.570756482;0.929411765;0.288635832;0.410619406;0.945454545;0.054545455;0.070588235
+Pisa (Users [4, 6]);DTWClassifierTest;holdout;0;1;0;0;0;0;0
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;cross-validation;0.986099973;1;0.990909091;0.995348837;1;0;0
+New York bus(lines=2);MSMMoveDistanceClassifierTest;cross-validation;0.988732394;0.988533989;0.984186162;0.986336186;0.988562092;0.011437908;0.011466011
+Pisa (Users [4, 6]);EDRClassifierTest;cross-validation;0.533333333;0.533333333;1;0.56;0;0.6;0.466666667
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;cross-validation;0.933333333;1;1;1;0.6;0;0
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;cross-validation;0.693908356;0.759611621;0.746212159;0.752094927;0.60042861;0.39957139;0.240388379
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;holdout;0.986013986;0.98630137;0.98630137;0.98630137;0.985714286;0.014285714;0.01369863
+New York bus(lines=2);MSMClassifierTest;cross-validation;0.45793019;0.898550725;0.2;0.132038835;0.8;0.2;0.101449275
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;holdout;0.67816092;0.72519084;0.826086957;0.772357724;0.389830508;0.610169492;0.27480916
+Vehicle ;ERPClassifierTest;holdout;0.336;0.330645161;1;0.496969697;0.011904762;0.988095238;0.669354839
+New York bus(lines=2);LiuSchneiderClassifierTest;cross-validation;0.518799755;0.896875;0.193761141;0.139263623;0.816666667;0.183333333;0.103125
+Vehicle ;LCSSClassifierTest;cross-validation;0.981468354;0.971746032;0.972256729;0.97157076;0.988681354;0.011318646;0.028253968
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;cross-validation;0.646397125;0.664836637;0.874674288;0.74630198;0.245940486;0.754059514;0.335163363
+Vehicle ;MSTPClassifierTest;cross-validation;0.352506329;1;0;0;1;0;0
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;cross-validation;0.933333333;1;1;1;0.6;0;0
+Pisa (Users [4, 6]);LCSSClassifierTest;cross-validation;0.866666667;1;0.9;0.933333333;0.6;0;0
+Dublin bus(lines=2);LCSSClassifierTest;cross-validation;0.883908046;0.986666667;0.812453504;0.886375466;0.986363636;0.013636364;0.013333333
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;cross-validation;1;1;1;1;0.6;0;0
+Vehicle ;MSMClassifierTest;holdout;0.328;0.328;1;0.493975904;0;1;0.672
+Vehicle ;wDFClassifierTest;cross-validation;0.807493671;0.642592846;0.628873192;0.627033493;0.860516473;0.139483527;0.357407154
+Dublin bus(lines=2);MSMClassifierTest;cross-validation;0.482651697;1;0;0;1;0;0
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;holdout;0.5;0.637254902;0.565217391;0.599078341;0.372881356;0.627118644;0.362745098
+Vehicle ;wDFClassifierTest;holdout;0.752;0.625;0.609756098;0.617283951;0.821428571;0.178571429;0.375
+Pisa (Users [4, 6]);wDFClassifierTest;cross-validation;0.133333333;0.5;0.9;0.5;0;0.6;0.5
+Dublin bus(lines=2);SWALEClassifierTest;holdout;0.601398601;0.7;0.383561644;0.495575221;0.828571429;0.171428571;0.3
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;cross-validation;0.997183099;0.988854489;1;0.994348259;0.988562092;0.011437908;0.011145511
+New York bus(lines=2);DTWClassifierTest;holdout;0.547826087;0.553571429;0.96875;0.704545455;0.019607843;0.980392157;0.446428571
+New York bus(lines=2);MSMClassifierTest;holdout;0.556521739;0.556521739;1;0.715083799;0;1;0.443478261
+Vehicle ;CVTIClassifierTest;holdout;0.328;0.328;1;0.493975904;0;1;0.672
+Pisa (Users [4, 6]);MSTPClassifierTest;cross-validation;0.333333333;0.533333333;1;0.56;0;0.6;0.466666667
+Dublin bus(lines=2);DTWaClassifierTest;holdout;0.734265734;1;0.479452055;0.648148148;1;0;0
+New York bus(lines=2);CVTIClassifierTest;holdout;0.556521739;0.556521739;1;0.715083799;0;1;0.443478261
+Pisa (Users [4, 6]);MSMMovePointsClassifierTest;holdout;1;1;1;1;0;0;0
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;holdout;0.626436782;0.711864407;0.730434783;0.721030043;0.423728814;0.576271186;0.288135593
+San Francisco cab (Airport <-> Mall);wDFClassifierTest;cross-validation;0.594986523;0.698273193;0.681832568;0.68948291;0.506188916;0.493811084;0.301726807
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;holdout;0.5;0.85;0.295652174;0.438709677;0.898305085;0.101694915;0.15
+Dublin bus(lines=2);LiuSchneiderClassifierTest;holdout;0.48951049;1;0;0;1;0;0
+San Francisco cab (Airport <-> Mall);EDRClassifierTest;cross-validation;0.587367475;0.634055362;0.822394532;0.715093121;0.207537538;0.792462462;0.365944638
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;cross-validation;0.433692722;0.625480683;1;0.769263624;0;1;0.374519317
+New York bus(lines=2);MSMMovePointsClassifierTest;cross-validation;0.997183099;0.988854489;1;0.994348259;0.988562092;0.011437908;0.011145511
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;holdout;0.66091954;0.66091954;1;0.795847751;0;1;0.33908046
+San Francisco cab (Airport <-> Mall);MSTPClassifierTest;holdout;0.66091954;0.66091954;1;0.795847751;0;1;0.33908046
+Pisa (Users [4, 6]);LCSSClassifierTest;holdout;1;1;1;1;0;0;0
+New York bus(lines=2);HCSSClassifierTest;holdout;0.965217391;0.954545455;0.984375;0.969230769;0.941176471;0.058823529;0.045454545
+Vehicle ;MSMMoveAngleClassifierTest;cross-validation;0.973603376;0.912063356;0.991304348;0.949901886;0.963334582;0.036665418;0.087936644
+New York bus(lines=2);wDFClassifierTest;cross-validation;0.991467646;1;0.983270831;0.991516684;1;0;0
+New York bus(lines=2);SWALEClassifierTest;cross-validation;0.628209839;0.636520705;0.6655595;0.646361197;0.5146491;0.4853509;0.363479295
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;cross-validation;0.538238994;0.617454432;0.880014861;0.725614812;0.089900355;0.910099645;0.382545568
+Dublin bus(lines=2);HCSSClassifierTest;cross-validation;0.760892809;1;0.423874707;0.583304932;1;0;0
+Pisa (Users [4, 6]);DTWClassifierTest;cross-validation;0.333333333;0.533333333;1;0.56;0;0.6;0.466666667
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;holdout;0.655172414;0.747747748;0.72173913;0.734513274;0.525423729;0.474576271;0.252252252
+Vehicle ;MSMMoveDistanceClassifierTest;holdout;0.968;0.911111111;1;0.953488372;0.952380952;0.047619048;0.088888889
+Dublin bus(lines=2);wDFClassifierTest;holdout;0.937062937;0.984848485;0.890410959;0.935251799;0.985714286;0.014285714;0.015151515
+San Francisco cab (Airport <-> Mall);ERPClassifierTest;cross-validation;0.566343217;0.631414702;0.982128068;0.767941657;0.042128037;0.957871963;0.368585298
+New York bus(lines=2);MSMMoveAngleClassifierTest;holdout;1;1;1;1;1;0;0
+Dublin bus(lines=2);CVTIClassifierTest;cross-validation;0.482651697;1;0;0;1;0;0
+Vehicle ;HCSSClassifierTest;holdout;0.896;0.966666667;0.707317073;0.816901408;0.988095238;0.011904762;0.033333333
+Dublin bus(lines=2);LCSSClassifierTest;holdout;0.881118881;0.966666667;0.794520548;0.872180451;0.971428571;0.028571429;0.033333333
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;holdout;0.993006993;1;0.98630137;0.993103448;1;0;0
+Dublin bus(lines=2);ERPClassifierTest;holdout;0.48951049;1;0;0;1;0;0
+Dublin bus(lines=2);EDRClassifierTest;cross-validation;0.958246458;0.995348837;0.95425036;0.974080508;0.995454545;0.004545455;0.004651163
+San Francisco cab (Airport <-> Mall);MSMClassifierTest;cross-validation;0.433692722;0.625480683;1;0.769263624;0;1;0.374519317
+Vehicle ;CVTIClassifierTest;cross-validation;0.352506329;1;0;0;1;0;0
+New York bus(lines=2);EDRClassifierTest;cross-validation;0.873280261;0.768913849;1;0.868030286;0.650446529;0.349553471;0.231086151
+Pisa (Users [4, 6]);MSMMoveAngleClassifierTest;holdout;1;1;1;1;0;0;0
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;cross-validation;0.534123989;0.6468078;0.790363643;0.710091974;0.278042588;0.721957412;0.3531922
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;cross-validation;1;1;1;1;0.6;0;0
+Pisa (Users [4, 6]);MSMClassifierTest;cross-validation;0.333333333;0.533333333;1;0.56;0;0.6;0.466666667
+Dublin bus(lines=2);MSTPClassifierTest;cross-validation;0.482651697;1;0;0;1;0;0
+Vehicle ;SWALEClassifierTest;holdout;0.984;0.975609756;0.975609756;0.975609756;0.988095238;0.011904762;0.024390244
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;cross-validation;0.68821204;0.751057099;0.749828359;0.750042514;0.580932296;0.419067704;0.248942901
+New York bus(lines=2);MSMMoveDistanceClassifierTest;holdout;1;1;1;1;1;0;0
+San Francisco cab (Airport <-> Mall);SWALEClassifierTest;holdout;0.591954023;0.654929577;0.808695652;0.723735409;0.169491525;0.830508475;0.345070423
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;cross-validation;0.524528302;0.625480683;1;0.769263624;0;1;0.374519317
+San Francisco cab (Airport <-> Mall);DTWaClassifierTest;holdout;0.603448276;0.651315789;0.860869565;0.741573034;0.101694915;0.898305085;0.348684211
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;cross-validation;0.433692722;0.625480683;1;0.769263624;0;1;0.374519317
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;cross-validation;0.691967655;0.735718973;0.760447928;0.747294223;0.541740377;0.458259623;0.264281027
+Dublin bus(lines=2);DTWClassifierTest;holdout;0.601398601;1;0.219178082;0.359550562;1;0;0
+Pisa (Users [4, 6]);MSMMoveEllipsesClassifierTest;holdout;1;1;1;1;0;0;0
+New York bus(lines=2);MSTPClassifierTest;cross-validation;0.45793019;0.898550725;0.2;0.132038835;0.8;0.2;0.101449275
+Vehicle ;MSMMoveDistanceClassifierTest;cross-validation;0.965603376;0.90191083;1;0.947910083;0.959816687;0.040183313;0.09808917
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;holdout;1;1;1;1;0;0;0
+Vehicle ;DTWClassifierTest;cross-validation;0.363037975;1;0.018518519;0.035338346;1;0;0
+Pisa (Users [4, 6]);DTWaClassifierTest;cross-validation;0.333333333;0.533333333;1;0.56;0;0.6;0.466666667
+Vehicle ;MSMMoveEllipsesClassifierTest;holdout;0.984;0.953488372;1;0.976190476;0.976190476;0.023809524;0.046511628
+Pisa (Users [4, 6]);EDRClassifierTest;holdout;1;1;1;1;0;0;0
+San Francisco cab (Airport <-> Mall);MSMMoveAngleClassifierTest;holdout;0.683908046;0.783018868;0.72173913;0.751131222;0.610169492;0.389830508;0.216981132
+New York bus(lines=2);MSMMoveAngleClassifierTest;cross-validation;0.994366197;0.988712242;0.994594595;0.99160952;0.988562092;0.011437908;0.011287758
+New York bus(lines=2);ERPClassifierTest;cross-validation;0.547703613;0.543326844;0.9741728;0.695052482;0.032140729;0.967859271;0.456673156
+Vehicle ;DTWaClassifierTest;cross-validation;0.363037975;1;0.018518519;0.035338346;1;0;0
+San Francisco cab (Airport <-> Mall);MSMMoveEllipsesClassifierTest;holdout;0.66091954;0.769230769;0.695652174;0.730593607;0.593220339;0.406779661;0.230769231
+Dublin bus(lines=2);DTWaClassifierTest;cross-validation;0.742555466;1;0.519888622;0.681714344;1;0;0
+Pisa (Users [4, 6]);SWALEClassifierTest;cross-validation;0.4;0.5;0.7;0.3;0;0.6;0.5
+Dublin bus(lines=2);wDFClassifierTest;cross-validation;0.946645282;0.984615385;0.887274428;0.933174603;0.986363636;0.013636364;0.015384615
+San Francisco cab (Airport <-> Mall);MSMMovePointsClassifierTest;holdout;0.672413793;0.784313725;0.695652174;0.737327189;0.627118644;0.372881356;0.215686275
+New York bus(lines=2);DTWaClassifierTest;cross-validation;0.495366401;0.872921109;0.269954102;0.258661939;0.805546218;0.194453782;0.127078891
+New York bus(lines=2);LiuSchneiderClassifierTest;holdout;0.556521739;0.556521739;1;0.715083799;0;1;0.443478261
+Dublin bus(lines=2);MSMClassifierTest;holdout;0.48951049;1;0;0;1;0;0
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;holdout;0.591954023;0.648648649;0.834782609;0.730038023;0.118644068;0.881355932;0.351351351
+San Francisco cab (Airport <-> Mall);LiuSchneiderClassifierTest;holdout;0.66091954;0.66091954;1;0.795847751;0;1;0.33908046
+New York bus(lines=2);EDRClassifierTest;holdout;0.704347826;1;0.46875;0.638297872;1;0;0
+Vehicle ;MSMClassifierTest;cross-validation;0.352506329;1;0;0;1;0;0
+Pisa (Users [4, 6]);MSMMoveDistanceClassifierTest;holdout;1;1;1;1;0;0;0
+Pisa (Users [4, 6]);HCSSClassifierTest;holdout;1;1;1;1;0;0;0
+Pisa (Users [4, 6]);ERPClassifierTest;cross-validation;0.333333333;0.533333333;1;0.56;0;0.6;0.466666667
+Vehicle ;MSTPClassifierTest;holdout;0.328;0.328;1;0.493975904;0;1;0.672
+Pisa (Users [4, 6]);LiuSchneiderClassifierTest;cross-validation;0.6;0.6;1;0.6;0.2;0.4;0.4
+San Francisco cab (Airport <-> Mall);DTWClassifierTest;cross-validation;0.58195867;0.632367268;0.935865364;0.754484941;0.091315861;0.908684139;0.367632732
+Dublin bus(lines=2);HCSSClassifierTest;holdout;0.804195804;0.959183673;0.643835616;0.770491803;0.971428571;0.028571429;0.040816327
+Vehicle ;HCSSClassifierTest;cross-validation;0.886413502;0.981818182;0.612701119;0.747518979;0.996551724;0.003448276;0.018181818
+Pisa (Users [4, 6]);ERPClassifierTest;holdout;0;1;0;0;0;0;0
+Dublin bus(lines=2);ERPClassifierTest;cross-validation;0.482651697;0.895081967;0.173588468;0.177437686;0.854545455;0.145454545;0.104918033
+Pisa (Users [4, 6]);wDFClassifierTest;holdout;0;1;0;0;0;0;0
+San Francisco cab (Airport <-> Mall);MSMMoveDistanceClassifierTest;cross-validation;0.695831087;0.760223881;0.75034025;0.754789246;0.602347802;0.397652198;0.239776119
+Vehicle ;MSMMoveAngleClassifierTest;holdout;0.968;0.911111111;1;0.953488372;0.952380952;0.047619048;0.088888889
+San Francisco cab (Airport <-> Mall);LCSSClassifierTest;cross-validation;0.585265049;0.662271899;0.753658713;0.704751293;0.359460824;0.640539176;0.337728101
+New York bus(lines=2);HCSSClassifierTest;cross-validation;0.752112676;0.717279693;0.952654862;0.809245516;0.484122139;0.515877861;0.282720307
+New York bus(lines=2);MSTPClassifierTest;holdout;0.556521739;0.556521739;1;0.715083799;0;1;0.443478261
+New York bus(lines=2);CVTIClassifierTest;cross-validation;0.45793019;0.898550725;0.2;0.132038835;0.8;0.2;0.101449275
+New York bus(lines=2);ERPClassifierTest;holdout;0.452173913;0.666666667;0.03125;0.059701493;0.980392157;0.019607843;0.333333333
+Vehicle ;LiuSchneiderClassifierTest;cross-validation;0.764556962;0.738383838;0.439058715;0.543754724;0.94890747;0.05109253;0.261616162
+New York bus(lines=2);wDFClassifierTest;holdout;1;1;1;1;1;0;0
+New York bus(lines=2);SWALEClassifierTest;holdout;0.669565217;0.675675676;0.78125;0.724637681;0.529411765;0.470588235;0.324324324
+Vehicle ;DTWClassifierTest;holdout;0.336;0.330645161;1;0.496969697;0.011904762;0.988095238;0.669354839
+San Francisco cab (Airport <-> Mall);CVTIClassifierTest;holdout;0.66091954;0.66091954;1;0.795847751;0;1;0.33908046
+Dublin bus(lines=2);MSMMovePointsClassifierTest;cross-validation;0.995375568;1;0.990909091;0.995348837;1;0;0
+Pisa (Users [4, 6]);MSMClassifierTest;holdout;0;1;0;0;0;0;0
+Vehicle ;LiuSchneiderClassifierTest;holdout;0.736;0.642857143;0.43902439;0.52173913;0.880952381;0.119047619;0.357142857
+New York bus(lines=2);MSMMoveEllipsesClassifierTest;holdout;1;1;1;1;1;0;0
+Dublin bus(lines=2);SWALEClassifierTest;cross-validation;0.540577386;0.596817411;0.49732289;0.528028371;0.6488063;0.3511937;0.403182589
+Dublin bus(lines=2);EDRClassifierTest;holdout;0.951048951;1;0.904109589;0.949640288;1;0;0
+Vehicle ;EDRClassifierTest;cross-validation;0.973333333;0.96076555;0.945870715;0.952300747;0.985960591;0.014039409;0.03923445
+New York bus(lines=2);DTWClassifierTest;cross-validation;0.489732598;0.739587775;0.27521726;0.264785725;0.787983494;0.212016506;0.260412225
+Dublin bus(lines=2);MSMMoveEllipsesClassifierTest;cross-validation;0.990751136;1;0.982398453;0.991001011;1;0;0
+Vehicle ;ERPClassifierTest;cross-validation;0.365704641;1;0.018518519;0.035338346;1;0;0
+Vehicle ;DTWaClassifierTest;holdout;0.336;0.330645161;1;0.496969697;0.011904762;0.988095238;0.669354839
+Vehicle ;MSMMoveEllipsesClassifierTest;cross-validation;0.978801688;0.952187286;1;0.975195957;0.981724306;0.018275694;0.047812714
+New York bus(lines=2);MSMMovePointsClassifierTest;holdout;1;1;1;1;1;0;0
+Dublin bus(lines=2);MSMMoveAngleClassifierTest;cross-validation;0.986099973;0.995555556;0.981891867;0.98854147;0.995238095;0.004761905;0.004444444
+Pisa (Users [4, 6]);CVTIClassifierTest;cross-validation;0.333333333;0.533333333;1;0.56;0;0.6;0.466666667
+Dublin bus(lines=2);MSMMovePointsClassifierTest;holdout;1;1;1;1;1;0;0
+Pisa (Users [4, 6]);HCSSClassifierTest;cross-validation;0.866666667;1;0.9;0.933333333;0.6;0;0
+Vehicle ;EDRClassifierTest;holdout;0.96;0.973684211;0.902439024;0.936708861;0.988095238;0.011904762;0.026315789
+New York bus(lines=2);LCSSClassifierTest;holdout;0.947826087;0.914285714;1;0.955223881;0.882352941;0.117647059;0.085714286
+New York bus(lines=2);DTWaClassifierTest;holdout;0.565217391;0.561403509;1;0.719101124;0.019607843;0.980392157;0.438596491
+Vehicle ;SWALEClassifierTest;cross-validation;0.992;0.98;0.982608696;0.980382775;0.992982456;0.007017544;0.02
+Pisa (Users [4, 6]);MSTPClassifierTest;holdout;0;1;0;0;0;0;0
+Dublin bus(lines=2);MSMMoveDistanceClassifierTest;holdout;0.986013986;0.98630137;0.98630137;0.98630137;0.985714286;0.014285714;0.01369863
+Vehicle ;MSMMovePointsClassifierTest;cross-validation;0.978801688;0.952187286;1;0.975195957;0.981724306;0.018275694;0.047812714
+Vehicle ;LCSSClassifierTest;holdout;0.968;1;0.902439024;0.948717949;1;0;0
+Pisa (Users [4, 6]);CVTIClassifierTest;holdout;0;1;0;0;0;0;0
+San Francisco cab (Airport <-> Mall);HCSSClassifierTest;holdout;0.649425287;0.690140845;0.852173913;0.762645914;0.254237288;0.745762712;0.309859155
+Pisa (Users [4, 6]);SWALEClassifierTest;holdout;1;1;1;1;0;0;0
+Dublin bus(lines=2);MSTPClassifierTest;holdout;0.48951049;1;0;0;1;0;0
+Dublin bus(lines=2);CVTIClassifierTest;holdout;0.48951049;1;0;0;1;0;0
+Vehicle ;MSMMovePointsClassifierTest;holdout;0.984;0.953488372;1;0.976190476;0.976190476;0.023809524;0.046511628
+Dublin bus(lines=2);LiuSchneiderClassifierTest;cross-validation;0.484923817;1;0.004761905;0.009302326;1;0;0
