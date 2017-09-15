@@ -41,7 +41,7 @@ public class ResultsParser {
     
     @Parameters(name="{0}")
     public static Collection<Path> data() throws IOException {
-    	List<Path> files = Files.list(Paths.get(new File("./src/main/resources/only-stops").toURI())).filter((Path p) -> {
+    	List<Path> files = Files.list(Paths.get(new File("./src/main/resources/only-stops-dataset").toURI())).filter((Path p) -> {
     		return p.getFileName().toString().endsWith(".out");
     	}).collect(Collectors.toList());
         return files;
@@ -57,7 +57,8 @@ public class ResultsParser {
 		String line = null;
 		Map<String, ExperimentData> datasets = new HashMap<>();
 		while((line = lineReader.readLine()) != null) {
-			if(line.equals("Executing SQL...")) {
+			if(line.equals("Reading file...")) {
+//			if(line.equals("Executing SQL...")) {
 				do {
 					line = lineReader.readLine();
 				} while(line != null && !TEST_NAME_PATTERN.matcher(line).matches());

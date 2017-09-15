@@ -19,6 +19,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -98,6 +99,9 @@ public class PisaDataReader {
 		Multimap<String, PisaRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		while(pointsData.hasNext()) {
 			CSVRecord data = pointsData.next();
+			if(!ArrayUtils.isEmpty(users) && !ArrayUtils.contains(users, Integer.parseInt(data.get("user_id")))) {
+				continue;
+			}
 			String stop = data.get("semantic_stop_id");
 			String move = data.get("semantic_move_id");
 			PisaRecord record = new PisaRecord(
