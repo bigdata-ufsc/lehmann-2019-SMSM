@@ -9,7 +9,7 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.lehmann.msm.artigo.problems.PisaDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
-import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
+import br.ufsc.utils.LatLongDistanceFunction;
 
 public class MoveDistance_Pisa {
 
