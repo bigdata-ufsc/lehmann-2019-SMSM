@@ -39,9 +39,9 @@ import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
-import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 import br.ufsc.lehmann.stopandmove.angle.AngleInference;
 import br.ufsc.lehmann.stopandmove.movedistance.MoveDistance;
+import br.ufsc.utils.LatLongDistanceFunction;
 
 public class SergipeTracksDataReader {
 	

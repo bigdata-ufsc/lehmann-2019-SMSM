@@ -19,9 +19,9 @@ import br.ufsc.core.trajectory.semantic.StopMove;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
-import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
 import br.ufsc.lehmann.stopandmove.angle.AngleInference;
 import br.ufsc.utils.Distance;
+import br.ufsc.utils.EuclideanDistanceFunction;
 import smile.math.Random;
 
 public class NElementProblem implements Problem {

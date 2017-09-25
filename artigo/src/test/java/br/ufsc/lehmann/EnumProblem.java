@@ -47,10 +47,16 @@ public enum EnumProblem {
 //	DUBLIN_BUS_2_LINES_ONLY_STOPS_STREET_NAME(new DublinBusProblem(DublinBusDataReader.STOP_STREET_NAME_SEMANTIC, true, "00671001", "00431001"), 2),//
 //	TAXI_SANFRANCISCO_AIRPORT_MALL_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_AirportMallRoad_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new String[] {"101", "280"}), 2),//
 //	VEHICLE_URBAN_ONLY_STOPS_STREET_NAME(new VehicleProblem(VehicleDataReader.STOP_STREET_NAME_SEMANTIC, true), 2),//
-	PISA_ONLY_STOPS_STREET_NAME_ALL_USERS(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, true, 1, 2, 3, 4, 5, 6, 7), 7),//
-	PISA_ONLY_STOPS_STREET_NAME_USERS_4_6(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, true, 4, 6), 2),//
-	PISA_ONLY_STOPS_STREET_NAME_USERS_2_3(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, true, 2, 3), 2),//
-	PROTOTYPE(new PrototypeProblem(), 2)
+//	PISA_ONLY_STOPS_STREET_NAME_ALL_USERS(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, true, 1, 2, 3, 4, 5, 6, 7), 7),//
+//	PISA_ONLY_STOPS_STREET_NAME_USERS_4_6(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, true, 4, 6), 2),//
+//	PISA_ONLY_STOPS_STREET_NAME_USERS_2_3(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, true, 2, 3), 2),//
+//	PROTOTYPE(new PrototypeProblem(), 2),
+	NEWYORK_BUS_2_LINES_ONLY_STOPS_TRAFFIC_LIGHT(new NewYorkBusProblem(NewYorkBusDataReader.STOP_TRAFFIC_LIGHT_SEMANTIC, true, "MTA NYCT_Q20A", "MTA NYCT_M102"), 2),//
+	NEWYORK_BUS_2_LINES_ONLY_STOPS_TRAFFIC_LIGHT_DISTANCE(new NewYorkBusProblem(NewYorkBusDataReader.STOP_TRAFFIC_LIGHT_DISTANCE_SEMANTIC, true, "MTA NYCT_Q20A", "MTA NYCT_M102"), 2),// 
+	DUBLIN_BUS_2_LINES_ONLY_STOPS_TRAFFIC_LIGHT(new DublinBusProblem(DublinBusDataReader.STOP_TRAFFIC_LIGHT_SEMANTIC, true, "00671001", "00431001"), 2),// 
+	DUBLIN_BUS_2_LINES_ONLY_STOPS_TRAFFIC_LIGHT_DISTANCE(new DublinBusProblem(DublinBusDataReader.STOP_TRAFFIC_LIGHT_DISTANCE_SEMANTIC, true, "00671001", "00431001"), 2),//
+	TAXI_SANFRANCISCO_AIRPORT_MALL_ONLY_STOPS_TRAFFIC_LIGHT(new SanFranciscoCab_AirportMallRoad_Problem(SanFranciscoCabDataReader.STOP_TRAFFIC_LIGHT_SEMANTIC, true, new String[] {"101", "280"}), 2),//
+	TAXI_SANFRANCISCO_AIRPORT_MALL_ONLY_STOPS_TRAFFIC_LIGHT_DISTANCE(new SanFranciscoCab_AirportMallRoad_Problem(SanFranciscoCabDataReader.STOP_TRAFFIC_LIGHT_DISTANCE_SEMANTIC, true, new String[] {"101", "280"}), 2),//
 	;
 	private Problem p;
 	private int numClasses;

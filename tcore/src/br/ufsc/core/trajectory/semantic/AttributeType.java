@@ -26,7 +26,9 @@ public enum AttributeType {
 			return s.getMove().getStreetName();
 		}
 		return null;
-	});
+	}),
+	STOP_TRAFFIC_LIGHT((Stop s) -> s.getTrafficLight()),
+	STOP_TRAFFIC_LIGHT_DISTANCE((Stop s) -> s.getTrafficLightDistance());
 	
 	private Function func;
 

@@ -44,9 +44,9 @@ import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
-import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
 import br.ufsc.lehmann.stopandmove.angle.AngleInference;
 import br.ufsc.lehmann.stopandmove.movedistance.MoveDistance;
+import br.ufsc.utils.LatLongDistanceFunction;
 import cc.mallet.util.IoUtils;
 
 public class PisaDataReader {
@@ -78,7 +78,7 @@ public class PisaDataReader {
 
 	public List<SemanticTrajectory> read(Integer... users) throws IOException, NumberFormatException, ParseException  {
 		System.out.println("Reading file...");
-		ZipFile zipFile = new ZipFile(this.getClass().getClassLoader().getResource("./datasets/pisa.data.zip").getFile());
+		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource("./datasets/pisa.data.zip").getFile(), "UTF-8"));
 		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("public.pisa.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("gid", "tid", "time", "is_stop", "geom", "lat", "lon", "ele", "weather", "temperature", "user_id", "place", "goal", "subgoal", "transportation", "event", "dailytid", "semantic_stop_id", "semantic_move_id").withDelimiter(';'));
