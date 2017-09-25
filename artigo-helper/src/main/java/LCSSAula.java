@@ -1,8 +1,8 @@
 public class LCSSAula {
 
 	public static void main(String[] args) {
-		String A = "What tensions you";
-		String B = "O a tem som de u";
+		String A = "CCCATAGCGTATCACT";
+		String B = "TCCCATAGCGAATCACA";
 		double distance = distance(A.toCharArray(), B.toCharArray());
 		System.out.println("Distance: " + distance);
 		System.out.println("Similarity: " + (1 - (distance / (Math.min(A.length(), B.length())))));
