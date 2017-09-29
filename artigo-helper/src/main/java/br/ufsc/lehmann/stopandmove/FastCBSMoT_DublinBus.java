@@ -26,17 +26,17 @@ public class FastCBSMoT_DublinBus {
 
 		// Trajectory t = retriever.fastFetchTrajectory(9543);
 		// FIND STOPS
-		double ratio = 40; // distance in meters to find neighbors
-		int timeTolerance = 24 * 1000; // time in ms dif do ponto final para o inicial deve ser maior que timeTolerance
+		double ratio = 50; // distance in meters to find neighbors
+		int timeTolerance = 30 * 1000; // time in ms dif do ponto final para o inicial deve ser maior que timeTolerance
 
 		// Merge - Será feito merge nos stops em que a distância dos centroid estiver há até maxDist de distância
 		// e em que o tempo do ponto inicial do primeiro stop e do ponto final do segundo stop
 		// seja menor ou igual a mergeTolerance
-		double maxDist = 300; // distance in meters to merge stops
-		int mergeTolerance = 450;// time in ms
+		double maxDist = 200; // distance in meters to merge stops
+		int mergeTolerance = 2 * 60 * 1000;// time in ms
 
 		// Clean - Os stops devem ter pelo menos o minTime
-		int minTime = 30 * 1000; // time in ms
+		int minTime = 45 * 1000; // time in ms
 
 		// System.out.println(T.size());
 		long start = System.currentTimeMillis();

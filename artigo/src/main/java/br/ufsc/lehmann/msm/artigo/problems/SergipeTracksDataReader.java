@@ -39,8 +39,8 @@ import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
-import br.ufsc.lehmann.stopandmove.angle.AngleInference;
-import br.ufsc.lehmann.stopandmove.movedistance.MoveDistance;
+import br.ufsc.utils.Angle;
+import br.ufsc.utils.Distance;
 import br.ufsc.utils.LatLongDistanceFunction;
 
 public class SergipeTracksDataReader {
@@ -211,8 +211,8 @@ public class SergipeTracksDataReader {
 			if(move.getEnd() != null) {
 				points.add(move.getEnd().getStartPoint());
 			}
-			move.setAttribute(AttributeType.MOVE_ANGLE, AngleInference.getAngle(points.get(0), points.get(points.size() - 1)));
-			move.setAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE, MoveDistance.getDistance(points.toArray(new TPoint[points.size()]), DISTANCE_FUNCTION));
+			move.setAttribute(AttributeType.MOVE_ANGLE, Angle.getAngle(points.get(0), points.get(points.size() - 1)));
+			move.setAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE, Distance.getDistance(points.toArray(new TPoint[points.size()]), DISTANCE_FUNCTION));
 		}
 	}
 }

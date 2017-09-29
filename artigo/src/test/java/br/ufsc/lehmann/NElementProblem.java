@@ -19,7 +19,7 @@ import br.ufsc.core.trajectory.semantic.StopMove;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
-import br.ufsc.lehmann.stopandmove.angle.AngleInference;
+import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
 import br.ufsc.utils.EuclideanDistanceFunction;
 import smile.math.Random;
@@ -79,7 +79,7 @@ public class NElementProblem implements Problem {
 					t.addData(j, stop, startStop);
 					previousMove = null;
 				} else {
-					double angle = AngleInference.getAngle(startStop.getCentroid(), endStop.getCentroid());
+					double angle = Angle.getAngle(startStop.getCentroid(), endStop.getCentroid());
 					if(previousMove == null) {
 						previousMove = new Move(id, startStop, endStop, nowMilli, future, j, 2,//
 										new TPoint[] {point, new TPoint(k + ((j + 1) / 20.0), k + ((j + 1) / 20.0))},//
@@ -135,5 +135,4 @@ public class NElementProblem implements Problem {
 	public String shortDescripton() {
 		return "Synthetic test problem(samples=" + elements + ", classes=" + classes + ")";
 	}
-
 }

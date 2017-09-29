@@ -11,6 +11,7 @@ import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.utils.Angle;
 
 public class AngleInference {
 	private final String database;
@@ -37,7 +38,7 @@ public class AngleInference {
 			TPoint end = null;
 			int endIndex = move.getBegin() + move.getLength() - 1;
 			end = Semantic.GEOGRAPHIC.getData(entry.getValue(), endIndex);
-			double angle = getAngle(start, end);
+			double angle = Angle.getAngle(start, end);
 			ps.setDouble(1, angle);
 			ps.setInt(2, move.getMoveId());
 			ps.execute();
@@ -53,15 +54,4 @@ public class AngleInference {
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		new AngleInference().extract(moveTable, moves);
 	}
-
-	public static double getAngle(TPoint p1, TPoint p2) {
-		double angle = Math.toDegrees(Math.atan2(p2.getY() - p1.getY(), p2.getX() - p1.getX()));
-
-		if (angle < 0) {
-			angle += 360;
-		}
-
-		return angle;
-	}
-
 }

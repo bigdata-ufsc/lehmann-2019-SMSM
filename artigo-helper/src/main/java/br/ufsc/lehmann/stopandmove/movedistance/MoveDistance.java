@@ -12,6 +12,7 @@ import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.utils.Distance;
 
 public class MoveDistance {
 	
@@ -39,7 +40,7 @@ public class MoveDistance {
 			for (int i = 0; i < move.getLength(); i++) {
 				points[i] = Semantic.GEOGRAPHIC.getData(entry.getValue(), move.getBegin() + i);
 			}
-			double traveledDistance = getDistance(points, func);
+			double traveledDistance = Distance.getDistance(points, func);
 			ps.setDouble(1, traveledDistance);
 			ps.setInt(2, move.getMoveId());
 			ps.execute();
@@ -49,13 +50,6 @@ public class MoveDistance {
 		}
 		conn.commit();
 		conn.close();
-	}
-	public static double getDistance(TPoint[] points, GeographicDistanceFunction func) {
-		double ret = 0;
-		for (int i = 0; i < points.length - 1; i++) {
-			ret += func.distance(points[i], points[i + 1]);
-		}
-	    return ret;
 	}
 
 }
