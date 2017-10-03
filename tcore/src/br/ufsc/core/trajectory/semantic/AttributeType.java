@@ -6,6 +6,7 @@ public enum AttributeType {
 
 	MOVE_ANGLE((Move m) -> m.getAngle()),
 	MOVE_TRAVELLED_DISTANCE((Move m) -> m.getTravelledDistance()),
+	MOVE_DURATION((Move m) -> m.getDuration()),
 	MOVE_POINTS((Move m) -> m.getPoints()),
 	MOVE_STREET_NAME((Move m) -> m.getStreetName()),
 	STOP_CENTROID((Stop s) -> s.getCentroid()),

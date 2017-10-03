@@ -1,0 +1,483 @@
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+SMSMTemporalDurationClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+0.5
+0.12571428571428572
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+SMSMTemporalDurationClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+[0.0, 0.0, 0.0, 0.9, 0.09999999999999998, 1.0]
+[0.05, 0.06666666666666667, 0.05714285714285715, 0.5876190476190477, 0.41238095238095235, 0.95]
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+SMSMTemporalDurationClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+1.0
+0.9333333333333333
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+SMSMTemporalDurationClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+[1.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+[1.0, 1.0, 1.0, 0.6, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+SMSMTemporalDurationClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+0.6
+0.3466666666666667
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+SMSMTemporalDurationClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+[0.75, 0.75, 0.75, 0.0, 1.0, 0.25]
+[0.7, 0.2, 0.13333333333333333, 0.7, 0.3, 0.3]
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+SMSMDistanceClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+0.5
+0.13428571428571429
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+SMSMDistanceClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+[0.0, 0.0, 0.0, 0.8, 0.19999999999999996, 1.0]
+[0.05, 0.06666666666666667, 0.05714285714285715, 0.5876190476190477, 0.41238095238095235, 0.95]
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+SMSMDistanceClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+1.0
+1.0
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+SMSMDistanceClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+[1.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+[1.0, 1.0, 1.0, 0.6, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+SMSMDistanceClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+0.6
+0.3466666666666667
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+SMSMDistanceClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+[0.75, 0.75, 0.75, 0.0, 1.0, 0.25]
+[0.7, 0.2, 0.13333333333333333, 0.7, 0.3, 0.3]
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+SMSMAngleClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+0.5833333333333334
+0.07714285714285714
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+SMSMAngleClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+[0.5, 0.5, 0.5, 0.9, 0.09999999999999998, 0.5]
+[0.0, 0.0, 0.0, 0.5209523809523808, 0.4790476190476191, 1.0]
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+SMSMAngleClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+1.0
+1.0
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+SMSMAngleClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+[1.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+[1.0, 1.0, 1.0, 0.6, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+SMSMAngleClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+0.6
+0.4133333333333333
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+SMSMAngleClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+[0.75, 0.75, 0.75, 0.0, 1.0, 0.25]
+[0.6666666666666666, 0.2, 0.1, 0.6, 0.4, 0.3333333333333333]
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+SMSMEllipsesClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+0.5
+0.15428571428571428
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+SMSMEllipsesClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+[0.0, 0.0, 0.0, 0.9, 0.09999999999999998, 1.0]
+[0.05, 0.06666666666666667, 0.05714285714285715, 0.580952380952381, 0.419047619047619, 0.95]
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+SMSMEllipsesClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+1.0
+0.9333333333333333
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+SMSMEllipsesClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+[1.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+[1.0, 1.0, 1.0, 0.6, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+SMSMEllipsesClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+0.6
+0.3466666666666667
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+SMSMEllipsesClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+[0.75, 0.75, 0.75, 0.0, 1.0, 0.25]
+[0.7, 0.2, 0.13333333333333333, 0.7, 0.3, 0.3]
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+SMSMPointsClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+0.5
+0.18285714285714283
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+SMSMPointsClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+[0.0, 0.0, 0.0, 0.9, 0.09999999999999998, 1.0]
+[0.05, 0.06666666666666667, 0.05714285714285715, 0.5476190476190477, 0.4523809523809524, 0.95]
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+SMSMPointsClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+1.0
+0.9333333333333333
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+SMSMPointsClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+[1.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+[1.0, 1.0, 1.0, 0.6, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+SMSMPointsClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+0.6
+0.3466666666666667
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+SMSMPointsClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+[0.75, 0.75, 0.75, 0.0, 1.0, 0.25]
+[0.7, 0.2, 0.13333333333333333, 0.7, 0.3, 0.3]
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+H_MSM_TemporalDurationClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+0.5
+0.10571428571428572
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+H_MSM_TemporalDurationClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+[0.0, 0.0, 0.0, 0.9, 0.09999999999999998, 1.0]
+[0.05, 0.06666666666666667, 0.05714285714285715, 0.580952380952381, 0.419047619047619, 0.95]
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+H_MSM_TemporalDurationClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+1.0
+0.9333333333333333
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+H_MSM_TemporalDurationClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+[1.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+[1.0, 1.0, 1.0, 0.6, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+H_MSM_TemporalDurationClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+0.6
+0.4133333333333333
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+H_MSM_TemporalDurationClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+[0.75, 0.75, 0.75, 0.0, 1.0, 0.25]
+[0.8, 0.2, 0.2, 0.8, 0.2, 0.2]
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+H_MSM_DistanceClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+0.5
+0.13428571428571429
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+H_MSM_DistanceClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+[0.0, 0.0, 0.0, 0.8, 0.19999999999999996, 1.0]
+[0.05, 0.06666666666666667, 0.05714285714285715, 0.580952380952381, 0.419047619047619, 0.95]
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+H_MSM_DistanceClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+1.0
+0.9333333333333333
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+H_MSM_DistanceClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+[1.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+[1.0, 1.0, 1.0, 0.6, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+H_MSM_DistanceClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+0.6
+0.4133333333333333
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+H_MSM_DistanceClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+[0.75, 0.75, 0.75, 0.0, 1.0, 0.25]
+[0.8, 0.2, 0.2, 0.8, 0.2, 0.2]
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+H_MSM_AngleClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+0.5
+0.07714285714285714
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+H_MSM_AngleClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+[0.5, 0.5, 0.5, 0.9, 0.09999999999999998, 0.5]
+[0.0, 0.0, 0.0, 0.47619047619047616, 0.5238095238095238, 1.0]
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+H_MSM_AngleClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+1.0
+0.9333333333333333
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+H_MSM_AngleClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+[1.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+[1.0, 1.0, 1.0, 0.6, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+H_MSM_AngleClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+0.6
+0.3733333333333333
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+H_MSM_AngleClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+[0.75, 0.75, 0.75, 0.0, 1.0, 0.25]
+[0.6, 0.0, 0.0, 0.6, 0.4, 0.4]
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+H_MSM_EllipsesClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+0.5
+0.13428571428571429
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+H_MSM_EllipsesClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+[0.0, 0.0, 0.0, 0.9, 0.09999999999999998, 1.0]
+[0.05, 0.06666666666666667, 0.05714285714285715, 0.580952380952381, 0.419047619047619, 0.95]
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+H_MSM_EllipsesClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+1.0
+0.9333333333333333
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+H_MSM_EllipsesClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+[1.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+[1.0, 1.0, 1.0, 0.6, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+H_MSM_EllipsesClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+0.6
+0.4133333333333333
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+H_MSM_EllipsesClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+[0.75, 0.75, 0.75, 0.0, 1.0, 0.25]
+[0.8, 0.2, 0.2, 0.8, 0.2, 0.2]
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+H_MSM_PointsClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+0.3333333333333333
+0.1457142857142857
+Reading file...
+Fetching...
+Loaded 141663 GPS points from dataset
+Loaded 38 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,55, min - 15,00, max - 160,00, sd - 33,45
+H_MSM_PointsClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [1, 2, 3, 4, 5, 6, 7])]
+[0.0, 0.0, 0.0, 0.7, 0.30000000000000004, 1.0]
+[0.09, 0.16666666666666666, 0.1142857142857143, 0.440952380952381, 0.5590476190476192, 0.9099999999999999]
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+H_MSM_PointsClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+1.0
+0.9333333333333333
+Reading file...
+Fetching...
+Loaded 19879 GPS points from dataset
+Loaded 7 trajectories from dataset
+Semantic Trajectories statistics: mean - 47,43, min - 25,00, max - 93,00, sd - 23,01
+H_MSM_PointsClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [4, 6])]
+[1.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+[1.0, 1.0, 1.0, 0.6, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+H_MSM_PointsClassifierTest#validation_accuracy[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+0.4
+0.4533333333333333
+Reading file...
+Fetching...
+Loaded 67051 GPS points from dataset
+Loaded 17 trajectories from dataset
+Semantic Trajectories statistics: mean - 54,82, min - 15,00, max - 125,00, sd - 31,57
+H_MSM_PointsClassifierTest#validation_precision_recall[Pisa [STOP_STREET_NAME][onlyStops=true](Users [2, 3])]
+[0.6666666666666666, 0.5, 0.5714285714285715, 0.0, 1.0, 0.3333333333333333]
+[0.6, 0.8, 0.6266666666666667, 0.26666666666666666, 0.7333333333333334, 0.4]

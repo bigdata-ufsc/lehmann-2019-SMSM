@@ -36,6 +36,7 @@ public class NElementProblem implements Problem {
 	
 	public static final MoveSemantic move = new MoveSemantic(5, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
 	public static final MoveSemantic move_distance = new MoveSemantic(5, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic move_duration = new MoveSemantic(5, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
 	public static final MoveSemantic move_points = new MoveSemantic(5, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(new EuclideanDistanceFunction(), 10)));
 	public static final MoveSemantic move_ellipses = new MoveSemantic(5, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 	

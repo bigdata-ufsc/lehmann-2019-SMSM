@@ -6,9 +6,9 @@ import br.ufsc.lehmann.EnumProblem;
 import br.ufsc.lehmann.method.MSMMoveEllipsesTest;
 import br.ufsc.lehmann.msm.artigo.Problem;
 
-public class MSMMoveEllipsesClassifierTest extends AbstractClassifierTest implements MSMMoveEllipsesTest {
+public class SMSMEllipsesClassifierTest extends AbstractClassifierTest implements MSMMoveEllipsesTest {
 
-	public MSMMoveEllipsesClassifierTest(EnumProblem problemDescriptor) {
+	public SMSMEllipsesClassifierTest(EnumProblem problemDescriptor) {
 		super(problemDescriptor);
 	}
 
