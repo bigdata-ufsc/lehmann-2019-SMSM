@@ -3,16 +3,14 @@ package br.ufsc.lehmann.msm.artigo.classifiers;
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
-import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 import br.ufsc.lehmann.H_MSM;
-import br.ufsc.lehmann.H_MSM.H_MSM_SemanticParameter;
 
 public class H_MSM_Classifier extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 
 	private H_MSM msm;
 	
-	public H_MSM_Classifier(H_MSM_SemanticParameter moveSemantic, MSMSemanticParameter<?, ?>... params) {
-		msm = new H_MSM(moveSemantic, params);
+	public H_MSM_Classifier(H_MSM.H_MSM_MoveSemanticParameters moveSemantic, H_MSM.H_MSM_StopSemanticParameters stopSemantic) {
+		msm = new H_MSM(moveSemantic, stopSemantic);
 	}
 
 	@Override

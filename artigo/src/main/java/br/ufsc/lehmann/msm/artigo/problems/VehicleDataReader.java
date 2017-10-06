@@ -123,7 +123,7 @@ public class VehicleDataReader {
 	}
 
 	private Map<Integer, Stop> readStops(CSVParser stopsParser) throws IOException {
-		return StopMoveCSVReader.stopsCsvRead(stopsParser, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS");
+		return StopMoveCSVReader.stopsCsvRead(stopsParser, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SS", "yyyy-MM-dd HH:mm:ss.S");
 	}
 	
 	public List<Stop> exportStops() throws IOException, ParseException, URISyntaxException {

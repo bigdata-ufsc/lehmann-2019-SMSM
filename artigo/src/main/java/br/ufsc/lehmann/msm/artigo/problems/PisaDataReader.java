@@ -92,8 +92,8 @@ public class PisaDataReader {
 		CSVParser movesParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawMovesEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("move_id", "start_time", "start_stop_id", "begin", "end_time", "end_stop_id", "length", "end_lon").withDelimiter(';'));
 		
-		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS");
-		Map<Integer, Move> moves = StopMoveCSVReader.moveCsvRead(movesParser, stops, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS");
+		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SS", "yyyy-MM-dd HH:mm:ss.S");
+		Map<Integer, Move> moves = StopMoveCSVReader.moveCsvRead(movesParser, stops, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SS", "yyyy-MM-dd HH:mm:ss.S");
 		List<CSVRecord> csvRecords = pointsParser.getRecords();
 		Iterator<CSVRecord> pointsData = csvRecords.subList(1, csvRecords.size()).iterator();
 		System.out.println("Fetching...");

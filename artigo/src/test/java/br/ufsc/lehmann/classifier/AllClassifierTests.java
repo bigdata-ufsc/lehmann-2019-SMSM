@@ -13,7 +13,7 @@ import org.junit.runners.Suite.SuiteClasses;
 //	LiuSchneiderClassifierTest.class, 
 //	DTWaClassifierTest.class, /*MTMClassifierTest.class*/
 //	SMSMTemporalDurationClassifierTest.class, SMSMDistanceClassifierTest.class, SMSMAngleClassifierTest.class, SMSMEllipsesClassifierTest.class, SMSMPointsClassifierTest.class,  
-	/*H_MSM_TemporalDurationClassifierTest.class, */H_MSM_DistanceClassifierTest.class, H_MSM_AngleClassifierTest.class, H_MSM_EllipsesClassifierTest.class, H_MSM_PointsClassifierTest.class, 
+	H_MSM_TemporalDurationClassifierTest.class, H_MSM_DistanceClassifierTest.class, H_MSM_AngleClassifierTest.class, H_MSM_EllipsesClassifierTest.class, H_MSM_PointsClassifierTest.class, 
 	})
 public class AllClassifierTests {
 

@@ -3,10 +3,8 @@ package br.ufsc.lehmann.method;
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.core.trajectory.TPoint;
-import br.ufsc.core.trajectory.TemporalDuration;
-import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
-import br.ufsc.lehmann.H_MSM.H_MSM_SemanticParameter;
+import br.ufsc.core.trajectory.semantic.AttributeType;
+import br.ufsc.lehmann.H_MSM;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.msm.artigo.Problem;
@@ -32,50 +30,101 @@ public interface H_MSM_EllipsesTest {
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		if(problem instanceof NElementProblem) {
 			return new H_MSM_Classifier(//
-					new H_MSM_SemanticParameter(NElementProblem.stop, .5, NElementProblem.move_ellipses, Thresholds.MOVE_INNER_POINTS_PERC, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 0.5, 1/3),//
-					new MSMSemanticParameter<Number, Number>(NElementProblem.dataSemantic, null, 1/3),
-					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, 1/3)
-					);
+						new H_MSM.H_MSM_MoveSemanticParameters(NElementProblem.move_ellipses, new H_MSM.H_MSM_DimensionParameters[] {
+								new H_MSM.H_MSM_DimensionParameters<>(NElementProblem.move_ellipses, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
+							}),
+						new H_MSM.H_MSM_StopSemanticParameters(NElementProblem.stop, new H_MSM.H_MSM_DimensionParameters[] {
+								new H_MSM.H_MSM_DimensionParameters<>(Semantic.GEOGRAPHIC, AttributeType.STOP_GEOGRAPHIC, 0.5, 1/2),
+								new H_MSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1/2)
+							})
+						);
 		} else if(problem instanceof NewYorkBusProblem) {
-			return new H_MSM_Classifier(new H_MSM_SemanticParameter(((NewYorkBusProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON, NewYorkBusDataReader.MOVE_ELLIPSES_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, .5),
-					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
+			return new H_MSM_Classifier(//
+					new H_MSM.H_MSM_MoveSemanticParameters(NewYorkBusDataReader.MOVE_ELLIPSES_SEMANTIC, new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(NewYorkBusDataReader.MOVE_ELLIPSES_SEMANTIC, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
+						}),
+					new H_MSM.H_MSM_StopSemanticParameters(((NewYorkBusProblem) problem).stopSemantic(), new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.GEOGRAPHIC_LATLON, AttributeType.STOP_GEOGRAPHIC, Thresholds.GEOGRAPHIC_LATLON, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(((NewYorkBusProblem) problem).stopSemantic(), AttributeType.STOP, Thresholds.STOP_CENTROID_LATLON, 1/3)
+						})
 					);
 		} else if(problem instanceof DublinBusProblem) {
-			return new H_MSM_Classifier(new H_MSM_SemanticParameter(((DublinBusProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON, DublinBusDataReader.MOVE_ELLIPSES_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, .5),
-					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
+			return new H_MSM_Classifier(//
+					new H_MSM.H_MSM_MoveSemanticParameters(DublinBusDataReader.MOVE_ELLIPSES_SEMANTIC, new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(DublinBusDataReader.MOVE_ELLIPSES_SEMANTIC, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
+						}),
+					new H_MSM.H_MSM_StopSemanticParameters(((DublinBusProblem) problem).stopSemantic(), new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.GEOGRAPHIC_LATLON, AttributeType.STOP_GEOGRAPHIC, Thresholds.GEOGRAPHIC_LATLON, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(((DublinBusProblem) problem).stopSemantic(), AttributeType.STOP, Thresholds.STOP_CENTROID_LATLON, 1/3)
+						})
 					);
 		} else if(problem instanceof PatelProblem) {
-			return new H_MSM_Classifier(new H_MSM_SemanticParameter(((PatelProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_EUCLIDEAN, PatelDataReader.MOVE_ELLIPSES_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, .5),
-					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
+			return new H_MSM_Classifier(//
+					new H_MSM.H_MSM_MoveSemanticParameters(PatelDataReader.MOVE_ELLIPSES_SEMANTIC, new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(PatelDataReader.MOVE_ELLIPSES_SEMANTIC, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
+						}),
+					new H_MSM.H_MSM_StopSemanticParameters(((PatelProblem) problem).stopSemantic(), new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.GEOGRAPHIC_EUCLIDEAN, AttributeType.STOP_GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(((PatelProblem) problem).stopSemantic(), AttributeType.STOP, Thresholds.STOP_CENTROID_EUCLIDEAN, 1/3)
+						})
 					);
 		} else if(problem instanceof VehicleProblem) {
-			return new H_MSM_Classifier(new H_MSM_SemanticParameter(((VehicleProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_EUCLIDEAN, PatelDataReader.MOVE_ELLIPSES_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, .5),
-					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
+			return new H_MSM_Classifier(//
+					new H_MSM.H_MSM_MoveSemanticParameters(PatelDataReader.MOVE_ELLIPSES_SEMANTIC, new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(PatelDataReader.MOVE_ELLIPSES_SEMANTIC, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
+						}),
+					new H_MSM.H_MSM_StopSemanticParameters(((VehicleProblem) problem).stopSemantic(), new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.GEOGRAPHIC_EUCLIDEAN, AttributeType.STOP_GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(((VehicleProblem) problem).stopSemantic(), AttributeType.STOP, Thresholds.STOP_CENTROID_EUCLIDEAN, 1/3)
+						})
 					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new H_MSM_Classifier(new H_MSM_SemanticParameter(((SanFranciscoCabProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON, SanFranciscoCabDataReader.MOVE_ELLIPSES_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, .5),
-					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
+			return new H_MSM_Classifier(//
+					new H_MSM.H_MSM_MoveSemanticParameters(SanFranciscoCabDataReader.MOVE_ELLIPSES_SEMANTIC, new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(SanFranciscoCabDataReader.MOVE_ELLIPSES_SEMANTIC, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
+						}),
+					new H_MSM.H_MSM_StopSemanticParameters(((SanFranciscoCabProblem) problem).stopSemantic(), new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.GEOGRAPHIC_LATLON, AttributeType.STOP_GEOGRAPHIC, Thresholds.GEOGRAPHIC_LATLON, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(((SanFranciscoCabProblem) problem).stopSemantic(), AttributeType.STOP, Thresholds.STOP_CENTROID_LATLON, 1/3)
+						})
 					);
 		} else if(problem instanceof SergipeTracksProblem) {
-			return new H_MSM_Classifier(new H_MSM_SemanticParameter(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Thresholds.STOP_CENTROID_LATLON, SergipeTracksDataReader.MOVE_ELLIPSES_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, .5),
-					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
+			return new H_MSM_Classifier(//
+					new H_MSM.H_MSM_MoveSemanticParameters(SergipeTracksDataReader.MOVE_ELLIPSES_SEMANTIC, new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(SergipeTracksDataReader.MOVE_ELLIPSES_SEMANTIC, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
+						}),
+					new H_MSM.H_MSM_StopSemanticParameters(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.GEOGRAPHIC_LATLON, AttributeType.STOP_GEOGRAPHIC, Thresholds.GEOGRAPHIC_LATLON, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, AttributeType.STOP, Thresholds.STOP_CENTROID_LATLON, 1/3)
+						})
 					);
 		} else if(problem instanceof PrototypeProblem) {
-			return new H_MSM_Classifier(new H_MSM_SemanticParameter(PrototypeDataReader.STOP_SEMANTIC, null, PrototypeDataReader.MOVE_SEMANTIC, null, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN, .5),
-					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
+			return new H_MSM_Classifier(//
+					new H_MSM.H_MSM_MoveSemanticParameters(PrototypeDataReader.MOVE_SEMANTIC, new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(PrototypeDataReader.MOVE_SEMANTIC, AttributeType.MOVE, null, 1)
+						}),
+					new H_MSM.H_MSM_StopSemanticParameters(PrototypeDataReader.STOP_SEMANTIC, new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.GEOGRAPHIC_EUCLIDEAN, AttributeType.STOP_GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(PrototypeDataReader.STOP_SEMANTIC, AttributeType.STOP, null, 1/3)
+						})
 					);
 		} else if(problem instanceof PisaProblem) {
-			return new H_MSM_Classifier(new H_MSM_SemanticParameter(((PisaProblem) problem).stopSemantic(), null, PisaDataReader.MOVE_ELLIPSES_SEMANTIC, Thresholds.MOVE_INNER_POINTS_PERC, .5)
-					, new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON, .5),
-					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, .5)
+			return new H_MSM_Classifier(//
+					new H_MSM.H_MSM_MoveSemanticParameters(PisaDataReader.MOVE_ELLIPSES_SEMANTIC, new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(PisaDataReader.MOVE_ELLIPSES_SEMANTIC, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
+						}),
+					new H_MSM.H_MSM_StopSemanticParameters(((PisaProblem) problem).stopSemantic(), new H_MSM.H_MSM_DimensionParameters[] {
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.GEOGRAPHIC_LATLON, AttributeType.STOP_GEOGRAPHIC, Thresholds.GEOGRAPHIC_LATLON, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1/3),
+							new H_MSM.H_MSM_DimensionParameters<>(((PisaProblem) problem).stopSemantic(), AttributeType.STOP, Thresholds.STOP_CENTROID_LATLON, 1/3)
+						})
 					);
 		}
 		return null;
