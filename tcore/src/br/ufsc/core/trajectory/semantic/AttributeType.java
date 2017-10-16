@@ -16,7 +16,7 @@ public enum AttributeType {
 	STOP((Stop s) -> s),
 	STOP_CENTROID((Stop s) -> s.getCentroid()),
 	STOP_STREET_NAME((Stop s) -> s.getStreetName()),
-	STOP_NAME((Stop s) -> s.getStreetName()),
+	STOP_NAME((Stop s) -> s.getStopName()),
 	STOP_STREET_NAME_MOVE_ANGLE((StopMove s) -> {
 		if(s.getStop() != null) {
 			return s.getStop().getStreetName();

@@ -33,9 +33,9 @@ public interface MSMMoveTemporalDurationTest {
 		if(problem instanceof NElementProblem) {
 			return new MSMMoveClassifier(//
 					new SMSMSemanticParameter(NElementProblem.stop, .5, NElementProblem.move_duration, Thresholds.MOVE_DURATION, .5)
-					,new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 0.5, 1/3),//
-					new MSMSemanticParameter<Number, Number>(NElementProblem.dataSemantic, null, 1/3),
-					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, 1/3)
+					,new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 0.5, 1.0/3.0),//
+					new MSMSemanticParameter<Number, Number>(NElementProblem.dataSemantic, null, 1.0/3.0),
+					new MSMSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0)
 					);
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new MSMMoveClassifier(new SMSMSemanticParameter(((NewYorkBusProblem) problem).stopSemantic(), Thresholds.STOP_CENTROID_LATLON, NewYorkBusDataReader.MOVE_TEMPORAL_DURATION_SEMANTIC, Thresholds.MOVE_DURATION, .5)

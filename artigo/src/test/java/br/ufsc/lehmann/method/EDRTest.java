@@ -5,7 +5,6 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
-import br.ufsc.core.trajectory.TemporalDuration;
 import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.NElementProblem;
@@ -31,48 +30,57 @@ public interface EDRTest {
 			return new EDRClassifier(//
 					new EDRSemanticParameter<Stop, Number>(NElementProblem.stop, 0.5),
 					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
-					new EDRSemanticParameter<Number, Number>(NElementProblem.dataSemantic, null),
-					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL));
+					new EDRSemanticParameter<Number, Number>(NElementProblem.dataSemantic, null)
+//					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)
+					);
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter<Stop, Number>(((NewYorkBusProblem) problem).stopSemantic(), calculateThreshold(((NewYorkBusProblem) problem).stopSemantic())),//
-					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
-					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL));
+					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)
+//					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)
+					);
 		} else if(problem instanceof DublinBusProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter<Stop, Number>(((DublinBusProblem) problem).stopSemantic(), calculateThreshold(((DublinBusProblem) problem).stopSemantic())),//
-					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
-					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL));
+					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)
+//					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)
+					);
 		} else if(problem instanceof PatelProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter<Stop, Number>(((PatelProblem) problem).stopSemantic(), calculateThreshold(((PatelProblem) problem).stopSemantic())),//
-					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN),
-					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL));
+					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN)
+//					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)
+					);
 		} else if(problem instanceof VehicleProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter<Stop, Number>(((VehicleProblem) problem).stopSemantic(), calculateThreshold(((VehicleProblem) problem).stopSemantic())),//
-					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN),
-					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL));
+					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN)
+//					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)
+					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter<Stop, Number>(((SanFranciscoCabProblem) problem).stopSemantic(), calculateThreshold(((SanFranciscoCabProblem) problem).stopSemantic())),//
-					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
-					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL));
+					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)
+//					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)
+					);
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter<Stop, Number>(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, calculateThreshold(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC)),//
-					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
-					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL));
+					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)
+//					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)
+					);
 		} else if(problem instanceof PrototypeProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter<Stop, Number>(PrototypeDataReader.STOP_SEMANTIC, null),//
-					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN),
-					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL));
+					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN)
+//					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)
+					);
 		} else if(problem instanceof PisaProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter<Stop, Number>(((PisaProblem) problem).stopSemantic(), calculateThreshold(((PisaProblem) problem).stopSemantic())),//
-					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON),
-					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL));
+					new EDRSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)
+//					new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)
+					);
 		}
 		return null;
 	}

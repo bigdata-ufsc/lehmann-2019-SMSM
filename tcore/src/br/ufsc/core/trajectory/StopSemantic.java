@@ -40,7 +40,7 @@ public class StopSemantic extends Semantic<Stop, Number> {
 		}
 		return distance <= desc.convertThreshold(threshold.doubleValue());
 	}
-	
+
 	public String name() {
 		return desc.attributeName();
 	}

@@ -4,7 +4,8 @@ public interface Thresholds {
 
 	public static final int GEOGRAPHIC_LATLON = 50;
 	public static final int GEOGRAPHIC_EUCLIDEAN = 500;
-	public static final int TEMPORAL = 100;
+	public static final int GEOGRAPHIC_PROTOTYPE = 1;
+	public static final double TEMPORAL = 0.7;
 	public static final int STOP_CENTROID_LATLON = 300;
 	public static final int STOP_CENTROID_EUCLIDEAN = 3000;
 	public static final int STOP_STREET_NAME = Integer.MAX_VALUE;

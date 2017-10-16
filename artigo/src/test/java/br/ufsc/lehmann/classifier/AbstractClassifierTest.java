@@ -1,5 +1,7 @@
 package br.ufsc.lehmann.classifier;
 
+import static org.junit.Assert.*;
+
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +13,7 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -190,6 +193,14 @@ public abstract class AbstractClassifierTest {
 			assertMeasure(FALLOUT, "Validation = " + validationAccuracy[4], validationAccuracy[4] < .2);
 			assertMeasure(FDR, "Validation = " + validationAccuracy[5], validationAccuracy[5] < .2);
 		}
+	}
+	
+	@Test
+	@Ignore
+	public void testName() throws Exception {
+		List<SemanticTrajectory> data = problem.data();
+		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
+		System.out.println(classifier.distance(data.get(0), data.get(1)));
 	}
 	
 	public void assertMeasure(ClassificationMeasure measure, double expected, double actual, double delta) {

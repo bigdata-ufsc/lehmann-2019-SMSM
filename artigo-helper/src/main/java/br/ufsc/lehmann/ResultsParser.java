@@ -142,7 +142,7 @@ public class ResultsParser {
 				String measure = split[2];
 				String type = split[3];
 				try {
-					printer.printRecord(dataset, stopSemantic, measure, type, values.get("accuracy"), values.get("precision"), values.get("recall"), values.get("f-measure"), values.get("specificity"), values.get("fall-out"), values.get("false-discovery-rate"));
+					printer.printRecord(dataset.trim(), stopSemantic.trim(), measure.trim(), type.trim(), values.get("accuracy"), values.get("precision"), values.get("recall"), values.get("f-measure"), values.get("specificity"), values.get("fall-out"), values.get("false-discovery-rate"));
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}

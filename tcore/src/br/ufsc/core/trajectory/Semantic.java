@@ -1,6 +1,8 @@
 package br.ufsc.core.trajectory;
 
 import java.time.Instant;
+import java.time.LocalTime;
+import java.time.ZoneId;
 
 import org.joda.time.Interval;
 
@@ -27,7 +29,6 @@ public abstract class Semantic<Element, Threshold> {
 		public double distance(Number d1, Number d2) {
 			return ((Comparable<Number>) d1).compareTo((Number) d2);
 		}
-		
 	};
 	public static final Semantic<TPoint, Number> GEOGRAPHIC_EUCLIDEAN = new Semantic<TPoint, Number>(1) {
 
@@ -50,6 +51,9 @@ public abstract class Semantic<Element, Threshold> {
 			return Distance.euclidean(d1, d2);
 		}
 		
+		public double similarity(TPoint d1, TPoint d2) {
+			return 1 / distance(d1, d2);
+		}
 	};
 	public static final Semantic<TPoint, Number> GEOGRAPHIC_LATLON = new Semantic<TPoint, Number>(1) {
 
@@ -72,6 +76,9 @@ public abstract class Semantic<Element, Threshold> {
 			return Distance.distFrom(d1, d2);
 		}
 		
+		public double similarity(TPoint d1, TPoint d2) {
+			return 1 / distance(d1, d2);
+		}
 	};
 	public static final Semantic<TemporalDuration, Number> TEMPORAL = new Semantic<TemporalDuration, Number>(2) {
 
@@ -93,20 +100,62 @@ public abstract class Semantic<Element, Threshold> {
 		}
 		
 		public double distance(TemporalDuration d1, TemporalDuration d2) {
-			long aStart = d1.getStart().toEpochMilli();
-			long aEnd = d1.getEnd().toEpochMilli();
-			long bStart = d2.getStart().toEpochMilli();
-			long bEnd = d2.getEnd().toEpochMilli();
-			Interval intervalA = new Interval(aStart, aEnd);
-			Interval intervalB = new Interval(bStart, bEnd);
+			long aStart = LocalTime.from(d1.getStart().atZone(ZoneId.of("GMT"))).toSecondOfDay();
+			long aEnd = LocalTime.from(d1.getEnd().atZone(ZoneId.of("GMT"))).toSecondOfDay();
+			aEnd = aEnd < aStart ? aEnd + (24 * 60 * 60) : aEnd;
+			long bStart = LocalTime.from(d2.getStart().atZone(ZoneId.of("GMT"))).toSecondOfDay();
+			long bEnd = LocalTime.from(d2.getEnd().atZone(ZoneId.of("GMT"))).toSecondOfDay();
+			bEnd = bEnd < bStart ? bEnd + (24 * 60 * 60) : bEnd;
+			Interval intervalA = new Interval(aStart * 1000, aEnd * 1000);
+			Interval intervalB = new Interval(bStart * 1000, bEnd * 1000);
 			Interval overlapAtoB = intervalA.overlap(intervalB);
 			if(overlapAtoB == null) {
 				return 1L;
 			}
-			long overlap = overlapAtoB.toDurationMillis();
+			double overlap = overlapAtoB.toDurationMillis();
 			Instant lastEnd = d1.getEnd().isAfter(d2.getEnd()) ? d1.getEnd() : d2.getEnd();
 			Instant firstStart = d1.getStart().isBefore(d2.getStart()) ? d1.getStart() : d2.getStart();
-			long maxDuration = new Interval(firstStart.toEpochMilli(), lastEnd.toEpochMilli()).toDurationMillis();
+			double maxDuration = new Interval(firstStart.toEpochMilli(), lastEnd.toEpochMilli()).toDurationMillis();
+			return (1 - overlap / maxDuration);
+		}
+		
+	};
+	public static final Semantic<TemporalDuration, Number> TIMESTAMP = new Semantic<TemporalDuration, Number>(2) {
+
+		@Override
+		public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshlod) {
+			return distance(a, i, b, j) <= threshlod.longValue();
+		}
+
+		@Override
+		public boolean match(TemporalDuration d1, TemporalDuration d2, Number threshlod) {
+			return distance(d1, d2) <= threshlod.longValue();
+		}
+
+		@Override
+		public Long distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
+			TemporalDuration a1 = (TemporalDuration) a.getDimensionData(index, i);
+			TemporalDuration b1 = (TemporalDuration) b.getDimensionData(index, j);
+			return (long) distance(a1, b1);
+		}
+		
+		public double distance(TemporalDuration d1, TemporalDuration d2) {
+			long aStart = LocalTime.from(d1.getStart().atZone(ZoneId.of("GMT"))).toSecondOfDay();
+			long aEnd = LocalTime.from(d1.getEnd().atZone(ZoneId.of("GMT"))).toSecondOfDay();
+			aEnd = aEnd < aStart ? aEnd + (24 * 60 * 60) : aEnd;
+			long bStart = LocalTime.from(d2.getStart().atZone(ZoneId.of("GMT"))).toSecondOfDay();
+			long bEnd = LocalTime.from(d2.getEnd().atZone(ZoneId.of("GMT"))).toSecondOfDay();
+			bEnd = bEnd < bStart ? bEnd + (24 * 60 * 60) : bEnd;
+			Interval intervalA = new Interval(aStart * 1000, aEnd * 1000);
+			Interval intervalB = new Interval(bStart * 1000, bEnd * 1000);
+			Interval overlapAtoB = intervalA.overlap(intervalB);
+			if(overlapAtoB == null) {
+				return 1L;
+			}
+			double overlap = overlapAtoB.toDurationMillis();
+			Instant lastEnd = d1.getEnd().isAfter(d2.getEnd()) ? d1.getEnd() : d2.getEnd();
+			Instant firstStart = d1.getStart().isBefore(d2.getStart()) ? d1.getStart() : d2.getStart();
+			double maxDuration = new Interval(firstStart.toEpochMilli(), lastEnd.toEpochMilli()).toDurationMillis();
 			return (1 - overlap / maxDuration);
 		}
 		
@@ -122,6 +171,17 @@ public abstract class Semantic<Element, Threshold> {
 
 	public Element getData(SemanticTrajectory p, int i) {
 		return (Element) p.getDimensionData(index, i);
+	}
+
+	public double similarity(Element d1, Element d2) {
+		return 1 - distance(d1, d2);
+	}
+	
+	public double similarity(Element d1, Element d2, Number unit) {
+		if(unit == null) {
+			return similarity(d1, d2);
+		}
+		return unit.doubleValue() / Math.max(unit.doubleValue(), distance(d1, d2));
 	}
 
 	public abstract Threshold distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j);
