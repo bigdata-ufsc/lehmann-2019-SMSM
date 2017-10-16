@@ -16,6 +16,7 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCab_AirportMallRoad_Problem;
+import br.ufsc.utils.LatLongDistanceFunction;
 
 public class FastCBSMoT_SanFranciscoCab_AirportMallRoad_Problem {
 

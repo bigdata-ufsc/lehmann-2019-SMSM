@@ -1,5 +1,6 @@
 package br.ufsc.core.trajectory.semantic;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -36,8 +37,8 @@ public class Stop {
 		this.centroid = centroid;
 		this.begin = beginIndex;
 		this.length = length;
-		attributes = Arrays.asList(new Attribute(AttributeType.STOP_NAME, stopName),
-				new Attribute(AttributeType.STOP_STREET_NAME, streetName));
+		attributes = new ArrayList<>(Arrays.asList(new Attribute(AttributeType.STOP_NAME, stopName),
+				new Attribute(AttributeType.STOP_STREET_NAME, streetName)));
 	}
 	
 	public Stop(int stopId, int beginIndex, long startTime, int length, long endTime) {
@@ -76,12 +77,28 @@ public class Stop {
 		return centroid;
 	}
 	
+	public Long getTrafficLight() {
+		return (Long) getAttribute(AttributeType.STOP_TRAFFIC_LIGHT);
+	}
+	
+	public Double getTrafficLightDistance() {
+		return (Double) getAttribute(AttributeType.STOP_TRAFFIC_LIGHT_DISTANCE);
+	}
+	
 	public String getStreetName() {
 		return (String) getAttribute(AttributeType.STOP_STREET_NAME);
 	}
 	
 	public String getStopName() {
 		return (String) getAttribute(AttributeType.STOP_NAME);
+	}
+	
+	public void setTrafficLight(Long trafficLightId) {
+		setAttribute(AttributeType.STOP_TRAFFIC_LIGHT, trafficLightId);
+	}
+
+	public void setTrafficLightDistance(Double trafficLightDistance) {
+		setAttribute(AttributeType.STOP_TRAFFIC_LIGHT_DISTANCE, trafficLightDistance);
 	}
 
 	public void setEndTime(long endTime) {
@@ -119,6 +136,16 @@ public class Stop {
 
 	public void setCentroid(TPoint centroid) {
 		this.centroid = centroid;
+	}
+	
+	private void setAttribute(AttributeType type, Object value) {
+		for (Attribute attribute : attributes) {
+			if(attribute.getType() == type) {
+				attribute.setValue(value);
+				return;
+			}
+		}
+		attributes.add(new Attribute(type, value));
 	}
 	
 	public Object getAttribute(AttributeType type) {

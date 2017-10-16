@@ -2,6 +2,8 @@ package br.ufsc.lehmann.msm.artigo.problems;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -41,9 +43,9 @@ import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
-import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
-import br.ufsc.lehmann.stopandmove.angle.AngleInference;
-import br.ufsc.lehmann.stopandmove.movedistance.MoveDistance;
+import br.ufsc.utils.Angle;
+import br.ufsc.utils.Distance;
+import br.ufsc.utils.EuclideanDistanceFunction;
 import cc.mallet.util.IoUtils;
 
 public class VehicleDataReader {
@@ -70,7 +72,7 @@ public class VehicleDataReader {
 
 	public List<SemanticTrajectory> read() throws IOException, ParseException {
 		System.out.println("Reading file...");
-		ZipFile zipFile = new ZipFile(this.getClass().getClassLoader().getResource("./datasets/vehicle.data.zip").getFile());
+		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource("./datasets/vehicle.data.zip").getFile(), "UTF-8"));
 		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("vehicle_urban.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("tid", "class", "time", "latitude", "longitude", "gid", "semantic_stop_id", "semantic_move_id").withDelimiter(';'));
@@ -83,7 +85,7 @@ public class VehicleDataReader {
 		CSVParser movesParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawMovesEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("move_id", "start_time", "start_stop_id", "begin", "end_time", "end_stop_id", "length").withDelimiter(';'));
 		
-		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS");
+		Map<Integer, Stop> stops = readStops(stopsParser);
 		Map<Integer, Move> moves = StopMoveCSVReader.moveCsvRead(movesParser, stops, StopMoveCSVReader.TIMESTAMP, "mm:ss.SSS", "dd/MM/yyyy HH:mm");
 
 		List<CSVRecord> csvRecords = pointsParser.getRecords();
@@ -120,6 +122,22 @@ public class VehicleDataReader {
 		return ret;
 	}
 
+	private Map<Integer, Stop> readStops(CSVParser stopsParser) throws IOException {
+		return StopMoveCSVReader.stopsCsvRead(stopsParser, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SS", "yyyy-MM-dd HH:mm:ss.S");
+	}
+	
+	public List<Stop> exportStops() throws IOException, ParseException, URISyntaxException {
+		System.out.println("Reading file...");
+		ZipFile zipFile = new ZipFile(new URI(this.getClass().getClassLoader().getResource("./datasets/vehicle.data.zip").toString()).getPath());
+		
+		InputStreamReader rawStopsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.vehicle_stop.csv")));
+		CSVParser stopsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawStopsEntry).toString(), 
+				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "end_lat", "end_lon", "centroid_lat", "centroid_lon", "start_time", "end_time", "begin", "length", "street").withDelimiter(';'));
+		Map<Integer, Stop> stops = readStops(stopsParser);
+		zipFile.close();
+		return new ArrayList<>(stops.values());
+	}
+
 	private List<SemanticTrajectory> readStopsTrajectories(Map<Integer, Stop> stops, Map<Integer, Move> moves,
 			Multimap<String, VehicleRecord> records) {
 		List<SemanticTrajectory> ret = new ArrayList<>();
@@ -140,8 +158,8 @@ public class VehicleDataReader {
 						Stop previousStop = STOP_CENTROID_SEMANTIC.getData(s, i - 1);
 						if(previousStop != null) {
 							Move move = new Move(-1, previousStop, stop, previousStop.getEndTime(), stop.getStartTime(), stop.getBegin() - 1, 0, new TPoint[0], 
-									AngleInference.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
-									MoveDistance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
+									Angle.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
+									Distance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
 							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 							//injecting a move between two consecutives stops
 							stops.put(record.getStop(), stop);
@@ -236,8 +254,8 @@ public class VehicleDataReader {
 			if(move.getEnd() != null) {
 				points.add(move.getEnd().getStartPoint());
 			}
-			move.setAttribute(AttributeType.MOVE_ANGLE, AngleInference.getAngle(points.get(0), points.get(points.size() - 1)));
-			move.setAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE, MoveDistance.getDistance(points.toArray(new TPoint[points.size()]), DISTANCE_FUNCTION));
+			move.setAttribute(AttributeType.MOVE_ANGLE, Angle.getAngle(points.get(0), points.get(points.size() - 1)));
+			move.setAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE, Distance.getDistance(points.toArray(new TPoint[points.size()]), DISTANCE_FUNCTION));
 		}
 	}
 }

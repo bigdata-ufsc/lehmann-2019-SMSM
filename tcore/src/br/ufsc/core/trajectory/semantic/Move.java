@@ -121,6 +121,10 @@ public class Move {
 		return (String) getAttribute(AttributeType.MOVE_STREET_NAME);
 	}
 	
+	public double getDuration() {
+		return this.endTime - this.startTime;
+	}
+	
 	public Object getAttribute(AttributeType type) {
 		for (Attribute attribute : attributes) {
 			if(attribute.getType() == type) {

@@ -8,8 +8,8 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.related.LCSS;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
-import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
 import br.ufsc.utils.Distance;
+import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class LiuSchneider extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 

@@ -9,7 +9,7 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
-import br.ufsc.lehmann.stopandmove.EuclideanDistanceFunction;
+import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class MoveDistance_Vehicle {
 

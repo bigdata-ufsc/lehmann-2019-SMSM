@@ -9,7 +9,7 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
-import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
+import br.ufsc.utils.LatLongDistanceFunction;
 
 public class MoveDistance_SergipeTracks {
 

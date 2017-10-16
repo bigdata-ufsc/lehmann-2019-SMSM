@@ -1,13 +1,19 @@
 package br.ufsc.core.trajectory.semantic;
 
+import java.time.Instant;
 import java.util.function.Function;
+
+import br.ufsc.core.trajectory.TemporalDuration;
 
 public enum AttributeType {
 
+	MOVE((Move m) -> m),
 	MOVE_ANGLE((Move m) -> m.getAngle()),
 	MOVE_TRAVELLED_DISTANCE((Move m) -> m.getTravelledDistance()),
+	MOVE_DURATION((Move m) -> m.getDuration()),
 	MOVE_POINTS((Move m) -> m.getPoints()),
 	MOVE_STREET_NAME((Move m) -> m.getStreetName()),
+	STOP((Stop s) -> s),
 	STOP_CENTROID((Stop s) -> s.getCentroid()),
 	STOP_STREET_NAME((Stop s) -> s.getStreetName()),
 	STOP_NAME((Stop s) -> s.getStreetName()),
@@ -26,7 +32,11 @@ public enum AttributeType {
 			return s.getMove().getStreetName();
 		}
 		return null;
-	});
+	}),
+	STOP_TRAFFIC_LIGHT((Stop s) -> s.getTrafficLight()),
+	STOP_TRAFFIC_LIGHT_DISTANCE((Stop s) -> s.getTrafficLightDistance()),
+	STOP_GEOGRAPHIC((Stop s) -> s.getCentroid()),
+	STOP_TEMPORAL((Stop s) -> new TemporalDuration(Instant.ofEpochMilli(s.getStartTime()), Instant.ofEpochMilli(s.getEndTime())));
 	
 	private Function func;
 
