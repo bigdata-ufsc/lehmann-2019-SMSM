@@ -2,6 +2,10 @@ package br.ufsc.lehmann.msm.artigo.problems;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -68,8 +72,8 @@ public class StopMoveCSVReader {
 			if (stop == null) {
 				try {
 					stop = new Stop(stopId, null, //
-							DateUtils.parseDate(data.get("start_time"), timeFormat).getTime(), //
-							DateUtils.parseDate(data.get("end_time"), timeFormat).getTime(), //
+							parseDate(data.get("start_time"), timeFormat), //
+							parseDate(data.get("end_time"), timeFormat), //
 							new TPoint(Double.parseDouble(data.get("start_lat")), Double.parseDouble(data.get("start_lon"))), //
 							Integer.parseInt(data.get("begin")), //
 							new TPoint(Double.parseDouble(data.get("end_lat")), Double.parseDouble(data.get("end_lon"))), //
@@ -77,12 +81,24 @@ public class StopMoveCSVReader {
 							new TPoint(Double.parseDouble(data.get("centroid_lat")), Double.parseDouble(data.get("centroid_lon"))),//
 							data.get("street")//
 					);
-				} catch (NumberFormatException | ParseException e) {
+				} catch (NumberFormatException e) {
 					throw new RuntimeException(e);
 				}
 				stops.put(stopId, stop);
 			}
 		}
 		return stops;
+	}
+
+	private static long parseDate(String string, String[] timeFormat) {
+		for (int i = 0; i < timeFormat.length; i++) {
+			try {
+				TemporalAccessor parse = DateTimeFormatter.ofPattern(timeFormat[i]).parse(string);
+				return parse.getLong(ChronoField.MILLI_OF_DAY) + (parse.getLong(ChronoField.EPOCH_DAY) * 24 * 60 * 60 * 1000);
+			} catch (DateTimeParseException e) {
+				//
+			}
+		}
+		throw new IllegalArgumentException();
 	}
 }

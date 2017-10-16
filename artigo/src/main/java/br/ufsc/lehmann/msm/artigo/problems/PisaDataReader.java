@@ -44,9 +44,9 @@ import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
-import br.ufsc.lehmann.stopandmove.LatLongDistanceFunction;
-import br.ufsc.lehmann.stopandmove.angle.AngleInference;
-import br.ufsc.lehmann.stopandmove.movedistance.MoveDistance;
+import br.ufsc.utils.Angle;
+import br.ufsc.utils.Distance;
+import br.ufsc.utils.LatLongDistanceFunction;
 import cc.mallet.util.IoUtils;
 
 public class PisaDataReader {
@@ -66,6 +66,7 @@ public class PisaDataReader {
 	
 	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(13, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(13, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(13, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(13, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, 10)));
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(13, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 	
@@ -78,7 +79,7 @@ public class PisaDataReader {
 
 	public List<SemanticTrajectory> read(Integer... users) throws IOException, NumberFormatException, ParseException  {
 		System.out.println("Reading file...");
-		ZipFile zipFile = new ZipFile(this.getClass().getClassLoader().getResource("./datasets/pisa.data.zip").getFile());
+		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource("./datasets/pisa.data.zip").getFile(), "UTF-8"));
 		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("public.pisa.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("gid", "tid", "time", "is_stop", "geom", "lat", "lon", "ele", "weather", "temperature", "user_id", "place", "goal", "subgoal", "transportation", "event", "dailytid", "semantic_stop_id", "semantic_move_id").withDelimiter(';'));
@@ -91,8 +92,8 @@ public class PisaDataReader {
 		CSVParser movesParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawMovesEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("move_id", "start_time", "start_stop_id", "begin", "end_time", "end_stop_id", "length", "end_lon").withDelimiter(';'));
 		
-		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS");
-		Map<Integer, Move> moves = StopMoveCSVReader.moveCsvRead(movesParser, stops, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS");
+		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SS", "yyyy-MM-dd HH:mm:ss.S");
+		Map<Integer, Move> moves = StopMoveCSVReader.moveCsvRead(movesParser, stops, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SS", "yyyy-MM-dd HH:mm:ss.S");
 		List<CSVRecord> csvRecords = pointsParser.getRecords();
 		Iterator<CSVRecord> pointsData = csvRecords.subList(1, csvRecords.size()).iterator();
 		System.out.println("Fetching...");
@@ -161,8 +162,8 @@ public class PisaDataReader {
 						Stop previousStop = STOP_CENTROID_SEMANTIC.getData(s, i - 1);
 						if(previousStop != null) {
 							Move move = new Move(-1, previousStop, stop, previousStop.getEndTime(), stop.getStartTime(), stop.getBegin() - 1, 0, new TPoint[0], 
-									AngleInference.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
-									MoveDistance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
+									Angle.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
+									Distance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
 							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 							//injecting a move between two consecutives stops
 							stops.put(record.getSemanticStopId(), stop);
@@ -273,8 +274,8 @@ public class PisaDataReader {
 			if(move.getEnd() != null) {
 				points.add(move.getEnd().getStartPoint());
 			}
-			move.setAttribute(AttributeType.MOVE_ANGLE, AngleInference.getAngle(points.get(0), points.get(points.size() - 1)));
-			move.setAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE, MoveDistance.getDistance(points.toArray(new TPoint[points.size()]), DISTANCE_FUNCTION));
+			move.setAttribute(AttributeType.MOVE_ANGLE, Angle.getAngle(points.get(0), points.get(points.size() - 1)));
+			move.setAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE, Distance.getDistance(points.toArray(new TPoint[points.size()]), DISTANCE_FUNCTION));
 		}
 	}
 }

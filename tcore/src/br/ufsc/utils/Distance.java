@@ -1,59 +1,19 @@
 package br.ufsc.utils;
 
-import java.sql.Timestamp;
-
 import br.ufsc.core.base.Point;
+import br.ufsc.core.trajectory.GeographicDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
 
 public class Distance {
 	
 	public static final double EARTH_RADIUS = 6371000d;
 
-	public static void main(String[] args) {
-		
-		
-		
-		TPoint p1 = new TPoint(1,0,0,new Timestamp(System.currentTimeMillis()));
-		TPoint p2 = new TPoint(2,-1,-1,new Timestamp(System.currentTimeMillis()));
-		
-		
-		System.out.println("### Angle: "+Math.toDegrees(angle(p1, p2)));
-		
-		showDistance(p1, p2);
-		
-		
-		
-		TPoint p3 = new TPoint(1,0,0,new Timestamp(System.currentTimeMillis()));
-		TPoint p4 = new TPoint(2,0,1,new Timestamp(System.currentTimeMillis()));
-		showDistance(p3, p4);
-		
-		TPoint p5 = new TPoint(1,0,0,new Timestamp(System.currentTimeMillis()));
-		TPoint p6 = new TPoint(2,0.5,1,new Timestamp(System.currentTimeMillis()));
-		showDistance(p5, p6);
-		
-		TPoint x = new TPoint(1,0,0,new Timestamp(System.currentTimeMillis()));
-		TPoint y = new TPoint(2,0.0000000000000000000000000000000000000000001,0.00000000000000000000000000000000000000000000000000000000001,new Timestamp(System.currentTimeMillis()));
-		TPoint z = new TPoint(1,999999999,999999999,new Timestamp(System.currentTimeMillis()));
-		System.out.println(Math.sin(Math.toRadians(45)));
-		System.out.println(triangular(x,z)+" < "+(triangular(x,y)+triangular(y,z)));
-		
-		Point a = new Point(-35.56666,-43.5555);
-		Point b = new Point(-35.56666,43.5555);
-		Point c = new Point(35.56666,43.5555);
-		
-		System.out.println(haversine(a, b));
-		System.out.println(haversine(a, c));
-		System.out.println(haversine(b, c));
-		
-	}
-	
-	private static void showDistance(TPoint p1, TPoint p2){
-		System.out.println("### Angle: "+Math.toDegrees(angle(p1, p2)));
-		System.out.println("# Euclidean: "+euclidean(p1,p2));
-		System.out.println("# Manhattan: "+manhattan(p1,p2));
-		System.out.println("# Chebyshev: "+chebyshev(p1,p2));
-		System.out.println("# Canberra: "+canberra(p1,p2));
-		System.out.println("# Triangular: "+triangular(p1,p2));
+	public static double getDistance(TPoint[] points, GeographicDistanceFunction func) {
+		double ret = 0;
+		for (int i = 0; i < points.length - 1; i++) {
+			ret += func.distance(points[i], points[i + 1]);
+		}
+	    return ret;
 	}
 
 	public static double euclidean(double[] p1, double[] p2){

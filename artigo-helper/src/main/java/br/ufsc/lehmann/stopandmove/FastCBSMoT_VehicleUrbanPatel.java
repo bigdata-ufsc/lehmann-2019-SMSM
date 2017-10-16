@@ -11,6 +11,7 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
+import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class FastCBSMoT_VehicleUrbanPatel {
 

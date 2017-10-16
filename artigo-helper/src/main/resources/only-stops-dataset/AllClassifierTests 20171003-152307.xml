@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="AllClassifierTests" project="artigo" tests="12" started="12" failures="1" errors="0" ignored="0">
+  <testsuite name="br.ufsc.lehmann.classifier.AllClassifierTests" time="526.875">
+    <testsuite name="br.ufsc.lehmann.classifier.SMSMTemporalDurationClassifierTest" time="87.837">
+      <testsuite name="[Vehicle [STOP_STREET_NAME][onlyStops=true]]" time="87.837">
+        <testcase name="validation_accuracy[Vehicle [STOP_STREET_NAME][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMTemporalDurationClassifierTest" time="42.816"/>
+        <testcase name="validation_precision_recall[Vehicle [STOP_STREET_NAME][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMTemporalDurationClassifierTest" time="45.021"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.H_MSM_TemporalDurationClassifierTest" time="85.484">
+      <testsuite name="[Vehicle [STOP_STREET_NAME][onlyStops=true]]" time="85.484">
+        <testcase name="validation_accuracy[Vehicle [STOP_STREET_NAME][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_TemporalDurationClassifierTest" time="42.63"/>
+        <testcase name="validation_precision_recall[Vehicle [STOP_STREET_NAME][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_TemporalDurationClassifierTest" time="42.854"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.H_MSM_DistanceClassifierTest" time="77.954">
+      <testsuite name="[Vehicle [STOP_STREET_NAME][onlyStops=true]]" time="77.954">
+        <testcase name="validation_accuracy[Vehicle [STOP_STREET_NAME][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_DistanceClassifierTest" time="43.112"/>
+        <testcase name="validation_precision_recall[Vehicle [STOP_STREET_NAME][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_DistanceClassifierTest" time="34.842">
+          <failure>java.lang.AssertionError: Precision - [Validation = 0.7320489242558208]
+False Discovery Rate - [Validation = 0.2679510757441792]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:92)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.H_MSM_AngleClassifierTest" time="88.044">
+      <testsuite name="[Vehicle [STOP_STREET_NAME][onlyStops=true]]" time="88.044">
+        <testcase name="validation_accuracy[Vehicle [STOP_STREET_NAME][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_AngleClassifierTest" time="42.987"/>
+        <testcase name="validation_precision_recall[Vehicle [STOP_STREET_NAME][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_AngleClassifierTest" time="45.057"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.H_MSM_EllipsesClassifierTest" time="100.676">
+      <testsuite name="[Vehicle [STOP_STREET_NAME][onlyStops=true]]" time="100.676">
+        <testcase name="validation_accuracy[Vehicle [STOP_STREET_NAME][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_EllipsesClassifierTest" time="49.87"/>
+        <testcase name="validation_precision_recall[Vehicle [STOP_STREET_NAME][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_EllipsesClassifierTest" time="50.806"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.H_MSM_PointsClassifierTest" time="79.072">
+      <testsuite name="[Vehicle [STOP_STREET_NAME][onlyStops=true]]" time="79.072">
+        <testcase name="validation_accuracy[Vehicle [STOP_STREET_NAME][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_PointsClassifierTest" time="44.047"/>
+        <testcase name="validation_precision_recall[Vehicle [STOP_STREET_NAME][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_PointsClassifierTest" time="35.025"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testrun>

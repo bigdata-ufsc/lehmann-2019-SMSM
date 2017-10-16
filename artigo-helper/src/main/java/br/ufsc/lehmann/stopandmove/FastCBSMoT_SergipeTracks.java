@@ -16,6 +16,7 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
+import br.ufsc.utils.LatLongDistanceFunction;
 
 public class FastCBSMoT_SergipeTracks {
 

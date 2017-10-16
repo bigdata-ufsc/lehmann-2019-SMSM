@@ -136,13 +136,13 @@ public class StopAndMoveExtractor {
 
 	public static Map<String, Integer> findBestCBSMoT(FastCBSMoT fastCBSMoT, List<SemanticTrajectory> trajs, AtomicInteger sid, AtomicInteger mid) {
 		Map<String, Integer> bestCombinations = new HashMap<>();
-		for (int i = 40; i <= 200; i+=20) {//ratio
+		for (int i = 200; i > 40; i-=25) {//ratio
 			final int finalI = i;
 			IntStream.iterate(20 * 1000, j -> j + 2 * 1000).limit(10).parallel().forEach((j) -> {//timeTolerance
 				final int finalJ = j;
 				for (int k = 300; k <= 475; k+=25) {//maxDist
 					final int finalK = k;
-					IntStream.iterate(300, l -> l + 25).limit(10).parallel().forEach((l) -> {//mergeTolerance
+					IntStream.iterate(30 * 1000, l -> l + 2000).limit(15).parallel().forEach((l) -> {//mergeTolerance
 						for (int m = 30 * 1000; m <= 90 * 1000; m+=1000) {//minTime
 							List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), finalI, finalJ, finalK, l, m, sid, mid);
 							int stopsCount = 0;

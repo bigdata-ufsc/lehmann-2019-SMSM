@@ -1,0 +1,103 @@
+Reading file...
+Fetching...
+Loaded 45578 GPS points from dataset
+Loaded 347 trajectories from dataset
+Semantic Trajectories statistics: mean - 12,06, min - 1,00, max - 25,00, sd - 5,50
+SMSMTemporalDurationClassifierTest#validation_accuracy[New York bus(lines=2)[STOP_STREET_NAME][onlyStops=true]]
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+0.991304347826087
+0.9914676464584609
+Reading file...
+Fetching...
+Loaded 45578 GPS points from dataset
+Loaded 347 trajectories from dataset
+Semantic Trajectories statistics: mean - 12,06, min - 1,00, max - 25,00, sd - 5,50
+SMSMTemporalDurationClassifierTest#validation_precision_recall[New York bus(lines=2)[STOP_STREET_NAME][onlyStops=true]]
+[1.0, 0.984375, 0.9921259842519685, 1.0, 0.0, 0.0]
+[0.9888544891640867, 0.9888544891640867, 0.9886965174129353, 0.988562091503268, 0.01143790849673203, 0.011145510835913312]
+Reading file...
+Fetching...
+Loaded 327763 GPS points from dataset
+Loaded 431 trajectories from dataset
+Semantic Trajectories statistics: mean - 64,44, min - 1,00, max - 715,00, sd - 123,68
+SMSMTemporalDurationClassifierTest#validation_accuracy[Dublin bus(lines=2)[STOP_STREET_NAME][onlyStops=true]]
+0.993006993006993
+0.990751136059877
+Reading file...
+Fetching...
+Loaded 327763 GPS points from dataset
+Loaded 431 trajectories from dataset
+Semantic Trajectories statistics: mean - 64,44, min - 1,00, max - 715,00, sd - 123,68
+SMSMTemporalDurationClassifierTest#validation_precision_recall[Dublin bus(lines=2)[STOP_STREET_NAME][onlyStops=true]]
+[1.0, 0.9863013698630136, 0.993103448275862, 1.0, 0.0, 0.0]
+[1.0, 0.9823984526112186, 0.9910010111223458, 1.0, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 15718 GPS points from dataset
+Loaded 526 trajectories from dataset
+Loaded 526 trajectories (filtered)
+Semantic Trajectories statistics: mean - 5,01, min - 1,00, max - 32,00, sd - 3,23
+SMSMTemporalDurationClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall)[STOP_STREET_NAME][onlyStops=true]]
+0.7011494252873564
+0.710943396226415
+Reading file...
+Fetching...
+Loaded 15718 GPS points from dataset
+Loaded 526 trajectories from dataset
+Loaded 526 trajectories (filtered)
+Semantic Trajectories statistics: mean - 5,01, min - 1,00, max - 32,00, sd - 3,23
+SMSMTemporalDurationClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall)[STOP_STREET_NAME][onlyStops=true]]
+[0.794392523364486, 0.7391304347826086, 0.7657657657657658, 0.6271186440677966, 0.3728813559322034, 0.205607476635514]
+[0.7535408921989888, 0.7780330087365431, 0.7652887891983996, 0.5703276003276003, 0.4296723996723997, 0.2464591078010112]
+Reading file...
+Fetching...
+Loaded 45578 GPS points from dataset
+Loaded 347 trajectories from dataset
+Semantic Trajectories statistics: mean - 12,06, min - 1,00, max - 25,00, sd - 5,50
+H_MSM_TemporalDurationClassifierTest#validation_accuracy[New York bus(lines=2)[STOP_STREET_NAME][onlyStops=true]]
+0.991304347826087
+0.9914676464584609
+Reading file...
+Fetching...
+Loaded 45578 GPS points from dataset
+Loaded 347 trajectories from dataset
+Semantic Trajectories statistics: mean - 12,06, min - 1,00, max - 25,00, sd - 5,50
+H_MSM_TemporalDurationClassifierTest#validation_precision_recall[New York bus(lines=2)[STOP_STREET_NAME][onlyStops=true]]
+[1.0, 0.984375, 0.9921259842519685, 1.0, 0.0, 0.0]
+[0.9945945945945945, 0.9773884776980752, 0.9858659302241393, 0.9941176470588236, 0.005882352941176472, 0.005405405405405406]
+Reading file...
+Fetching...
+Loaded 327763 GPS points from dataset
+Loaded 431 trajectories from dataset
+Semantic Trajectories statistics: mean - 64,44, min - 1,00, max - 715,00, sd - 123,68
+H_MSM_TemporalDurationClassifierTest#validation_accuracy[Dublin bus(lines=2)[STOP_STREET_NAME][onlyStops=true]]
+0.972027972027972
+0.965196471531676
+Reading file...
+Fetching...
+Loaded 327763 GPS points from dataset
+Loaded 431 trajectories from dataset
+Semantic Trajectories statistics: mean - 64,44, min - 1,00, max - 715,00, sd - 123,68
+H_MSM_TemporalDurationClassifierTest#validation_precision_recall[Dublin bus(lines=2)[STOP_STREET_NAME][onlyStops=true]]
+[0.9726027397260274, 0.9726027397260274, 0.9726027397260274, 0.9714285714285714, 0.02857142857142858, 0.0273972602739726]
+[0.9902380952380951, 0.9594547296674956, 0.9743057042907118, 0.9906926406926406, 0.00930735930735931, 0.009761904761904762]
+Reading file...
+Fetching...
+Loaded 15718 GPS points from dataset
+Loaded 526 trajectories from dataset
+Loaded 526 trajectories (filtered)
+Semantic Trajectories statistics: mean - 5,01, min - 1,00, max - 32,00, sd - 3,23
+H_MSM_TemporalDurationClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall)[STOP_STREET_NAME][onlyStops=true]]
+0.6551724137931034
+0.701527403414196
+Reading file...
+Fetching...
+Loaded 15718 GPS points from dataset
+Loaded 526 trajectories from dataset
+Loaded 526 trajectories (filtered)
+Semantic Trajectories statistics: mean - 5,01, min - 1,00, max - 32,00, sd - 3,23
+H_MSM_TemporalDurationClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall)[STOP_STREET_NAME][onlyStops=true]]
+[0.7522935779816514, 0.7130434782608696, 0.7321428571428571, 0.5423728813559322, 0.4576271186440678, 0.24770642201834864]
+[0.7317996381727724, 0.7692285927424916, 0.7494967682202553, 0.5267895167895168, 0.4732104832104832, 0.2682003618272275]

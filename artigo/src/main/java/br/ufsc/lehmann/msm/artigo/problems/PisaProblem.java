@@ -1,7 +1,6 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +10,6 @@ import java.util.List;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
-import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import smile.math.Random;
 
