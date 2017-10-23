@@ -141,6 +141,47 @@ public class NewYorkBusDatabaseReader {
 		return ret;
 	}
 
+	public List<Stop> exportStops(String... lines) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "bus.nyc_20140927", null, null);
+		DataRetriever retriever = source.getRetriever();
+		System.out.println("Executing SQL...");
+		Connection conn = retriever.getConnection();
+		conn.setAutoCommit(false);
+
+		String sql = "SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
+				"centroid_lon, start_time, end_time, street " + //
+				"FROM stops_moves.bus_nyc_20140927_stop";
+		if(lines != null && lines.length > 0) {
+			sql += " where stop_id in (select semantic_stop_id from bus.nyc_20140927 where trim(infered_route_id) in (SELECT * FROM unnest(?))) ";
+		}
+		PreparedStatement st = conn.prepareStatement(sql);
+		st.setFetchSize(1000);
+		if(lines != null && lines.length > 0) {
+			Array array = conn.createArrayOf("varchar", lines);
+			st.setArray(1, array);
+		}
+		ResultSet stopsData = st.executeQuery();
+		Map<Integer, Stop> stops = new HashMap<>();
+		while (stopsData.next()) {
+			int stopId = stopsData.getInt("stop_id");
+			Stop stop = stops.get(stopId);
+			if (stop == null) {
+				stop = new Stop(stopId, null, //
+						stopsData.getTimestamp("start_time").getTime(), //
+						stopsData.getTimestamp("end_time").getTime(), //
+						new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
+						stopsData.getInt("begin"), //
+						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
+						stopsData.getInt("length"), //
+						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")),//
+						stopsData.getString("street")//
+				);
+				stops.put(stopId, stop);
+			}
+		}
+		return new ArrayList<>(stops.values());
+	}
+
 	private List<SemanticTrajectory> readStopsTrajectories(String[] lines, Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws SQLException {
 		String sql = "select gid, time_received as \"time\", vehicle_id, trim(infered_route_id) as route, "
 		/**/+ "trim(infered_trip_id) as trip_id, longitude, latitude, distance_along_trip, infered_direction_id, "

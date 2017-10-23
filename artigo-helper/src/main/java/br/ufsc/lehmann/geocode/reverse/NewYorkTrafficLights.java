@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.zip.ZipException;
 
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Stop;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDatabaseReader;
 import br.ufsc.utils.Distance;
 import cc.mallet.util.FileUtils;
 
@@ -20,8 +21,8 @@ public class NewYorkTrafficLights {
 	
 	private static List<String> stopIds = new ArrayList<>();
 
-	public static void main(String[] args) throws NumberFormatException, ZipException, IOException, ParseException, URISyntaxException {
-		File trafficLightFile = new File("C:/Users/André/git/ArtigoMSM_UFSC/artigo/src/main/resources/datasets/nyc.stop.traffic_light.csv");
+	public static void main(String[] args) throws NumberFormatException, ZipException, IOException, ParseException, URISyntaxException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		File trafficLightFile = new File("C:/Users/uuario/Desktop/Lehmann/ArtigoMSM_UFSC/artigo/src/main/resources/datasets/nyc.stop.BM2-BM3.traffic_light.csv");
 		if(trafficLightFile.exists()) {
 			String[] lines = FileUtils.readFile(trafficLightFile);
 			for (int i = 0; i < lines.length; i++) {
@@ -32,8 +33,8 @@ public class NewYorkTrafficLights {
 		}
 		FileWriter csvWriter = new FileWriter(trafficLightFile, true);
 		TrafficLightsExtractor extractor = new TrafficLightsExtractor();
-		NewYorkBusDataReader dublinBusDataReader = new NewYorkBusDataReader(true);
-		List<Stop> exportStops = dublinBusDataReader.exportStops();
+		NewYorkBusDatabaseReader dublinBusDataReader = new NewYorkBusDatabaseReader(true);
+		List<Stop> exportStops = dublinBusDataReader.exportStops("MTABC_BM2", "MTABC_BM3");
 		if(stopIds.isEmpty()) {
 			csvWriter.write("stopId;trafficLightId;trafficLightDistance\n");
 			csvWriter.flush();
