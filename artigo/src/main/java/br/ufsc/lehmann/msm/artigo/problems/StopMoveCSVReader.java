@@ -21,10 +21,12 @@ import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
 
 public class StopMoveCSVReader {
-	static final String TIMESTAMP = ("yyyy-MM-dd HH:mm:ss");
+	static final String TIMESTAMP_US = ("yyyy-MM-dd HH:mm:ss");
+	static final String TIMESTAMP_BR = ("dd/MM/yyyy HH:mm");
+	static final String TIMESTAMP = TIMESTAMP_US;
 
 	public static Map<Integer, Move> moveCsvRead(CSVParser movesParser, Map<Integer, Stop> stops) throws IOException, ParseException {
-		return moveCsvRead(movesParser, stops, TIMESTAMP);
+		return moveCsvRead(movesParser, stops, TIMESTAMP_US, TIMESTAMP_BR);
 	}
 
 	public static Map<Integer, Move> moveCsvRead(CSVParser movesParser, Map<Integer, Stop> stops, String... timeFormat) throws IOException {
