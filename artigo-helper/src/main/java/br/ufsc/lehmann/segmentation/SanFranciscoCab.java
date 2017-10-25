@@ -26,7 +26,7 @@ public class SanFranciscoCab {
 		System.out.println("Connecting...");
 		Connection conn = source.getRetriever().getConnection();
 		System.out.println("Querying...");
-		PreparedStatement ps = conn.prepareStatement("select gid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road "//
+		PreparedStatement ps = conn.prepareStatement("select gid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, direction "//
 				+ "from taxi.sanfrancisco_taxicab_crawdad order by taxi_id, \"timestamp\"");
 		ResultSet rs = ps.executeQuery();
 		int generatedTid = 0;
@@ -55,6 +55,7 @@ public class SanFranciscoCab {
 					rs.getBoolean("airport"),
 					rs.getBoolean("mall"),
 					rs.getInt("road"),
+					rs.getString("direction"),
 					null, null);
 			registers.put(generatedTid, record);
 		}

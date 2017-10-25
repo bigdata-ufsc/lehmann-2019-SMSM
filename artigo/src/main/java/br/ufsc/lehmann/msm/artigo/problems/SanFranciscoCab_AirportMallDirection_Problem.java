@@ -3,40 +3,47 @@ package br.ufsc.lehmann.msm.artigo.problems;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
-import br.ufsc.lehmann.msm.artigo.Problem;
 import smile.math.Random;
 
-public class NewYorkBusProblem implements Problem {
+public class SanFranciscoCab_AirportMallDirection_Problem extends SanFranciscoCabProblem {
 	
 	private List<SemanticTrajectory> data;
 	private List<SemanticTrajectory> trainingData;
 	private List<SemanticTrajectory> testingData;
 	private List<SemanticTrajectory> validatingData;
 	private boolean loaded;
-	private String[] lines;
 	private Random random = new Random();
-	private StopSemantic stopSemantic;
-	private boolean onlyStops;
-	
-	public NewYorkBusProblem(String... lines) {
-		this(NewYorkBusDataReader.STOP_CENTROID_SEMANTIC, lines);
+	private String[] roads;
+	private String[] directions;
+
+	public SanFranciscoCab_AirportMallDirection_Problem(String[] roads) {
+		this(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, roads);
+	}
+
+	public SanFranciscoCab_AirportMallDirection_Problem(StopSemantic stopSemantic, String[] roads) {
+		this(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, false, roads);
 	}
 	
-	public NewYorkBusProblem(StopSemantic stopSemantic, String... lines) {
-		this(stopSemantic, false, lines);
+	public SanFranciscoCab_AirportMallDirection_Problem(StopSemantic stopSemantic, boolean onlyStop, String[] roads) {
+		super(stopSemantic, onlyStop);
+		this.roads = roads;
 	}
-	
-	public NewYorkBusProblem(StopSemantic stopSemantic, boolean onlyStops, String... lines) {
-		this.stopSemantic = stopSemantic;
-		this.onlyStops = onlyStops;
-		this.lines = lines;
+
+	public SanFranciscoCab_AirportMallDirection_Problem(StopSemantic stopSemantic, boolean onlyStop, String[] roads, String[] directions) {
+		this(stopSemantic, onlyStop, roads);
+		/**
+		 * Proporção das classes de direction
+		 * 	"airport to mall";106
+		 *	"mall to airport";203
+		 *	"";217
+		 */
+		this.directions = directions;
 	}
 	
 	@Override
@@ -58,11 +65,7 @@ public class NewYorkBusProblem implements Problem {
 
 	@Override
 	public Semantic discriminator() {
-		return NewYorkBusDataReader.ROUTE;
-	}
-	
-	public StopSemantic stopSemantic() {
-		return stopSemantic;
+		return SanFranciscoCabDataReader.DIRECTION;
 	}
 
 	@Override
@@ -91,7 +94,7 @@ public class NewYorkBusProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "New York bus" + (lines != null ? "(lines=" + Arrays.toString(lines) + ")" : "") + "[" + stopSemantic.name() + "][onlyStops=" + onlyStops + "]";
+		return "San Francisco cab (Airport <-> Mall|Direction)[" + getStopSemantic().name() + "][onlyStops=" + onlyStop + "]";
 	}
 	
 	private void load() {
@@ -99,12 +102,12 @@ public class NewYorkBusProblem implements Problem {
 			return;
 		}
 		try {
-			data = new ArrayList<>(new NewYorkBusDataReader(onlyStops).read(lines));
+			data = new ArrayList<>(new SanFranciscoCabDataReader(onlyStop, roads, directions).read());
 		} catch (IOException | ParseException e) {
 			throw new RuntimeException(e);
 		}
 //		try {
-//			data = new ArrayList<>(new NewYorkBusDatabaseReader(onlyStops).read(lines));
+//			data = new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop, roads).read());
 //		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 //			throw new RuntimeException(e);
 //		}

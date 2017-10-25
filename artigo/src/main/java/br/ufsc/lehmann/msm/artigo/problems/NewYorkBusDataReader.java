@@ -20,6 +20,7 @@ import java.util.zip.ZipFile;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -80,7 +81,15 @@ public class NewYorkBusDataReader {
 
 	public List<SemanticTrajectory> read(String[] lines) throws IOException, ParseException {
 		System.out.println("Reading file...");
-		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource("./datasets/nyc.data.zip").getFile(), "UTF-8"));
+		String dataFile = "./datasets/nyc.data.zip";
+		if(!ArrayUtils.isEmpty(lines) && (ArrayUtils.contains(lines, "MTABC_BM3") && ArrayUtils.contains(lines, "MTABC_BM2"))) {//
+			dataFile = "./datasets/nyc_bus_BM2-BM3.zip";
+		} else if(!ArrayUtils.isEmpty(lines) && (ArrayUtils.contains(lines, "MTABC_Q52") && ArrayUtils.contains(lines, "MTABC_Q53"))) {
+			dataFile = "./datasets/nyc_bus_Q52-Q53.zip";
+		} else if(!ArrayUtils.isEmpty(lines) && (ArrayUtils.contains(lines, "MTA NYCT_S79+") && ArrayUtils.contains(lines, "MTA NYCT_S59") && ArrayUtils.contains(lines, "MTA NYCT_X1"))) {
+			dataFile = "./datasets/nyc_bus_S59_S79_X1.zip";
+		}
+		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource(dataFile).getFile(), "UTF-8"));
 		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("bus.nyc_20140927.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("gid", "time", "vehicle_id", "route", "trip_id", "longitude", "latitude", "distance_along_trip", "infered_direction_id", "phase", "next_scheduled_stop_distance", "next_scheduled_stop_id", "semantic_stop_id", "semantic_move_id").withDelimiter(';'));
@@ -156,7 +165,7 @@ public class NewYorkBusDataReader {
 			String move = data.get("semantic_move_id");
 			NewYorkBusRecord record = new NewYorkBusRecord(
 				Integer.parseInt(data.get("gid")),
-				new Timestamp(DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP).getTime()),
+				new Timestamp(DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP_US, StopMoveCSVReader.TIMESTAMP_BR).getTime()),
 				Integer.parseInt(data.get("vehicle_id")),
 				data.get("route"),
 				data.get("trip_id"),

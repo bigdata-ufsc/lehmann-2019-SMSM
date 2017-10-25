@@ -58,20 +58,23 @@ public class SanFranciscoCabDataReader {
 	public static final BasicSemantic<Integer> TID = new BasicSemantic<>(3);
 	public static final BasicSemantic<Integer> OCUPATION = new BasicSemantic<>(4);
 	public static final BasicSemantic<Integer> ROAD = new BasicSemantic<>(5);
-	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
-	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_TRAFFIC_LIGHT_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop, String>(AttributeType.STOP_TRAFFIC_LIGHT, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_TRAFFIC_LIGHT_DISTANCE_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop, Double>(AttributeType.STOP_TRAFFIC_LIGHT_DISTANCE, new NumberDistance()));
+	public static final BasicSemantic<String> DIRECTION = new BasicSemantic<>(6);
+	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
+	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
+	public static final StopSemantic STOP_TRAFFIC_LIGHT_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_TRAFFIC_LIGHT, new EqualsDistanceFunction<String>()));
+	public static final StopSemantic STOP_TRAFFIC_LIGHT_DISTANCE_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, Double>(AttributeType.STOP_TRAFFIC_LIGHT_DISTANCE, new NumberDistance()));
 	
-	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
-	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
-	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
-	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, 10)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
+	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, 10)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 	private String[] roads;
 	private boolean onlyStops;
+
+	private String[] directions;
 	
 	public SanFranciscoCabDataReader(boolean onlyStop) {
 		this.onlyStops = onlyStop;
@@ -82,12 +85,17 @@ public class SanFranciscoCabDataReader {
 		this.roads = roads;
 	}
 
+	public SanFranciscoCabDataReader(boolean onlyStop, String[] roads, String[] directions) {
+		this(onlyStop, roads);
+		this.directions = directions;
+	}
+
 	public List<SemanticTrajectory> read() throws IOException, ParseException {
 		System.out.println("Reading file...");
 		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource("./datasets/sanfrancisco.data.zip").getFile(), "UTF-8"));
 		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("taxi.sanfrancisco_taxicab_crawdad.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("gid", "tid", "taxi_id", "lat", "lon", "timestamp", "ocupation", "road", "semantic_stop_id", "semantic_move_id").withDelimiter(';'));
+				CSVFormat.EXCEL.withHeader("gid", "tid", "taxi_id", "lat", "lon", "timestamp", "ocupation", "road", "direction", "semantic_stop_id", "semantic_move_id").withDelimiter(';'));
 		
 		InputStreamReader rawStopsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.taxi_sanfrancisco_stop.csv")));
 		CSVParser stopsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawStopsEntry).toString(), 
@@ -159,7 +167,11 @@ public class SanFranciscoCabDataReader {
 			String stop = data.get("semantic_stop_id");
 			String move = data.get("semantic_move_id");
 			String road = data.get("road");
+			String direction = data.get("direction");
 			if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.contains(roads, road)) {
+				continue;
+			}
+			if(!ArrayUtils.isEmpty(directions) && !ArrayUtils.contains(directions, direction)) {
 				continue;
 			}
 			SanFranciscoCabRecord record = new SanFranciscoCabRecord(
@@ -173,6 +185,7 @@ public class SanFranciscoCabDataReader {
 				true,
 				true,
 				Integer.parseInt(road),
+				direction,
 				StringUtils.isEmpty(stop) ? null : Integer.parseInt(stop),
 				StringUtils.isEmpty(move) ? null : Integer.parseInt(move)
 			);
@@ -184,7 +197,7 @@ public class SanFranciscoCabDataReader {
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 8);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 9);
 			Collection<SanFranciscoCabRecord> collection = records.get(trajId);
 			int i = 0;
 			for (SanFranciscoCabRecord record : collection) {
@@ -240,6 +253,7 @@ public class SanFranciscoCabDataReader {
 				s.addData(i, TID, record.getTid());
 				s.addData(i, OCUPATION, record.getOcupation());
 				s.addData(i, ROAD, record.getRoad());
+				s.addData(i, DIRECTION, record.getDirection());
 				i++;
 			}
 			stats.addValue(s.length());
@@ -260,7 +274,11 @@ public class SanFranciscoCabDataReader {
 			String stop = data.get("semantic_stop_id");
 			String move = data.get("semantic_move_id");
 			String road = data.get("road");
+			String direction = data.get("direction");
 			if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.contains(roads, road)) {
+				continue;
+			}
+			if(!ArrayUtils.isEmpty(directions) && !ArrayUtils.contains(directions, direction)) {
 				continue;
 			}
 			SanFranciscoCabRecord record = new SanFranciscoCabRecord(
@@ -274,6 +292,7 @@ public class SanFranciscoCabDataReader {
 				true,
 				true,
 				Integer.parseInt(road),
+				direction,
 				stop == null ? null : Integer.parseInt(stop),
 				move == null ? null : Integer.parseInt(move)
 			);
