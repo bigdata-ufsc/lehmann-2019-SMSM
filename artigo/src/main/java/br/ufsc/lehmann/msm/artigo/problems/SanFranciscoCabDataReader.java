@@ -71,6 +71,7 @@ public class SanFranciscoCabDataReader {
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
+	
 	private String[] roads;
 	private boolean onlyStops;
 
@@ -168,6 +169,7 @@ public class SanFranciscoCabDataReader {
 			String move = data.get("semantic_move_id");
 			String road = data.get("road");
 			String direction = data.get("direction");
+			String region = data.get("region");
 			if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.contains(roads, road)) {
 				continue;
 			}
@@ -186,6 +188,7 @@ public class SanFranciscoCabDataReader {
 				true,
 				Integer.parseInt(road),
 				direction,
+				region,
 				StringUtils.isEmpty(stop) ? null : Integer.parseInt(stop),
 				StringUtils.isEmpty(move) ? null : Integer.parseInt(move)
 			);
@@ -275,6 +278,7 @@ public class SanFranciscoCabDataReader {
 			String move = data.get("semantic_move_id");
 			String road = data.get("road");
 			String direction = data.get("direction");
+			String region = data.get("region");
 			if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.contains(roads, road)) {
 				continue;
 			}
@@ -293,6 +297,7 @@ public class SanFranciscoCabDataReader {
 				true,
 				Integer.parseInt(road),
 				direction,
+				region,
 				stop == null ? null : Integer.parseInt(stop),
 				move == null ? null : Integer.parseInt(move)
 			);

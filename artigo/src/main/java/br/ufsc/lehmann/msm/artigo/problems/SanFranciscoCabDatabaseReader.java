@@ -65,6 +65,9 @@ public class SanFranciscoCabDatabaseReader {
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
+	
+	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(9);
+	
 	private Integer[] roads;
 	private boolean mall;
 	private boolean airport;
@@ -154,7 +157,7 @@ public class SanFranciscoCabDatabaseReader {
 	}
 
 	private List<SemanticTrajectory> readStopsTrajectories(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
-		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, direction, semantic_stop_id, semantic_move_id" + //
+		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, direction, stop, semantic_stop_id, semantic_move_id" + //
 				" FROM taxi.sanfrancisco_taxicab_crawdad";
 		if(roads != null) {
 			sql += " where road in (SELECT * FROM unnest(?))";
@@ -191,6 +194,7 @@ public class SanFranciscoCabDatabaseReader {
 				data.getBoolean("mall"),
 				data.getInt("road"),
 				data.getString("direction"),
+				data.getString("stop"),
 				stop,
 				move
 			);
@@ -202,7 +206,7 @@ public class SanFranciscoCabDatabaseReader {
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 8);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 10);
 			Collection<SanFranciscoCabRecord> collection = records.get(trajId);
 			int i = 0;
 			for (SanFranciscoCabRecord record : collection) {
@@ -258,6 +262,8 @@ public class SanFranciscoCabDatabaseReader {
 				s.addData(i, TID, record.getTid());
 				s.addData(i, OCUPATION, record.getOcupation());
 				s.addData(i, ROAD, record.getRoad());
+				s.addData(i, DIRECTION, record.getDirection());
+				s.addData(i, REGION_INTEREST, record.getRegion());
 				i++;
 			}
 			stats.addValue(s.length());
@@ -306,6 +312,7 @@ public class SanFranciscoCabDatabaseReader {
 				data.getBoolean("mall"),
 				data.getInt("road"),
 				data.getString("direction"),
+				data.getString("stop"),
 				stop,
 				move
 			);
@@ -328,6 +335,8 @@ public class SanFranciscoCabDatabaseReader {
 				s.addData(i, TID, record.getTid());
 				s.addData(i, OCUPATION, record.getOcupation());
 				s.addData(i, ROAD, record.getRoad());
+				s.addData(i, DIRECTION, record.getDirection());
+				s.addData(i, REGION_INTEREST, record.getRegion());
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
 					s.addData(i, STOP_CENTROID_SEMANTIC, stop);

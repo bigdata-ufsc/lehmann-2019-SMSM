@@ -1,7 +1,6 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.io.IOException;
-import java.text.ParseException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +26,7 @@ public class DublinBusProblem implements Problem {
 	public DublinBusProblem(String... lines) {
 		this(DublinBusDataReader.STOP_CENTROID_SEMANTIC, lines);
 	}
-	
+
 	public DublinBusProblem(StopSemantic stopSemantic, String... lines) {
 		this(stopSemantic, false, lines);
 	}
@@ -97,16 +96,16 @@ public class DublinBusProblem implements Problem {
 		if(loaded) {
 			return;
 		}
-		try {
-			data = new ArrayList<>(new DublinBusDataReader(onlyStops).read(lines));
-		} catch (NumberFormatException | IOException | ParseException e) {
-			throw new RuntimeException(e);
-		}
 //		try {
-//			data = new ArrayList<>(new DublinBusDatabaseReader(onlyStops).read(lines));
-//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+//			data = new ArrayList<>(new DublinBusDataReader(onlyStops).read(lines));
+//		} catch (NumberFormatException | IOException | ParseException e) {
 //			throw new RuntimeException(e);
 //		}
+		try {
+			data = new ArrayList<>(new DublinBusDatabaseReader(onlyStops).read(lines));
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			throw new RuntimeException(e);
+		}
 		Collections.shuffle(data, new java.util.Random() {
 			@Override
 			public int nextInt(int bound) {

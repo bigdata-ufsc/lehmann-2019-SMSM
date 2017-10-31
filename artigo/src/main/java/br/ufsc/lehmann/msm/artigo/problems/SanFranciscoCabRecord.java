@@ -17,7 +17,8 @@ public class SanFranciscoCabRecord {
 	private boolean mall;
 	private boolean airport;
 	private String direction;
-	public SanFranciscoCabRecord(int tid, int gid, int taxi_id, Timestamp time, int occupation, double longitude, double latitude,boolean airport, boolean mall, int road,String direction,
+	private String region;
+	public SanFranciscoCabRecord(int tid, int gid, int taxi_id, Timestamp time, int occupation, double longitude, double latitude,boolean airport, boolean mall, int road,String direction,String region,
 			Integer semanticStop, Integer semanticMoveId) {
 		this.tid = tid;
 		this.gid = gid;
@@ -30,6 +31,7 @@ public class SanFranciscoCabRecord {
 		this.mall = mall;
 		this.road = road;
 		this.direction = direction;
+		this.region = region;
 		this.semanticStop = semanticStop;
 		this.semanticMoveId = semanticMoveId;
 	}
@@ -71,6 +73,9 @@ public class SanFranciscoCabRecord {
 	}
 	public String getDirection() {
 		return direction;
+	}
+	public String getRegion() {
+		return region;
 	}
 	public void setDirection(String direction) {
 		this.direction = direction;

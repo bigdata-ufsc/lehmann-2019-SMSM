@@ -148,7 +148,7 @@ public class DublinBusDatabaseReader {
 		+ "from bus.dublin_201301 ";
 		//sql += "where date_frame between '2013-01-27' and '2013-01-31'";
 		if(lines != null && lines.length > 0) {
-			sql += "where trim(journey_pattern) in (SELECT * FROM unnest(?)) ";
+			sql += "where trim(journey_pattern) in (SELECT * FROM unnest(?)) and date_frame = ? ";
 		}
 		sql += "order by time_in_seconds";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);

@@ -22,7 +22,7 @@ public enum EnumProblem {
 //	NEWYORK_BUS(new NewYorkBusProblem(), 258),// 
 //	NEWYORK_BUS_2_LINES_STREET_NAME(new NewYorkBusProblem(NewYorkBusDataReader.STOP_STREET_NAME_SEMANTIC, "MTA NYCT_Q20A", "MTA NYCT_M102"), 2),//
 //	DUBLIN_BUS(new DublinBusProblem(), 465),// 
-//	DUBLIN_BUS_2_LINES(new DublinBusProblem("00671001", "00431001"), 2),//
+	DUBLIN_BUS_2_LINES(new DublinBusProblem("00671001", "00431001"), 2),//
 //	DUBLIN_BUS_2_LINES_STREET_NAME(new DublinBusProblem(DublinBusDataReader.STOP_STREET_NAME_SEMANTIC, "00671001", "00431001"), 2),//
 //	TDRIVE(new TDriveProblem()),//
 //	NEWYORK_BIKE(new NYBikeProblem()), //
