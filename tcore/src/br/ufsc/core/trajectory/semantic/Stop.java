@@ -28,7 +28,8 @@ public class Stop {
 	
 	private List<Attribute> attributes;
 
-	public Stop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, int beginIndex, TPoint endPoint, int length, TPoint centroid, String streetName) {
+	public Stop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, int beginIndex, TPoint endPoint, int length, TPoint centroid, 
+			String streetName, String region) {
 		this.stopId = stopId;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -38,7 +39,13 @@ public class Stop {
 		this.begin = beginIndex;
 		this.length = length;
 		attributes = new ArrayList<>(Arrays.asList(new Attribute(AttributeType.STOP_NAME, stopName),
-				new Attribute(AttributeType.STOP_STREET_NAME, streetName)));
+				new Attribute(AttributeType.STOP_STREET_NAME, streetName),
+				new Attribute(AttributeType.STOP_REGION, region)));
+	}
+
+	public Stop(int stopId, String stopName, long startTime, long endTime, TPoint startPoint, int beginIndex, TPoint endPoint, int length, TPoint centroid, 
+			String streetName) {
+		this(stopId, stopName, startTime, endTime, startPoint, beginIndex, endPoint, length, centroid, streetName, null);
 	}
 	
 	public Stop(int stopId, int beginIndex, long startTime, int length, long endTime) {
@@ -46,7 +53,7 @@ public class Stop {
 	}
 
 	public Stop(int stopId, int beginIndex, long startTime, int length, long endTime, TPoint centroid) {
-		this(stopId, null, startTime, endTime, null, beginIndex, null, length, centroid, null);
+		this(stopId, null, startTime, endTime, null, beginIndex, null, length, centroid, null, null);
 	}
 
 	public int getStopId() {
@@ -93,12 +100,20 @@ public class Stop {
 		return (String) getAttribute(AttributeType.STOP_NAME);
 	}
 	
+	public String getRegion() {
+		return (String) getAttribute(AttributeType.STOP_REGION);
+	}
+	
 	public void setTrafficLight(Long trafficLightId) {
 		setAttribute(AttributeType.STOP_TRAFFIC_LIGHT, trafficLightId);
 	}
 
 	public void setTrafficLightDistance(Double trafficLightDistance) {
 		setAttribute(AttributeType.STOP_TRAFFIC_LIGHT_DISTANCE, trafficLightDistance);
+	}
+
+	public <ROI> void setRegion(ROI region) {
+		setAttribute(AttributeType.STOP_REGION, region);
 	}
 
 	public void setEndTime(long endTime) {

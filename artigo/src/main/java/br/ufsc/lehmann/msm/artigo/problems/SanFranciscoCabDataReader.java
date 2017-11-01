@@ -176,6 +176,7 @@ public class SanFranciscoCabDataReader {
 			String road = data.get("road");
 			String direction = data.get("direction");
 			String region = data.get("region");
+			String route = data.get("route");
 			if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.contains(roads, road)) {
 				continue;
 			}
@@ -195,6 +196,7 @@ public class SanFranciscoCabDataReader {
 				Integer.parseInt(road),
 				direction,
 				region,
+				route,
 				StringUtils.isEmpty(stop) ? null : Integer.parseInt(stop),
 				StringUtils.isEmpty(move) ? null : Integer.parseInt(move)
 			);
@@ -285,6 +287,7 @@ public class SanFranciscoCabDataReader {
 			String road = data.get("road");
 			String direction = data.get("direction");
 			String region = data.get("region");
+			String route = data.get("route");
 			if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.contains(roads, road)) {
 				continue;
 			}
@@ -304,6 +307,7 @@ public class SanFranciscoCabDataReader {
 				Integer.parseInt(road),
 				direction,
 				region,
+				route,
 				stop == null ? null : Integer.parseInt(stop),
 				move == null ? null : Integer.parseInt(move)
 			);

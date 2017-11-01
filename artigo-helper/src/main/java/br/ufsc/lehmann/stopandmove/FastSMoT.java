@@ -37,36 +37,33 @@ public class FastSMoT<E, T> {
 	
 		StopAndMove ret = new StopAndMove(T);
 		for (int i = 0; i < neighborhood.length; i++) {
-			if (neighborhood[i] > 0) {
-				Instant p1 = Semantic.TEMPORAL.getData(T, i).getStart();
-				Instant p2 = Semantic.TEMPORAL.getData(T, i + neighborhood[i] - 1).getStart();
-	
-				long p1Milli = p1.toEpochMilli();
-				long p2Milli = p2.toEpochMilli();
-				E data = segmentationSemantic.getData(T, i);
-				if(data != null) {
-					Stop s = new Stop(sid.incrementAndGet(), i, p1Milli, neighborhood[i] + 1, p2Milli);
-					s.setCentroid(centroid(T, i, i + neighborhood[i] - 1));
-					
-					List<Integer> points = new ArrayList<>(neighborhood[i]);
-					for (int x = 0; x <= neighborhood[i]; x++) {
-						TPoint p = Semantic.GEOGRAPHIC.getData(T, i + x);
-						points.add(Semantic.GID.getData(T, i + x).intValue());
-						s.addPoint(p);
-					}
-					ret.addStop(s, points);
-					i += neighborhood[i];
-				} else {
-					List<Integer> gids = new ArrayList<>();
-					int init = i, j = i;
-					for (; j < neighborhood.length && j < i + neighborhood[i] + 1; j++) {
-						gids.add(Semantic.GID.getData(T, j).intValue());
-					}
-					ret.addMove(new Move(mid.incrementAndGet(), ret.lastStop(), null, p1Milli, p2Milli, init, j - init, null), gids);
-					i += neighborhood[i];
+			Instant p1 = Semantic.TEMPORAL.getData(T, i).getStart();
+			Instant p2 = Semantic.TEMPORAL.getData(T, i + neighborhood[i]).getStart();
+
+			long p1Milli = p1.toEpochMilli();
+			long p2Milli = p2.toEpochMilli();
+			E data = segmentationSemantic.getData(T, i);
+			if (data != null) {
+				Stop s = new Stop(sid.incrementAndGet(), i, p1Milli, neighborhood[i] + 1, p2Milli);
+				s.setCentroid(centroid(T, i, i + neighborhood[i]));
+				s.setRegion(data);
+
+				List<Integer> points = new ArrayList<>(neighborhood[i]);
+				for (int x = 0; x <= neighborhood[i]; x++) {
+					TPoint p = Semantic.GEOGRAPHIC.getData(T, i + x);
+					points.add(Semantic.GID.getData(T, i + x).intValue());
+					s.addPoint(p);
 				}
+				ret.addStop(s, points);
+				i += neighborhood[i];
 			} else {
-				throw new IllegalStateException();
+				List<Integer> gids = new ArrayList<>();
+				int init = i, j = i;
+				for (; j < neighborhood.length && j < i + neighborhood[i] + 1; j++) {
+					gids.add(Semantic.GID.getData(T, j).intValue());
+				}
+				ret.addMove(new Move(mid.incrementAndGet(), ret.lastStop(), null, p1Milli, p2Milli, init, j - init, null), gids);
+				i += neighborhood[i];
 			}
 		}
 	

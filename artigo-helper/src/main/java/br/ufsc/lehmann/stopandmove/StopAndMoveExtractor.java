@@ -53,6 +53,11 @@ public class StopAndMoveExtractor {
 
 	public static void persistStopAndMove(Connection conn, PreparedStatement update, PreparedStatement insertStop,
 			PreparedStatement insertMove, List<StopAndMove> findBestCBSMoT) throws SQLException {
+		persistStopAndMove(conn, update, insertStop, null, insertMove, findBestCBSMoT);
+	}
+
+	public static void persistStopAndMove(Connection conn, PreparedStatement update, PreparedStatement insertStop, StopPersisterCallback stopCallback,
+			PreparedStatement insertMove, List<StopAndMove> findBestCBSMoT) throws SQLException {
 		int registers = 0;
 		for (StopAndMove stopAndMove : findBestCBSMoT) {
 			List<Stop> stops = stopAndMove.getStops();
@@ -81,6 +86,9 @@ public class StopAndMoveExtractor {
 				insertStop.setInt(9, stop.getLength());
 				insertStop.setDouble(10, stop.getCentroid().getX());
 				insertStop.setDouble(11, stop.getCentroid().getY());
+				
+				stopCallback.parameterize(insertStop, stop);
+
 				insertStop.addBatch();
 				if(registers % 100 == 0) {
 					try {
@@ -88,7 +96,10 @@ public class StopAndMoveExtractor {
 						insertStop.executeBatch();
 						insertMove.executeBatch();
 					} catch (SQLException e) {
-						throw e.getNextException();
+						while(e.getNextException() != null) {
+							e = e.getNextException();
+						}
+						throw e;
 					}
 					conn.commit();
 				}
@@ -178,4 +189,14 @@ public class StopAndMoveExtractor {
 		return ret;
 	}
 
+	public static interface StopPersisterCallback {
+		void parameterize(PreparedStatement statement, Stop stop) throws SQLException;
+	}
+	static StopPersisterCallback EMPTY = new StopPersisterCallback() {
+
+		@Override
+		public void parameterize(PreparedStatement statement, Stop stop) {
+		}
+		
+	};
 }

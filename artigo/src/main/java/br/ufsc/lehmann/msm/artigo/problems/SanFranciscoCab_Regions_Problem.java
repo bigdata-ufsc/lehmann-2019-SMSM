@@ -12,7 +12,7 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import smile.math.Random;
 
-public class SanFranciscoCab_AirportMallDirection_Problem extends SanFranciscoCabProblem {
+public class SanFranciscoCab_Regions_Problem extends SanFranciscoCabProblem {
 	
 	private List<SemanticTrajectory> data;
 	private List<SemanticTrajectory> trainingData;
@@ -20,33 +20,17 @@ public class SanFranciscoCab_AirportMallDirection_Problem extends SanFranciscoCa
 	private List<SemanticTrajectory> validatingData;
 	private boolean loaded;
 	private Random random = new Random();
-	private String[] roads;
+	private String[] regions;
 	private String[] directions;
+	private String[] roads;
 
-	public SanFranciscoCab_AirportMallDirection_Problem(String[] roads) {
-		this(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, roads);
-	}
-
-	public SanFranciscoCab_AirportMallDirection_Problem(StopSemantic stopSemantic, String[] roads) {
-		this(SanFranciscoCabDataReader.STOP_CENTROID_SEMANTIC, false, roads);
-	}
-	
-	public SanFranciscoCab_AirportMallDirection_Problem(StopSemantic stopSemantic, boolean onlyStop, String[] roads) {
+	public SanFranciscoCab_Regions_Problem(StopSemantic stopSemantic, String[] roads, String[] directions, String[] regions, boolean onlyStop) {
 		super(stopSemantic, onlyStop);
 		this.roads = roads;
+		this.directions = directions;
+		this.regions = regions;
 	}
 
-	public SanFranciscoCab_AirportMallDirection_Problem(StopSemantic stopSemantic, boolean onlyStop, String[] roads, String[] directions) {
-		this(stopSemantic, onlyStop, roads);
-		/**
-		 * Proporção das classes de direction
-		 * 	"airport to mall";106
-		 *	"mall to airport";203
-		 *	"";217
-		 */
-		this.directions = directions;
-	}
-	
 	@Override
 	public void initialize(Random r) {
 		if(!random.equals(r)) {
@@ -66,10 +50,16 @@ public class SanFranciscoCab_AirportMallDirection_Problem extends SanFranciscoCa
 
 	@Override
 	public Semantic discriminator() {
-		if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.isEmpty(directions)) {
-			return SanFranciscoCabDataReader.DIRECTION_ROAD;
+		if(!ArrayUtils.isEmpty(directions)) {
+			if(!ArrayUtils.isEmpty(roads)) {
+				return SanFranciscoCabDatabaseReader.ROUTE_IN_ROADS_WITH_DIRECTION;
+			}
+			return SanFranciscoCabDatabaseReader.ROUTE_WITH_DIRECTION;
 		}
-		return SanFranciscoCabDataReader.DIRECTION;
+		if(!ArrayUtils.isEmpty(roads)) {
+			return SanFranciscoCabDatabaseReader.ROADS_WITH_DIRECTION;
+		}
+		return SanFranciscoCabDatabaseReader.ROUTE;
 	}
 
 	@Override
@@ -98,10 +88,7 @@ public class SanFranciscoCab_AirportMallDirection_Problem extends SanFranciscoCa
 
 	@Override
 	public String shortDescripton() {
-		if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.isEmpty(directions)) {
-			return "San Francisco cab (Airport <-> Mall|Direction|" + cc.mallet.util.ArrayUtils.toString(roads) + ")[" + getStopSemantic().name() + "][onlyStops=" + onlyStop + "]";
-		}
-		return "San Francisco cab (Airport <-> Mall|Direction)[" + getStopSemantic().name() + "][onlyStops=" + onlyStop + "]";
+		return "San Francisco cab (" + (!ArrayUtils.isEmpty(directions) ? "Directed " : "") + "Regions)[" + getStopSemantic().name() + "][onlyStops=" + onlyStop + "]";
 	}
 	
 	private void load() {
@@ -114,7 +101,7 @@ public class SanFranciscoCab_AirportMallDirection_Problem extends SanFranciscoCa
 //			throw new RuntimeException(e);
 //		}
 		try {
-			data = new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop, roads, directions).read());
+			data = new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop, roads, directions, regions).read());
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}

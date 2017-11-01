@@ -175,6 +175,7 @@ public class ClassSFDataReader {
 				Integer.parseInt(road),
 				null,
 				null,
+				null,
 				StringUtils.isEmpty(stop) ? null : Integer.parseInt(stop),
 				StringUtils.isEmpty(move) ? null : Integer.parseInt(move)
 			);
@@ -276,6 +277,7 @@ public class ClassSFDataReader {
 				true,
 				true,
 				Integer.parseInt(road),
+				null,
 				null,
 				null,
 				stop == null ? null : Integer.parseInt(stop),

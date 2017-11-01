@@ -1,18 +1,8 @@
 package br.ufsc.lehmann;
 
 import br.ufsc.lehmann.msm.artigo.Problem;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PisaDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCab_AirportMallDirection_Problem;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCab_AirportMallRoad_Problem;
-import br.ufsc.lehmann.msm.artigo.problems.VehicleDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.VehicleProblem;
-import br.ufsc.lehmann.prototype.PrototypeProblem;
+import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCab_Regions_Problem;
 import smile.math.Random;
 
 public enum EnumProblem {
@@ -22,7 +12,7 @@ public enum EnumProblem {
 //	NEWYORK_BUS(new NewYorkBusProblem(), 258),// 
 //	NEWYORK_BUS_2_LINES_STREET_NAME(new NewYorkBusProblem(NewYorkBusDataReader.STOP_STREET_NAME_SEMANTIC, "MTA NYCT_Q20A", "MTA NYCT_M102"), 2),//
 //	DUBLIN_BUS(new DublinBusProblem(), 465),// 
-	DUBLIN_BUS_2_LINES(new DublinBusProblem("00671001", "00431001"), 2),//
+//	DUBLIN_BUS_2_LINES(new DublinBusProblem("00671001", "00431001"), 2),//
 //	DUBLIN_BUS_2_LINES_STREET_NAME(new DublinBusProblem(DublinBusDataReader.STOP_STREET_NAME_SEMANTIC, "00671001", "00431001"), 2),//
 //	TDRIVE(new TDriveProblem()),//
 //	NEWYORK_BIKE(new NYBikeProblem()), //
@@ -50,8 +40,11 @@ public enum EnumProblem {
 //	NEWYORK_BUS_2_LINES_S79_S59_X1_ONLY_STOPS_STREET_NAME(new NewYorkBusProblem(NewYorkBusDataReader.STOP_STREET_NAME_SEMANTIC, true, "MTA NYCT_S79+", "MTA NYCT_S59", "MTA NYCT_X1"), 3),// 
 //	DUBLIN_BUS_2_LINES_ONLY_STOPS_STREET_NAME(new DublinBusProblem(DublinBusDataReader.STOP_STREET_NAME_SEMANTIC, true, "00671001", "00431001"), 2),//
 //	TAXI_SANFRANCISCO_AIRPORT_MALL_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_AirportMallRoad_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new String[] {"101", "280"}), 2),//
-	TAXI_SANFRANCISCO_AIRPORT_MALL_JUST_DIRECTION_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_AirportMallDirection_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new String[] {}, new String[] {"mall to airport", "airport to mall"}), 2),//
-	TAXI_SANFRANCISCO_AIRPORT_MALL_DIRECTION_THROUGH_ROAD_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_AirportMallDirection_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}), 4),//
+//	TAXI_SANFRANCISCO_AIRPORT_MALL_JUST_DIRECTION_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_AirportMallDirection_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new String[] {}, new String[] {"mall to airport", "airport to mall"}), 2),//
+//	TAXI_SANFRANCISCO_AIRPORT_MALL_DIRECTION_THROUGH_ROAD_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_AirportMallDirection_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}), 4),//
+	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_IN_ROADS_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "airport"}, true), 4),//
+//	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, null, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "airport"}, true), 4),//
+//	TAXI_SANFRANCISCO_REGIONS_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, null, new String[] {}, new String[] {"mall", "airport"}, true), 2),//
 //	VEHICLE_URBAN_ONLY_STOPS_STREET_NAME(new VehicleProblem(VehicleDataReader.STOP_STREET_NAME_SEMANTIC, true), 2),//
 //	PISA_ONLY_STOPS_STREET_NAME_ALL_USERS(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, true, 1, 2, 3, 4, 5, 6, 7), 7),//
 //	PISA_ONLY_STOPS_STREET_NAME_USERS_4_6(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, true, 4, 6), 2),//
