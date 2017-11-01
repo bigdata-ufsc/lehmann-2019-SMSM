@@ -1,0 +1,975 @@
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+MSMClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+0.6862745098039216
+0.7474905422446406
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+MSMClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6951219512195121, 0.890625, 0.7808219178082191, 0.34210526315789475, 0.6578947368421053, 0.3048780487804878]
+[0.7619333997084757, 0.91440696603168, 0.8298270457119017, 0.46139404186247635, 0.5386059581375237, 0.23806660029152432]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+MSMClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.4019607843137255
+0.4554350567465321
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+MSMClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.5178571428571429, 0.6590909090909091, 0.5800000000000001, 0.5344827586206896, 0.4655172413793104, 0.48214285714285715]
+[0.26368886015944837, 0.2364347932768985, 0.24054545454545453, 0.8000255754475702, 0.19997442455242967, 0.7363111398405516]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+DTWClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6372549019607843
+0.6407061790668348
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+DTWClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6336633663366337, 1.0, 0.7757575757575758, 0.02631578947368421, 0.9736842105263158, 0.36633663366336633]
+[0.7281152633444654, 0.8915105946684893, 0.7846111617317089, 0.26848628555453163, 0.7315137144454684, 0.27188473665553464]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+DTWClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.3431372549019608
+0.3853215636822195
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+DTWClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.6923076923076923, 0.4090909090909091, 0.5142857142857142, 0.8620689655172413, 0.13793103448275867, 0.3076923076923077]
+[0.39761904761904765, 0.1565967365967366, 0.21503267973856208, 0.9481270715644117, 0.05187292843558831, 0.6023809523809524]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+EDRClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6764705882352942
+0.7241361916771752
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+EDRClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6666666666666666, 0.96875, 0.7898089171974522, 0.18421052631578946, 0.8157894736842105, 0.3333333333333333]
+[0.6837996096291477, 0.9207096793366816, 0.7826941891513565, 0.19033522227761018, 0.8096647777223897, 0.3162003903708523]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+EDRClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.35294117647058826
+0.4373770491803278
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+EDRClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.4, 0.5909090909090909, 0.47706422018348627, 0.3275862068965517, 0.6724137931034483, 0.6]
+[0.46984126984126984, 0.2284087841982579, 0.2753068441855627, 0.9005824644238967, 0.09941753557610333, 0.5301587301587302]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+ERPClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6274509803921569
+0.666733921815889
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+ERPClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6274509803921569, 1.0, 0.7710843373493976, 0.0, 1.0, 0.37254901960784315]
+[0.6546325248392753, 0.9488790157211209, 0.7736860061717747, 0.04637128923035505, 0.9536287107696451, 0.3453674751607247]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+ERPClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.38235294117647056
+0.4080706179066834
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+ERPClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.40425531914893614, 0.8636363636363636, 0.5507246376811594, 0.034482758620689655, 0.9655172413793104, 0.5957446808510638]
+[1.0, 0.04, 0.06666666666666668, 1.0, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+LCSSClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.5588235294117647
+0.6286002522068095
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+LCSSClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6461538461538462, 0.65625, 0.6511627906976746, 0.39473684210526316, 0.6052631578947368, 0.35384615384615387]
+[0.6807401079294767, 0.8092775416802876, 0.7374927372530369, 0.27012854781060464, 0.7298714521893954, 0.3192598920705233]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+LCSSClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.35294117647058826
+0.38244640605296343
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+LCSSClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.4883720930232558, 0.4772727272727273, 0.4827586206896552, 0.6206896551724138, 0.3793103448275862, 0.5116279069767442]
+[0.3283333333333333, 0.20461293092872043, 0.2505725744937378, 0.8780457734933439, 0.12195422650665617, 0.6716666666666666]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+MSTPClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6274509803921569
+0.5876418663303908
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+MSTPClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6274509803921569, 1.0, 0.7710843373493976, 0.0, 1.0, 0.37254901960784315]
+[0.731702395964691, 0.8, 0.6376339883023051, 0.2, 0.8, 0.26829760403530895]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+MSTPClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.19607843137254902
+0.3746784363177806
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+MSTPClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+[1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+HCSSClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.5686274509803921
+0.5693820933165197
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+HCSSClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.631578947368421, 0.75, 0.6857142857142857, 0.2631578947368421, 0.736842105263158, 0.3684210526315789]
+[0.6637357357357357, 0.7063958810068651, 0.6809999798128054, 0.32424293075793953, 0.6757570692420604, 0.33626426426426426]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+HCSSClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.30392156862745096
+0.3271122320302648
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+HCSSClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.4375, 0.4772727272727273, 0.45652173913043476, 0.5344827586206896, 0.4655172413793104, 0.5625]
+[0.21000000000000002, 0.10612440191387558, 0.12884057971014493, 0.9175524577724066, 0.08244754222759343, 0.7899999999999999]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+CVTIClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6274509803921569
+0.5876418663303908
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+CVTIClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6274509803921569, 1.0, 0.7710843373493976, 0.0, 1.0, 0.37254901960784315]
+[0.731702395964691, 0.8, 0.6376339883023051, 0.2, 0.8, 0.26829760403530895]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+CVTIClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.19607843137254902
+0.3746784363177806
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+CVTIClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+[1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+wDFClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.7647058823529411
+0.790517023959647
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+wDFClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.8225806451612904, 0.796875, 0.8095238095238094, 0.7105263157894737, 0.2894736842105263, 0.1774193548387097]
+[0.8277711323763957, 0.8573415257511368, 0.8417392174827786, 0.6556479236651536, 0.34435207633484655, 0.17222886762360448]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+wDFClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.4019607843137255
+0.4304161412358134
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+wDFClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.6511627906976745, 0.6363636363636364, 0.6436781609195402, 0.7413793103448276, 0.2586206896551724, 0.3488372093023256]
+[0.37982456140350873, 0.37766654398233346, 0.3648409381168002, 0.820730970649129, 0.1792690293508708, 0.6201754385964912]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SWALEClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6862745098039216
+0.694829760403531
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SWALEClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.7, 0.875, 0.7777777777777777, 0.3684210526315789, 0.631578947368421, 0.3]
+[0.6902245451025939, 0.633944247971708, 0.6583563309661072, 0.4738839524544196, 0.5261160475455805, 0.3097754548974061]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SWALEClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.35294117647058826
+0.45624211853720054
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SWALEClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.5588235294117647, 0.4318181818181818, 0.48717948717948717, 0.7413793103448276, 0.2586206896551724, 0.4411764705882353]
+[0.20317460317460317, 0.20311127469022208, 0.1988730313891604, 0.8086617951528436, 0.19133820484715625, 0.7968253968253969]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+LiuSchneiderClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6274509803921569
+0.5210088272383354
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+LiuSchneiderClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6274509803921569, 1.0, 0.7710843373493976, 0.0, 1.0, 0.37254901960784315]
+[0.7520705977009527, 0.3690142351927249, 0.46391163092917476, 0.7090205348113545, 0.29097946518864537, 0.24792940229904734]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+LiuSchneiderClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.3235294117647059
+0.31071878940731396
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+LiuSchneiderClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.3717948717948718, 0.6590909090909091, 0.4754098360655737, 0.15517241379310345, 0.8448275862068966, 0.6282051282051282]
+[1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+DTWaClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6470588235294118
+0.6634552332912989
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+DTWaClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6428571428571429, 0.984375, 0.7777777777777778, 0.07894736842105263, 0.9210526315789473, 0.35714285714285715]
+[0.738066730523627, 0.9177511961722488, 0.8009124024976559, 0.2697255138633521, 0.7302744861366479, 0.2619332694763729]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+DTWaClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.4019607843137255
+0.36564943253467846
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+DTWaClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.7777777777777778, 0.4772727272727273, 0.5915492957746479, 0.896551724137931, 0.10344827586206895, 0.2222222222222222]
+[0.37676767676767675, 0.1489412342043921, 0.18981089086352243, 0.9164006632753436, 0.08359933672465643, 0.6232323232323232]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMTemporalDurationClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.9313725490196079
+0.9255989911727618
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMTemporalDurationClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.9253731343283582, 0.96875, 0.9465648854961832, 0.868421052631579, 0.13157894736842102, 0.07462686567164178]
+[0.9423583947498632, 0.9698661178638297, 0.9557816012771563, 0.8845467988286672, 0.11545320117133281, 0.057641605250136715]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMTemporalDurationClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.6078431372549019
+0.6017654476670871
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMTemporalDurationClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.717391304347826, 0.75, 0.7333333333333332, 0.7758620689655172, 0.22413793103448276, 0.2826086956521739]
+[0.4801470588235294, 0.43514660777818676, 0.4437892165028597, 0.8554753754344547, 0.14452462456554527, 0.5198529411764705]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMDistanceClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.8921568627450981
+0.9122824716267338
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMDistanceClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.8840579710144928, 0.953125, 0.9172932330827068, 0.7894736842105263, 0.21052631578947367, 0.11594202898550725]
+[0.8962132212692122, 0.9651258581235698, 0.9288301697691024, 0.7780259718744038, 0.22197402812559633, 0.10378677873078768]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMDistanceClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.5686274509803921
+0.6011601513240857
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMDistanceClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.6818181818181818, 0.6818181818181818, 0.6818181818181818, 0.7586206896551724, 0.24137931034482762, 0.3181818181818182]
+[0.46403596403596403, 0.5107103422892896, 0.4671256485450034, 0.8287754138444676, 0.17122458615553246, 0.535964035964036]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMAngleClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.9411764705882353
+0.9645397225725094
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMAngleClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.9142857142857143, 1.0, 0.955223880597015, 0.8421052631578947, 0.1578947368421053, 0.08571428571428572]
+[0.947163763554741, 0.9801913875598085, 0.9631273701064618, 0.8971405002768578, 0.10285949972314223, 0.052836236445259]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMAngleClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.6176470588235294
+0.6277931904161412
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMAngleClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.7291666666666666, 0.7954545454545454, 0.7608695652173914, 0.7758620689655172, 0.22413793103448276, 0.2708333333333333]
+[0.5052380952380953, 0.5089559563243773, 0.48188235294117643, 0.8492095406724565, 0.15079045932754373, 0.4947619047619048]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMEllipsesClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.8921568627450981
+0.8801008827238336
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMEllipsesClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.8840579710144928, 0.953125, 0.9172932330827068, 0.7894736842105263, 0.21052631578947367, 0.11594202898550725]
+[0.8792587408492306, 0.9694115724092841, 0.9217270585236559, 0.7409426083406431, 0.25905739165935693, 0.1207412591507693]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMEllipsesClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.5294117647058824
+0.5751324085750315
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMEllipsesClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.6521739130434783, 0.6818181818181818, 0.6666666666666666, 0.7241379310344828, 0.27586206896551724, 0.34782608695652173]
+[0.41939393939393943, 0.4525187093608146, 0.4190356769667115, 0.8195519706210244, 0.1804480293789757, 0.5806060606060606]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMPointsClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.8921568627450981
+0.8833795712484237
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMPointsClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.8840579710144928, 0.953125, 0.9172932330827068, 0.7894736842105263, 0.21052631578947367, 0.11594202898550725]
+[0.8789497687755528, 0.9694115724092841, 0.9215311966737613, 0.7419451146063072, 0.25805488539369276, 0.12105023122444725]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMPointsClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.5196078431372549
+0.5784110970996217
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+SMSMPointsClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.6521739130434783, 0.6818181818181818, 0.6666666666666666, 0.7241379310344828, 0.27586206896551724, 0.34782608695652173]
+[0.4270995670995671, 0.47251870936081464, 0.4344673041630445, 0.8186362197052734, 0.1813637802947266, 0.5729004329004328]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_TemporalDurationClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6274509803921569
+0.5810844892812106
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_TemporalDurationClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6274509803921569, 1.0, 0.7710843373493976, 0.0, 1.0, 0.37254901960784315]
+[0.731702395964691, 0.8210526315789473, 0.6757292263975432, 0.2, 0.8, 0.26829760403530895]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_TemporalDurationClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.20588235294117646
+0.3648423707440101
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_TemporalDurationClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.5, 0.045454545454545456, 0.08333333333333334, 0.9655172413793104, 0.03448275862068961, 0.5]
+[0.6, 0.0, 0.0, 0.9920784313725491, 0.007921568627450993, 0.4]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_DistanceClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6176470588235294
+0.5845649432534679
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_DistanceClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6237623762376238, 0.984375, 0.7636363636363637, 0.0, 1.0, 0.37623762376237624]
+[0.7307734342160572, 0.816507177033493, 0.673494794163111, 0.2, 0.8, 0.26922656578394283]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_DistanceClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.19607843137254902
+0.361765447667087
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_DistanceClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.3333333333333333, 0.022727272727272728, 0.04255319148936171, 0.9655172413793104, 0.03448275862068961, 0.6666666666666666]
+[0.8, 0.0, 0.0, 0.9960000000000001, 0.0040000000000000036, 0.2]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_AngleClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6176470588235294
+0.5843631778058007
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_AngleClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6237623762376238, 0.984375, 0.7636363636363637, 0.0, 1.0, 0.37623762376237624]
+[0.7307734342160572, 0.811244019138756, 0.6646678487507998, 0.2, 0.8, 0.26922656578394283]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_AngleClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.19607843137254902
+0.3648423707440101
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_AngleClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.3333333333333333, 0.022727272727272728, 0.04255319148936171, 0.9655172413793104, 0.03448275862068961, 0.6666666666666666]
+[0.6666666666666666, 0.02, 0.030769230769230764, 0.9883107088989442, 0.01168929110105581, 0.3333333333333333]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_EllipsesClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6274509803921569
+0.5810844892812106
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_EllipsesClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6274509803921569, 1.0, 0.7710843373493976, 0.0, 1.0, 0.37254901960784315]
+[0.731702395964691, 0.8210526315789473, 0.6757292263975432, 0.2, 0.8, 0.26829760403530895]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_EllipsesClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.20588235294117646
+0.3681210592686003
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_EllipsesClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.5, 0.045454545454545456, 0.08333333333333334, 0.9655172413793104, 0.03448275862068961, 0.5]
+[1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_PointsClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.6274509803921569
+0.5876418663303908
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_PointsClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.6274509803921569, 1.0, 0.7710843373493976, 0.0, 1.0, 0.37254901960784315]
+[0.731702395964691, 0.8210526315789473, 0.6757292263975432, 0.2, 0.8, 0.26829760403530895]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_PointsClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.19607843137254902
+0.3648423707440101
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_PointsClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.5, 0.022727272727272728, 0.04347826086956522, 0.9827586206896551, 0.017241379310344862, 0.5]
+[0.7, 0.02, 0.03333333333333334, 0.9920784313725491, 0.007921568627450993, 0.3]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_TemporalDurationClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.9509803921568627
+0.9547036569987389
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_TemporalDurationClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.9538461538461539, 0.96875, 0.9612403100775193, 0.9210526315789473, 0.07894736842105265, 0.046153846153846156]
+[0.9564091946700642, 0.9853890160183066, 0.9701714078633545, 0.918368318987514, 0.081631681012486, 0.04359080532993577]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_TemporalDurationClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.6764705882352942
+0.6146784363177805
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_TemporalDurationClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.723404255319149, 0.7727272727272727, 0.7472527472527473, 0.7758620689655172, 0.22413793103448276, 0.2765957446808511]
+[0.4843638817323028, 0.5019629493313704, 0.47725524475524467, 0.8566452132692541, 0.1433547867307458, 0.5156361182676973]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_DistanceClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.9411764705882353
+0.9581841109709963
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_DistanceClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.953125, 0.953125, 0.953125, 0.9210526315789473, 0.07894736842105265, 0.046875]
+[0.9563081845690542, 0.9808435614728521, 0.9678731443291358, 0.918368318987514, 0.081631681012486, 0.04369181543094587]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_DistanceClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.6666666666666666
+0.6116015132408574
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_DistanceClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.717391304347826, 0.75, 0.7333333333333332, 0.7758620689655172, 0.22413793103448276, 0.2826086956521739]
+[0.49193963930806034, 0.5019629493313704, 0.4815842490842491, 0.8605667818967051, 0.13943321810329484, 0.5080603606919396]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_AngleClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.9411764705882353
+0.9579823455233291
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_AngleClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.953125, 0.953125, 0.953125, 0.9210526315789473, 0.07894736842105265, 0.046875]
+[0.9563081845690542, 0.9755804035781154, 0.9651344055903971, 0.918368318987514, 0.081631681012486, 0.04369181543094587]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_AngleClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.6666666666666666
+0.6146784363177805
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_AngleClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.717391304347826, 0.75, 0.7333333333333332, 0.7758620689655172, 0.22413793103448276, 0.2826086956521739]
+[0.4865134865134865, 0.5219629493313704, 0.4876350820316337, 0.8528774907956492, 0.14712250920435066, 0.5134865134865134]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_EllipsesClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.9509803921568627
+0.9547036569987389
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_EllipsesClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.9538461538461539, 0.96875, 0.9612403100775193, 0.9210526315789473, 0.07894736842105265, 0.046153846153846156]
+[0.9564091946700642, 0.9853890160183066, 0.9701714078633545, 0.918368318987514, 0.081631681012486, 0.04359080532993577]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_EllipsesClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.6764705882352942
+0.6179571248423708
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_EllipsesClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.723404255319149, 0.7727272727272727, 0.7472527472527473, 0.7758620689655172, 0.22413793103448276, 0.2765957446808511]
+[0.49720279720279725, 0.5019629493313704, 0.4857221801187318, 0.864566781896705, 0.13543321810329484, 0.5027972027972029]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_PointsClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+0.9509803921568627
+0.9612610340479193
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_PointsClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction)[STOP_STREET_NAME][onlyStops=true]]
+[0.9538461538461539, 0.96875, 0.9612403100775193, 0.9210526315789473, 0.07894736842105265, 0.046153846153846156]
+[0.9564091946700642, 0.9853890160183066, 0.9701714078633545, 0.918368318987514, 0.081631681012486, 0.04359080532993577]
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_PointsClassifierTest#validation_accuracy[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+0.6666666666666666
+0.6146784363177805
+Reading file...
+Fetching...
+Loaded 8829 GPS points from dataset
+Loaded 309 trajectories from dataset
+Loaded 309 trajectories (filtered)
+Semantic Trajectories statistics: mean - 4,75, min - 1,00, max - 31,00, sd - 3,30
+H_MSM_StopMove_PointsClassifierTest#validation_precision_recall[San Francisco cab (Airport <-> Mall|Direction|101 280)[STOP_STREET_NAME][onlyStops=true]]
+[0.7333333333333333, 0.75, 0.7415730337078651, 0.7931034482758621, 0.2068965517241379, 0.26666666666666666]
+[0.49333824070666177, 0.5219629493313704, 0.4906939799331103, 0.8566452132692541, 0.1433547867307458, 0.5066617592933382]
