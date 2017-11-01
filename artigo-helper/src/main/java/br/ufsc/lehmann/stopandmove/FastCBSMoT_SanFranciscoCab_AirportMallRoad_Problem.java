@@ -61,7 +61,7 @@ public class FastCBSMoT_SanFranciscoCab_AirportMallRoad_Problem {
 //			ArrayList<Integer> t = new ArrayList<>(bestCombinations.values());
 //			Collections.sort(t);
 //			System.out.println(t.get(t.size() - 1));
-			StopAndMoveExtractor.persistStopMove(fastCBSMoT, trajs, ratio, timeTolerance, maxDist, mergeTolerance, minTime, conn, sid, mid, update, insertStop, insertMove);
+			StopAndMoveExtractor.extractStopMove(fastCBSMoT, trajs, ratio, timeTolerance, maxDist, mergeTolerance, minTime, conn, sid, mid, update, insertStop, insertMove);
 		} finally {
 			update.close();
 			insertStop.close();

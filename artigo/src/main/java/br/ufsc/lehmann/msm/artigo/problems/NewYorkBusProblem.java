@@ -11,6 +11,7 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.lehmann.msm.artigo.Problem;
+import cc.mallet.util.ArrayUtils;
 import smile.math.Random;
 
 public class NewYorkBusProblem implements Problem {
@@ -91,7 +92,7 @@ public class NewYorkBusProblem implements Problem {
 
 	@Override
 	public String shortDescripton() {
-		return "New York bus" + (lines != null ? "(lines=" + Arrays.toString(lines) + ")" : "") + "[" + stopSemantic.name() + "][onlyStops=" + onlyStops + "]";
+		return "New York bus" + (lines != null ? "(lines=" + ArrayUtils.toString(lines) + ")" : "") + "[" + stopSemantic.name() + "][onlyStops=" + onlyStops + "]";
 	}
 	
 	private void load() {

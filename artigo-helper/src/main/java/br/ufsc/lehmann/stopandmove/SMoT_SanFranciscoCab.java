@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,10 +19,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 import br.ufsc.utils.LatLongDistanceFunction;
@@ -49,22 +52,12 @@ public class SMoT_SanFranciscoCab {
 		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.taxi_sanfrancisco_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
 		try {
 			conn.setAutoCommit(false);
+			FastSMoT<String, Number> fastSMoT = new FastSMoT<>(SanFranciscoCabDatabaseReader.REGION_INTEREST);
+			List<StopAndMove> bestSMoT = new ArrayList<>();
 			for (SemanticTrajectory T : trajs) {
-				StopAndMove ret = new StopAndMove(T);
-				String currentRegion = null;
-				for (int i = 0; i < T.length(); i++) {
-					String region = SanFranciscoCabDatabaseReader.REGION_INTEREST.getData(T, i);
-
-					Instant p1 = Semantic.TEMPORAL.getData(T, i).getStart();
-		
-					long p1Milli = p1.toEpochMilli();
-					if(!StringUtils.equals(region, currentRegion)) {
-						if(region == null) {
-							ret.addMove(new Move(mid.incrementAndGet(), ret.lastStop(), null, p1Milli, p2Milli, init, j - init, null), gids);
-						}
-					}
-				}
+				bestSMoT.add(fastSMoT.findStops(T, sid, mid));
 			}
+			StopAndMoveExtractor.persistStopAndMove(conn, update, insertStop, insertMove, bestSMoT);
 						
 		} finally {
 			update.close();

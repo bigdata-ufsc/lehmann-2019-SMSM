@@ -63,7 +63,7 @@ public class FastCBSMoT_Hurricane2vs3Patel {
 //					System.out.println(e.getKey() + " ->" + e.getValue());
 //				}
 //			}
-			StopAndMoveExtractor.persistStopMove(fastCBSMoT, trajs, ratio, timeTolerance, maxDist, mergeTolerance, minTime, conn, sid, mid, update, insertStop, insertMove);
+			StopAndMoveExtractor.extractStopMove(fastCBSMoT, trajs, ratio, timeTolerance, maxDist, mergeTolerance, minTime, conn, sid, mid, update, insertStop, insertMove);
 		} finally {
 			update.close();
 			insertMove.close();

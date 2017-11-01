@@ -1,10 +1,14 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
@@ -65,6 +69,9 @@ public class SanFranciscoCab_AirportMallDirection_Problem extends SanFranciscoCa
 
 	@Override
 	public Semantic discriminator() {
+		if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.isEmpty(directions)) {
+			return SanFranciscoCabDataReader.DIRECTION_ROAD;
+		}
 		return SanFranciscoCabDataReader.DIRECTION;
 	}
 
@@ -94,6 +101,9 @@ public class SanFranciscoCab_AirportMallDirection_Problem extends SanFranciscoCa
 
 	@Override
 	public String shortDescripton() {
+		if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.isEmpty(directions)) {
+			return "San Francisco cab (Airport <-> Mall|Direction|" + cc.mallet.util.ArrayUtils.toString(roads) + ")[" + getStopSemantic().name() + "][onlyStops=" + onlyStop + "]";
+		}
 		return "San Francisco cab (Airport <-> Mall|Direction)[" + getStopSemantic().name() + "][onlyStops=" + onlyStop + "]";
 	}
 	

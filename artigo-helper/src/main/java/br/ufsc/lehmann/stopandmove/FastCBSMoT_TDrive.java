@@ -62,7 +62,7 @@ public class FastCBSMoT_TDrive {
 //				}
 //			}
 //			System.out.println(bestConfiguration + " ->" + bestCombinations.get(bestConfiguration));
-			StopAndMoveExtractor.persistStopMove(fastCBSMoT, trajs, ratio, timeTolerance, maxDist, mergeTolerance, minTime, conn, sid, mid, update, insertStop, insertMove);
+			StopAndMoveExtractor.extractStopMove(fastCBSMoT, trajs, ratio, timeTolerance, maxDist, mergeTolerance, minTime, conn, sid, mid, update, insertStop, insertMove);
 		} finally {
 			update.close();
 			insertStop.close();

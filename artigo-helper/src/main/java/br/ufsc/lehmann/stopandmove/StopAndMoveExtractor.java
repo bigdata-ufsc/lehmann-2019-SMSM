@@ -20,7 +20,7 @@ import br.ufsc.core.trajectory.semantic.Stop;
 
 public class StopAndMoveExtractor {
 
-	public static void persistStopMove(FastCBSMoT fastCBSMoT, List<SemanticTrajectory> trajs, double ratio, int timeTolerance, double maxDist,
+	public static void extractStopMove(FastCBSMoT fastCBSMoT, List<SemanticTrajectory> trajs, double ratio, int timeTolerance, double maxDist,
 			int mergeTolerance, int minTime, Connection conn, AtomicInteger sid, AtomicInteger mid, PreparedStatement update, PreparedStatement insertStop, PreparedStatement insertMove)
 			throws SQLException {
 		List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), ratio, timeTolerance, maxDist, mergeTolerance, minTime, sid, mid);
@@ -48,6 +48,11 @@ public class StopAndMoveExtractor {
 //		if(true) {
 //			throw new RuntimeException();
 //		}
+		persistStopAndMove(conn, update, insertStop, insertMove, findBestCBSMoT);
+	}
+
+	public static void persistStopAndMove(Connection conn, PreparedStatement update, PreparedStatement insertStop,
+			PreparedStatement insertMove, List<StopAndMove> findBestCBSMoT) throws SQLException {
 		int registers = 0;
 		for (StopAndMove stopAndMove : findBestCBSMoT) {
 			List<Stop> stops = stopAndMove.getStops();
