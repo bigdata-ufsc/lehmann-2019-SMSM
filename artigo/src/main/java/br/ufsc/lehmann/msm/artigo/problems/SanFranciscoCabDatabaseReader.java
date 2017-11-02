@@ -190,8 +190,10 @@ public class SanFranciscoCabDatabaseReader {
 	private List<SemanticTrajectory> readStopsTrajectories(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
 		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, direction, stop, semantic_stop_id, semantic_move_id, stop, route" + //
 				" FROM taxi.sanfrancisco_taxicab_crawdad where 1=1";
-		if(roads != null) {
+		if(!ArrayUtils.isEmpty(roads)) {
 			sql += " and road in (SELECT * FROM unnest(?))";
+		} else if(roads != null) {
+			sql += " and road is not null";
 		}
 		if(!ArrayUtils.isEmpty(directions)) {
 			sql += " and direction in (SELECT * FROM unnest(?))";
@@ -199,12 +201,12 @@ public class SanFranciscoCabDatabaseReader {
 			sql += " and direction is not null";
 		}
 		if(regions != null) {
-			sql += " and stop in (SELECT * FROM unnest(?))";
+			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab_crawdad r where r.stop in (SELECT * FROM unnest(?)))";
 		}
 		sql +=" order by tid, \"timestamp\"";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		int index = 1;
-		if(roads != null) {
+		if(!ArrayUtils.isEmpty(roads)) {
 			Array array = conn.createArrayOf("integer", roads);
 			preparedStatement.setArray(index++, array);
 		}
@@ -325,23 +327,27 @@ public class SanFranciscoCabDatabaseReader {
 	private List<SemanticTrajectory> loadRawPoints(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
 		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, direction, semantic_stop_id, semantic_move_id, stop, route" + //
 				" FROM taxi.sanfrancisco_taxicab_crawdad where 1=1";
-		if(roads != null) {
+		if(!ArrayUtils.isEmpty(roads)) {
 			sql += " and road in (SELECT * FROM unnest(?))";
+		} else if(roads != null) {
+			sql += " and road is not null";
 		}
-		if(directions != null) {
+		if(!ArrayUtils.isEmpty(directions)) {
 			sql += " and direction in (SELECT * FROM unnest(?))";
+		} else if(directions != null) {
+			sql += " and direction is not null";
 		}
 		if(regions != null) {
-			sql += " and stop in (SELECT * FROM unnest(?))";
+			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab_crawdad r where r.stop in (SELECT * FROM unnest(?)))";
 		}
 		sql +=" order by tid, \"timestamp\"";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		int index = 1;
-		if(roads != null) {
+		if(!ArrayUtils.isEmpty(roads)) {
 			Array array = conn.createArrayOf("integer", roads);
 			preparedStatement.setArray(index++, array);
 		}
-		if(directions != null) {
+		if(!ArrayUtils.isEmpty(directions)) {
 			Array array = conn.createArrayOf("text", directions);
 			preparedStatement.setArray(index++, array);
 		}

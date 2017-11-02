@@ -82,6 +82,8 @@ public class SanFranciscoCabDataReader {
 	private boolean onlyStops;
 
 	private String[] directions;
+
+	private String[] regions;
 	
 	public SanFranciscoCabDataReader(boolean onlyStop) {
 		this.onlyStops = onlyStop;
@@ -95,6 +97,11 @@ public class SanFranciscoCabDataReader {
 	public SanFranciscoCabDataReader(boolean onlyStop, String[] roads, String[] directions) {
 		this(onlyStop, roads);
 		this.directions = directions;
+	}
+	
+	public SanFranciscoCabDataReader(boolean onlyStop, String[] roads, String[] directions, String[] regions) {
+		this(onlyStop, roads, directions);
+		this.regions = regions;
 	}
 
 	public List<SemanticTrajectory> read() throws IOException, ParseException {
