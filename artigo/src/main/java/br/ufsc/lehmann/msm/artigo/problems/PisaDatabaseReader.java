@@ -67,6 +67,8 @@ public class PisaDatabaseReader {
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(13, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
+	
+	public static final BasicSemantic<Integer> IS_STOP = new BasicSemantic<>(14);
 	private boolean onlyStops;
 
 	public PisaDatabaseReader(boolean onlyStops) {
@@ -201,7 +203,7 @@ public class PisaDatabaseReader {
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 14);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 15);
 			Collection<PisaRecord> collection = records.get(trajId);
 			int i = 0;
 			for (PisaRecord record : collection) {
@@ -263,6 +265,7 @@ public class PisaDatabaseReader {
 				s.addData(i, SUBGOAL, record.getSubGoal());
 				s.addData(i, TRANSPORTATION, record.getTransportation());
 				s.addData(i, EVENT, record.getEvent());
+				s.addData(i, IS_STOP, record.getIs_stop());
 				i++;
 			}
 			stats.addValue(s.length());
@@ -277,7 +280,7 @@ public class PisaDatabaseReader {
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 14);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 15);
 			Collection<PisaRecord> collection = records.get(trajId);
 			int i = 0;
 			for (PisaRecord record : collection) {
@@ -294,6 +297,7 @@ public class PisaDatabaseReader {
 				s.addData(i, SUBGOAL, record.getSubGoal());
 				s.addData(i, TRANSPORTATION, record.getTransportation());
 				s.addData(i, EVENT, record.getEvent());
+				s.addData(i, IS_STOP, record.getIs_stop());
 				if(record.getSemanticStopId() != null) {
 					Stop stop = stops.get(record.getSemanticStopId());
 					s.addData(i, STOP_CENTROID_SEMANTIC, stop);

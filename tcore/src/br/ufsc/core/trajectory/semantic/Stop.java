@@ -100,8 +100,8 @@ public class Stop {
 		return (String) getAttribute(AttributeType.STOP_NAME);
 	}
 	
-	public String getRegion() {
-		return (String) getAttribute(AttributeType.STOP_REGION);
+	public Object getRegion() {
+		return getAttribute(AttributeType.STOP_REGION);
 	}
 	
 	public void setTrafficLight(Long trafficLightId) {
