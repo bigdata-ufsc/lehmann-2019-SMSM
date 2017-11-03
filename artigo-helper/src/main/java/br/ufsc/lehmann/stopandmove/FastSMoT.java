@@ -16,9 +16,15 @@ import br.ufsc.core.trajectory.semantic.Stop;
 public class FastSMoT<E, T> {
 	
 	private Semantic<E, T> segmentationSemantic;
+	private StopDetector<E> detector;
 
 	public FastSMoT(Semantic<E, T> segmentationSemantic) {
+		this(segmentationSemantic, (StopDetector<E>) NOT_NULL_DETECTOR);
+	}
+
+	public FastSMoT(Semantic<E, T> segmentationSemantic, StopDetector<E> detector) {
 		this.segmentationSemantic = segmentationSemantic;
+		this.detector = detector;
 	}
 
 	public StopAndMove findStops(SemanticTrajectory T, AtomicInteger sid, AtomicInteger mid) {
@@ -43,7 +49,7 @@ public class FastSMoT<E, T> {
 			long p1Milli = p1.toEpochMilli();
 			long p2Milli = p2.toEpochMilli();
 			E data = segmentationSemantic.getData(T, i);
-			if (data != null) {
+			if (detector.isStop(data)) {
 				Stop s = new Stop(sid.incrementAndGet(), i, p1Milli, neighborhood[i] + 1, p2Milli);
 				s.setCentroid(centroid(T, i, i + neighborhood[i]));
 				s.setRegion(data);
@@ -104,4 +110,17 @@ public class FastSMoT<E, T> {
 		}
 		return neighbors;
 	}
+	
+	public static interface StopDetector<E> {
+		boolean isStop(E data);
+	}
+	
+	private final static StopDetector<Object> NOT_NULL_DETECTOR = new StopDetector<Object>() {
+		
+		@Override
+		public boolean isStop(Object data) {
+			return data != null;
+		}
+
+	};
 }

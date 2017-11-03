@@ -49,7 +49,7 @@ public class SMoT_SanFranciscoCab {
 
 				@Override
 				public void parameterize(PreparedStatement statement, Stop stop) throws SQLException {
-					statement.setString(12, stop.getRegion());
+					statement.setString(12, String.valueOf(stop.getRegion()));
 				}
 				
 			}, insertMove, bestSMoT);
