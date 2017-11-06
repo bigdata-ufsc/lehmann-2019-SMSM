@@ -2,8 +2,6 @@ package br.ufsc.lehmann.method;
 
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.core.trajectory.StopSemantic;
-import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.Thresholds;
@@ -26,32 +24,22 @@ public interface CVTITest {
 		if(problem instanceof NElementProblem) {
 			return new CVTI(new CVTISemanticParameter<Number, Number>(NElementProblem.dataSemantic, null));
 		} else if(problem instanceof NewYorkBusProblem) {
-			return new CVTI(new CVTISemanticParameter<Stop, Number>(((NewYorkBusProblem) problem).stopSemantic(), calculateThreshold(((NewYorkBusProblem) problem).stopSemantic())));
+			return new CVTI(new CVTISemanticParameter<Stop, Number>(((NewYorkBusProblem) problem).stopSemantic(), Thresholds.calculateThreshold(((NewYorkBusProblem) problem).stopSemantic())));
 		} else if(problem instanceof DublinBusProblem) {
-			return new CVTI(new CVTISemanticParameter<Stop, Number>(((DublinBusProblem) problem).stopSemantic(), calculateThreshold(((DublinBusProblem) problem).stopSemantic())));
+			return new CVTI(new CVTISemanticParameter<Stop, Number>(((DublinBusProblem) problem).stopSemantic(), Thresholds.calculateThreshold(((DublinBusProblem) problem).stopSemantic())));
 		} else if(problem instanceof PatelProblem) {
-			return new CVTI(new CVTISemanticParameter<Stop, Number>(((PatelProblem) problem).stopSemantic(), calculateThreshold(((PatelProblem) problem).stopSemantic())));
+			return new CVTI(new CVTISemanticParameter<Stop, Number>(((PatelProblem) problem).stopSemantic(), Thresholds.calculateThreshold(((PatelProblem) problem).stopSemantic())));
 		} else if(problem instanceof VehicleProblem) {
-			return new CVTI(new CVTISemanticParameter<Stop, Number>(((VehicleProblem) problem).stopSemantic(), calculateThreshold(((VehicleProblem) problem).stopSemantic())));
+			return new CVTI(new CVTISemanticParameter<Stop, Number>(((VehicleProblem) problem).stopSemantic(), Thresholds.calculateThreshold(((VehicleProblem) problem).stopSemantic())));
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new CVTI(new CVTISemanticParameter<Stop, Number>(((SanFranciscoCabProblem) problem).stopSemantic(), calculateThreshold(((SanFranciscoCabProblem) problem).stopSemantic())));
+			return new CVTI(new CVTISemanticParameter<Stop, Number>(((SanFranciscoCabProblem) problem).stopSemantic(), Thresholds.calculateThreshold(((SanFranciscoCabProblem) problem).stopSemantic())));
 		} else if(problem instanceof SergipeTracksProblem) {
-			return new CVTI(new CVTISemanticParameter<Stop, Number>(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, calculateThreshold(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC)));
+			return new CVTI(new CVTISemanticParameter<Stop, Number>(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Thresholds.calculateThreshold(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC)));
 		} else if(problem instanceof PrototypeProblem) {
 			return new CVTI(new CVTISemanticParameter<Stop, Number>(PrototypeDataReader.STOP_SEMANTIC, null));
 		} else if(problem instanceof PisaProblem) {
-			return new CVTI(new CVTISemanticParameter<Stop, Number>(((PisaProblem) problem).stopSemantic(), calculateThreshold(((PisaProblem) problem).stopSemantic())));
+			return new CVTI(new CVTISemanticParameter<Stop, Number>(((PisaProblem) problem).stopSemantic(), Thresholds.calculateThreshold(((PisaProblem) problem).stopSemantic())));
 		}
 		return null;
-	}
-	
-	public static double calculateThreshold(StopSemantic semantic) {
-		if(semantic.name().equals(AttributeType.STOP_CENTROID.name())) {
-			return Thresholds.STOP_CENTROID_LATLON;
-		}
-		if(semantic.name().equals(AttributeType.STOP_STREET_NAME.name())) {
-			return Thresholds.STOP_STREET_NAME;
-		}
-		return Double.MAX_VALUE;
 	}
 }

@@ -47,7 +47,8 @@ public enum EnumProblem {
 //	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, null, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "airport"}, true), 4),//
 //	TAXI_SANFRANCISCO_REGIONS_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, null, new String[] {}, new String[] {"mall", "airport"}, true), 2),//
 //	VEHICLE_URBAN_ONLY_STOPS_STREET_NAME(new VehicleProblem(VehicleDataReader.STOP_STREET_NAME_SEMANTIC, true), 2),//
-	PISA_ONLY_STOPS_PLACES_ALL_USERS(new PisaProblem(PisaDataReader.STOP_NAME_SEMANTIC, StopMoveStrategy.SMoT, true, 1, 2, 3, 4, 5, 6, 7), 7),//
+//	PISA_ONLY_STOPS_PLACES_ALL_USERS(new PisaProblem(PisaDataReader.STOP_NAME_SEMANTIC, StopMoveStrategy.SMoT, true, 1, 2, 3, 4, 5, 6, 7), 7),//
+	PISA_ONLY_STOPS_PLACES_ALL_USERS(new PisaProblem(PisaDataReader.STOP_NAME_SEMANTIC, StopMoveStrategy.SMoT, true, 1, 2, 3), 3),//
 //	PISA_ONLY_STOPS_STREET_NAME_ALL_USERS(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, true, 1, 2, 3, 4, 5, 6, 7), 7),//
 //	PISA_ONLY_STOPS_STREET_NAME_USERS_4_6(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, true, 4, 6), 2),//
 //	PISA_ONLY_STOPS_STREET_NAME_USERS_2_3(new PisaProblem(PisaDataReader.STOP_STREET_NAME_SEMANTIC, true, 2, 3), 2),//

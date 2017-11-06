@@ -56,9 +56,17 @@ public class FastSMoT<E, T> {
 			long p2Milli = p2.toEpochMilli();
 			E data = segmentationSemantic.getData(T, i);
 			if (detector.isStop(data)) {
+				String stopName = null;
+				for (int j = i; j < i + neighborhood[i]; j++) {
+					Object stopNameValue = stopNameSemantic.getData(T, i);
+					if(stopNameValue != null) {
+						stopName = String.valueOf(stopNameValue);
+						break;
+					}
+				}
 				Stop s = new Stop(sid.incrementAndGet(), i, p1Milli, neighborhood[i] + 1, p2Milli);
 				s.setCentroid(centroid(T, i, i + neighborhood[i]));
-				s.setStopName(String.valueOf(stopNameSemantic.getData(T, i)));
+				s.setStopName(stopName);
 
 				List<Integer> points = new ArrayList<>(neighborhood[i]);
 				for (int x = 0; x <= neighborhood[i]; x++) {

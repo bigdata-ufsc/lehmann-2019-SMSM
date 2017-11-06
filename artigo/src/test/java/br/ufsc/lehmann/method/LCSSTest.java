@@ -3,9 +3,7 @@ package br.ufsc.lehmann.method;
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
-import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.lehmann.NElementProblem;
@@ -35,37 +33,37 @@ public interface LCSSTest {
 					);
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new LCSSClassifier(//
-					new LCSSSemanticParameter<Stop, Number>(((NewYorkBusProblem) problem).stopSemantic(), calculateThreshold(((NewYorkBusProblem) problem).stopSemantic())),//
+					new LCSSSemanticParameter<Stop, Number>(((NewYorkBusProblem) problem).stopSemantic(), Thresholds.calculateThreshold(((NewYorkBusProblem) problem).stopSemantic())),//
 					new LCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)
 //					new LCSSSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		} else if(problem instanceof DublinBusProblem) {
 			return new LCSSClassifier(//
-					new LCSSSemanticParameter<Stop, Number>(((DublinBusProblem) problem).stopSemantic(), calculateThreshold(((DublinBusProblem) problem).stopSemantic())),//
+					new LCSSSemanticParameter<Stop, Number>(((DublinBusProblem) problem).stopSemantic(), Thresholds.calculateThreshold(((DublinBusProblem) problem).stopSemantic())),//
 					new LCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)
 //					new LCSSSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		} else if(problem instanceof PatelProblem) {
 			return new LCSSClassifier(//
-					new LCSSSemanticParameter<Stop, Number>(((PatelProblem) problem).stopSemantic(), calculateThreshold(((PatelProblem) problem).stopSemantic())),//
+					new LCSSSemanticParameter<Stop, Number>(((PatelProblem) problem).stopSemantic(), Thresholds.calculateThreshold(((PatelProblem) problem).stopSemantic())),//
 					new LCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN)
 //					new LCSSSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		} else if(problem instanceof VehicleProblem) {
 			return new LCSSClassifier(//
-					new LCSSSemanticParameter<Stop, Number>(((VehicleProblem) problem).stopSemantic(), calculateThreshold(((VehicleProblem) problem).stopSemantic())),//
+					new LCSSSemanticParameter<Stop, Number>(((VehicleProblem) problem).stopSemantic(), Thresholds.calculateThreshold(((VehicleProblem) problem).stopSemantic())),//
 					new LCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN)
 //					new LCSSSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new LCSSClassifier(//
-					new LCSSSemanticParameter<Stop, Number>(((SanFranciscoCabProblem) problem).stopSemantic(), calculateThreshold(((SanFranciscoCabProblem) problem).stopSemantic())),//
+					new LCSSSemanticParameter<Stop, Number>(((SanFranciscoCabProblem) problem).stopSemantic(), Thresholds.calculateThreshold(((SanFranciscoCabProblem) problem).stopSemantic())),//
 					new LCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)
 //					new LCSSSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new LCSSClassifier(//
-					new LCSSSemanticParameter<Stop, Number>(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, calculateThreshold(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC)),//
+					new LCSSSemanticParameter<Stop, Number>(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Thresholds.calculateThreshold(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC)),//
 					new LCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)
 //					new LCSSSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
@@ -77,21 +75,11 @@ public interface LCSSTest {
 					);
 		} else if(problem instanceof PisaProblem) {
 			return new LCSSClassifier(//
-					new LCSSSemanticParameter<Stop, Number>(((PisaProblem) problem).stopSemantic(), calculateThreshold(((PisaProblem) problem).stopSemantic())),//
+					new LCSSSemanticParameter<Stop, Number>(((PisaProblem) problem).stopSemantic(), Thresholds.calculateThreshold(((PisaProblem) problem).stopSemantic())),//
 					new LCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON)
 //					new LCSSSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL)//
 					);
 		}
 		return null;
-	}
-	
-	public static double calculateThreshold(StopSemantic semantic) {
-		if(semantic.name().equals(AttributeType.STOP_CENTROID.name())) {
-			return Thresholds.STOP_CENTROID_LATLON;
-		}
-		if(semantic.name().equals(AttributeType.STOP_STREET_NAME.name())) {
-			return Thresholds.STOP_STREET_NAME;
-		}
-		return Double.MAX_VALUE;
 	}
 }
