@@ -24,9 +24,11 @@ public class SanFranciscoCab_Regions_Problem extends SanFranciscoCabProblem {
 	private String[] regions;
 	private String[] directions;
 	private String[] roads;
+	private StopMoveStrategy strategy;
 
-	public SanFranciscoCab_Regions_Problem(StopSemantic stopSemantic, String[] roads, String[] directions, String[] regions, boolean onlyStop) {
+	public SanFranciscoCab_Regions_Problem(StopSemantic stopSemantic, StopMoveStrategy strategy, String[] roads, String[] directions, String[] regions, boolean onlyStop) {
 		super(stopSemantic, onlyStop);
+		this.strategy = strategy;
 		this.roads = roads;
 		this.directions = directions;
 		this.regions = regions;
@@ -97,7 +99,7 @@ public class SanFranciscoCab_Regions_Problem extends SanFranciscoCabProblem {
 			return;
 		}
 		try {
-			data = new ArrayList<>(new SanFranciscoCabDataReader(onlyStop, roads, directions).read());
+			data = new ArrayList<>(new SanFranciscoCabDataReader(onlyStop, strategy, roads, directions, regions).read());
 		} catch (IOException | ParseException e) {
 			throw new RuntimeException(e);
 		}

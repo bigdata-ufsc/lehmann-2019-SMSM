@@ -64,6 +64,10 @@ public class StopMoveCSVReader {
 	}
 
 	public static Map<Integer, Stop> stopsCsvRead(CSVParser stopsParser, String... timeFormat) throws IOException {
+		return stopsCsvRead(stopsParser, EMPTY_CALLBACK, timeFormat);
+	}
+	
+	public static Map<Integer, Stop> stopsCsvRead(CSVParser stopsParser, StopReaderCallback callback, String... timeFormat) throws IOException {
 		List<CSVRecord> records = stopsParser.getRecords();
 		Iterator<CSVRecord> stopsData = records.subList(1, records.size()).iterator();
 		Map<Integer, Stop> stops = new HashMap<>();
@@ -81,8 +85,9 @@ public class StopMoveCSVReader {
 							new TPoint(Double.parseDouble(data.get("end_lat")), Double.parseDouble(data.get("end_lon"))), //
 							Integer.parseInt(data.get("length")), //
 							new TPoint(Double.parseDouble(data.get("centroid_lat")), Double.parseDouble(data.get("centroid_lon"))),//
-							data.get("street")//
+							StringUtils.trim(data.get("street"))//
 					);
+					callback.readFields(stop, data);
 				} catch (NumberFormatException e) {
 					throw new RuntimeException(e);
 				}
@@ -103,4 +108,17 @@ public class StopMoveCSVReader {
 		}
 		throw new IllegalArgumentException();
 	}
+	
+	public static interface StopReaderCallback {
+		void readFields(Stop stop, CSVRecord data);
+	}
+	private static final StopReaderCallback EMPTY_CALLBACK = new StopReaderCallback() {
+
+		@Override
+		public void readFields(Stop stop, CSVRecord data) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	};
 }

@@ -1,7 +1,10 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.sql.SQLException;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -108,16 +111,16 @@ public class SanFranciscoCab_AirportMallDirection_Problem extends SanFranciscoCa
 		if(loaded) {
 			return;
 		}
-//		try {
-//			data = new ArrayList<>(new SanFranciscoCabDataReader(onlyStop, roads, directions).read());
-//		} catch (IOException | ParseException e) {
-//			throw new RuntimeException(e);
-//		}
 		try {
-			data = new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop, roads, directions).read());
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			data = new ArrayList<>(new SanFranciscoCabDataReader(onlyStop, roads, directions).read());
+		} catch (IOException | ParseException e) {
 			throw new RuntimeException(e);
 		}
+//		try {
+//			data = new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop, roads).read());
+//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+//			throw new RuntimeException(e);
+//		}
 		Collections.shuffle(data, new java.util.Random() {
 			@Override
 			public int nextInt(int bound) {

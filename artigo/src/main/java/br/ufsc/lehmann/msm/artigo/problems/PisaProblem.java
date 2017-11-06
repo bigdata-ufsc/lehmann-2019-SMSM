@@ -1,6 +1,7 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.sql.SQLException;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,6 +24,7 @@ public class PisaProblem implements Problem {
 	private boolean onlyStops;
 	private StopSemantic stopSemantic;
 	private Integer[] users;
+	private StopMoveStrategy strategy;
 
 	public PisaProblem(Integer... users) {
 		this(false, users);
@@ -33,7 +35,12 @@ public class PisaProblem implements Problem {
 	}
 
 	public PisaProblem(StopSemantic stopSemantic,boolean onlyStops, Integer... users) {
+		this(stopSemantic, StopMoveStrategy.CBSMoT, onlyStops, users);
+	}
+	
+	public PisaProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, boolean onlyStops, Integer... users) {
 		this.stopSemantic = stopSemantic;
+		this.strategy = strategy;
 		this.onlyStops = onlyStops;
 		this.users = users;
 	}
@@ -97,16 +104,16 @@ public class PisaProblem implements Problem {
 		if(loaded) {
 			return;
 		}
-		//		try {
-		//			data = new ArrayList<>(new PisaDataReader(onlyStops).read(users));
-		//		} catch (NumberFormatException | ParseException | IOException e) {
-		//			throw new RuntimeException(e);
-		//		}
 		try {
-			data = new ArrayList<>(new PisaDatabaseReader(onlyStops).read(users));
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			data = new ArrayList<>(new PisaDataReader(onlyStops, strategy).read(users));
+		} catch (NumberFormatException | ParseException | IOException e) {
 			throw new RuntimeException(e);
 		}
+		//		try {
+		//			data = new ArrayList<>(new PisaDatabaseReader(onlyStops).read(users));
+		//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+		//			throw new RuntimeException(e);
+		//		}
 		Collections.shuffle(data, new java.util.Random() {
 			@Override
 			public int nextInt(int bound) {

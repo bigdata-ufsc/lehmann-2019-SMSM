@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -59,6 +61,7 @@ public class SanFranciscoCabDataReader {
 	public static final BasicSemantic<Integer> OCUPATION = new BasicSemantic<>(4);
 	public static final BasicSemantic<Integer> ROAD = new BasicSemantic<>(5);
 	public static final BasicSemantic<String> DIRECTION = new BasicSemantic<>(6);
+	public static final StopSemantic STOP_REGION_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_REGION, new EqualsDistanceFunction<String>()));
 	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
 	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
 	public static final StopSemantic STOP_TRAFFIC_LIGHT_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_TRAFFIC_LIGHT, new EqualsDistanceFunction<String>()));
@@ -72,6 +75,26 @@ public class SanFranciscoCabDataReader {
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 
+	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(9);
+	public static final BasicSemantic<String> ROUTE = new BasicSemantic<>(10);
+	public static final BasicSemantic<String> ROUTE_WITH_DIRECTION = new BasicSemantic<String>(6) {
+		@Override
+		public String getData(SemanticTrajectory p, int i) {
+			return DIRECTION.getData(p, i) + "/" + ROUTE.getData(p, i);
+		}
+	};
+	public static final BasicSemantic<String> ROUTE_IN_ROADS_WITH_DIRECTION = new BasicSemantic<String>(6) {
+		@Override
+		public String getData(SemanticTrajectory p, int i) {
+			return DIRECTION.getData(p, i) + "/" + ROAD.getData(p, i) + "/" + ROUTE.getData(p, i);
+		}
+	};
+	public static final BasicSemantic<String> ROADS_WITH_DIRECTION = new BasicSemantic<String>(6) {
+		@Override
+		public String getData(SemanticTrajectory p, int i) {
+			return ROAD.getData(p, i) + "/" + ROUTE.getData(p, i);
+		}
+	};
 	public static final BasicSemantic<String> DIRECTION_ROAD = new BasicSemantic<String>(6) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
@@ -84,6 +107,8 @@ public class SanFranciscoCabDataReader {
 	private String[] directions;
 
 	private String[] regions;
+
+	private StopMoveStrategy strategy = StopMoveStrategy.CBSMoT;
 	
 	public SanFranciscoCabDataReader(boolean onlyStop) {
 		this.onlyStops = onlyStop;
@@ -99,30 +124,37 @@ public class SanFranciscoCabDataReader {
 		this.directions = directions;
 	}
 	
-	public SanFranciscoCabDataReader(boolean onlyStop, String[] roads, String[] directions, String[] regions) {
+	public SanFranciscoCabDataReader(boolean onlyStop, StopMoveStrategy strategy, String[] roads, String[] directions, String[] regions) {
 		this(onlyStop, roads, directions);
+		this.strategy  = strategy;
 		this.regions = regions;
 	}
 
 	public List<SemanticTrajectory> read() throws IOException, ParseException {
 		System.out.println("Reading file...");
-		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource("./datasets/sanfrancisco.data.zip").getFile(), "UTF-8"));
+		String filename = "./datasets/sanfrancisco." + strategy.name().toLowerCase() + ".data.zip";
+		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource(filename).getFile(), "UTF-8"));
 		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("taxi.sanfrancisco_taxicab_crawdad.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("gid", "tid", "taxi_id", "lat", "lon", "timestamp", "ocupation", "road", "direction", "semantic_stop_id", "semantic_move_id").withDelimiter(';'));
+				CSVFormat.EXCEL.withHeader("gid", "tid", "taxi_id", "lat", "lon", "timestamp", "ocupation", "airport", "mall", "road", "direction", "intersection_101_280", "bayshore_fwy", "stop", "semantic_stop_id", "semantic_move_id", "route").withDelimiter(';'));
 		
 		InputStreamReader rawStopsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.taxi_sanfrancisco_stop.csv")));
 		CSVParser stopsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawStopsEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "end_lat", "end_lon", "centroid_lat", "centroid_lon", "start_time", "end_time", "begin", "length", "street").withDelimiter(';'));
-		InputStreamReader rawTrafficLightsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("sanfrancisco.stop.traffic_light.csv")));
-		CSVParser trafficLightsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawTrafficLightsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("stopId", "trafficLightId", "trafficLightDistance").withDelimiter(';'));
-		
+		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser);
+
+		ZipEntry entry = zipFile.getEntry("sanfrancisco.stop.traffic_light.csv");
+		if(entry != null) {
+			InputStreamReader rawTrafficLightsEntry = new InputStreamReader(zipFile.getInputStream(entry));
+			CSVParser trafficLightsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawTrafficLightsEntry).toString(), 
+					CSVFormat.EXCEL.withHeader("stopId", "trafficLightId", "trafficLightDistance").withDelimiter(';'));
+			readTrafficLights(trafficLightsParser, stops);
+		}
+
 		InputStreamReader rawMovesEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.taxi_sanfrancisco_move.csv")));
 		CSVParser movesParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawMovesEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("move_id", "start_time", "start_stop_id", "begin", "end_time", "end_stop_id", "length").withDelimiter(';'));
 		
-		Map<Integer, Stop> stops = readStops(stopsParser, trafficLightsParser);
 		Map<Integer, Move> moves = StopMoveCSVReader.moveCsvRead(movesParser, stops);
 		List<Move> allMoves = new ArrayList<>(moves.values());
 		List<SemanticTrajectory> ret = null;
@@ -143,17 +175,21 @@ public class SanFranciscoCabDataReader {
 		InputStreamReader rawStopsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.taxi_sanfrancisco_stop.csv")));
 		CSVParser stopsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawStopsEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "end_lat", "end_lon", "centroid_lat", "centroid_lon", "start_time", "end_time", "begin", "length", "street").withDelimiter(';'));
-		InputStreamReader rawTrafficLightsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("sanfrancisco.stop.traffic_light.csv")));
-		CSVParser trafficLightsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawTrafficLightsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("stopId", "trafficLightId", "trafficLightDistance").withDelimiter(';'));
+		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser);
+
+		ZipEntry entry = zipFile.getEntry("sanfrancisco.stop.traffic_light.csv");
+		if(entry != null) {
+			InputStreamReader rawTrafficLightsEntry = new InputStreamReader(zipFile.getInputStream(entry));
+			CSVParser trafficLightsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawTrafficLightsEntry).toString(), 
+					CSVFormat.EXCEL.withHeader("stopId", "trafficLightId", "trafficLightDistance").withDelimiter(';'));
+			readTrafficLights(trafficLightsParser, stops);
+		}
 		
-		Map<Integer, Stop> stops = readStops(stopsParser, trafficLightsParser);
 		zipFile.close();
 		return new ArrayList<>(stops.values());
 	}
 
-	private Map<Integer, Stop> readStops(CSVParser stopsParser, CSVParser trafficLightsParser) throws IOException, ParseException {
-		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser);
+	private void readTrafficLights(CSVParser trafficLightsParser, Map<Integer, Stop> stops) throws IOException {
 		List<CSVRecord> records = trafficLightsParser.getRecords();
 		Iterator<CSVRecord> trafficLightData = records.subList(1, records.size()).iterator();
 		while(trafficLightData.hasNext()) {
@@ -168,7 +204,6 @@ public class SanFranciscoCabDataReader {
 			Double trafficLightDistance = Double.parseDouble(record.get("trafficLightDistance"));
 			stop.setTrafficLightDistance(trafficLightDistance);
 		}
-		return stops;
 	}
 
 	private List<SemanticTrajectory> readStopsTrajectories(CSVParser pointsParser, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws NumberFormatException, ParseException, IOException {
@@ -182,7 +217,7 @@ public class SanFranciscoCabDataReader {
 			String move = data.get("semantic_move_id");
 			String road = data.get("road");
 			String direction = data.get("direction");
-			String region = data.get("region");
+			String region = data.get("stop");
 			String route = data.get("route");
 			if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.contains(roads, road)) {
 				continue;
@@ -209,13 +244,16 @@ public class SanFranciscoCabDataReader {
 			);
 			records.put(record.getTid(), record);
 		}
+		if(regions != null) {
+			records = filterRecordsByRegions(records, regions);
+		}
 		System.out.printf("Loaded %d GPS points from dataset\n", records.size());
 		System.out.printf("Loaded %d trajectories from dataset\n", records.keySet().size());
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 9);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 11);
 			Collection<SanFranciscoCabRecord> collection = records.get(trajId);
 			int i = 0;
 			for (SanFranciscoCabRecord record : collection) {
@@ -272,6 +310,8 @@ public class SanFranciscoCabDataReader {
 				s.addData(i, OCUPATION, record.getOcupation());
 				s.addData(i, ROAD, record.getRoad());
 				s.addData(i, DIRECTION, record.getDirection());
+				s.addData(i, REGION_INTEREST, record.getRegion());
+				s.addData(i, ROUTE, record.getRoute());
 				i++;
 			}
 			stats.addValue(s.length());
@@ -280,6 +320,26 @@ public class SanFranciscoCabDataReader {
 		System.out.printf("Loaded %d trajectories (filtered)\n", ret.size());
 		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
 		return ret;
+	}
+
+	private static Multimap<Integer, SanFranciscoCabRecord> filterRecordsByRegions(
+			Multimap<Integer, SanFranciscoCabRecord> records, String[] regions) {
+
+		Set<Integer> keys = new HashSet<>(records.keySet());
+		main: for (Integer trajId : keys) {
+			Collection<SanFranciscoCabRecord> recs = records.get(trajId);
+			ArrayList<String> untouchedRegions = new ArrayList<>(Arrays.asList(regions));
+			for (SanFranciscoCabRecord rec : recs) {
+				if(untouchedRegions.contains(rec.getRegion())) {
+					untouchedRegions.remove(rec.getRegion());
+				}
+				if(untouchedRegions.isEmpty()) {
+					continue main;
+				}
+			}
+			records.removeAll(trajId);
+		}
+		return records;
 	}
 
 	private List<SemanticTrajectory> loadRawPoints(CSVParser pointsParser, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws NumberFormatException, ParseException, IOException {
@@ -293,7 +353,7 @@ public class SanFranciscoCabDataReader {
 			String move = data.get("semantic_move_id");
 			String road = data.get("road");
 			String direction = data.get("direction");
-			String region = data.get("region");
+			String region = data.get("stop");
 			String route = data.get("route");
 			if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.contains(roads, road)) {
 				continue;
@@ -320,13 +380,16 @@ public class SanFranciscoCabDataReader {
 			);
 			records.put(record.getTid(), record);
 		}
+		if(regions != null) {
+			records = filterRecordsByRegions(records, regions);
+		}
 		System.out.printf("Loaded %d GPS points from dataset\n", records.size());
 		System.out.printf("Loaded %d trajectories from dataset\n", records.keySet().size());
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 8);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 11);
 			Collection<SanFranciscoCabRecord> collection = records.get(trajId);
 			int i = 0;
 			for (SanFranciscoCabRecord record : collection) {
@@ -337,6 +400,9 @@ public class SanFranciscoCabDataReader {
 				s.addData(i, TID, record.getTid());
 				s.addData(i, OCUPATION, record.getOcupation());
 				s.addData(i, ROAD, record.getRoad());
+				s.addData(i, DIRECTION, record.getDirection());
+				s.addData(i, REGION_INTEREST, record.getRegion());
+				s.addData(i, ROUTE, record.getRoute());
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
 					s.addData(i, STOP_CENTROID_SEMANTIC, stop);

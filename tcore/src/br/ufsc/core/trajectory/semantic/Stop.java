@@ -116,6 +116,10 @@ public class Stop {
 		setAttribute(AttributeType.STOP_REGION, region);
 	}
 
+	public void setStopName(String name) {
+		setAttribute(AttributeType.STOP_NAME, name);
+	}
+
 	public void setEndTime(long endTime) {
 		this.endTime = endTime;
 	}

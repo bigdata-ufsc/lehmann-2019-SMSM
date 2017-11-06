@@ -44,6 +44,7 @@ import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.StopMoveCSVReader.StopReaderCallback;
 import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
 import br.ufsc.utils.LatLongDistanceFunction;
@@ -63,6 +64,7 @@ public class PisaDataReader {
 	public static final BasicSemantic<String> EVENT = new BasicSemantic<>(11);
 	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(12, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
 	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(12, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
+	public static final StopSemantic STOP_NAME_SEMANTIC = new StopSemantic(12, new AttributeDescriptor<Stop, String>(AttributeType.STOP_NAME, new EqualsDistanceFunction<String>()));
 	
 	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(13, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(13, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
@@ -72,27 +74,40 @@ public class PisaDataReader {
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 	private boolean onlyStops;
+	private StopMoveStrategy strategy;
 
 	public PisaDataReader(boolean onlyStops) {
+		this(onlyStops, StopMoveStrategy.CBSMoT);
+	}
+
+	public PisaDataReader(boolean onlyStops, StopMoveStrategy strategy) {
 		this.onlyStops = onlyStops;
+		this.strategy = strategy;
 	}
 
 	public List<SemanticTrajectory> read(Integer... users) throws IOException, NumberFormatException, ParseException  {
 		System.out.println("Reading file...");
-		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource("./datasets/pisa.data.zip").getFile(), "UTF-8"));
+		String filename = "./datasets/pisa." + strategy.name().toLowerCase() + ".data.zip";
+		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource(filename).getFile(), "UTF-8"));
 		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("public.pisa.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("gid", "tid", "time", "is_stop", "geom", "lat", "lon", "ele", "weather", "temperature", "user_id", "place", "goal", "subgoal", "transportation", "event", "dailytid", "semantic_stop_id", "semantic_move_id").withDelimiter(';'));
 		
 		InputStreamReader rawStopsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.pisa_stop.csv")));
 		CSVParser stopsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawStopsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "end_lat", "end_lon", "centroid_lat", "centroid_lon", "start_time", "end_time", "begin", "length", "street").withDelimiter(';'));
+				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "end_lat", "end_lon", "centroid_lat", "centroid_lon", "start_time", "end_time", "begin", "length", "street", "place").withDelimiter(';'));
 		
 		InputStreamReader rawMovesEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.pisa_move.csv")));
 		CSVParser movesParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawMovesEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("move_id", "start_time", "start_stop_id", "begin", "end_time", "end_stop_id", "length", "end_lon").withDelimiter(';'));
 		
-		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SS", "yyyy-MM-dd HH:mm:ss.S");
+		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser, new StopReaderCallback() {
+			
+			@Override
+			public void readFields(Stop stop, CSVRecord data) {
+				stop.setStopName(data.get("place"));
+			}
+		}, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SS", "yyyy-MM-dd HH:mm:ss.S");
 		Map<Integer, Move> moves = StopMoveCSVReader.moveCsvRead(movesParser, stops, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SS", "yyyy-MM-dd HH:mm:ss.S");
 		List<CSVRecord> csvRecords = pointsParser.getRecords();
 		Iterator<CSVRecord> pointsData = csvRecords.subList(1, csvRecords.size()).iterator();
