@@ -42,7 +42,13 @@ public class SMoT_Pisa {
 //		AtomicInteger mid = new AtomicInteger(0);
 		try {
 			conn.setAutoCommit(false);
-			FastSMoT<String, Number> fastSMoT = new FastSMoT<>(PisaDatabaseReader.PLACE);
+			FastSMoT<String, Number> fastSMoT = new FastSMoT(PisaDatabaseReader.IS_STOP, PisaDatabaseReader.PLACE, new FastSMoT.StopDetector<Number>() {
+
+				@Override
+				public boolean isStop(Number data) {
+					return data != null && data.equals(1);
+				}
+			});
 			List<StopAndMove> bestSMoT = new ArrayList<>();
 			for (SemanticTrajectory T : trajs) {
 				bestSMoT.add(fastSMoT.findStops(T, sid, mid));
@@ -51,7 +57,7 @@ public class SMoT_Pisa {
 
 				@Override
 				public void parameterize(PreparedStatement statement, Stop stop) throws SQLException {
-					statement.setString(12, String.valueOf(stop.getRegion()));
+					statement.setString(12, String.valueOf(stop.getStopName()));
 				}
 				
 			}, insertMove, bestSMoT);

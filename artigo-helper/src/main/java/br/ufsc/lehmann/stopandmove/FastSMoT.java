@@ -17,13 +17,19 @@ public class FastSMoT<E, T> {
 	
 	private Semantic<E, T> segmentationSemantic;
 	private StopDetector<E> detector;
+	private Semantic stopNameSemantic;
 
 	public FastSMoT(Semantic<E, T> segmentationSemantic) {
-		this(segmentationSemantic, (StopDetector<E>) NOT_NULL_DETECTOR);
+		this(segmentationSemantic, segmentationSemantic);
 	}
 
-	public FastSMoT(Semantic<E, T> segmentationSemantic, StopDetector<E> detector) {
+	public FastSMoT(Semantic<E, T> segmentationSemantic, Semantic stopNameSemantic) {
+		this(segmentationSemantic, stopNameSemantic, (StopDetector<E>) NOT_NULL_DETECTOR);
+	}
+
+	public FastSMoT(Semantic<E, T> segmentationSemantic, Semantic stopNameSemantic, StopDetector<E> detector) {
 		this.segmentationSemantic = segmentationSemantic;
+		this.stopNameSemantic = stopNameSemantic;
 		this.detector = detector;
 	}
 
@@ -52,7 +58,7 @@ public class FastSMoT<E, T> {
 			if (detector.isStop(data)) {
 				Stop s = new Stop(sid.incrementAndGet(), i, p1Milli, neighborhood[i] + 1, p2Milli);
 				s.setCentroid(centroid(T, i, i + neighborhood[i]));
-				s.setRegion(data);
+				s.setStopName(String.valueOf(stopNameSemantic.getData(T, i)));
 
 				List<Integer> points = new ArrayList<>(neighborhood[i]);
 				for (int x = 0; x <= neighborhood[i]; x++) {
