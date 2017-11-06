@@ -143,7 +143,7 @@ public class PisaDatabaseReader {
 		if(users != null && users.length > 0) {
 			sql += "where user_id in (SELECT * FROM unnest(?)) ";
 		}
-		sql += "order by tid, dailytid, \"time\"";
+		sql += "order by tid, dailytid, gid";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		if(users != null && users.length > 0) {
 			Array array = conn.createArrayOf("integer", users);
