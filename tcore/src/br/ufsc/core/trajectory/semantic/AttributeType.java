@@ -1,8 +1,12 @@
 package br.ufsc.core.trajectory.semantic;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
+import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
 
 public enum AttributeType {
@@ -11,7 +15,18 @@ public enum AttributeType {
 	MOVE_ANGLE((Move m) -> m.getAngle()),
 	MOVE_TRAVELLED_DISTANCE((Move m) -> m.getTravelledDistance()),
 	MOVE_DURATION((Move m) -> m.getDuration()),
-	MOVE_POINTS((Move m) -> m.getPoints()),
+	MOVE_POINTS((Move m) -> {
+		Stop start = m.getStart();
+		TPoint lastStartPoint = start.getEndPoint();
+		Stop end = m.getEnd();
+		TPoint lastEndPoint = end.getStartPoint();
+		List<TPoint> points = new ArrayList<>(Arrays.asList(lastStartPoint));
+		points.addAll(Arrays.asList(m.getPoints()));
+		points.add(lastEndPoint);
+		TPoint[] ret = new TPoint[points.size()];
+		points.toArray(ret);
+		return ret;
+	}),
 	MOVE_STREET_NAME((Move m) -> m.getStreetName()),
 	STOP((Stop s) -> s),
 	STOP_CENTROID((Stop s) -> s.getCentroid()),

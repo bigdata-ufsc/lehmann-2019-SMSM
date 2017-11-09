@@ -261,7 +261,7 @@ public class NewYorkBusDatabaseReader {
 				} else if(record.getSemanticMoveId() != null) {
 					Move move = moves.remove(record.getSemanticMoveId());
 					if(move == null) {
-						for (int j = 0; j < i; j++) {
+						for (int j = i - 1; j > -1; j--) {
 							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
 							if(move != null) {
 								break;

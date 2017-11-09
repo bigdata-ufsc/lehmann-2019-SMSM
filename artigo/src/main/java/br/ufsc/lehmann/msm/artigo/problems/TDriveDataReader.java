@@ -156,15 +156,16 @@ public class TDriveDataReader {
 			for (TDriveRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				s.addData(i, Semantic.GEOGRAPHIC, new TPoint(record.getLatitude(), record.getLongitude()));
-				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli((long) record.getTime()), Instant.ofEpochMilli((long) record.getTime())));
 				s.addData(i, TID, record.getTid());
 				if(record.getStop() != null) {
 					Stop stop = stops.get(record.getStop());
 					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
 				}
 				if(record.getSemanticMoveId() != null) {
 					Move move = moves.get(record.getSemanticMoveId());
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
 				}
 				i++;
 			}

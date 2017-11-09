@@ -33,7 +33,7 @@ public class StopMoveSemantic extends Semantic<StopMove, Number> {
 			return 0;
 		}
 		if (d1 == null || d2 == null) {
-			return Double.MAX_VALUE;
+			return 1;
 		}
 		return desc.distance(d1, d2);
 	}

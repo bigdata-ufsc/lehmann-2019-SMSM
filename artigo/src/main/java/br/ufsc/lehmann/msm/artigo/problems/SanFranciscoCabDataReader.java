@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -47,6 +48,7 @@ import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
+import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
@@ -70,7 +72,11 @@ public class SanFranciscoCabDataReader {
 	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
+<<<<<<< HEAD
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, 10)));
+=======
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, Thresholds.MOVE_INNERPOINTS_DISTANCE)));
+>>>>>>> refs/remotes/origin/master
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(DISTANCE_FUNCTION)));
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
@@ -89,13 +95,13 @@ public class SanFranciscoCabDataReader {
 			return DIRECTION.getData(p, i) + "/" + ROAD.getData(p, i) + "/" + ROUTE.getData(p, i);
 		}
 	};
-	public static final BasicSemantic<String> ROADS_WITH_DIRECTION = new BasicSemantic<String>(6) {
+	public static final BasicSemantic<String> ROUTE_WITH_ROADS = new BasicSemantic<String>(6) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
 			return ROAD.getData(p, i) + "/" + ROUTE.getData(p, i);
 		}
 	};
-	public static final BasicSemantic<String> DIRECTION_ROAD = new BasicSemantic<String>(6) {
+	public static final BasicSemantic<String> ROADS_WITH_DIRECTION = new BasicSemantic<String>(6) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
 			return DIRECTION.getData(p, i) + "/" + ROAD.getData(p, i);
@@ -134,14 +140,22 @@ public class SanFranciscoCabDataReader {
 		System.out.println("Reading file...");
 		String filename = "./datasets/sanfrancisco." + strategy.name().toLowerCase() + ".data.zip";
 		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource(filename).getFile(), "UTF-8"));
-		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("taxi.sanfrancisco_taxicab_crawdad.csv")));
+		//
+		//InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("taxi.sanfrancisco_taxicab_crawdad.csv")));
+		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("taxi.sanfrancisco_taxicab_subset_cleaned.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("gid", "tid", "taxi_id", "lat", "lon", "timestamp", "ocupation", "airport", "mall", "road", "direction", "intersection_101_280", "bayshore_fwy", "stop", "semantic_stop_id", "semantic_move_id", "route").withDelimiter(';'));
 		
 		InputStreamReader rawStopsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.taxi_sanfrancisco_stop.csv")));
 		CSVParser stopsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawStopsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "end_lat", "end_lon", "centroid_lat", "centroid_lon", "start_time", "end_time", "begin", "length", "street").withDelimiter(';'));
-		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser);
+				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "end_lat", "end_lon", "centroid_lat", "centroid_lon", "start_time", "end_time", "begin", "length", "POI", "street").withDelimiter(';'));
+		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser, new StopMoveCSVReader.StopReaderCallback() {
+			
+			@Override
+			public void readFields(Stop stop, CSVRecord data) {
+				stop.setRegion(data.get("POI"));
+			}
+		}, StopMoveCSVReader.TIMESTAMP);
 
 		ZipEntry entry = zipFile.getEntry("sanfrancisco.stop.traffic_light.csv");
 		if(entry != null) {
@@ -270,19 +284,25 @@ public class SanFranciscoCabDataReader {
 									Angle.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
 									Distance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
 							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
 							//injecting a move between two consecutives stops
 							stops.put(record.getSemanticStop(), stop);
+							s.addData(i, Semantic.GEOGRAPHIC, point);
 						} else {
 							s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
+							s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
 						}
 					} else {
 						s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+						s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
+						s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
 					}
 				} else if(record.getSemanticMoveId() != null) {
 					Move move = moves.remove(record.getSemanticMoveId());
 					if(move == null) {
-						for (int j = 0; j < i; j++) {
-							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
+						for (int j = i; j > 0; j--) {
+							move = MOVE_ANGLE_SEMANTIC.getData(s, j - 1);
 							if(move != null) {
 								break;
 							}
@@ -302,10 +322,10 @@ public class SanFranciscoCabDataReader {
 					points = a.toArray(new TPoint[a.size()]);
 					move.setAttribute(AttributeType.MOVE_POINTS, points);
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
+					s.addData(i, Semantic.GEOGRAPHIC, point);
 				}
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
-				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, TID, record.getTid());
 				s.addData(i, OCUPATION, record.getOcupation());
 				s.addData(i, ROAD, record.getRoad());

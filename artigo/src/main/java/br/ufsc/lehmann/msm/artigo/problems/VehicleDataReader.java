@@ -161,18 +161,21 @@ public class VehicleDataReader {
 									Angle.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
 									Distance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
 							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
 							//injecting a move between two consecutives stops
 							stops.put(record.getStop(), stop);
 						} else {
 							s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
 						}
 					} else {
 						s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+						s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
 					}
 				} else if(record.getMove() != null) {
 					Move move = moves.remove(record.getMove());
 					if(move == null) {
-						for (int j = 0; j < i; j++) {
+						for (int j = i - 1; j > -1; j--) {
 							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
 							if(move != null) {
 								break;
@@ -191,10 +194,10 @@ public class VehicleDataReader {
 					a.add(point);
 					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
 				}
 				s.addData(i, Semantic.GID, record.getGid());
 				s.addData(i, Semantic.GEOGRAPHIC, point);
-				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli((long) record.getTime()), Instant.ofEpochMilli((long) record.getTime())));
 				s.addData(i, TID, record.getTid());
 				s.addData(i, CLASS, record.getClazz());
 				i++;

@@ -3,7 +3,7 @@ package br.ufsc.core.trajectory;
 import java.util.Arrays;
 
 public class SemanticElement {
-	
+
 	private Object[] dimensions;
 	
 	public SemanticElement(int semantics) {
@@ -29,6 +29,28 @@ public class SemanticElement {
 	@Override
 	public String toString() {
 		return "SemanticElement [dimensions=" + Arrays.toString(dimensions) + "]";
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(dimensions);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SemanticElement other = (SemanticElement) obj;
+		if (!Arrays.equals(dimensions, other.dimensions))
+			return false;
+		return true;
 	}
 
 }

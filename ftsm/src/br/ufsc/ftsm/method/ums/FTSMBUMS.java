@@ -33,8 +33,8 @@ public class FTSMBUMS extends TrajectorySimilarityCalculator<Trajectory> {
 			return 0;
 		}
 		
-		ETrajectory E1 = CreateEllipseMath.createEllipticalTrajectoryFixed(R);
-		ETrajectory E2 = CreateEllipseMath.createEllipticalTrajectoryFixed(S);
+		ETrajectory E1 = new CreateEllipseMath().createEllipticalTrajectoryFixed(R);
+		ETrajectory E2 = new CreateEllipseMath().createEllipticalTrajectoryFixed(S);
 
 		//Initialization
 		

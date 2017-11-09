@@ -40,6 +40,11 @@ public class FastCBSMoT_NewYorkBus {
 		// System.out.println(T.size());
 		long start = System.currentTimeMillis();
 		Connection conn = source.getRetriever().getConnection();
+		conn.setAutoCommit(false);
+		conn.createStatement().executeQuery("delete from stops_moves.bus_nyc_20140927_stop");
+		conn.createStatement().executeQuery("delete from stops_moves.bus_nyc_20140927_move");
+		conn.createStatement().executeQuery("update bus.nyc_20140927 set semantic_stop_id = null, semantic_move_id = null where semantic_stop_id is not null null or semantic_move_id is not null");
+		conn.commit();
 
 		ResultSet lastStop = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.bus_nyc_20140927_stop");
 		lastStop.next();

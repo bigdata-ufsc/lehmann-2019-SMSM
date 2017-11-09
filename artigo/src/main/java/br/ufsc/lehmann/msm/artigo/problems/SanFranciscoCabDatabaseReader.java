@@ -69,12 +69,6 @@ public class SanFranciscoCabDatabaseReader {
 	
 	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(9);
 	public static final BasicSemantic<String> ROUTE = new BasicSemantic<>(10);
-	public static final BasicSemantic<String> REGION_ROUTE = new BasicSemantic<String>(6) {
-		@Override
-		public String getData(SemanticTrajectory p, int i) {
-			return DIRECTION.getData(p, i) + "/" + ROAD.getData(p, i);
-		}
-	};
 	public static final BasicSemantic<String> ROUTE_WITH_DIRECTION = new BasicSemantic<String>(6) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
@@ -87,10 +81,16 @@ public class SanFranciscoCabDatabaseReader {
 			return DIRECTION.getData(p, i) + "/" + ROAD.getData(p, i) + "/" + ROUTE.getData(p, i);
 		}
 	};
-	public static final BasicSemantic<String> ROADS_WITH_DIRECTION = new BasicSemantic<String>(6) {
+	public static final BasicSemantic<String> ROUTE_WITH_ROADS = new BasicSemantic<String>(6) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
 			return ROAD.getData(p, i) + "/" + ROUTE.getData(p, i);
+		}
+	};
+	public static final BasicSemantic<String> ROADS_WITH_DIRECTION = new BasicSemantic<String>(6) {
+		@Override
+		public String getData(SemanticTrajectory p, int i) {
+			return DIRECTION.getData(p, i) + "/" + ROAD.getData(p, i);
 		}
 	};
 	
@@ -284,7 +284,7 @@ public class SanFranciscoCabDatabaseReader {
 				} else if(record.getSemanticMoveId() != null) {
 					Move move = moves.remove(record.getSemanticMoveId());
 					if(move == null) {
-						for (int j = 0; j < i; j++) {
+						for (int j = i - 1; j > -1; j--) {
 							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
 							if(move != null) {
 								break;

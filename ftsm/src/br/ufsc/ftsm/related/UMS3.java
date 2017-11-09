@@ -35,8 +35,8 @@ public class UMS3 extends TrajectorySimilarityCalculator<Trajectory> {
 		if (n < 3 || m < 3)
 			return 0;
 
-		//ETrajectory E1 = CreateEllipseMath.createEllipticalTrajectoryFixed(T1);
-		//ETrajectory E2 = CreateEllipseMath.createEllipticalTrajectoryFixed(T2);
+		//ETrajectory E1 = new CreateEllipseMath().createEllipticalTrajectoryFixed(T1);
+		//ETrajectory E2 = new CreateEllipseMath().createEllipticalTrajectoryFixed(T2);
 		// System.out.println("n: "+n);
 		// System.out.println("m: "+m);
 
@@ -344,8 +344,8 @@ public class UMS3 extends TrajectorySimilarityCalculator<Trajectory> {
 	
 	@Override
 	public double getSimilarity(Trajectory T1, Trajectory T2) {
-		ETrajectory E1 = CreateEllipseMath.createEllipticalTrajectoryFixed(T1);
-		ETrajectory E2 = CreateEllipseMath.createEllipticalTrajectoryFixed(T2);
+		ETrajectory E1 = new CreateEllipseMath().createEllipticalTrajectoryFixed(T1);
+		ETrajectory E2 = new CreateEllipseMath().createEllipticalTrajectoryFixed(T2);
 		return getDistance(E1,E2);
 	}
 

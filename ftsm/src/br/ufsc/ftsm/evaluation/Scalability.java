@@ -222,7 +222,7 @@ public class Scalability {
 		long start = System.currentTimeMillis();
 		List<ETrajectory> E = new ArrayList<ETrajectory>();
 		for (Trajectory t : T){
-			E.add(CreateEllipseMath.createEllipticalTrajectoryFixed(t));
+			E.add(new CreateEllipseMath().createEllipticalTrajectoryFixed(t));
 			
 		}
 		
@@ -251,7 +251,7 @@ System.out.println();
 		long start = System.currentTimeMillis();
 		List<ETrajectory> E = new ArrayList<ETrajectory>();
 		for (Trajectory t : T){
-			E.add(CreateEllipseMath.createEllipticalTrajectoryFixed(t));
+			E.add(new CreateEllipseMath().createEllipticalTrajectoryFixed(t));
 			
 		}
 		
@@ -301,7 +301,7 @@ System.out.println();
 		long start = System.currentTimeMillis();
 		List<ETrajectory> E = new ArrayList<ETrajectory>();
 		for (Trajectory t : T){
-			E.add(CreateEllipseMath.createEllipticalTrajectoryFixed(t));
+			E.add(new CreateEllipseMath().createEllipticalTrajectoryFixed(t));
 			
 		}
 		
@@ -331,7 +331,7 @@ System.out.println();
 		long start = System.currentTimeMillis();
 		List<ETrajectory> E = new ArrayList<ETrajectory>();
 		for (Trajectory t : T){
-			E.add(CreateEllipseMath.createEllipticalTrajectoryFixed(t));
+			E.add(new CreateEllipseMath().createEllipticalTrajectoryFixed(t));
 			
 		}
 		

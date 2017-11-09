@@ -24,4 +24,8 @@ public class AttributeDescriptor<T, Y> {
 		return type.name();
 	}
 
+	public double maxDistance() {
+		return function.maxDistance();
+	}
+
 }

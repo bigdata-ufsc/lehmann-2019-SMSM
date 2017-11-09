@@ -25,5 +25,14 @@ public class EuclideanDistanceFunction implements GeographicDistanceFunction {
 	public double convert(double units) {
 		return units;
 	}
+	
+	@Override
+	public double maxDistance() {
+		return Double.MAX_VALUE;
+	}
 
+	@Override
+	public TPoint[] convertToMercator(TPoint[] p) {
+		return p;
+	}
 }
