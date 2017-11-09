@@ -52,7 +52,16 @@ public abstract class Semantic<Element, Threshold> {
 		}
 		
 		public double similarity(TPoint d1, TPoint d2) {
-			return 1 / distance(d1, d2);
+			return 1 / Math.max(1, distance(d1, d2));
+		}
+		
+		public double similarity(TPoint d1, TPoint d2, Number threshold) {
+			if(threshold == null) {
+				return similarity(d1, d2);
+			}
+			double distance = distance(d1, d2);
+			double t = threshold.doubleValue();
+			return 1 / (distance <= t ? 1 : Math.max(1, distance));
 		}
 	};
 	public static final Semantic<TPoint, Number> GEOGRAPHIC_LATLON = new Semantic<TPoint, Number>(1) {
@@ -77,8 +86,18 @@ public abstract class Semantic<Element, Threshold> {
 		}
 		
 		public double similarity(TPoint d1, TPoint d2) {
-			return 1 / distance(d1, d2);
+			return 1 / Math.max(1, distance(d1, d2));
 		}
+		
+		public double similarity(TPoint d1, TPoint d2, Number threshold) {
+			if(threshold == null) {
+				return similarity(d1, d2);
+			}
+			double distance = distance(d1, d2);
+			double t = threshold.doubleValue();
+			return 1 / (distance <= t ? 1 : Math.max(1, distance));
+		}
+		
 	};
 	public static final Semantic<TemporalDuration, Number> TEMPORAL = new Semantic<TemporalDuration, Number>(2) {
 
@@ -110,11 +129,14 @@ public abstract class Semantic<Element, Threshold> {
 			Interval intervalB = new Interval(bStart * 1000, bEnd * 1000);
 			Interval overlapAtoB = intervalA.overlap(intervalB);
 			if(overlapAtoB == null) {
-				return 1L;
+				if(intervalA.equals(intervalB)) {
+					return 0;
+				}
+				return 1;
 			}
 			double overlap = overlapAtoB.toDurationMillis();
-			Instant lastEnd = d1.getEnd().isAfter(d2.getEnd()) ? d1.getEnd() : d2.getEnd();
-			Instant firstStart = d1.getStart().isBefore(d2.getStart()) ? d1.getStart() : d2.getStart();
+			Instant lastEnd = Instant.ofEpochSecond(aEnd > bEnd ? bEnd: aEnd);
+			Instant firstStart = Instant.ofEpochSecond(aStart < bStart ? aStart: bStart);
 			double maxDuration = new Interval(firstStart.toEpochMilli(), lastEnd.toEpochMilli()).toDurationMillis();
 			return (1 - overlap / maxDuration);
 		}
@@ -177,11 +199,13 @@ public abstract class Semantic<Element, Threshold> {
 		return 1 - distance(d1, d2);
 	}
 	
-	public double similarity(Element d1, Element d2, Number unit) {
-		if(unit == null) {
+	public double similarity(Element d1, Element d2, Number threshold) {
+		if(threshold == null) {
 			return similarity(d1, d2);
 		}
-		return unit.doubleValue() / Math.max(unit.doubleValue(), distance(d1, d2));
+		double similarity = similarity(d1, d2);
+		double t = threshold.doubleValue();
+		return similarity >= t ? 1 : similarity;
 	}
 
 	public abstract Threshold distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j);

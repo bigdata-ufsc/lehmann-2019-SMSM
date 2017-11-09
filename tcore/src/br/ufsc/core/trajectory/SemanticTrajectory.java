@@ -61,4 +61,38 @@ public class SemanticTrajectory {
 	public String toString() {
 		return "SemanticTrajectory [elements=" + elements + ", trajectoryId=" + trajectoryId + ", semantics=" + semantics + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((elements == null) ? 0 : elements.hashCode());
+		result = prime * result + semantics;
+		result = prime * result + ((trajectoryId == null) ? 0 : trajectoryId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SemanticTrajectory other = (SemanticTrajectory) obj;
+		if (elements == null) {
+			if (other.elements != null)
+				return false;
+		} else if (!elements.containsAll(other.elements) || !other.elements.containsAll(elements))
+			return false;
+		if (semantics != other.semantics)
+			return false;
+		if (trajectoryId == null) {
+			if (other.trajectoryId != null)
+				return false;
+		} else if (!trajectoryId.equals(other.trajectoryId))
+			return false;
+		return true;
+	}
 }

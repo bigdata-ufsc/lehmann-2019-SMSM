@@ -1,14 +1,26 @@
 package br.ufsc.ftsm.util;
 
+import br.ufsc.core.trajectory.GeographicDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.base.ETrajectory;
 import br.ufsc.ftsm.base.Ellipse;
 import br.ufsc.utils.Distance;
+import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class CreateEllipseMath {
 	
-	public static ETrajectory createEllipticalTrajectoryFixed(Trajectory t) {
+	private GeographicDistanceFunction distanceFunction;
+
+	public CreateEllipseMath() {
+		this(new EuclideanDistanceFunction());
+	}
+	
+	public CreateEllipseMath(GeographicDistanceFunction distanceFunction) {
+		this.distanceFunction = distanceFunction;
+	}
+	
+	public ETrajectory createEllipticalTrajectoryFixed(Trajectory t) {
 		int i = 0;
 		ETrajectory T = new ETrajectory(t.getTid(), t.length());
 		while (i < t.getPoints().size() - 1) {
@@ -18,7 +30,7 @@ public class CreateEllipseMath {
 			double x = (p1.getX() + p2.getX()) / 2;
 			double y = (p1.getY() + p2.getY()) / 2;
 
-			double fociDistance = Distance.euclidean(p1, p2);
+			double fociDistance = distanceFunction.distance(p1, p2);
 			double majorAxis = Distance.triangular(p1, p2) + 1;
 
 			double fociDistanceSquare = fociDistance * fociDistance;
@@ -50,7 +62,7 @@ public class CreateEllipseMath {
 		return T;
 	}
 	
-	public static ETrajectory createEllipticalTrajectoryFixed(int tid, TPoint[] points) {
+	public ETrajectory createEllipticalTrajectoryFixed(int tid, TPoint[] points) {
 		int i = 0;
 		ETrajectory T = new ETrajectory(tid, points.length);
 		while (i < points.length - 1) {
@@ -60,7 +72,7 @@ public class CreateEllipseMath {
 			double x = (p1.getX() + p2.getX()) / 2;
 			double y = (p1.getY() + p2.getY()) / 2;
 
-			double fociDistance = Distance.euclidean(p1, p2);
+			double fociDistance = distanceFunction.distance(p1, p2);
 			double majorAxis = Distance.triangular(p1, p2) + 1;
 
 			double fociDistanceSquare = fociDistance * fociDistance;
@@ -81,7 +93,7 @@ public class CreateEllipseMath {
 			e.setMinorAxis(minorAxis);
 			e.setAngle(angleO);
 			e.setEccentricity(fociDistance);
-			e.setSemiMajorAxisSquare(e.getSemiMinorAxis() * e.getSemiMinorAxis());
+			e.setSemiMinorAxisSquare(e.getSemiMinorAxis() * e.getSemiMinorAxis());
 			e.setSemiMajorAxisSquare(e.getSemiMajorAxis() * e.getSemiMajorAxis());
 			e.setXi((e.getSemiMinorAxisSquare() + e.getSemiMajorAxisSquare()) / e.getMajorAxis());
 			T.addEllipse(e);
@@ -90,7 +102,7 @@ public class CreateEllipseMath {
 		return T;
 	}
 	
-	public static ETrajectory createUpperBoundEllipticalTrajectory(Trajectory t) {
+	public ETrajectory createUpperBoundEllipticalTrajectory(Trajectory t) {
 		int i = 0;
 		ETrajectory T = new ETrajectory(t.getTid(), t.length());
 
@@ -101,7 +113,7 @@ public class CreateEllipseMath {
 			long timeDiff = (t.getPoint(i + 1).getTime() - t.getPoint(i)
 					.getTime()) / 1000;
 			
-			double minDistance = Distance.euclidean(p1, p2);
+			double minDistance = distanceFunction.distance(p1, p2);
 			double majorAxis = 55.5 * (timeDiff+1);// Tolerance=1s
 			majorAxis=Math.max(majorAxis, minDistance);// Noise in real data									
 			
@@ -116,31 +128,13 @@ public class CreateEllipseMath {
 		return T;
 	}
 
-	public static ETrajectory createManhattanEllipticalTrajectory(Trajectory t) {
-		int i = 0;
-		ETrajectory T = new ETrajectory(t.getTid(), t.length());
-		while (i < t.getPoints().size() - 1) {
-			TPoint p1 = t.getPoint(i);
-			TPoint p2 = t.getPoint(i + 1);
-
-			double majorAxis = Distance.manhattan(p1, p2)+1; //tolerance
-
-			Ellipse e = createEllipseByFoci(i, p1, p2, majorAxis);
-
-			T.addEllipse(e);
-			i++;
-		}
-
-		return T;
-	}
-
-	private static Ellipse createEllipseByFoci(int eid, TPoint p1, TPoint p2,
+	private Ellipse createEllipseByFoci(int eid, TPoint p1, TPoint p2,
 			double majorAxis) {
 		
 		double x = (p1.getX() + p2.getX()) / 2;
 		double y = (p1.getY() + p2.getY()) / 2;
 
-		double fociDistance = Distance.euclidean(p1, p2);
+		double fociDistance = distanceFunction.distance(p1, p2);
 		double fociDistanceSquare = fociDistance * fociDistance;
 		double majorAxisSquare = majorAxis * majorAxis;
 

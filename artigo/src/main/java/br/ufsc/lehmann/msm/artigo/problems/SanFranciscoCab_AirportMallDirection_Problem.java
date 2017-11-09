@@ -70,7 +70,7 @@ public class SanFranciscoCab_AirportMallDirection_Problem extends SanFranciscoCa
 	@Override
 	public Semantic discriminator() {
 		if(!ArrayUtils.isEmpty(roads) && !ArrayUtils.isEmpty(directions)) {
-			return SanFranciscoCabDataReader.DIRECTION_ROAD;
+			return SanFranciscoCabDataReader.ROADS_WITH_DIRECTION;
 		}
 		return SanFranciscoCabDataReader.DIRECTION;
 	}

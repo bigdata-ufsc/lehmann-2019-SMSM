@@ -6,4 +6,6 @@ public interface IDistanceFunction<T> {
 	
 	double convert(double units);
 
+	double maxDistance();
+
 }

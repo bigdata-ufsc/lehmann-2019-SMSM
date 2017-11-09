@@ -8,9 +8,9 @@ public class EqualsDistanceFunction<T extends Object> implements IDistanceFuncti
 			return 0;
 		}
 		if (p == null || d == null) {
-			return Double.MAX_VALUE;
+			return 1;
 		}
-		return p.equals(d) ? 0 : Double.MAX_VALUE;
+		return p.equals(d) ? 0 : 1;
 	}
 
 	@Override
@@ -18,4 +18,9 @@ public class EqualsDistanceFunction<T extends Object> implements IDistanceFuncti
 		return units;
 	}
 
+	
+	@Override
+	public double maxDistance() {
+		return 1;
+	}
 }

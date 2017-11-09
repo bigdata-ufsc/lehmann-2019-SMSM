@@ -4,21 +4,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.ufsc.core.trajectory.GeographicDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.base.ETrajectory;
 import br.ufsc.ftsm.base.Ellipse;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.util.CreateEllipseMath;
-import br.ufsc.utils.Distance;
+import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 
-	public UMS() {
+	private GeographicDistanceFunction distanceFunc;
 
+	public UMS() {
+		this(new EuclideanDistanceFunction());
 	}
 
-	public double getDistance(ETrajectory E1, ETrajectory E2) {
+	public UMS(GeographicDistanceFunction distanceFunc) {
+		this.distanceFunc = distanceFunc;
+	}
+
+	public double getSimilarity(ETrajectory E1, ETrajectory E2) {
 		int n = E1.trajectoryLength();
 		int m = E2.trajectoryLength();
 
@@ -36,7 +43,7 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 			for (int j = 0; j < m - 1; j++) {
 
 				Ellipse e2 = E2.getEllipse(j);
-				if (Distance.euclidean(e1.getCenter(), e2.getCenter()) <= e1.getSemiMajorAxis() + e2.getSemiMajorAxis()) {
+				if (distanceFunc.distance(e1.getCenter(), e2.getCenter()) <= e1.getSemiMajorAxis() + e2.getSemiMajorAxis()) {
 					double p1shr = getShareness(e1.getF1(), e2);
 					if (p1shr>0) {
 						if (aMatchSet[i] == null) {
@@ -207,18 +214,19 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 
 	//	double minDist = 1;
 
-		double distF1 = Distance.euclidean(p1, e.getF1());
-		double distF2 = Distance.euclidean(p1, e.getF2());
-		double distC = Distance.euclidean(p1, center);
+		double distF1 = distanceFunc.distance(p1, e.getF1());
+		double distF2 = distanceFunc.distance(p1, e.getF2());
+		double distC = distanceFunc.distance(p1, center);
 
 		return (1 - (Math.min(Math.min(distF1, distF2), distC) / e.getXi()));
 	}
 	
 	@Override
 	public double getSimilarity(Trajectory T1, Trajectory T2) {
-		ETrajectory E1 = CreateEllipseMath.createEllipticalTrajectoryFixed(T1);
-		ETrajectory E2 = CreateEllipseMath.createEllipticalTrajectoryFixed(T2);
-		return getDistance(E1,E2);
+		CreateEllipseMath createEllipseMath = new CreateEllipseMath(distanceFunc);
+		ETrajectory E1 = new CreateEllipseMath().createEllipticalTrajectoryFixed(T1);
+		ETrajectory E2 = new CreateEllipseMath().createEllipticalTrajectoryFixed(T2);
+		return getSimilarity(E1,E2);
 	}
 
 
