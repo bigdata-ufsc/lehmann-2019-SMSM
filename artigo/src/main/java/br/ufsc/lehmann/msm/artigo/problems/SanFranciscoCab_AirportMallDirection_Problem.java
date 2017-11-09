@@ -1,10 +1,8 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

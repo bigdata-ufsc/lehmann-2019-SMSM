@@ -57,8 +57,8 @@ public class FastSMoT<E, T> {
 			E data = segmentationSemantic.getData(T, i);
 			if (detector.isStop(data)) {
 				String stopName = null;
-				for (int j = i; j < i + neighborhood[i]; j++) {
-					Object stopNameValue = stopNameSemantic.getData(T, i);
+				for (int j = i; j <= i + neighborhood[i]; j++) {
+					Object stopNameValue = stopNameSemantic.getData(T, j);
 					if(stopNameValue != null) {
 						stopName = String.valueOf(stopNameValue);
 						break;

@@ -63,7 +63,7 @@ public class SanFranciscoCabDatabaseReader {
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, 10)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(DISTANCE_FUNCTION)));
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 	
@@ -189,7 +189,7 @@ public class SanFranciscoCabDatabaseReader {
 
 	private List<SemanticTrajectory> readStopsTrajectories(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
 		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, direction, stop, semantic_stop_id, semantic_move_id, stop, route" + //
-				" FROM taxi.sanfrancisco_taxicab_crawdad where 1=1";
+				" FROM taxi.sanfrancisco_taxicab_subset_cleaned where 1=1";
 		if(!ArrayUtils.isEmpty(roads)) {
 			sql += " and road in (SELECT * FROM unnest(?))";
 		} else if(roads != null) {
@@ -201,7 +201,7 @@ public class SanFranciscoCabDatabaseReader {
 			sql += " and direction is not null";
 		}
 		if(regions != null) {
-			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab_crawdad r where r.stop in (SELECT * FROM unnest(?)))";
+			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab_subset_cleaned r where r.stop in (SELECT * FROM unnest(?)))";
 		}
 		sql +=" order by tid, \"timestamp\"";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -280,6 +280,7 @@ public class SanFranciscoCabDatabaseReader {
 					} else {
 						s.addData(i, STOP_CENTROID_SEMANTIC, stop);
 					}
+					stop.setRegion(record.getRegion());
 				} else if(record.getSemanticMoveId() != null) {
 					Move move = moves.remove(record.getSemanticMoveId());
 					if(move == null) {
@@ -326,7 +327,7 @@ public class SanFranciscoCabDatabaseReader {
 
 	private List<SemanticTrajectory> loadRawPoints(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
 		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, direction, semantic_stop_id, semantic_move_id, stop, route" + //
-				" FROM taxi.sanfrancisco_taxicab_crawdad where 1=1";
+				" FROM taxi.sanfrancisco_taxicab_subset_cleaned where 1=1";
 		if(!ArrayUtils.isEmpty(roads)) {
 			sql += " and road in (SELECT * FROM unnest(?))";
 		} else if(roads != null) {
@@ -338,7 +339,7 @@ public class SanFranciscoCabDatabaseReader {
 			sql += " and direction is not null";
 		}
 		if(regions != null) {
-			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab_crawdad r where r.stop in (SELECT * FROM unnest(?)))";
+			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab_subset_cleaned r where r.stop in (SELECT * FROM unnest(?)))";
 		}
 		sql +=" order by tid, \"timestamp\"";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -409,6 +410,7 @@ public class SanFranciscoCabDatabaseReader {
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
 					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+					stop.setRegion(record.getRegion());
 				}
 				if(record.getSemanticMoveId() != null) {
 					Move move = moves.get(record.getSemanticMoveId());

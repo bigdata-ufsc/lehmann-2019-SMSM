@@ -22,7 +22,7 @@ public class SMoT_SanFranciscoCab {
 	private static DataSource source;
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		SanFranciscoCabProblem problem = new SanFranciscoCab_AirportMallDirection_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"});
+		SanFranciscoCabProblem problem = new SanFranciscoCab_AirportMallDirection_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, false, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"});
 		List<SemanticTrajectory> trajs = problem.data();
 		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.taxi_sanfrancisco_stop", null, "geom");
 
@@ -35,7 +35,7 @@ public class SMoT_SanFranciscoCab {
 		ResultSet lastMove = conn.createStatement().executeQuery("select max(move_id) from stops_moves.taxi_sanfrancisco_move");
 		lastMove.next();
 		AtomicInteger mid = new AtomicInteger(lastMove.getInt(1));
-		PreparedStatement update = conn.prepareStatement("update taxi.sanfrancisco_taxicab_crawdad set semantic_stop_id = ?, semantic_move_id = ? where tid = ? and gid in (SELECT * FROM unnest(?))");
+		PreparedStatement update = conn.prepareStatement("update taxi.sanfrancisco_taxicab_subset_cleaned set semantic_stop_id = ?, semantic_move_id = ? where tid = ? and gid in (SELECT * FROM unnest(?))");
 		PreparedStatement insertStop = conn.prepareStatement("insert into stops_moves.taxi_sanfrancisco_stop(stop_id, start_time, start_lat, start_lon, begin, end_time, end_lat, end_lon, length, centroid_lat, centroid_lon, \"POI\") values (?,?,?,?,?,?,?,?,?,?,?,?)");
 		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.taxi_sanfrancisco_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
 		try {
@@ -49,7 +49,7 @@ public class SMoT_SanFranciscoCab {
 
 				@Override
 				public void parameterize(PreparedStatement statement, Stop stop) throws SQLException {
-					statement.setString(12, String.valueOf(stop.getRegion()));
+					statement.setString(12, String.valueOf(stop.getStopName()));
 				}
 				
 			}, insertMove, bestSMoT);
