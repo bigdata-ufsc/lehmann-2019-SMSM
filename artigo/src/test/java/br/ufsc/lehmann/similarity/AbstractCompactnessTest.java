@@ -71,9 +71,9 @@ public abstract class AbstractCompactnessTest {
 		trajs = trajs.stream()//
 				.filter(t -> Arrays.asList(
 						459330,175302,347277,564396,525373, //(a->m/101)
-						374700,614527,176231,73718,771453, //(a->m/280)
-						409260,484589,768378,418507,461179, //(m->a/101)
-						431550,59000,801975,595185,983724 //(m->a/280)
+						374700,614527,176231,73718,771453 //(a->m/280)
+//						409260,484589,768378,418507,461179, //(m->a/101)
+//						431550,59000,801975,595185,983724 //(m->a/280)
 						).contains(t.getTrajectoryId()))//
 				.sorted((o1, o2) -> ((Comparable) o1.getTrajectoryId()).compareTo(o2.getTrajectoryId()))//
 				.collect(Collectors.toList());
