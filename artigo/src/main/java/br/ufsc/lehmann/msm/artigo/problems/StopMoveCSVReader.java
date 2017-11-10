@@ -60,7 +60,7 @@ public class StopMoveCSVReader {
 	}
 
 	public static Map<Integer, Stop> stopsCsvRead(CSVParser stopsParser) throws IOException, ParseException {
-		return stopsCsvRead(stopsParser, TIMESTAMP);
+		return stopsCsvRead(stopsParser, TIMESTAMP, TIMESTAMP_BR);
 	}
 
 	public static Map<Integer, Stop> stopsCsvRead(CSVParser stopsParser, String... timeFormat) throws IOException {
@@ -68,7 +68,7 @@ public class StopMoveCSVReader {
 	}
 
 	public static Map<Integer, Stop> stopsCsvRead(CSVParser stopsParser, StopReaderCallback callback) throws IOException {
-		return stopsCsvRead(stopsParser, callback, TIMESTAMP);
+		return stopsCsvRead(stopsParser, callback, TIMESTAMP, TIMESTAMP_BR);
 	}
 	
 	public static Map<Integer, Stop> stopsCsvRead(CSVParser stopsParser, StopReaderCallback callback, String... timeFormat) throws IOException {

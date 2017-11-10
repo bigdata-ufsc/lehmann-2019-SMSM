@@ -1,6 +1,8 @@
 package br.ufsc.lehmann;
 
 import br.ufsc.lehmann.msm.artigo.Problem;
+import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.NewYorkBus_Zoned_Problem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCab_Regions_Problem;
 import br.ufsc.lehmann.msm.artigo.problems.StopMoveStrategy;
@@ -35,6 +37,8 @@ public enum EnumProblem {
 	/**
 	 * Trajectories constructed with only Stops&Moves
 	 */
+	NEWYORK_BUS_ZONED_ONLY_STOPS(new NewYorkBus_Zoned_Problem(NewYorkBusDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, true), 53),//
+	NEWYORK_BUS_ZONED_ONLY_STOPS_WITH_DIRECTION(new NewYorkBus_Zoned_Problem(NewYorkBusDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, true, true, new String[0]), 105),//
 //	NEWYORK_BUS_2_LINES_ONLY_STOPS_STREET_NAME(new NewYorkBusProblem(NewYorkBusDataReader.STOP_STREET_NAME_SEMANTIC, true, "MTA NYCT_Q20A", "MTA NYCT_M102"), 2),//
 //	NEWYORK_BUS_2_LINES_BM2_BM3_ONLY_STOPS_STREET_NAME(new NewYorkBusProblem(NewYorkBusDataReader.STOP_STREET_NAME_SEMANTIC, true, "MTABC_BM3", "MTABC_BM2"), 2),//
 //	NEWYORK_BUS_2_LINES_Q52_Q53_ONLY_STOPS_STREET_NAME(new NewYorkBusProblem(NewYorkBusDataReader.STOP_STREET_NAME_SEMANTIC, true, "MTABC_Q52", "MTABC_Q53"), 2),//
@@ -43,7 +47,7 @@ public enum EnumProblem {
 //	TAXI_SANFRANCISCO_AIRPORT_MALL_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_AirportMallRoad_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new String[] {"101", "280"}), 2),//
 //	TAXI_SANFRANCISCO_AIRPORT_MALL_JUST_DIRECTION_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_AirportMallDirection_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new String[] {}, new String[] {"mall to airport", "airport to mall"}), 2),//
 //	TAXI_SANFRANCISCO_AIRPORT_MALL_DIRECTION_THROUGH_ROAD_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_AirportMallDirection_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}), 4),//
-	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_IN_ROADS_ONLY_STOPS_REGION(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}, new String[] {}, true), 4),//
+//	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_IN_ROADS_ONLY_STOPS_REGION(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}, new String[] {}, true), 4),//
 //	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, null, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "airport"}, true), 4),//
 //	TAXI_SANFRANCISCO_REGIONS_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, null, new String[] {}, new String[] {"mall", "airport"}, true), 2),//
 //	VEHICLE_URBAN_ONLY_STOPS_STREET_NAME(new VehicleProblem(VehicleDataReader.STOP_STREET_NAME_SEMANTIC, true), 2),//

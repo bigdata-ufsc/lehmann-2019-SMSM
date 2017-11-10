@@ -70,7 +70,13 @@ public class NewYorkBusDataReader {
 	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION, Thresholds.MOVE_INNERPOINTS_DISTANCE)));
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
-	
+
+	public static final BasicSemantic<String> ROUTE_WITH_DIRECTION = new BasicSemantic<String>(10) {
+		@Override
+		public String getData(SemanticTrajectory p, int i) {
+			return ROUTE.getData(p, i) + "/" + DIRECTION.getData(p, i);
+		}
+	};
 	private boolean onlyStops;
 
 	private StopMoveStrategy strategy;
@@ -101,7 +107,7 @@ public class NewYorkBusDataReader {
 			public void readFields(Stop stop, CSVRecord data) {
 				stop.setRegion(data.get("POI"));
 			}
-		});
+		}, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS");
 
 		ZipEntry trafficLightEntry = zipFile.getEntry("nyc.stop.traffic_light.csv");
 		if(trafficLightEntry != null) {
@@ -115,7 +121,7 @@ public class NewYorkBusDataReader {
 		CSVParser movesParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawMovesEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("move_id", "start_time", "start_stop_id", "begin", "end_time", "end_stop_id", "length").withDelimiter(';'));
 		
-		Map<Integer, Move> moves = StopMoveCSVReader.moveCsvRead(movesParser, stops);
+		Map<Integer, Move> moves = StopMoveCSVReader.moveCsvRead(movesParser, stops, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SS", "yyyy-MM-dd HH:mm:ss.S");
 		List<SemanticTrajectory> ret = null;
 		List<Move> usedMoves = new ArrayList<Move>();
 		if(onlyStops) {
@@ -184,7 +190,7 @@ public class NewYorkBusDataReader {
 			String move = data.get("semantic_move_id");
 			NewYorkBusRecord record = new NewYorkBusRecord(
 				Integer.parseInt(data.get("gid")),
-				new Timestamp(DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP_US, StopMoveCSVReader.TIMESTAMP_BR).getTime()),
+				new Timestamp(DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SS", "yyyy-MM-dd HH:mm:ss.S").getTime()),
 				Integer.parseInt(data.get("vehicle_id")),
 				data.get("route"),
 				data.get("trip_id"),
@@ -206,7 +212,7 @@ public class NewYorkBusDataReader {
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 12);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 13);
 			Collection<NewYorkBusRecord> collection = records.get(trajId);
 			int i = 0;
 			for (NewYorkBusRecord record : collection) {
@@ -312,7 +318,7 @@ public class NewYorkBusDataReader {
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 12);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 13);
 			Collection<NewYorkBusRecord> collection = records.get(trajId);
 			int i = 0;
 			for (NewYorkBusRecord record : collection) {
