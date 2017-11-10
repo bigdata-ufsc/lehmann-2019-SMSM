@@ -15,12 +15,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -38,13 +38,12 @@ import br.ufsc.core.trajectory.semantic.AttributeDescriptor;
 import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
-import br.ufsc.core.trajectory.semantic.StopMove;
 import br.ufsc.lehmann.AngleDistance;
 import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
-import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
+import br.ufsc.lehmann.Thresholds;
 import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
 import br.ufsc.utils.LatLongDistanceFunction;
@@ -52,7 +51,7 @@ import cc.mallet.util.IoUtils;
 
 public class NewYorkBusDataReader {
 	
-	private static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
+	private static final LatLongDistanceFunction GEO_DISTANCE_FUNCTION = new LatLongDistanceFunction();
 
 	public static final BasicSemantic<Double> DISTANCE = new BasicSemantic<>(3);
 	public static final BasicSemantic<String> ROUTE = new BasicSemantic<>(4);
@@ -61,51 +60,61 @@ public class NewYorkBusDataReader {
 	public static final BasicSemantic<String> PHASE = new BasicSemantic<>(7);
 	public static final BasicSemantic<Double> NEXT_STOP_DISTANCE = new BasicSemantic<>(8);
 	public static final BasicSemantic<String> NEXT_STOP_ID = new BasicSemantic<>(9);
-	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(10, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
-	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(10, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_TRAFFIC_LIGHT_SEMANTIC = new StopSemantic(10, new AttributeDescriptor<Stop, String>(AttributeType.STOP_TRAFFIC_LIGHT, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_TRAFFIC_LIGHT_DISTANCE_SEMANTIC = new StopSemantic(10, new AttributeDescriptor<Stop, Double>(AttributeType.STOP_TRAFFIC_LIGHT_DISTANCE, new NumberDistance()));
+	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(10);
+	public static final StopSemantic STOP_REGION_SEMANTIC = new StopSemantic(11, new AttributeDescriptor<Stop, String>(AttributeType.STOP_REGION, new EqualsDistanceFunction<String>()));
+	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(11, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, GEO_DISTANCE_FUNCTION));
+	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(11, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
 	
-	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
-	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
-	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, 10)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(11, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(DISTANCE_FUNCTION)));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION, Thresholds.MOVE_INNERPOINTS_DISTANCE)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
 	
-	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 	private boolean onlyStops;
 
+	private StopMoveStrategy strategy;
+	
 	public NewYorkBusDataReader(boolean onlyStops) {
+		this(onlyStops, StopMoveStrategy.CBSMoT);
+	}
+
+	public NewYorkBusDataReader(boolean onlyStops, StopMoveStrategy strategy) {
 		this.onlyStops = onlyStops;
+		this.strategy = strategy;
 	}
 
 	public List<SemanticTrajectory> read(String[] lines) throws IOException, ParseException {
 		System.out.println("Reading file...");
-		String dataFile = "./datasets/nyc.data.zip";
-		if(!ArrayUtils.isEmpty(lines) && (ArrayUtils.contains(lines, "MTABC_BM3") && ArrayUtils.contains(lines, "MTABC_BM2"))) {//
-			dataFile = "./datasets/nyc_bus_BM2-BM3.zip";
-		} else if(!ArrayUtils.isEmpty(lines) && (ArrayUtils.contains(lines, "MTABC_Q52") && ArrayUtils.contains(lines, "MTABC_Q53"))) {
-			dataFile = "./datasets/nyc_bus_Q52-Q53.zip";
-		} else if(!ArrayUtils.isEmpty(lines) && (ArrayUtils.contains(lines, "MTA NYCT_S79+") && ArrayUtils.contains(lines, "MTA NYCT_S59") && ArrayUtils.contains(lines, "MTA NYCT_X1"))) {
-			dataFile = "./datasets/nyc_bus_S59_S79_X1.zip";
-		}
+		String dataFile = "./datasets/nyc." + strategy.name().toLowerCase() + ".data.zip";
 		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource(dataFile).getFile(), "UTF-8"));
 		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("bus.nyc_20140927.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("gid", "time", "vehicle_id", "route", "trip_id", "longitude", "latitude", "distance_along_trip", "infered_direction_id", "phase", "next_scheduled_stop_distance", "next_scheduled_stop_id", "semantic_stop_id", "semantic_move_id").withDelimiter(';'));
+				CSVFormat.EXCEL.withHeader("gid", "time", "vehicle_id", "route", "trip_id", "longitude", "latitude", "distance_along_trip", "infered_direction_id", "phase", "next_scheduled_stop_distance", "next_scheduled_stop_id", "POI", "semantic_stop_id", "semantic_move_id").withDelimiter(';'));
 		
 		InputStreamReader rawStopsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.bus_nyc_20140927_stop.csv")));
 		CSVParser stopsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawStopsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "end_lat", "end_lon", "centroid_lat", "centroid_lon", "start_time", "end_time", "begin", "length", "street").withDelimiter(';'));
-		InputStreamReader rawTrafficLightsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("nyc.stop.traffic_light.csv")));
-		CSVParser trafficLightsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawTrafficLightsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("stopId", "trafficLightId", "trafficLightDistance").withDelimiter(';'));
+				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "end_lat", "end_lon", "centroid_lat", "centroid_lon", "start_time", "end_time", "begin", "length", "street", "POI").withDelimiter(';'));
+		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser, new StopMoveCSVReader.StopReaderCallback() {
+			
+			@Override
+			public void readFields(Stop stop, CSVRecord data) {
+				stop.setRegion(data.get("POI"));
+			}
+		});
+
+		ZipEntry trafficLightEntry = zipFile.getEntry("nyc.stop.traffic_light.csv");
+		if(trafficLightEntry != null) {
+			InputStreamReader rawTrafficLightsEntry = new InputStreamReader(zipFile.getInputStream(trafficLightEntry));
+			CSVParser trafficLightsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawTrafficLightsEntry).toString(), 
+					CSVFormat.EXCEL.withHeader("stopId", "trafficLightId", "trafficLightDistance").withDelimiter(';'));
+			readTrafficLights(trafficLightsParser, stops);
+		}
 		
 		InputStreamReader rawMovesEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.bus_nyc_20140927_move.csv")));
 		CSVParser movesParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawMovesEntry).toString(), 
 				CSVFormat.EXCEL.withHeader("move_id", "start_time", "start_stop_id", "begin", "end_time", "end_stop_id", "length").withDelimiter(';'));
 		
-		Map<Integer, Stop> stops = readStops(stopsParser, trafficLightsParser);
 		Map<Integer, Move> moves = StopMoveCSVReader.moveCsvRead(movesParser, stops);
 		List<SemanticTrajectory> ret = null;
 		List<Move> usedMoves = new ArrayList<Move>();
@@ -121,22 +130,33 @@ public class NewYorkBusDataReader {
 
 	public List<Stop> exportStops() throws IOException, ParseException, URISyntaxException {
 		System.out.println("Reading file...");
-		ZipFile zipFile = new ZipFile(new URI(this.getClass().getClassLoader().getResource("./datasets/nyc.data.zip").toString()).getPath());
-		
+		String dataFile = "./datasets/nyc." + strategy.name().toLowerCase() + ".data.zip";
+		ZipFile zipFile = new ZipFile(new URI(this.getClass().getClassLoader().getResource(dataFile).toString()).getPath());
+
 		InputStreamReader rawStopsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.bus_nyc_20140927_stop.csv")));
-		CSVParser stopsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawStopsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "end_lat", "end_lon", "centroid_lat", "centroid_lon", "start_time", "end_time", "begin", "length", "street").withDelimiter(';'));
-		InputStreamReader rawTrafficLightsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("nyc.stop.traffic_light.csv")));
-		CSVParser trafficLightsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawTrafficLightsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("stopId", "trafficLightId", "trafficLightDistance").withDelimiter(';'));
-		
-		Map<Integer, Stop> stops = readStops(stopsParser, trafficLightsParser);
+		CSVParser stopsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawStopsEntry).toString(),
+				CSVFormat.EXCEL.withHeader("stop_id", "start_lat", "start_lon", "end_lat", "end_lon", "centroid_lat", "centroid_lon", "start_time",
+						"end_time", "begin", "length", "street", "POI").withDelimiter(';'));
+		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser, new StopMoveCSVReader.StopReaderCallback() {
+
+			@Override
+			public void readFields(Stop stop, CSVRecord data) {
+				stop.setRegion(data.get("POI"));
+			}
+		});
+
+		ZipEntry trafficLightEntry = zipFile.getEntry("nyc.stop.traffic_light.csv");
+		if (trafficLightEntry != null) {
+			InputStreamReader rawTrafficLightsEntry = new InputStreamReader(zipFile.getInputStream(trafficLightEntry));
+			CSVParser trafficLightsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawTrafficLightsEntry).toString(),
+					CSVFormat.EXCEL.withHeader("stopId", "trafficLightId", "trafficLightDistance").withDelimiter(';'));
+			readTrafficLights(trafficLightsParser, stops);
+		}
 		zipFile.close();
 		return new ArrayList<>(stops.values());
 	}
 
-	private Map<Integer, Stop> readStops(CSVParser stopsParser, CSVParser trafficLightsParser) throws IOException, ParseException {
-		Map<Integer, Stop> stops = StopMoveCSVReader.stopsCsvRead(stopsParser);
+	private void readTrafficLights(CSVParser trafficLightsParser, Map<Integer, Stop> stops) throws IOException {
 		List<CSVRecord> records = trafficLightsParser.getRecords();
 		Iterator<CSVRecord> trafficLightData = records.subList(1, records.size()).iterator();
 		while(trafficLightData.hasNext()) {
@@ -151,7 +171,6 @@ public class NewYorkBusDataReader {
 			Double trafficLightDistance = Double.parseDouble(record.get("trafficLightDistance"));
 			stop.setTrafficLightDistance(trafficLightDistance);
 		}
-		return stops;
 	}
 
 	private List<SemanticTrajectory> readStopsTrajectories(String[] lines, CSVParser pointsParser, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws NumberFormatException, ParseException, IOException {
@@ -202,7 +221,7 @@ public class NewYorkBusDataReader {
 						if(previousStop != null) {
 							Move move = new Move(-1, previousStop, stop, previousStop.getEndTime(), stop.getStartTime(), stop.getBegin() - 1, 0, new TPoint[0], 
 									Angle.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
-									Distance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
+									Distance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, new LatLongDistanceFunction()));
 							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
 							//injecting a move between two consecutives stops
@@ -342,7 +361,7 @@ public class NewYorkBusDataReader {
 				points.add(move.getEnd().getStartPoint());
 			}
 			move.setAttribute(AttributeType.MOVE_ANGLE, Angle.getAngle(points.get(0), points.get(points.size() - 1)));
-			move.setAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE, Distance.getDistance(points.toArray(new TPoint[points.size()]), DISTANCE_FUNCTION));
+			move.setAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE, Distance.getDistance(points.toArray(new TPoint[points.size()]), new LatLongDistanceFunction()));
 		}
 	}
 }
