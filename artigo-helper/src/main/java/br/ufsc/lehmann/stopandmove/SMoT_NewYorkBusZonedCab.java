@@ -12,6 +12,8 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
+import br.ufsc.lehmann.msm.artigo.problems.NewYorkBus_Zoned_DatabaseReader;
+import br.ufsc.lehmann.msm.artigo.problems.NewYorkBus_Zoned_Problem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
@@ -22,25 +24,25 @@ public class SMoT_NewYorkBusZonedCab {
 	private static DataSource source;
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		SanFranciscoCabProblem problem = new SanFranciscoCab_AirportMallDirection_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, false, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"});
+		NewYorkBus_Zoned_Problem problem = new NewYorkBus_Zoned_Problem(new String[0]);
 		List<SemanticTrajectory> trajs = problem.data();
-		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.bus_newyorkbus_zoned_stop", null, "geom");
+		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.bus_nyc_20140927_zoned_stop", null, "geom");
 
 		long start = System.currentTimeMillis();
 		Connection conn = source.getRetriever().getConnection();
 
-		ResultSet lastStop = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.bus_newyorkbus_zoned_stop");
+		ResultSet lastStop = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.bus_nyc_20140927_zoned_stop");
 		lastStop.next();
 		AtomicInteger sid = new AtomicInteger(lastStop.getInt(1));
-		ResultSet lastMove = conn.createStatement().executeQuery("select max(move_id) from stops_moves.bus_newyorkbus_zoned_move");
+		ResultSet lastMove = conn.createStatement().executeQuery("select max(move_id) from stops_moves.bus_nyc_20140927_zoned_move");
 		lastMove.next();
 		AtomicInteger mid = new AtomicInteger(lastMove.getInt(1));
-		PreparedStatement update = conn.prepareStatement("update bus.nyc_20140927_zoned set semantic_stop_id = ?, semantic_move_id = ? where infered_route_id = ? and gid in (SELECT * FROM unnest(?))");
-		PreparedStatement insertStop = conn.prepareStatement("insert into stops_moves.bus_newyorkbus_zoned_stop(stop_id, start_time, start_lat, start_lon, begin, end_time, end_lat, end_lon, length, centroid_lat, centroid_lon, \"POI\") values (?,?,?,?,?,?,?,?,?,?,?,?)");
-		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.bus_newyorkbus_zoned_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
+		PreparedStatement update = conn.prepareStatement("update bus.nyc_20140927_zoned set semantic_stop_id = ?, semantic_move_id = ? where infered_trip_id = ? and gid in (SELECT * FROM unnest(?))");
+		PreparedStatement insertStop = conn.prepareStatement("insert into stops_moves.bus_nyc_20140927_zoned_stop(stop_id, start_time, start_lat, start_lon, begin, end_time, end_lat, end_lon, length, centroid_lat, centroid_lon, \"POI\") values (?,?,?,?,?,?,?,?,?,?,?,?)");
+		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.bus_nyc_20140927_zoned_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
 		try {
 			conn.setAutoCommit(false);
-			FastSMoT<String, Number> fastSMoT = new FastSMoT<>(SanFranciscoCabDatabaseReader.REGION_INTEREST);
+			FastSMoT<String, Number> fastSMoT = new FastSMoT<>(NewYorkBus_Zoned_DatabaseReader.REGION_INTEREST);
 			List<StopAndMove> bestSMoT = new ArrayList<>();
 			for (SemanticTrajectory T : trajs) {
 				bestSMoT.add(fastSMoT.findStops(T, sid, mid));

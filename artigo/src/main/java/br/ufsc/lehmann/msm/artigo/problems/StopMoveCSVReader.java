@@ -66,6 +66,10 @@ public class StopMoveCSVReader {
 	public static Map<Integer, Stop> stopsCsvRead(CSVParser stopsParser, String... timeFormat) throws IOException {
 		return stopsCsvRead(stopsParser, EMPTY_CALLBACK, timeFormat);
 	}
+
+	public static Map<Integer, Stop> stopsCsvRead(CSVParser stopsParser, StopReaderCallback callback) throws IOException {
+		return stopsCsvRead(stopsParser, callback, TIMESTAMP);
+	}
 	
 	public static Map<Integer, Stop> stopsCsvRead(CSVParser stopsParser, StopReaderCallback callback, String... timeFormat) throws IOException {
 		List<CSVRecord> records = stopsParser.getRecords();

@@ -1,6 +1,7 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.sql.SQLException;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +26,7 @@ public class NewYorkBus_Zoned_Problem implements Problem {
 	private boolean onlyStops;
 	
 	public NewYorkBus_Zoned_Problem(String... lines) {
-		this(NewYorkBusDataReader.STOP_CENTROID_SEMANTIC, lines);
+		this(NewYorkBus_Zoned_DatabaseReader.STOP_CENTROID_SEMANTIC, lines);
 	}
 	
 	public NewYorkBus_Zoned_Problem(StopSemantic stopSemantic, String... zones) {
@@ -97,16 +98,16 @@ public class NewYorkBus_Zoned_Problem implements Problem {
 		if(loaded) {
 			return;
 		}
-//		try {
-//			data = new ArrayList<>(new NewYorkBusDataReader(onlyStops).read(zones));
-//		} catch (IOException | ParseException e) {
-//			throw new RuntimeException(e);
-//		}
 		try {
-			data = new ArrayList<>(new NewYorkBus_Zoned_DatabaseReader(onlyStops).read(zones));
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			data = new ArrayList<>(new NewYorkBus_Zoned_DataReader(onlyStops).read(zones));
+		} catch (IOException | ParseException e) {
 			throw new RuntimeException(e);
 		}
+//		try {
+//			data = new ArrayList<>(new NewYorkBus_Zoned_DatabaseReader(onlyStops).read(zones));
+//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+//			throw new RuntimeException(e);
+//		}
 		Collections.shuffle(data, new java.util.Random() {
 			@Override
 			public int nextInt(int bound) {

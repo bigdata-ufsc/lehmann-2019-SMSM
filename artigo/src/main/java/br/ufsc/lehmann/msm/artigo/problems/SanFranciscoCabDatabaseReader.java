@@ -272,13 +272,19 @@ public class SanFranciscoCabDatabaseReader {
 									Angle.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
 									Distance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
 							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
 							//injecting a move between two consecutives stops
 							stops.put(record.getSemanticStop(), stop);
+							s.addData(i, Semantic.GEOGRAPHIC, point);
 						} else {
 							s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
+							s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
 						}
 					} else {
 						s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+						s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
+						s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
 					}
 					stop.setRegion(record.getRegion());
 				} else if(record.getSemanticMoveId() != null) {
@@ -305,6 +311,8 @@ public class SanFranciscoCabDatabaseReader {
 					points = a.toArray(new TPoint[a.size()]);
 					move.setAttribute(AttributeType.MOVE_POINTS, points);
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
+					s.addData(i, Semantic.GEOGRAPHIC, point);
 				}
 				s.addData(i, Semantic.GID, record.getGid());
 				s.addData(i, Semantic.GEOGRAPHIC, point);

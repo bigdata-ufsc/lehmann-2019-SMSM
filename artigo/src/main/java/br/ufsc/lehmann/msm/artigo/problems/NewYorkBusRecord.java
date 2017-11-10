@@ -18,23 +18,30 @@ public class NewYorkBusRecord {
 	private String nextStopId;
 	private Integer semanticStop;
 	private Integer semanticMoveId;
+	private String POI;
+
+	public NewYorkBusRecord(int gid, Timestamp time, int vehicleId, String route, String tripId, double longitude, double latitude, double distanceAlongTrip,
+			int direction, String phase, double nextStopDistance, String nextStopId, String POI, Integer semanticStop, Integer semanticMoveId) {
+		this.gid = gid;
+		this.time = time;
+		this.vehicleId = vehicleId;
+		this.route = route;
+		this.tripId = tripId;
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.distanceAlongTrip = distanceAlongTrip;
+		this.direction = direction;
+		this.phase = phase;
+		this.nextStopDistance = nextStopDistance;
+		this.nextStopId = nextStopId;
+		this.semanticStop = semanticStop;
+		this.semanticMoveId = semanticMoveId;
+		this.POI = POI;
+	}
 
 	public NewYorkBusRecord(int gid, Timestamp time, int vehicleId, String route, String tripId, double longitude, double latitude, double distanceAlongTrip,
 			int direction, String phase, double nextStopDistance, String nextStopId, Integer semanticStop, Integer semanticMoveId) {
-				this.gid = gid;
-				this.time = time;
-				this.vehicleId = vehicleId;
-				this.route = route;
-				this.tripId = tripId;
-				this.longitude = longitude;
-				this.latitude = latitude;
-				this.distanceAlongTrip = distanceAlongTrip;
-				this.direction = direction;
-				this.phase = phase;
-				this.nextStopDistance = nextStopDistance;
-				this.nextStopId = nextStopId;
-				this.semanticStop = semanticStop;
-				this.semanticMoveId = semanticMoveId;
+		this(gid, time, vehicleId, route, tripId, longitude, latitude, distanceAlongTrip, direction, phase, nextStopDistance, nextStopId, null, semanticStop, semanticMoveId);
 	}
 
 	public int getGid() {
@@ -91,5 +98,9 @@ public class NewYorkBusRecord {
 
 	public Integer getSemanticMoveId() {
 		return semanticMoveId;
+	}
+
+	public String getPOI() {
+		return POI;
 	}
 }
