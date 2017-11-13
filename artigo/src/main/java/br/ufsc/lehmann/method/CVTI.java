@@ -46,7 +46,7 @@ public class CVTI extends TrajectorySimilarityCalculator<SemanticTrajectory> imp
 					TemporalDuration temporalDuration2 = Semantic.TEMPORAL.getData(S, j - 1);
 					Interval interval2 = new Interval(temporalDuration2.getStart().toEpochMilli(), temporalDuration2.getEnd().toEpochMilli());
 					Interval overlap = interval.overlap(interval2);
-					if(overlap != null) {
+					if(overlap != null && overlap.toDurationMillis() > 0) {
 						CVTIMetric[i][j] = CVTIMetric[i - 1][j - 1] + (overlap.toDurationMillis() / Math.min(interval.toDurationMillis(), interval2.toDurationMillis()));
 					} else {
 						CVTIMetric[i][j] = CVTIMetric[i - 1][j - 1];
