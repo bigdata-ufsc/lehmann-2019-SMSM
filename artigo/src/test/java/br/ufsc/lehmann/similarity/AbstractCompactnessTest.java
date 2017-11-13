@@ -89,7 +89,7 @@ public abstract class AbstractCompactnessTest {
 //						689815,						577772,						724312,						106879,
 //						672714,						109402,						328903,						253186,
 //						940828
-						85432, 345591
+						768051,940828
 						).contains(t.getTrajectoryId()))//
 				.sorted((o1, o2) -> ((Comparable) o1.getTrajectoryId()).compareTo(o2.getTrajectoryId()))//
 				.collect(Collectors.toList());
@@ -101,11 +101,11 @@ public abstract class AbstractCompactnessTest {
 		for (int i = 0; i < trajsArray.length; i++) {
 			for (int j = i; j < trajsArray.length; j++) {
 				double distance = measureDistance.distance(trajsArray[i], trajsArray[j]);
-				Object classData = semantic.getData(trajsArray[i], 0);
-				Object otherClassData = semantic.getData(trajsArray[j], 0);
-				if(!(Objects.equals(classData, otherClassData) && distance > 0.5)) {
-					distance = 0.0;
-				}
+//				Object classData = semantic.getData(trajsArray[i], 0);
+//				Object otherClassData = semantic.getData(trajsArray[j], 0);
+//				if(!(Objects.equals(classData, otherClassData) && distance > 0.5)) {
+//					distance = 0.0;
+//				}
 				allDistances.put(trajsArray[i], trajsArray[j], distance);
 				allDistances.put(trajsArray[j], trajsArray[i], distance);
 			}

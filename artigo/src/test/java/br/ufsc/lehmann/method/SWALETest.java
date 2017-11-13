@@ -21,21 +21,21 @@ public interface SWALETest {
 		if(problem instanceof NElementProblem) {
 			return new SWALEClassifier(new SWALE.SWALEParameters(0.0, -10, 10));
 		} else if(problem instanceof NewYorkBusProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.GEOGRAPHIC_LATLON, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_LATLON, -10, 10));
 		} else if(problem instanceof DublinBusProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.GEOGRAPHIC_LATLON, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_LATLON, -10, 10));
 		} else if(problem instanceof PatelProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.GEOGRAPHIC_EUCLIDEAN, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_EUCLIDEAN, -10, 10));
 		} else if(problem instanceof VehicleProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.GEOGRAPHIC_EUCLIDEAN, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_EUCLIDEAN, -10, 10));
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.GEOGRAPHIC_LATLON, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_LATLON, -10, 10));
 		} else if(problem instanceof SergipeTracksProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.GEOGRAPHIC_LATLON, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_LATLON, -10, 10));
 		} else if(problem instanceof PrototypeProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.GEOGRAPHIC_EUCLIDEAN, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_EUCLIDEAN, -10, 10));
 		} else if(problem instanceof PisaProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.GEOGRAPHIC_LATLON, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_LATLON, -10, 10));
 		}
 		return null;
 	}
