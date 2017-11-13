@@ -13,6 +13,7 @@ public interface Problem extends Cloneable {
 	List<SemanticTrajectory> trainingData();
 	List<SemanticTrajectory> testingData();
 	List<SemanticTrajectory> validatingData();
+	List<SemanticTrajectory> balancedData();
 	
 	String shortDescripton();
 	
