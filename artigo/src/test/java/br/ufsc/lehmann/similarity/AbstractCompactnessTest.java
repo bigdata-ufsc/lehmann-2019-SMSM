@@ -57,6 +57,7 @@ public abstract class AbstractCompactnessTest {
 	@Test
 	public void oneClassCompactness() throws Exception {
 		List<SemanticTrajectory> trajs = problem.data();
+		trajs = problem.balancedData();
 		//944553,768051,130346,360156 (280/mall to airport)
 		//733677 (280/airport to mall)
 		//541571,740318,717577,872545 (101/mall to airport)
@@ -70,10 +71,25 @@ public abstract class AbstractCompactnessTest {
 		
 		trajs = trajs.stream()//
 				.filter(t -> Arrays.asList(
-						459330,175302,347277,564396,525373, //(a->m/101)
-						374700,614527,176231,73718,771453 //(a->m/280)
+//						459330,175302,347277,564396,525373, //(a->m/101)
+//						374700,614527,176231,73718,771453 //(a->m/280)
 //						409260,484589,768378,418507,461179, //(m->a/101)
 //						431550,59000,801975,595185,983724 //(m->a/280)
+//						438507,						221720,						207926,						754915,
+//						671867,						740318,						969847,						456659,
+//						172186,						687355,						331711,						345591,
+//						351344,						52546,						351391,						311081,
+//						525373,						846995,						508323,						91493,
+//						347277,						325766,						966146,						89144,
+//						564396,						731217,						763218,						260461,
+//						408861,						408385,						495702,						508631,
+//						488350,						300359,						519257,						755692,
+//						459330,						24686,						85432,
+//						16427,						398147,						819009,						175302,
+//						689815,						577772,						724312,						106879,
+//						672714,						109402,						328903,						253186,
+//						940828
+						85432, 345591
 						).contains(t.getTrajectoryId()))//
 				.sorted((o1, o2) -> ((Comparable) o1.getTrajectoryId()).compareTo(o2.getTrajectoryId()))//
 				.collect(Collectors.toList());
@@ -85,6 +101,11 @@ public abstract class AbstractCompactnessTest {
 		for (int i = 0; i < trajsArray.length; i++) {
 			for (int j = i; j < trajsArray.length; j++) {
 				double distance = measureDistance.distance(trajsArray[i], trajsArray[j]);
+				Object classData = semantic.getData(trajsArray[i], 0);
+				Object otherClassData = semantic.getData(trajsArray[j], 0);
+				if(!(Objects.equals(classData, otherClassData) && distance > 0.5)) {
+					distance = 0.0;
+				}
 				allDistances.put(trajsArray[i], trajsArray[j], distance);
 				allDistances.put(trajsArray[j], trajsArray[i], distance);
 			}

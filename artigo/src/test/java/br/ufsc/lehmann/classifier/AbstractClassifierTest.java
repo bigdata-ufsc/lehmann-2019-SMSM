@@ -99,7 +99,8 @@ public abstract class AbstractClassifierTest {
 	
 	@Test
 	public void validation_accuracy() throws Exception {
-		List<SemanticTrajectory> data = problem.data();
+//		List<SemanticTrajectory> data = problem.data();
+		List<SemanticTrajectory> data = problem.balancedData();
 		List<SemanticTrajectory> testingData = new ArrayList<>(problem.testingData());
 		List<SemanticTrajectory> trainingData = new ArrayList<>(problem.trainingData());
 		List<SemanticTrajectory> validatingData = new ArrayList<>(problem.validatingData());
