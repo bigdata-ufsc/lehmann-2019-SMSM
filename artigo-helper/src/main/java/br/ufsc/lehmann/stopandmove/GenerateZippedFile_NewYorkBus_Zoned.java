@@ -32,7 +32,7 @@ public class GenerateZippedFile_NewYorkBus_Zoned {
 				+ "trim(infered_trip_id) as trip_id, longitude, latitude, distance_along_trip, infered_direction_id, "
 				+ "trim(infered_phase) as phase, next_scheduled_stop_distance, next_scheduled_stop_id,\"POI\", semantic_stop_id, semantic_move_id "
 				+ "from bus.nyc_20140927_zoned ";
-		sql += "order by trip_id,time_received";
+		sql += "order by trip_id,time_received,gid";
 		File directory = Files.createTempDirectory("trajs").toFile();
 		
 		File pisaTrajs = new File(directory, "bus.nyc_20140927.csv");

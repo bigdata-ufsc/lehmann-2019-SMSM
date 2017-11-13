@@ -9,7 +9,6 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import cc.mallet.util.ArrayUtils;
-import smile.math.Random;
 
 public class NewYorkBus_Zoned_Problem extends NewYorkBusProblem {
 	
@@ -62,7 +61,7 @@ public class NewYorkBus_Zoned_Problem extends NewYorkBusProblem {
 			throw new RuntimeException(e);
 		}
 //		try {
-//			data = new ArrayList<>(new NewYorkBus_Zoned_DatabaseReader(onlyStops).read(zones));
+//			return new ArrayList<>(new NewYorkBus_Zoned_DatabaseReader(onlyStops).read(zones));
 //		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 //			throw new RuntimeException(e);
 //		}
