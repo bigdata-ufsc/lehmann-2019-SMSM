@@ -14,10 +14,6 @@ import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBus_Zoned_DatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBus_Zoned_Problem;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDatabaseReader;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCab_AirportMallDirection_Problem;
 
 public class SMoT_NewYorkBusZonedCab {
 

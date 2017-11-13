@@ -198,7 +198,7 @@ public class NewYorkBus_Zoned_DatabaseReader {
 		if(zones != null && zones.length > 0) {
 			sql += "and POI in (SELECT * FROM unnest(?)) ";
 		}
-		sql += "order by time_received";
+		sql += "order by trip_id, time_received, gid";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		if(zones != null && zones.length > 0) {
 			Array array = conn.createArrayOf("varchar", zones);
@@ -328,7 +328,7 @@ public class NewYorkBus_Zoned_DatabaseReader {
 		if(zones != null && zones.length > 0) {
 			sql += "and POI in (SELECT * FROM unnest(?)) ";
 		}
-		sql += "order by time_received";
+		sql += "order by trip_id, time_received, gid";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		if(zones != null && zones.length > 0) {
 			Array array = conn.createArrayOf("varchar", zones);
