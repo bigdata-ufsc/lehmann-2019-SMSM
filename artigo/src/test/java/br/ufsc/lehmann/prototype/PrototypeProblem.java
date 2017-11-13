@@ -31,6 +31,11 @@ public class PrototypeProblem implements Problem {
 	}
 
 	@Override
+	public List<SemanticTrajectory> balancedData() {
+		return data();
+	}
+
+	@Override
 	public List<SemanticTrajectory> data() {
 		if(!loaded) {
 			load();

@@ -20,7 +20,7 @@ public class FastCBSMoT_TaxiShangai {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		FastCBSMoT fastCBSMoT = new FastCBSMoT(new EuclideanDistanceFunction());
-		TaxiShangaiProblem problem = new TaxiShangaiProblem();
+		TaxiShangaiProblem problem = new TaxiShangaiProblem(null);
 		List<SemanticTrajectory> trajs = problem.data();
 		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.taxi_shangai_20070220", null, "geom");
 

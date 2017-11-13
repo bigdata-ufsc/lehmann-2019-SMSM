@@ -13,7 +13,7 @@ import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
 public class AngleInference_SergipeTracks {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		SergipeTracksProblem problem = new SergipeTracksProblem();
+		SergipeTracksProblem problem = new SergipeTracksProblem(null);
 		String moveTable = "stops_moves.sergipe_tracks_move";
 		List<SemanticTrajectory> trajs = problem.data();
 		Map<Move, SemanticTrajectory> moves = new HashMap<>();

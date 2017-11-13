@@ -10,20 +10,13 @@ import org.apache.commons.lang3.StringUtils;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
-import br.ufsc.lehmann.msm.artigo.Problem;
+import br.ufsc.lehmann.msm.artigo.AbstractProblem;
 import smile.math.Random;
 
-public class PatelProblem implements Problem {
+public class PatelProblem extends AbstractProblem {
 	
-	private List<SemanticTrajectory> data;
-	private List<SemanticTrajectory> trainingData;
-	private List<SemanticTrajectory> testingData;
-	private List<SemanticTrajectory> validatingData;
 	private String table;
 	private String stopMoveTable;
-	private boolean loaded;
-	private Random random;
-	private StopSemantic stopSemantic;
 	private boolean onlyStops;
 
 	public PatelProblem(String table) {
@@ -39,54 +32,18 @@ public class PatelProblem implements Problem {
 	}
 
 	public PatelProblem(StopSemantic stopSemantic, boolean onlyStops, String table, String stopMoveTable) {
-		this.stopSemantic = stopSemantic;
+		super(stopSemantic);
 		this.onlyStops = onlyStops;
 		this.table = table;
 		this.stopMoveTable = stopMoveTable;
-		this.random = new Random();
 	}
 	
-	@Override
-	public void initialize(Random r) {
-		if(!random.equals(r)) {
-			random = r;
-			loaded = false;
-			load();
-		}
-	}
-
-	private void load() {
-		if(loaded) {
-			return;
-		}
+	protected List<SemanticTrajectory> load() {
 		try {
-			data = new ArrayList<>(new PatelDataReader(onlyStops, table, stopMoveTable).read());
+			return new ArrayList<>(new PatelDataReader(onlyStops, table, stopMoveTable).read());
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}
-		Collections.shuffle(data, new java.util.Random() {
-			@Override
-			public int nextInt(int bound) {
-				return random.nextInt(bound);
-			}
-			
-			@Override
-			public int nextInt() {
-				return random.nextInt();
-			}
-		});
-		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
-		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));
-		this.validatingData = data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1);
-		this.loaded = true;
-	}
-
-	@Override
-	public List<SemanticTrajectory> data() {
-		if(!loaded) {
-			load();
-		}
-		return data;
 	}
 
 	@Override
@@ -94,37 +51,9 @@ public class PatelProblem implements Problem {
 		return PatelDataReader.CLASS;
 	}
 	
-	public StopSemantic stopSemantic() {
-		return stopSemantic;
-	}
-
-	@Override
-	public List<SemanticTrajectory> trainingData() {
-		if(!loaded) {
-			load();
-		}
-		return trainingData;
-	}
-
-	@Override
-	public List<SemanticTrajectory> testingData() {
-		if(!loaded) {
-			load();
-		}
-		return testingData;
-	}
-
-	@Override
-	public List<SemanticTrajectory> validatingData() {
-		if(!loaded) {
-			load();
-		}
-		return validatingData;
-	}
-
 	@Override
 	public String shortDescripton() {
-		return "Patel's " + StringUtils.capitalize(table) + "[" + stopSemantic.name() + "][onlyStops=" + onlyStops + "]";
+		return "Patel's " + StringUtils.capitalize(table) + "[" + stopSemantic().name() + "][onlyStops=" + onlyStops + "]";
 	}
 
 }

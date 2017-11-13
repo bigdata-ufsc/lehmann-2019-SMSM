@@ -24,7 +24,7 @@ public class FastCBSMoT_SergipeTracks {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		FastCBSMoT fastCBSMoT = new FastCBSMoT(new LatLongDistanceFunction());
-		SergipeTracksProblem problem = new SergipeTracksProblem();
+		SergipeTracksProblem problem = new SergipeTracksProblem(null);
 		List<SemanticTrajectory> trajs = problem.data();
 		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.sergipe_tracks_stop", null, "geom");
 

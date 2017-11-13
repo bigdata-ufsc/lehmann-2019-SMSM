@@ -131,6 +131,11 @@ public class NElementProblem implements Problem {
 	public List<SemanticTrajectory> validatingData() {
 		return validating;
 	}
+	
+	@Override
+	public List<SemanticTrajectory> balancedData() {
+		return data();
+	}
 
 	@Override
 	public String shortDescripton() {

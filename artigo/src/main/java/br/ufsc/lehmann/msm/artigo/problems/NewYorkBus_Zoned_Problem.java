@@ -3,7 +3,6 @@ package br.ufsc.lehmann.msm.artigo.problems;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
@@ -14,14 +13,7 @@ import smile.math.Random;
 
 public class NewYorkBus_Zoned_Problem extends NewYorkBusProblem {
 	
-	private List<SemanticTrajectory> data;
-	private List<SemanticTrajectory> trainingData;
-	private List<SemanticTrajectory> testingData;
-	private List<SemanticTrajectory> validatingData;
-	private boolean loaded;
 	private String[] zones;
-	private Random random = new Random();
-	private StopSemantic stopSemantic;
 	private boolean onlyStops;
 	private boolean withDirection;
 	private StopMoveStrategy strategy;
@@ -43,28 +35,11 @@ public class NewYorkBus_Zoned_Problem extends NewYorkBusProblem {
 	}
 	
 	public NewYorkBus_Zoned_Problem(StopSemantic stopSemantic, StopMoveStrategy strategy, boolean onlyStops, boolean withDirection, String... zones) {
-		this.stopSemantic = stopSemantic;
+		super(stopSemantic);
 		this.strategy = strategy;
 		this.onlyStops = onlyStops;
 		this.withDirection = withDirection;
 		this.zones = zones;
-	}
-	
-	@Override
-	public void initialize(Random r) {
-		if(!random.equals(r)) {
-			random = r;
-			loaded = false;
-			load();
-		}
-	}
-
-	@Override
-	public List<SemanticTrajectory> data() {
-		if(!loaded) {
-			load();
-		}
-		return data;
 	}
 
 	@Override
@@ -74,46 +49,15 @@ public class NewYorkBus_Zoned_Problem extends NewYorkBusProblem {
 		}
 		return NewYorkBusDataReader.ROUTE;
 	}
-	
-	public StopSemantic stopSemantic() {
-		return stopSemantic;
-	}
-
-	@Override
-	public List<SemanticTrajectory> trainingData() {
-		if(!loaded) {
-			load();
-		}
-		return trainingData;
-	}
-
-	@Override
-	public List<SemanticTrajectory> testingData() {
-		if(!loaded) {
-			load();
-		}
-		return testingData;
-	}
-
-	@Override
-	public List<SemanticTrajectory> validatingData() {
-		if(!loaded) {
-			load();
-		}
-		return validatingData;
-	}
 
 	@Override
 	public String shortDescripton() {
-		return "New York bus " + (withDirection ? "Directed " : "") + (!org.apache.commons.lang3.ArrayUtils.isEmpty(zones)? "(zones=" + ArrayUtils.toString(zones) + ")" : "") + "[" + stopSemantic.name() + "][onlyStops=" + onlyStops + "]";
+		return "New York bus " + (withDirection ? "Directed " : "") + (!org.apache.commons.lang3.ArrayUtils.isEmpty(zones)? "(zones=" + ArrayUtils.toString(zones) + ")" : "") + "[" + stopSemantic().name() + "][onlyStops=" + onlyStops + "]";
 	}
 	
-	private void load() {
-		if(loaded) {
-			return;
-		}
+	protected List<SemanticTrajectory> load() {
 		try {
-			data = new ArrayList<>(new NewYorkBusDataReader(onlyStops, strategy).read(zones));
+			return new ArrayList<>(new NewYorkBusDataReader(onlyStops, strategy).read(zones));
 		} catch (IOException | ParseException e) {
 			throw new RuntimeException(e);
 		}
@@ -122,22 +66,6 @@ public class NewYorkBus_Zoned_Problem extends NewYorkBusProblem {
 //		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 //			throw new RuntimeException(e);
 //		}
-		Collections.shuffle(data, new java.util.Random() {
-			@Override
-			public int nextInt(int bound) {
-				return random.nextInt(bound);
-			}
-			
-			@Override
-			public int nextInt() {
-				return random.nextInt();
-			}
-		});
-//		data = data.subList(0, data.size() / 80);
-		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
-		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));
-		this.validatingData = data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1);
-		loaded = true;
 	}
 
 }
