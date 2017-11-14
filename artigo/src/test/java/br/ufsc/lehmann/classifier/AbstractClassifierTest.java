@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -41,6 +42,7 @@ import br.ufsc.lehmann.msm.artigo.classifiers.validation.Precision;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Recall;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Specificity;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Validation;
+import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import smile.math.Random;
 
 @RunWith(Parameterized.class)
@@ -57,6 +59,8 @@ public abstract class AbstractClassifierTest {
 	private static final Accuracy ACCURACY = new Accuracy();
 
 	private Problem problem;
+	private EnumProblem problemDescriptor;
+
 	private Multimap<ClassificationMeasure, String> measureFailures = MultimapBuilder.linkedHashKeys().linkedHashSetValues().build();
 
 	@Rule public TestName name = new TestName();
@@ -67,6 +71,7 @@ public abstract class AbstractClassifierTest {
     }
 	
 	public AbstractClassifierTest(EnumProblem problemDescriptor) {
+		this.problemDescriptor = problemDescriptor;
 		random = new Random(5);
 		problem = problemDescriptor.problem(random);
 	}
@@ -101,9 +106,9 @@ public abstract class AbstractClassifierTest {
 	public void validation_accuracy() throws Exception {
 //		List<SemanticTrajectory> data = problem.data();
 		List<SemanticTrajectory> data = problem.balancedData();
-		List<SemanticTrajectory> testingData = new ArrayList<>(problem.testingData());
-		List<SemanticTrajectory> trainingData = new ArrayList<>(problem.trainingData());
-		List<SemanticTrajectory> validatingData = new ArrayList<>(problem.validatingData());
+		List<SemanticTrajectory> trainingData = new ArrayList<>(data.subList(0, (int) (data.size() * (1.0 / 3))));
+		List<SemanticTrajectory> testingData = new ArrayList<>(data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3))));
+		List<SemanticTrajectory> validatingData = new ArrayList<>(data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1));
 		trainingData.addAll(testingData);
 		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
 		SemanticTrajectory[] trainData = trainingData.toArray(new SemanticTrajectory[trainingData.size()]);
