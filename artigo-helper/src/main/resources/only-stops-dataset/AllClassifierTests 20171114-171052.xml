@@ -1,20 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="AllClassifierTests" project="artigo" tests="36" started="36" failures="24" errors="0" ignored="0">
-  <testsuite name="br.ufsc.lehmann.classifier.AllClassifierTests" time="55164.086">
-    <testsuite name="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="1459.313">
-      <testsuite name="[New York bus(lines=2)]" time="201.011">
-        <testcase name="validation_accuracy[New York bus(lines=2)]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="101.335"/>
-        <testcase name="validation_precision_recall[New York bus(lines=2)]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="99.676"/>
-      </testsuite>
-      <testsuite name="[Patel's Animal]" time="3.318">
-        <testcase name="validation_accuracy[Patel's Animal]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="1.945">
-          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.696969696969697, Validating = 0.7763636363636364]
+<?xml version="1.0" encoding="UTF-8"?><testrun name="AllClassifierTests" project="artigo" tests="51" started="51" failures="27" errors="0" ignored="17">
+  <testsuite name="br.ufsc.lehmann.classifier.AllClassifierTests" time="7.232">
+    <testsuite name="br.ufsc.lehmann.classifier.MSMClassifierTest" time="1.351">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="1.351">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.MSMClassifierTest" time="0.389" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.MSMClassifierTest" time="0.481">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.5526315789473685, Validating = 0.4670289855072463]
 &#13;
 	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
@@ -49,26 +46,26 @@
 	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
 	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
 &#13;
 </failure>
         </testcase>
-        <testcase name="validation_precision_recall[Patel's Animal]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="1.373">
-          <failure>java.lang.AssertionError: Precision - [Testing = 0.6363636363636364]
-F-measure - [Testing = 0.7368421052631579, Validation = 0.5809523809523809]
-Specificity - [Testing = 0.5294117647058824]
-Fall-out - [Testing = 0.47058823529411764]
-False Discovery Rate - [Testing = 0.36363636363636365]
-Recall - [Validation = 0.44666666666666666]
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.MSMClassifierTest" time="0.374">
+          <failure>java.lang.AssertionError: Precision - [Testing = 0.6538461538461539, Validation = 0.6104273504273504]
+Recall - [Testing = 0.53125, Validation = 0.41609022556390973]
+F-measure - [Testing = 0.5862068965517242, Validation = 0.491347926267281]
+Specificity - [Testing = 0.7428571428571429, Validation = 0.7385440874914558]
+Fall-out - [Testing = 0.2571428571428571, Validation = 0.2614559125085441]
+False Discovery Rate - [Testing = 0.34615384615384615, Validation = 0.3895726495726496]
 &#13;
 	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
@@ -103,559 +100,26 @@ Recall - [Validation = 0.44666666666666666]
 	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
 	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
 &#13;
 </failure>
         </testcase>
-      </testsuite>
-      <testsuite name="[Patel's Hurricane_1vs4]" time="0.618">
-        <testcase name="validation_accuracy[Patel's Hurricane_1vs4]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="0.318">
-          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.463768115942029, Validating = 0.4238095238095238]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-        <testcase name="validation_precision_recall[Patel's Hurricane_1vs4]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="0.3">
-          <failure>java.lang.AssertionError: Precision - [Testing = 0.7142857142857143, Validation = 0.7726984126984127]
-Recall - [Testing = 0.32608695652173914, Validation = 0.21214799984961275]
-F-measure - [Testing = 0.4477611940298507, Validation = 0.3138020097954375]
-Specificity - [Testing = 0.7391304347826086]
-Fall-out - [Testing = 0.26086956521739135]
-False Discovery Rate - [Testing = 0.2857142857142857, Validation = 0.22730158730158728]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-      </testsuite>
-      <testsuite name="[Patel's Hurricane_2vs3]" time="0.365">
-        <testcase name="validation_accuracy[Patel's Hurricane_2vs3]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="0.185">
-          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.4772727272727273, Validating = 0.5333333333333333]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-        <testcase name="validation_precision_recall[Patel's Hurricane_2vs3]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="0.18">
-          <failure>java.lang.AssertionError: Precision - [Testing = 0.5625, Validation = 0.5474544948229159]
-Recall - [Testing = 0.36, Validation = 0.7783333333333333]
-F-measure - [Testing = 0.43902439024390244, Validation = 0.6286387966039129]
-Specificity - [Testing = 0.631578947368421, Validation = 0.24099821746880568]
-Fall-out - [Testing = 0.368421052631579, Validation = 0.7590017825311943]
-False Discovery Rate - [Testing = 0.4375, Validation = 0.4525455051770841]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-      </testsuite>
-      <testsuite name="[Patel's Hurricane_tsvs45]" time="1.061">
-        <testcase name="validation_accuracy[Patel's Hurricane_tsvs45]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="0.53">
-          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.7264957264957265, Validating = 0.6052509652509652]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-        <testcase name="validation_precision_recall[Patel's Hurricane_tsvs45]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="0.531">
-          <failure>java.lang.AssertionError: Recall - [Testing = 0.7032967032967034, Validation = 0.720408886465858]
-F-measure - [Testing = 0.7999999999999999, Validation = 0.7642406573723852]
-Specificity - [Validation = 0.5297368421052633]
-Fall-out - [Validation = 0.4702631578947368]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-      </testsuite>
-      <testsuite name="[Patel's Hurricane_12vs45]" time="1.357">
-        <testcase name="validation_accuracy[Patel's Hurricane_12vs45]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="0.704">
-          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.6020408163265306, Validating = 0.4536905412793876]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-        <testcase name="validation_precision_recall[Patel's Hurricane_12vs45]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="0.653">
-          <failure>java.lang.AssertionError: Precision - [Testing = 0.7833333333333333, Validation = 0.763026190754047]
-Recall - [Testing = 0.6438356164383562, Validation = 0.6206397325697433]
-F-measure - [Testing = 0.7067669172932332, Validation = 0.681523203876145]
-Specificity - [Testing = 0.48, Validation = 0.5178119658119658]
-Fall-out - [Testing = 0.52, Validation = 0.4821880341880342]
-False Discovery Rate - [Testing = 0.21666666666666667, Validation = 0.23697380924595302]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-      </testsuite>
-      <testsuite name="[San Francisco cab (Airport &lt;-&gt; Mall)]" time="17.745">
-        <testcase name="validation_accuracy[San Francisco cab (Airport &lt;-&gt; Mall)]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="8.868">
-          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.7988505747126436, Validating = 0.7566756513926325]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-        <testcase name="validation_precision_recall[San Francisco cab (Airport &lt;-&gt; Mall)]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="8.877">
-          <failure>java.lang.AssertionError: Recall - [Testing = 0.7425742574257426, Validation = 0.7766147075004585]
-Precision - [Validation = 0.6595067706684643]
-F-measure - [Validation = 0.710122688339474]
-Specificity - [Validation = 0.7566477225218445]
-Fall-out - [Validation = 0.24335227747815544]
-False Discovery Rate - [Validation = 0.3404932293315356]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-      </testsuite>
-      <testsuite name="[Patel's Vehicle_urban]" time="337.86">
-        <testcase name="validation_accuracy[Patel's Vehicle_urban]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="166.716"/>
-        <testcase name="validation_precision_recall[Patel's Vehicle_urban]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="171.144"/>
-      </testsuite>
-      <testsuite name="[Synthetic test problem(samples=50, classes=5)]" time="0.069">
-        <testcase name="validation_accuracy[Synthetic test problem(samples=50, classes=5)]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="0.048"/>
-        <testcase name="validation_precision_recall[Synthetic test problem(samples=50, classes=5)]" classname="br.ufsc.lehmann.classifier.MSMMoveDistanceClassifierTest" time="0.021"/>
       </testsuite>
     </testsuite>
-    <testsuite name="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="53704.773">
-      <testsuite name="[New York bus(lines=2)]" time="42949.505">
-        <testcase name="validation_accuracy[New York bus(lines=2)]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="22599.211"/>
-        <testcase name="validation_precision_recall[New York bus(lines=2)]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="20350.294"/>
-      </testsuite>
-      <testsuite name="[Patel's Animal]" time="2778.785">
-        <testcase name="validation_accuracy[Patel's Animal]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="1426.409">
-          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.696969696969697, Validating = 0.740909090909091]
+    <testsuite name="br.ufsc.lehmann.classifier.DTWClassifierTest" time="0.259">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.259">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.DTWClassifierTest" time="0.079" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.DTWClassifierTest" time="0.07">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.47368421052631576, Validating = 0.4916666666666667]
 &#13;
 	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
@@ -690,25 +154,26 @@ False Discovery Rate - [Validation = 0.3404932293315356]
 	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
 	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
 &#13;
 </failure>
         </testcase>
-        <testcase name="validation_precision_recall[Patel's Animal]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="1352.376">
-          <failure>java.lang.AssertionError: Precision - [Testing = 0.6363636363636364]
-F-measure - [Testing = 0.7368421052631579, Validation = 0.5738095238095238]
-Specificity - [Testing = 0.5294117647058824]
-Fall-out - [Testing = 0.47058823529411764]
-False Discovery Rate - [Testing = 0.36363636363636365]
-Recall - [Validation = 0.48500000000000004]
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.DTWClassifierTest" time="0.028">
+          <failure>java.lang.AssertionError: Precision - [Testing = 0.7045454545454546, Validation = 0.8]
+Specificity - [Testing = 0.6285714285714286]
+Fall-out - [Testing = 0.37142857142857144]
+False Discovery Rate - [Testing = 0.29545454545454547, Validation = 0.2]
+Recall - [Validation = 0.0]
+F-measure - [Validation = 0.0]
 &#13;
 	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
@@ -743,125 +208,26 @@ Recall - [Validation = 0.48500000000000004]
 	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
 	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-      </testsuite>
-      <testsuite name="[Patel's Hurricane_1vs4]" time="178.13">
-        <testcase name="validation_accuracy[Patel's Hurricane_1vs4]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="88.597">
-          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.463768115942029, Validating = 0.3142857142857143]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-        <testcase name="validation_precision_recall[Patel's Hurricane_1vs4]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="89.533">
-          <failure>java.lang.AssertionError: Precision - [Testing = 0.7142857142857143, Validation = 0.8]
-Recall - [Testing = 0.32608695652173914, Validation = 0.04074074074074074]
-F-measure - [Testing = 0.4477611940298507, Validation = 0.06379310344827586]
-Specificity - [Testing = 0.7391304347826086]
-Fall-out - [Testing = 0.26086956521739135]
-False Discovery Rate - [Testing = 0.2857142857142857, Validation = 0.2]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
 &#13;
 </failure>
         </testcase>
       </testsuite>
-      <testsuite name="[Patel's Hurricane_2vs3]" time="79.413">
-        <testcase name="validation_accuracy[Patel's Hurricane_2vs3]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="40.922">
-          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.4772727272727273, Validating = 0.4666666666666667]
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.EDRClassifierTest" time="0.378">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.378">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.EDRClassifierTest" time="0.085" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.EDRClassifierTest" time="0.103">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.47368421052631576, Validating = 0.388768115942029]
 &#13;
 	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
@@ -896,25 +262,26 @@ False Discovery Rate - [Testing = 0.2857142857142857, Validation = 0.2]
 	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
 	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
 &#13;
 </failure>
         </testcase>
-        <testcase name="validation_precision_recall[Patel's Hurricane_2vs3]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="38.491">
-          <failure>java.lang.AssertionError: Precision - [Testing = 0.5625, Validation = 0.5570424992963693]
-Recall - [Testing = 0.36]
-F-measure - [Testing = 0.43902439024390244, Validation = 0.6538700198772794]
-Specificity - [Testing = 0.631578947368421, Validation = 0.2296171802054155]
-Fall-out - [Testing = 0.368421052631579, Validation = 0.7703828197945845]
-False Discovery Rate - [Testing = 0.4375, Validation = 0.4429575007036307]
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.EDRClassifierTest" time="0.121">
+          <failure>java.lang.AssertionError: Precision - [Testing = 0.6578947368421053, Validation = 0.45999999999999996]
+Recall - [Testing = 0.78125, Validation = 0.10473684210526316]
+F-measure - [Testing = 0.7142857142857143, Validation = 0.14440279860069966]
+Specificity - [Testing = 0.6285714285714286]
+Fall-out - [Testing = 0.37142857142857144]
+False Discovery Rate - [Testing = 0.34210526315789475, Validation = 0.54]
 &#13;
 	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
@@ -949,123 +316,26 @@ False Discovery Rate - [Testing = 0.4375, Validation = 0.4429575007036307]
 	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
 	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-      </testsuite>
-      <testsuite name="[Patel's Hurricane_tsvs45]" time="249.479">
-        <testcase name="validation_accuracy[Patel's Hurricane_tsvs45]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="123.559">
-          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.7264957264957265, Validating = 0.68007722007722]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-        <testcase name="validation_precision_recall[Patel's Hurricane_tsvs45]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="125.919">
-          <failure>java.lang.AssertionError: Recall - [Testing = 0.7032967032967034, Validation = 0.7278543417366947]
-F-measure - [Testing = 0.7999999999999999, Validation = 0.7717221568033177]
-Specificity - [Validation = 0.5149373433583959]
-Fall-out - [Validation = 0.48506265664160403]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
 &#13;
 </failure>
         </testcase>
       </testsuite>
-      <testsuite name="[Patel's Hurricane_12vs45]" time="276.01">
-        <testcase name="validation_accuracy[Patel's Hurricane_12vs45]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="140.211">
-          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.6020408163265306, Validating = 0.5729360306178239]
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.ERPClassifierTest" time="0.199">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.199">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.ERPClassifierTest" time="0.064" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.ERPClassifierTest" time="0.043">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.47368421052631576, Validating = 0.4916666666666667]
 &#13;
 	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
@@ -1100,25 +370,26 @@ Fall-out - [Validation = 0.48506265664160403]
 	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
 	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
 &#13;
 </failure>
         </testcase>
-        <testcase name="validation_precision_recall[Patel's Hurricane_12vs45]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="135.799">
-          <failure>java.lang.AssertionError: Precision - [Testing = 0.7833333333333333]
-Recall - [Testing = 0.6438356164383562, Validation = 0.29112597547380153]
-F-measure - [Testing = 0.7067669172932332, Validation = 0.4039773763911695]
-Specificity - [Testing = 0.48]
-Fall-out - [Testing = 0.52]
-False Discovery Rate - [Testing = 0.21666666666666667]
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.ERPClassifierTest" time="0.026">
+          <failure>java.lang.AssertionError: Precision - [Testing = 0.7045454545454546, Validation = 0.8]
+Specificity - [Testing = 0.6285714285714286]
+Fall-out - [Testing = 0.37142857142857144]
+False Discovery Rate - [Testing = 0.29545454545454547, Validation = 0.2]
+Recall - [Validation = 0.0]
+F-measure - [Validation = 0.0]
 &#13;
 	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
@@ -1153,123 +424,1038 @@ False Discovery Rate - [Testing = 0.21666666666666667]
 	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
 	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-      </testsuite>
-      <testsuite name="[San Francisco cab (Airport &lt;-&gt; Mall)]" time="18.542">
-        <testcase name="validation_accuracy[San Francisco cab (Airport &lt;-&gt; Mall)]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="9.205">
-          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.7988505747126436, Validating = 0.7584725965858041]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
-&#13;
-</failure>
-        </testcase>
-        <testcase name="validation_precision_recall[San Francisco cab (Airport &lt;-&gt; Mall)]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="9.337">
-          <failure>java.lang.AssertionError: Recall - [Testing = 0.7425742574257426, Validation = 0.7745747868759534]
-Precision - [Validation = 0.6434271656191739]
-F-measure - [Validation = 0.7009930250860464]
-Specificity - [Validation = 0.7404176755447942]
-Fall-out - [Validation = 0.2595823244552058]
-False Discovery Rate - [Validation = 0.35657283438082604]
-&#13;
-	at org.junit.Assert.fail(Assert.java:88)&#13;
-	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:91)&#13;
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)&#13;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
-	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
-	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
-	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
-	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
 &#13;
 </failure>
         </testcase>
       </testsuite>
-      <testsuite name="[Patel's Vehicle_urban]" time="7174.852">
-        <testcase name="validation_accuracy[Patel's Vehicle_urban]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="3730.975"/>
-        <testcase name="validation_precision_recall[Patel's Vehicle_urban]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="3443.877"/>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.LCSSClassifierTest" time="0.264">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.264">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.LCSSClassifierTest" time="0.062" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.LCSSClassifierTest" time="0.071">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.5263157894736842, Validating = 0.41521739130434787]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.LCSSClassifierTest" time="0.066">
+          <failure>java.lang.AssertionError: Precision - [Testing = 0.6578947368421053, Validation = 0.5888888888888889]
+Recall - [Testing = 0.78125, Validation = 0.12282524493050809]
+F-measure - [Testing = 0.7142857142857143, Validation = 0.1838748208313426]
+Specificity - [Testing = 0.6285714285714286]
+Fall-out - [Testing = 0.37142857142857144]
+False Discovery Rate - [Testing = 0.34210526315789475, Validation = 0.4111111111111111]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
       </testsuite>
-      <testsuite name="[Synthetic test problem(samples=50, classes=5)]" time="0.055">
-        <testcase name="validation_accuracy[Synthetic test problem(samples=50, classes=5)]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="0.028"/>
-        <testcase name="validation_precision_recall[Synthetic test problem(samples=50, classes=5)]" classname="br.ufsc.lehmann.classifier.MSMMoveEllipsesClassifierTest" time="0.027"/>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.MSTPClassifierTest" time="0.319">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.319">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.MSTPClassifierTest" time="0.063" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.MSTPClassifierTest" time="0.109">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.23684210526315788, Validating = 0.2496376811594203]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.MSTPClassifierTest" time="0.069">
+          <failure>java.lang.AssertionError: Precision - [Testing = 0.47761194029850745]
+F-measure - [Testing = 0.6464646464646464, Validation = 0.0]
+Specificity - [Testing = 0.0]
+Fall-out - [Testing = 1.0]
+False Discovery Rate - [Testing = 0.5223880597014925]
+Recall - [Validation = 0.0]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.HCSSClassifierTest" time="0.324">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.324">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.HCSSClassifierTest" time="0.071" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.HCSSClassifierTest" time="0.151"/>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.HCSSClassifierTest" time="0.102"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.CVTIClassifierTest" time="0.354">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.354">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.CVTIClassifierTest" time="0.07" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.CVTIClassifierTest" time="0.092">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.23684210526315788, Validating = 0.24130434782608695]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.CVTIClassifierTest" time="0.124">
+          <failure>java.lang.AssertionError: Precision - [Testing = 0.46153846153846156, Validation = 0.55]
+F-measure - [Testing = 0.6185567010309277, Validation = 0.033566433566433566]
+Specificity - [Testing = 0.0]
+Fall-out - [Testing = 1.0]
+False Discovery Rate - [Testing = 0.5384615384615384, Validation = 0.45]
+Recall - [Validation = 0.019090909090909092]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.wDFClassifierTest" time="0.195">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.195">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.wDFClassifierTest" time="0.069" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.wDFClassifierTest" time="0.032">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.7894736842105263, Validating = 0.7847826086956522]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.wDFClassifierTest" time="0.0"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.SWALEClassifierTest" time="0.171">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.171">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SWALEClassifierTest" time="0.069" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SWALEClassifierTest" time="0.036">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.21052631578947367, Validating = 0.24130434782608695]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SWALEClassifierTest" time="0.019">
+          <failure>java.lang.AssertionError: Precision - [Testing = 0.46153846153846156, Validation = 0.4]
+F-measure - [Testing = 0.6185567010309277, Validation = 0.03636363636363636]
+Specificity - [Testing = 0.0]
+Fall-out - [Testing = 1.0]
+False Discovery Rate - [Testing = 0.5384615384615384, Validation = 0.6]
+Recall - [Validation = 0.02]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.LiuSchneiderClassifierTest" time="0.169">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.169">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.LiuSchneiderClassifierTest" time="0.045" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.LiuSchneiderClassifierTest" time="0.003">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.05263157894736842, Validating = 0.017391304347826087]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.LiuSchneiderClassifierTest" time="0.038">
+          <failure>java.lang.AssertionError: Precision - [Testing = 0.08333333333333333, Validation = 0.04205128205128205]
+Recall - [Testing = 0.0625, Validation = 0.029523809523809525]
+F-measure - [Testing = 0.07142857142857144, Validation = 0.034621848739495795]
+Specificity - [Testing = 0.37142857142857144, Validation = 0.4064547732968785]
+Fall-out - [Testing = 0.6285714285714286, Validation = 0.5935452267031215]
+False Discovery Rate - [Testing = 0.9166666666666666, Validation = 0.957948717948718]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.DTWaClassifierTest" time="0.768">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.768">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.DTWaClassifierTest" time="0.055" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.DTWaClassifierTest" time="0.302">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.7368421052631579]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.DTWaClassifierTest" time="0.349"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.H_MSM_StopMove_TemporalDurationClassifierTest" time="0.349">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.349">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_TemporalDurationClassifierTest" time="0.044" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_TemporalDurationClassifierTest" time="0.078">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.39473684210526316, Validating = 0.3721014492753623]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_TemporalDurationClassifierTest" time="0.182">
+          <failure>java.lang.AssertionError: Precision - [Testing = 0.6578947368421053, Validation = 0.6282539682539683]
+Recall - [Testing = 0.78125, Validation = 0.2708680792891319]
+F-measure - [Testing = 0.7142857142857143, Validation = 0.375572505605876]
+Specificity - [Testing = 0.6285714285714286]
+Fall-out - [Testing = 0.37142857142857144]
+False Discovery Rate - [Testing = 0.34210526315789475, Validation = 0.3717460317460317]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.H_MSM_StopMove_DistanceClassifierTest" time="0.225">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.225">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_DistanceClassifierTest" time="0.044" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_DistanceClassifierTest" time="0.058">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.5526315789473685, Validating = 0.44818840579710145]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_DistanceClassifierTest" time="0.077">
+          <failure>java.lang.AssertionError: Recall - [Validation = 0.7422328548644339]
+F-measure - [Validation = 0.7975585293125905]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.H_MSM_StopMove_AngleClassifierTest" time="0.647">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.647">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_AngleClassifierTest" time="0.042" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_AngleClassifierTest" time="0.158">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.42105263157894735, Validating = 0.3543478260869565]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_AngleClassifierTest" time="0.394">
+          <failure>java.lang.AssertionError: Precision - [Testing = 0.6904761904761905, Validation = 0.6666666666666666]
+F-measure - [Testing = 0.7837837837837837, Validation = 0.09112554112554114]
+Specificity - [Testing = 0.6285714285714286]
+Fall-out - [Testing = 0.37142857142857144]
+False Discovery Rate - [Testing = 0.30952380952380953, Validation = 0.3333333333333333]
+Recall - [Validation = 0.0505764411027569]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.H_MSM_StopMove_EllipsesClassifierTest" time="0.766">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.766">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_EllipsesClassifierTest" time="0.042" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_EllipsesClassifierTest" time="0.194"/>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_EllipsesClassifierTest" time="0.53"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.H_MSM_StopMove_PointsClassifierTest" time="0.494">
+      <testsuite name="[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" time="0.494">
+        <testcase name="testName[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_PointsClassifierTest" time="0.044" ignored="true"/>
+        <testcase name="validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_PointsClassifierTest" time="0.099">
+          <failure>java.lang.AssertionError: Accuracy - [Testing = 0.7368421052631579]
+&#13;
+	at org.junit.Assert.fail(Assert.java:88)&#13;
+	at br.ufsc.lehmann.classifier.AbstractClassifierTest.after(AbstractClassifierTest.java:100)&#13;
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.lang.reflect.Method.invoke(Method.java:498)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)&#13;
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)&#13;
+	at org.junit.rules.TestWatcher$1.evaluate(TestWatcher.java:55)&#13;
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)&#13;
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)&#13;
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:128)&#13;
+	at org.junit.runners.Suite.runChild(Suite.java:27)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+        </testcase>
+        <testcase name="validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.H_MSM_StopMove_PointsClassifierTest" time="0.26"/>
       </testsuite>
     </testsuite>
   </testsuite>

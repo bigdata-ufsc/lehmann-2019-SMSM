@@ -11,6 +11,16 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import smile.classification.KNN;
 
 public class KNNSmileTrainer<Label> implements ITrainer<Label> {
+	
+	private int k;
+
+	public KNNSmileTrainer() {
+		this(1);
+	}
+	
+	public KNNSmileTrainer(int k) {
+		this.k = k;
+	}
 
 	@Override
 	public IClassifier<Label> train(SemanticTrajectory[] trainx, Semantic<Label, ?> discriminator, IMeasureDistance<SemanticTrajectory> measure) {
@@ -29,7 +39,7 @@ public class KNNSmileTrainer<Label> implements ITrainer<Label> {
 			y[i] = uniqueLabels.indexOf(labels.get(i));
 		}
 		
-		KNN<SemanticTrajectory> knn = new KNN<>(trainx, y, new SmileDistanceWrapper<Label>(measure));
+		KNN<SemanticTrajectory> knn = new KNN<>(trainx, y, new SmileDistanceWrapper<Label>(measure), k);
 		return new KNNSmileClassifier<Label>(knn, uniqueLabels);
 	}
 }

@@ -166,7 +166,7 @@ public class Move {
 
 	@Override
 	public String toString() {
-		return "Move [moveId=" + moveId + ", startTime=" + startTime + ", endTime=" + endTime + ", start=" + start + ", end=" + end + ", begin="
-				+ begin + ", length=" + length + ", attributes=" + attributes + "]";
+		return String.format("Move (from '%s' to '%s') [moveId=" + moveId + ", startTime=" + startTime + ", endTime=" + endTime + ", start=" + start + ", end=" + end + ", begin="
+				+ begin + ", length=" + length + ", attributes=" + attributes + "]", this.start == null ? "" : this.start.getStopName(), this.end == null ? "" : this.end.getStopName());
 	}
 }

@@ -149,6 +149,7 @@ public class SanFranciscoCabDataReader {
 			@Override
 			public void readFields(Stop stop, CSVRecord data) {
 				stop.setRegion(data.get("POI"));
+				stop.setStopName(data.get("POI"));
 			}
 		}, StopMoveCSVReader.TIMESTAMP);
 

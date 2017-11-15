@@ -84,22 +84,20 @@ public abstract class AbstractProblem implements Problem {
 		}
 		int c = Integer.MAX_VALUE;
 		Map<Object, Collection<SemanticTrajectory>> asMap = classifiedTrajs.asMap();
+		
 		for (Map.Entry<Object, Collection<SemanticTrajectory>> entry: asMap.entrySet()) {
 			if(entry.getValue().size() < c) {
 				c = entry.getValue().size();
 			}
 		}
 		List<SemanticTrajectory> ret = new ArrayList<>(asMap.size() * c);
-		for (Map.Entry<Object, Collection<SemanticTrajectory>> entry: asMap.entrySet()) {
-			ret.addAll(entry.getValue().stream().collect(Collectors.collectingAndThen(
-			        Collectors.toList(),
-			        list -> {
-			            Collections.shuffle(list, AbstractProblem.this.random);
-			            return list;
-			        }
-			)).stream().limit(c).collect(Collectors.toList()));
+		for (Map.Entry<Object, Collection<SemanticTrajectory>> entry : asMap.entrySet()) {
+			ret.addAll(entry.getValue().stream().collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+				Collections.shuffle(list, AbstractProblem.this.random);
+				return list;
+			})).stream().limit(c).collect(Collectors.toList()));
 		}
-		
+		Collections.shuffle(ret, this.random);
 		return ret;
 	}
 

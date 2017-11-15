@@ -4,6 +4,7 @@ import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
+import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.lehmann.H_MSM_StopMove;
 import br.ufsc.lehmann.MoveSemantic;
@@ -33,6 +34,8 @@ public interface H_MSM_StopMove_EllipsesTest {
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		StopSemantic stopSemantic = null;
 		MoveSemantic moveSemantic = null;
+		Semantic<TPoint, Number> geoSemantic = Semantic.GEOGRAPHIC_LATLON;
+		double geoThreshold = Thresholds.STOP_CENTROID_LATLON;
 		if(problem instanceof NElementProblem) {
 			return new H_MSM_StopMove_Classifier(//
 						new H_MSM_StopMove.H_MSM_MoveSemanticParameters(NElementProblem.move_ellipses, new H_MSM_StopMove.H_MSM_DimensionParameters[] {
@@ -50,9 +53,13 @@ public interface H_MSM_StopMove_EllipsesTest {
 			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
 			moveSemantic = DublinBusDataReader.MOVE_ELLIPSES_SEMANTIC;
 		} else if(problem instanceof PatelProblem) {
+			geoThreshold = Thresholds.GEOGRAPHIC_EUCLIDEAN;
+			geoSemantic = Semantic.GEOGRAPHIC_EUCLIDEAN;
 			stopSemantic = ((PatelProblem) problem).stopSemantic();
 			moveSemantic = PatelDataReader.MOVE_ELLIPSES_SEMANTIC;
 		} else if(problem instanceof VehicleProblem) {
+			geoThreshold = Thresholds.GEOGRAPHIC_EUCLIDEAN;
+			geoSemantic = Semantic.GEOGRAPHIC_EUCLIDEAN;
 			stopSemantic = ((VehicleProblem) problem).stopSemantic();
 			moveSemantic = VehicleDataReader.MOVE_ELLIPSES_SEMANTIC;
 		} else if(problem instanceof SanFranciscoCabProblem) {
@@ -62,6 +69,8 @@ public interface H_MSM_StopMove_EllipsesTest {
 			stopSemantic = SergipeTracksDataReader.STOP_CENTROID_SEMANTIC;
 			moveSemantic = SergipeTracksDataReader.MOVE_ELLIPSES_SEMANTIC;
 		} else if(problem instanceof PrototypeProblem) {
+			geoThreshold = Thresholds.GEOGRAPHIC_EUCLIDEAN;
+			geoSemantic = Semantic.GEOGRAPHIC_EUCLIDEAN;
 			stopSemantic = PrototypeDataReader.STOP_SEMANTIC;
 			moveSemantic = PrototypeDataReader.MOVE_SEMANTIC;
 		} else if(problem instanceof PisaProblem) {
@@ -73,9 +82,8 @@ public interface H_MSM_StopMove_EllipsesTest {
 						new H_MSM_StopMove.H_MSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
 					}),
 				new H_MSM_StopMove.H_MSM_StopSemanticParameters(stopSemantic, new H_MSM_StopMove.H_MSM_DimensionParameters[] {
-						new H_MSM_StopMove.H_MSM_DimensionParameters<>(Semantic.GEOGRAPHIC_LATLON, AttributeType.STOP_GEOGRAPHIC, Thresholds.STOP_CENTROID_LATLON, 2.0/4.0),
-//						new H_MSM_StopMove.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/10.0),
-						new H_MSM_StopMove.H_MSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.STOP_CENTROID_LATLON, 1.0/2.0)
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_GEOGRAPHIC, geoThreshold, 1.0/2.0),
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 1.0/2.0)
 					})
 				);
 	}
