@@ -16,7 +16,7 @@ public interface Thresholds {
 	public static final int MOVE_DISTANCE = 150;
 	public static final int MOVE_INNERPOINTS_DISTANCE = 100;
 	public static final int MOVE_DURATION = 2 * 60 * 1000;//2 minutes
-	public static final double MOVE_INNER_POINTS_PERC = .75;
+	public static final double MOVE_INNER_POINTS_PERC = .9;
 	public static final double STOP_MOVE = .5;
 
 	public static Double calculateThreshold(StopSemantic semantic) {
