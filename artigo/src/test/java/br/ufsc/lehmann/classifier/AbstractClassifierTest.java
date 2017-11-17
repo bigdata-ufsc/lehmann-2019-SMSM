@@ -104,8 +104,8 @@ public abstract class AbstractClassifierTest {
 	
 	@Test
 	public void validation_accuracy() throws Exception {
-//		List<SemanticTrajectory> data = problem.data();
-		List<SemanticTrajectory> data = problem.balancedData();
+		List<SemanticTrajectory> data = problem.data();
+//		List<SemanticTrajectory> data = problem.balancedData();
 		List<SemanticTrajectory> trainingData = new ArrayList<>(data.subList(0, (int) (data.size() * (1.0 / 3))));
 		List<SemanticTrajectory> testingData = new ArrayList<>(data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3))));
 		List<SemanticTrajectory> validatingData = new ArrayList<>(data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1));

@@ -69,9 +69,9 @@ public abstract class AbstractCompactnessTest {
 		
 		trajs = trajs.stream()//
 //				.filter(t -> t.length() > 6)//
-				.filter(t -> Arrays.asList(
-						172186,614059
-						).contains(t.getTrajectoryId()))//
+//				.filter(t -> Arrays.asList(
+//							172186,614059
+//						).contains(t.getTrajectoryId()))//
 //				.filter(t -> Arrays.asList("mall to airport").contains(SanFranciscoCabDataReader.DIRECTION.getData(t, 0)))//
 //				.filter(t -> Arrays.asList("MTABC_7094061-YODD4-YO_D4-Saturday-10", "MTA NYCT_KB_D4-Saturday-106300_M100_332").contains(t.getTrajectoryId()))//
 				.sorted((o1, o2) -> ((Comparable) o1.getTrajectoryId()).compareTo(o2.getTrajectoryId()))//
