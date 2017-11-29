@@ -21,7 +21,7 @@ public interface DTWaTest {
 
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		if(problem instanceof NElementProblem) {
-			return new DTWaClassifier(problem, NElementProblem.dataSemantic, Semantic.GEOGRAPHIC/*, Semantic.TEMPORAL*/);
+			return new DTWaClassifier(problem, NElementProblem.dataSemantic, Semantic.GEOGRAPHIC_EUCLIDEAN/*, Semantic.TEMPORAL*/);
 		} else if(problem instanceof PatelProblem) {
 			return new DTWaClassifier(problem, ((PatelProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON/*, Semantic.TEMPORAL*/);
 		} else if(problem instanceof VehicleProblem) {
@@ -29,7 +29,7 @@ public interface DTWaTest {
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new DTWaClassifier(problem, ((NewYorkBusProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON/*, Semantic.TEMPORAL*/);
 		} else if(problem instanceof DublinBusProblem) {
-			return new DTWaClassifier(problem, ((DublinBusProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC/*, Semantic.TEMPORAL*/);
+			return new DTWaClassifier(problem, ((DublinBusProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_EUCLIDEAN/*, Semantic.TEMPORAL*/);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new DTWaClassifier(problem, ((SanFranciscoCabProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON/*, Semantic.TEMPORAL*/);
 		} else if(problem instanceof SergipeTracksProblem) {

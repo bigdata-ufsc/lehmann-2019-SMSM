@@ -79,11 +79,11 @@ public class StopToStopTrajectoryTransformer {
 	}
 	
 	private static void fromCSV() throws IOException {
-		String dataFile = "./datasets/sanfrancisco.smot.data.zip";
+		String dataFile = "./datasets/nyc.smot.data.zip";
 		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(StopToStopTrajectoryTransformer.class.getClassLoader().getResource(dataFile).getFile(), "UTF-8"));
-		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("taxi.sanfrancisco_taxicab_subset_cleaned.csv")));
-		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("gid", "tid", "taxi_id", "lat", "lon", "timestamp", "ocupation", "airport", "mall", "road", "direction", "intersection_101_280", "bayshore_fwy", "stop", "semantic_stop_id", "semantic_move_id", "route").withDelimiter(';'));
+		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("bus.nyc_20140927.csv")));
+		CSVFormat csvHeader = CSVFormat.EXCEL.withHeader("gid", "time", "vehicle_id", "route", "trip_id", "longitude", "latitude", "distance_along_trip", "infered_direction_id", "phase", "next_scheduled_stop_distance", "next_scheduled_stop_id", "POI", "semantic_stop_id", "semantic_move_id").withDelimiter(';');
+		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), csvHeader);
 		List<CSVRecord> csvRecords = pointsParser.getRecords();
 		Iterator<CSVRecord> pointsData = csvRecords.subList(1, csvRecords.size()).iterator();
 		String currentTid = null;
@@ -92,8 +92,8 @@ public class StopToStopTrajectoryTransformer {
 		Set<String> lastMoves = new LinkedHashSet<>();
 		while(pointsData.hasNext()) {
 			CSVRecord data = pointsData.next();
-			if(currentTid == null || !currentTid.equals(data.get("tid"))) {
-				currentTid = data.get("tid");
+			if(currentTid == null || !currentTid.equals(data.get("trip_id"))) {
+				currentTid = data.get("trip_id");
 				if(currentMoveId != null) {
 					gidsToRemove.addAll(lastMoves);
 					currentMoveId = null;
@@ -124,9 +124,8 @@ public class StopToStopTrajectoryTransformer {
 		System.out.println("gids to remove: " + gidsToRemove);
 		
 		File directory = Files.createTempDirectory("trajs").toFile();
-		File nycTrajs = new File(directory, "taxi.sanfrancisco_taxicab_subset_cleaned.csv");
-		CSVPrinter printer = new CSVPrinter(new FileWriter(nycTrajs),
-				CSVFormat.EXCEL.withHeader("gid", "tid", "taxi_id", "lat", "lon", "timestamp", "ocupation", "airport", "mall", "road", "direction", "intersection_101_280", "bayshore_fwy", "stop", "semantic_stop_id", "semantic_move_id", "route").withDelimiter(';'));
+		File nycTrajs = new File(directory, "bus.nyc_20140927.csv");
+		CSVPrinter printer = new CSVPrinter(new FileWriter(nycTrajs), csvHeader);
 		while(pointsData.hasNext()) {
 			CSVRecord data = pointsData.next();
 			if(!gidsToRemove.contains(data.get("gid"))) {

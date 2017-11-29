@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.ArrayUtils;
 
 import br.ufsc.core.trajectory.Semantic;
@@ -53,6 +54,14 @@ public class SanFranciscoCab_Regions_Problem extends SanFranciscoCabProblem {
 			return SanFranciscoCabDataReader.ROUTE;
 		}
 		return null;
+	}
+
+	public List<CSVRecord> rawData() {
+		try {
+			return new ArrayList<>(new SanFranciscoCabDataReader(onlyStop, strategy, roads, directions, regions).raw());
+		} catch (IOException | ParseException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
