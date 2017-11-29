@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.csv.CSVFormat;
@@ -29,53 +30,72 @@ import cc.mallet.util.IoUtils;
 public class StopToStopTrajectoryTransformer {
 
 	public static void main(String[] args) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
-		if(true) {
-			fromCSV();
-			return;
-		}
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.patel_vehicle_stop", null,
+//		if(true) {
+//			fromCSV();
+//			return;
+//		}
+		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.geolife_enriched_move", null,
 				null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
 		Connection conn = retriever.getConnection();
 		conn.setAutoCommit(false);
-		Statement statement = conn.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT infered_trip_id, gid, semantic_stop_id, semantic_move_id "+
-			  "from bus.nyc_20140927_zoned "+
-			  "order by infered_trip_id,time_received");
-		String currentTid = null;
-		Long currentStopId = null, currentMoveId = null;
-		Set<Long> gidsToRemove = new LinkedHashSet<>();
-		while(rs.next()) {
-			if(currentTid == null || !currentTid.equals(rs.getString("infered_trip_id"))) {
-				currentTid = rs.getString("infered_trip_id");
-				if(currentMoveId != null) {
-					gidsToRemove.add(rs.getLong("gid"));
+		while(true) {
+			Statement statement = conn.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT tid, gid, semantic_stop_id, semantic_move_id "+
+					"from geolife.geolife_enriched_transportation_means "+
+					"order by tid,timestamp,gid");
+			Integer currentTid = null;
+			Set<Long> gidsToRemove = new LinkedHashSet<>();
+			Long currentStopId = null, currentMoveId = null;
+			Set<Long> lastGids = new LinkedHashSet<>();
+			while(rs.next()) {
+				if(currentTid == null || !currentTid.equals(rs.getInt("tid"))) {
+					currentTid = rs.getInt("tid");
+					if(!lastGids.isEmpty()) {
+						gidsToRemove.addAll(lastGids);
+						lastGids.clear();
+					}
 					currentMoveId = null;
-				}
-				currentStopId = null;
-			}
-			Long stopId = rs.getLong("semantic_stop_id");
-			boolean isStop = !rs.wasNull();
-			Long moveId = rs.getLong("semantic_move_id");
-			boolean isMove = !rs.wasNull();
-			if(isStop) {
-				if(currentMoveId != null) {
-					currentMoveId = null;
-				}
-				currentStopId = stopId;
-			}
-			if(isMove) {
-				if(currentStopId == null) {
-					gidsToRemove.add(rs.getLong("gid"));
-				} else {
 					currentStopId = null;
-					currentMoveId = moveId;
 				}
+				Long stopId = rs.getLong("semantic_stop_id");
+				boolean isStop = !rs.wasNull();
+				Long moveId = rs.getLong("semantic_move_id");
+				boolean isMove = !rs.wasNull();
+				if(isStop) {
+					if(currentStopId == null) {
+						if(!lastGids.isEmpty()) {
+							gidsToRemove.addAll(lastGids);
+						}
+					}
+					currentStopId = stopId;
+					lastGids.clear();
+				}
+				if(isMove) {
+					long lastGid = rs.getLong("gid");
+					currentMoveId = moveId;
+					lastGids.add(lastGid);
+				}
+			}
+			if(!lastGids.isEmpty()) {
+				gidsToRemove.addAll(lastGids);
+			}
+			System.out.println(gidsToRemove.size());
+			if(gidsToRemove.isEmpty()) {
+				return;
+			}
+			int i = 0;
+			for (; i < gidsToRemove.size(); i+=100000) {
+				int min = Math.min(gidsToRemove.size() - i, 100000);
+				System.out.printf("Deleting %d rows\n", min);
+				List<Long> collect = gidsToRemove.stream().skip(i).limit(min).collect(Collectors.toList());
+				String string = collect.toString();
+				
+				conn.prepareStatement("delete from geolife.geolife_enriched_transportation_means where gid in (" + string.substring(1, string.length() - 1) + ")").execute();
+				conn.commit();
 			}
 		}
-		System.out.println("gid in (" + gidsToRemove + ")");
-		conn.commit();
 	}
 	
 	private static void fromCSV() throws IOException {

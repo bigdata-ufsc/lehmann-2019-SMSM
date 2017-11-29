@@ -12,43 +12,33 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
-import br.ufsc.lehmann.msm.artigo.problems.PisaDatabaseReader;
-import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeDatabaseReader;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
 
-public class SMoT_Pisa {
+public class SMoT_Geolife2_Limited {
 
 	private static DataSource source;
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		PisaProblem problem = new PisaProblem(false);
+		GeolifeProblem problem = new GeolifeProblem();
 		List<SemanticTrajectory> trajs = problem.data();
-		source = new DataSource("postgres", "postgres", "localhost", 5432, "pisa", DataSourceType.PGSQL, "stops_moves.pisa_stop", null, "geom");
+		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.geolife2_limited_stop", null, "geom");
 
-		// System.out.println(T.size());
 		long start = System.currentTimeMillis();
 		Connection conn = source.getRetriever().getConnection();
 
-		ResultSet lastStop = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.pisa_stop");
+		ResultSet lastStop = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.geolife2_limited_stop");
 		lastStop.next();
 		AtomicInteger sid = new AtomicInteger(lastStop.getInt(1));
-		ResultSet lastMove = conn.createStatement().executeQuery("select max(move_id) from stops_moves.pisa_move");
+		ResultSet lastMove = conn.createStatement().executeQuery("select max(move_id) from stops_moves.geolife2_limited_move");
 		lastMove.next();
 		AtomicInteger mid = new AtomicInteger(lastMove.getInt(1));
-		PreparedStatement update = conn.prepareStatement("update public.semanticpoint set semantic_stop_id = ?, semantic_move_id = ? where tid::text || '_' || dailytid::text = ? and gid in (SELECT * FROM unnest(?))");
-		PreparedStatement insertStop = conn.prepareStatement("insert into stops_moves.pisa_stop(stop_id, start_time, start_lat, start_lon, begin, end_time, end_lat, end_lon, length, centroid_lat, centroid_lon, place) values (?,?,?,?,?,?,?,?,?,?,?,?)");
-		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.pisa_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
-
-//		AtomicInteger sid = new AtomicInteger(0);
-//		AtomicInteger mid = new AtomicInteger(0);
+		PreparedStatement update = conn.prepareStatement("update public.geolife2_limited set semantic_stop_id = ?, semantic_move_id = ? where tid = ? and gid in (SELECT * FROM unnest(?))");
+		PreparedStatement insertStop = conn.prepareStatement("insert into stops_moves.geolife2_limited_stop(stop_id, start_time, start_lat, start_lon, begin, end_time, end_lat, end_lon, length, centroid_lat, centroid_lon, \"POI\") values (?,?,?,?,?,?,?,?,?,?,?,?)");
+		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.geolife2_limited_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
 		try {
 			conn.setAutoCommit(false);
-			FastSMoT<String, Number> fastSMoT = new FastSMoT(PisaDatabaseReader.IS_STOP, PisaDatabaseReader.PLACE, new FastSMoT.StopDetector<Number>() {
-
-				@Override
-				public boolean isStop(Number data) {
-					return data != null && data.equals(1);
-				}
-			}, 0);
+			FastSMoT<String, Number> fastSMoT = new FastSMoT<>(GeolifeDatabaseReader.REGION_INTEREST);
 			List<StopAndMove> bestSMoT = new ArrayList<>();
 			for (SemanticTrajectory T : trajs) {
 				bestSMoT.add(fastSMoT.findStops(T, sid, mid));
@@ -61,6 +51,7 @@ public class SMoT_Pisa {
 				}
 				
 			}, insertMove, bestSMoT);
+						
 		} finally {
 			update.close();
 			insertStop.close();

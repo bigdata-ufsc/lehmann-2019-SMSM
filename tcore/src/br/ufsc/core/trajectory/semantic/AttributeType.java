@@ -17,6 +17,9 @@ public enum AttributeType {
 	MOVE_DURATION((Move m) -> m.getDuration()),
 	MOVE_POINTS((Move m) -> {
 		Stop start = m.getStart();
+		if(start == null) {
+			System.out.println("Move sem start: " + m.getMoveId());
+		}
 		TPoint lastStartPoint = start.getEndPoint();
 		Stop end = m.getEnd();
 		TPoint lastEndPoint = end.getStartPoint();

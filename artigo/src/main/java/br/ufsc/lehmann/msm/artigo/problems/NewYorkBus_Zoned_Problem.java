@@ -1,7 +1,6 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.io.IOException;
-import java.text.ParseException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,16 +54,16 @@ public class NewYorkBus_Zoned_Problem extends NewYorkBusProblem {
 	}
 	
 	protected List<SemanticTrajectory> load() {
-		try {
-			return new ArrayList<>(new NewYorkBusDataReader(onlyStops, strategy).read(zones));
-		} catch (IOException | ParseException e) {
-			throw new RuntimeException(e);
-		}
 //		try {
-//			return new ArrayList<>(new NewYorkBus_Zoned_DatabaseReader(onlyStops).read(zones));
-//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+//			return new ArrayList<>(new NewYorkBusDataReader(onlyStops, strategy).read(zones));
+//		} catch (IOException | ParseException e) {
 //			throw new RuntimeException(e);
 //		}
+		try {
+			return new ArrayList<>(new NewYorkBus_Zoned_DatabaseReader(onlyStops).read(zones));
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
