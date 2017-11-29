@@ -103,4 +103,8 @@ public class NewYorkBusRecord {
 	public String getPOI() {
 		return POI;
 	}
+
+	public void setPOI(String pOI) {
+		POI = pOI;
+	}
 }

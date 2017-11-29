@@ -2,6 +2,7 @@ package br.ufsc.lehmann.msm.artigo.problems;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Timestamp;
@@ -18,9 +19,11 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -89,8 +92,12 @@ public class NewYorkBusDataReader {
 		this.onlyStops = onlyStops;
 		this.strategy = strategy;
 	}
-
+	
 	public List<SemanticTrajectory> read(String[] lines) throws IOException, ParseException {
+		return read(new CSVRegisterFilter("route", lines));
+	}
+
+	public List<SemanticTrajectory> read(CSVRegisterFilter filter) throws IOException, ParseException {
 		System.out.println("Reading file...");
 		String dataFile = "./datasets/nyc." + strategy.name().toLowerCase() + ".data.zip";
 		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource(dataFile).getFile(), "UTF-8"));
@@ -106,6 +113,7 @@ public class NewYorkBusDataReader {
 			@Override
 			public void readFields(Stop stop, CSVRecord data) {
 				stop.setRegion(data.get("POI"));
+				stop.setStopName((String) stop.getRegion());
 			}
 		}, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS");
 
@@ -125,9 +133,9 @@ public class NewYorkBusDataReader {
 		List<SemanticTrajectory> ret = null;
 		List<Move> usedMoves = new ArrayList<Move>();
 		if(onlyStops) {
-			ret = readStopsTrajectories(lines, pointsParser, stops, moves, usedMoves);
+			ret = readStopsTrajectories(filter, pointsParser, stops, moves, usedMoves);
 		} else {
-			ret = readRawPoints(lines, pointsParser, stops, moves);
+			ret = readRawPoints(filter, pointsParser, stops, moves);
 		}
 		compute(usedMoves);
 		zipFile.close();
@@ -179,13 +187,16 @@ public class NewYorkBusDataReader {
 		}
 	}
 
-	private List<SemanticTrajectory> readStopsTrajectories(String[] lines, CSVParser pointsParser, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws NumberFormatException, ParseException, IOException {
+	private List<SemanticTrajectory> readStopsTrajectories(CSVRegisterFilter filter, CSVParser pointsParser, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws NumberFormatException, ParseException, IOException {
 		List<CSVRecord> csvRecords = pointsParser.getRecords();
 		Iterator<CSVRecord> pointsData = csvRecords.subList(1, csvRecords.size()).iterator();
 		System.out.println("Fetching...");
 		Multimap<String, NewYorkBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		while(pointsData.hasNext()) {
 			CSVRecord data = pointsData.next();
+			if(filter != null && !filter.accept(data)) {
+				continue;
+			}
 			String stop = data.get("semantic_stop_id");
 			String move = data.get("semantic_move_id");
 			NewYorkBusRecord record = new NewYorkBusRecord(
@@ -201,6 +212,7 @@ public class NewYorkBusDataReader {
 				data.get("phase"),
 				Double.parseDouble(data.get("next_scheduled_stop_distance")),
 				data.get("next_scheduled_stop_id"),
+				data.get("POI"),
 				StringUtils.isEmpty(stop) ? null : Integer.parseInt(stop),
 				StringUtils.isEmpty(move) ? null : Integer.parseInt(move)
 			);
@@ -214,6 +226,9 @@ public class NewYorkBusDataReader {
 		for (String trajId : keys) {
 			SemanticTrajectory s = new SemanticTrajectory(trajId, 13);
 			Collection<NewYorkBusRecord> collection = records.get(trajId);
+			if(!filter.accept(collection)) {
+				continue;
+			}
 			int i = 0;
 			for (NewYorkBusRecord record : collection) {
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
@@ -284,7 +299,7 @@ public class NewYorkBusDataReader {
 		return ret;
 	}
 
-	private List<SemanticTrajectory> readRawPoints(String[] lines, CSVParser pointsParser, Map<Integer, Stop> stops,
+	private List<SemanticTrajectory> readRawPoints(CSVRegisterFilter filter, CSVParser pointsParser, Map<Integer, Stop> stops,
 			Map<Integer, Move> moves) throws IOException, NumberFormatException, ParseException {
 		List<CSVRecord> csvRecords = pointsParser.getRecords();
 		Iterator<CSVRecord> pointsData = csvRecords.subList(1, csvRecords.size()).iterator();
@@ -292,6 +307,9 @@ public class NewYorkBusDataReader {
 		Multimap<String, NewYorkBusRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		while(pointsData.hasNext()) {
 			CSVRecord data = pointsData.next();
+			if(filter != null && !filter.accept(data)) {
+				continue;
+			}
 			String stop = data.get("semantic_stop_id");
 			String move = data.get("semantic_move_id");
 			NewYorkBusRecord record = new NewYorkBusRecord(
@@ -307,6 +325,7 @@ public class NewYorkBusDataReader {
 				data.get("phase"),
 				Double.parseDouble(data.get("next_scheduled_stop_distance")),
 				data.get("next_scheduled_stop_id"),
+				data.get("POI"),
 				StringUtils.isEmpty(stop) ? null : Integer.parseInt(stop),
 				StringUtils.isEmpty(move) ? null : Integer.parseInt(move)
 			);
@@ -320,6 +339,9 @@ public class NewYorkBusDataReader {
 		for (String trajId : keys) {
 			SemanticTrajectory s = new SemanticTrajectory(trajId, 13);
 			Collection<NewYorkBusRecord> collection = records.get(trajId);
+			if(!filter.accept(collection)) {
+				continue;
+			}
 			int i = 0;
 			for (NewYorkBusRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
@@ -368,6 +390,60 @@ public class NewYorkBusDataReader {
 			}
 			move.setAttribute(AttributeType.MOVE_ANGLE, Angle.getAngle(points.get(0), points.get(points.size() - 1)));
 			move.setAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE, Distance.getDistance(points.toArray(new TPoint[points.size()]), new LatLongDistanceFunction()));
+		}
+	}
+	
+	public static class CSVRegisterFilter {
+		
+		private String field;
+		private String[] values;
+		private boolean allValues;
+		
+		public CSVRegisterFilter(String field, String[] values) {
+			this(field, values, true);
+		}
+
+		public CSVRegisterFilter(String field, String[] values, boolean allValues) {
+			this.allValues = allValues;
+			this.field = field;
+			this.values = values;
+			
+		}
+
+		public boolean accept(CSVRecord rec) {
+			if(rec.isMapped(field)) {
+				if(ArrayUtils.contains(values, rec.get(field))) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public boolean accept(Collection<NewYorkBusRecord> recs) {
+			List<String> untouchedValues = new ArrayList<>(Arrays.asList(values));
+			try {
+				PropertyUtilsBean bean = new PropertyUtilsBean();
+				for (NewYorkBusRecord rec : recs) {
+					if(!bean.isReadable(rec, field)) {
+						return false;
+					}
+					if(allValues) {
+						if(untouchedValues.contains(bean.getProperty(rec, field))) {
+							untouchedValues.remove(bean.getProperty(rec, field));
+						}
+						if(untouchedValues.isEmpty()) {
+							return true;
+						}
+					} else {
+						if(untouchedValues.contains(bean.getProperty(rec, field))) {
+							return true;
+						}
+					}
+				}
+			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+				throw new RuntimeException(e);
+			}
+			return false;
 		}
 	}
 }

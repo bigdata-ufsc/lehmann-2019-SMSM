@@ -54,6 +54,15 @@ public class NewYorkBus_Zoned_Problem extends NewYorkBusProblem {
 	}
 	
 	protected List<SemanticTrajectory> load() {
+<<<<<<< HEAD
+=======
+		NewYorkBusDataReader.CSVRegisterFilter filter = new NewYorkBusDataReader.CSVRegisterFilter("POI", zones);
+		try {
+			return new ArrayList<>(new NewYorkBusDataReader(onlyStops, strategy).read(filter));
+		} catch (IOException | ParseException e) {
+			throw new RuntimeException(e);
+		}
+>>>>>>> refs/remotes/origin/master
 //		try {
 //			return new ArrayList<>(new NewYorkBusDataReader(onlyStops, strategy).read(zones));
 //		} catch (IOException | ParseException e) {

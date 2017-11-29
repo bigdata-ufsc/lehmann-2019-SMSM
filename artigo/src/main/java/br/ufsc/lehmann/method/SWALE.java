@@ -3,6 +3,7 @@ package br.ufsc.lehmann.method;
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.related.LCSS;
 
@@ -17,7 +18,7 @@ public class SWALE extends TrajectorySimilarityCalculator<SemanticTrajectory> im
 	private LCSS lcss;
 
 	public SWALE(SWALEParameters params) {
-		this.lcss = new LCSS(new LCSS.LCSSSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, params.epsilon));
+		this.lcss = new LCSS(new LCSS.LCSSSemanticParameter<>(params.geoSemantic, params.epsilon));
 		this.penalty = params.penalty;
 		this.reward = params.reward;
 	}
@@ -42,12 +43,12 @@ public class SWALE extends TrajectorySimilarityCalculator<SemanticTrajectory> im
 	}
 	
 	public static class SWALEParameters {
+		public Semantic<TPoint, Number> geoSemantic;
 		private double epsilon = 0;
 		private double penalty = 0;
 		private double reward = 50;
-		public SWALEParameters() {
-		}
-		public SWALEParameters(double epsilon, double penalty, double reward) {
+		public SWALEParameters(Semantic<TPoint, Number> geoSemantic, double epsilon, double penalty, double reward) {
+			this.geoSemantic = geoSemantic;
 			this.epsilon = epsilon;
 			this.penalty = penalty;
 			this.reward = reward;

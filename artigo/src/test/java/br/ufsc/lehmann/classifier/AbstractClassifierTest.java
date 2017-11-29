@@ -104,8 +104,8 @@ public abstract class AbstractClassifierTest {
 	
 	@Test
 	public void validation_accuracy() throws Exception {
-		List<SemanticTrajectory> data = problem.data();
-//		List<SemanticTrajectory> data = problem.balancedData();
+//		List<SemanticTrajectory> data = problem.data();
+		List<SemanticTrajectory> data = problem.balancedData();
 		List<SemanticTrajectory> trainingData = new ArrayList<>(data.subList(0, (int) (data.size() * (1.0 / 3))));
 		List<SemanticTrajectory> testingData = new ArrayList<>(data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3))));
 		List<SemanticTrajectory> validatingData = new ArrayList<>(data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1));
@@ -200,15 +200,7 @@ public abstract class AbstractClassifierTest {
 			assertMeasure(FDR, "Validation = " + validationAccuracy[5], validationAccuracy[5] < .2);
 		}
 	}
-	
-	@Test
-	@Ignore
-	public void testName() throws Exception {
-		List<SemanticTrajectory> data = problem.data();
-		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		System.out.println(classifier.distance(data.get(0), data.get(1)));
-	}
-	
+
 	public void assertMeasure(ClassificationMeasure measure, double expected, double actual, double delta) {
 		if(expected != actual) {
 			measureFailures.put(measure, "Expected was " + expected + " but actual is " + actual);
