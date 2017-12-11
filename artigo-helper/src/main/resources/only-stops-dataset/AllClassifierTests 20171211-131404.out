@@ -1,0 +1,237 @@
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+MSMClassifierTest#validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+0.5625
+0.45999999999999996
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+MSMClassifierTest#validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+[0.5, 0.2857142857142857, 0.36363636363636365, 0.92, 0.07999999999999996, 0.5]
+[0.5563492063492064, 0.665, 0.5725829725829726, 0.8099999999999999, 0.19, 0.4436507936507937]
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+MSMClassifierTest#precisionAtRecall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+Precision@recall(25): {1.0,0.7983333333333333,0.6700357142857143,0.6189411307646602,0.5816133324879454,0.5736490116321172,0.5694373960046325,0.5552993268707631,0.5465151364795717,0.5438703043085699,0.5400925482410517,0.5380772218790327,0.5364125757344003,0.528583982291694,0.5256425868678393,0.5264852860821895,0.5237566086165895,0.5253716734686974,0.5184345320976153,0.5090200736230548,0.5053233260062505,0.48893890877492574,0.4671398395905008,0.45537373764306976,0.4250423800965487}
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+EDRClassifierTest#validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+0.53125
+0.43000000000000005
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+EDRClassifierTest#validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+[0.0, 0.0, 0.0, 0.96, 0.040000000000000036, 1.0]
+[0.49682539682539684, 0.525, 0.48571428571428577, 0.7966666666666666, 0.20333333333333337, 0.5031746031746032]
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+EDRClassifierTest#precisionAtRecall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+Precision@recall(25): {0.8183333333333332,0.6755476190476191,0.6117124542124542,0.5867959817959818,0.5750972638472639,0.5679699343484174,0.56185824927417,0.555526971242499,0.5532812885100659,0.5551491971547015,0.5527409169677148,0.5532149611368714,0.5415572269345179,0.5410734750150814,0.5408362723343582,0.540792553584481,0.5425390237925903,0.5433818185642195,0.5338054411936369,0.5308458443095673,0.5281798270017876,0.5268387778370213,0.523743220826934,0.5079517221533901,0.5106877804313215}
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+LCSSClassifierTest#validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+0.5
+0.44000000000000006
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+LCSSClassifierTest#validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+[0.0, 0.0, 0.0, 0.96, 0.040000000000000036, 1.0]
+[0.49682539682539684, 0.525, 0.48571428571428577, 0.7966666666666666, 0.20333333333333337, 0.5031746031746032]
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+LCSSClassifierTest#precisionAtRecall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+Precision@recall(25): {0.765,0.7141904761904762,0.6036309523809524,0.5908659673659673,0.5897601214145332,0.5801789436054142,0.5648028144026597,0.558575563291945,0.5555697243346979,0.5519872209879728,0.5520572295634762,0.5479082537068406,0.5477076053413817,0.5415093009363444,0.5359520066694125,0.5403095082225832,0.5381404545551153,0.541768014586,0.5398204183257195,0.532241027408566,0.5315631175467737,0.5240233827130059,0.5235568945370396,0.5224810988462013,0.5159484714856398}
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+MSTPClassifierTest#validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+0.3125
+0.27
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+MSTPClassifierTest#validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+[1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+[1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+MSTPClassifierTest#precisionAtRecall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+Precision@recall(25): {1.0,0.5445562770562771,0.4726190476190476,0.39625641025641023,0.330979171971819,0.3078296647266226,0.28750514919308023,0.28342309308270036,0.2793080044955045,0.26476262071944484,0.2594474559186105,0.26541560522245466,0.27596324157996877,0.2701204635296404,0.2643480177910325,0.2646310502275551,0.2703619703224353,0.27295525504534374,0.2597158027775016,0.2581907320031909,0.260289394554478,0.2565992874129944,0.25899801147010626,0.25846932637320813,0.25839011713889276}
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+CVTIClassifierTest#validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+0.3125
+0.25
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+CVTIClassifierTest#validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+[1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+[0.6, 0.0, 0.0, 0.9755555555555556, 0.024444444444444446, 0.4]
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+CVTIClassifierTest#precisionAtRecall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+Precision@recall(25): {1.0,0.5400324675324675,0.46870879120879116,0.39492291042291044,0.32969055046260926,0.3072002529619167,0.28699985770518005,0.2829759212946136,0.2790689619288757,0.26459455349255406,0.25931969749816913,0.26528271485700616,0.27582582086115265,0.2699963500544631,0.26423489561908675,0.264523306119811,0.2702515807120457,0.272856894389606,0.25968416774586656,0.2581598678056601,0.2602585394266496,0.2565677326224035,0.2589657985849522,0.2584412758823245,0.25839011713889276}
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+wDFClassifierTest#validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+0.71875
+0.72
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+wDFClassifierTest#validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+[0.75, 0.8571428571428571, 0.7999999999999999, 0.92, 0.07999999999999996, 0.25]
+[0.72, 0.7, 0.6487878787878787, 0.9022222222222223, 0.09777777777777777, 0.27999999999999997]
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+wDFClassifierTest#precisionAtRecall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+Precision@recall(25): {1.0,0.8736428571428572,0.811011931908671,0.7727352144587439,0.7541790072672425,0.7178640400019657,0.7161524085376791,0.7090841091067037,0.6942515591365604,0.6525486468486554,0.6348073544282444,0.6230332199063408,0.5831679242580172,0.5649331435666783,0.5524102364605195,0.5330984256708063,0.5162836312709197,0.5000117374123735,0.5015148224532903,0.5016347044143197,0.5031898907571012,0.5033374038272957,0.5006008628500096,0.5003446702061316,0.3891145887448088}
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+SWALEClassifierTest#validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+0.53125
+0.44000000000000006
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+SWALEClassifierTest#validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+[0.0, 0.0, 0.0, 0.92, 0.07999999999999996, 1.0]
+[0.49682539682539684, 0.525, 0.48571428571428577, 0.7966666666666666, 0.20333333333333337, 0.5031746031746032]
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+SWALEClassifierTest#precisionAtRecall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+Precision@recall(25): {0.8183333333333332,0.6788809523809524,0.6174267399267399,0.5925723165723166,0.5819758713508714,0.5752164378449208,0.5669848012754359,0.5608569695361996,0.5597641873222421,0.5657702371210697,0.5614155093146773,0.5572860789416589,0.54836663463659,0.5443166623032553,0.5405731298636599,0.539295981836599,0.5425610580981459,0.5453796936001841,0.5384093298164848,0.5304634772410428,0.5295576233562908,0.5229774846902845,0.5221102256397496,0.5208323736986196,0.5138525215956847}
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+DTWaClassifierTest#validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+0.75
+0.8300000000000001
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+DTWaClassifierTest#validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+[0.8571428571428571, 0.8571428571428571, 0.8571428571428571, 0.96, 0.040000000000000036, 0.14285714285714285]
+[0.6833333333333333, 0.74, 0.6575757575757575, 0.888888888888889, 0.11111111111111109, 0.3166666666666666]
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+DTWaClassifierTest#precisionAtRecall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+Precision@recall(25): {1.0,0.9030238095238096,0.8552726703121439,0.8409062049062049,0.8293672934934376,0.8171425179567595,0.8013174976438436,0.7868555524462376,0.7835768299453434,0.7697148775094756,0.7533284270244947,0.7347138167861935,0.7252822778453101,0.7142526552888561,0.7061162361512286,0.6853673397438219,0.647395837631526,0.6158599540774228,0.5939687764544501,0.5711304204648041,0.5486956345691274,0.5386774849169756,0.5275502889391712,0.5178032274941142,0.5137403814633893}
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+H_MSM_StopMove_EllipsesClassifierTest#validation_accuracy[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+1.0
+0.99
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+H_MSM_StopMove_EllipsesClassifierTest#validation_precision_recall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+[1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
+[1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
+Reading file...
+Fetching...
+Loaded 2510 GPS points from dataset
+Loaded 100 trajectories from dataset
+Loaded 100 trajectories (filtered)
+Semantic Trajectories statistics: mean - 7,15, min - 6,00, max - 11,00, sd - 0,69
+H_MSM_StopMove_EllipsesClassifierTest#precisionAtRecall[San Francisco cab (Directed Regions)[STOP_REGION][onlyStops=true]]
+Precision@recall(25): {1.0,1.0,0.9884999999999999,0.9733809523809523,0.9610569985569986,0.9542888471177945,0.9418088669500435,0.9370851436374656,0.9202076390956252,0.9151384209472445,0.9034203779896879,0.892800417198235,0.8827540924050549,0.8644010622283068,0.8575926773576664,0.8409566411335601,0.8262942988601973,0.7977292520917503,0.7741372776176989,0.7552382092479857,0.7307358650722219,0.6857997528679631,0.6374411480650053,0.5723630650886635,0.5510756864141055}

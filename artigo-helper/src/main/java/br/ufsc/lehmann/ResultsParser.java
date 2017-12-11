@@ -38,6 +38,7 @@ public class ResultsParser {
 	
 	private static final Pattern TEST_NAME_PATTERN = Pattern.compile("(.+)#(.+)\\[(.+)\\[(.+)\\]\\[(.+)\\](.+\\[.+\\].+)?\\]");
 	private static final Pattern MULTIPLE_MEASURES_PATTERN = Pattern.compile("\\[(\\d+\\.\\d+).*,.*(\\d+\\.\\d+).*,.*(\\d+\\.\\d+).*,.*(\\d+\\.\\d+).*,.*(\\d+\\.\\d+).*,.*(\\d+\\.\\d+)\\]");
+	private static final Pattern PRECISION_AT_RECALL_PATTERN = Pattern.compile("Precision@recall\\((\\d+)\\): \\{(.+)\\}");
     
     @Parameters(name="{0}")
     public static Collection<Path> data() throws IOException {
@@ -74,8 +75,14 @@ public class ResultsParser {
 						Experiment exp = testData.addTest(test, method, stopSemantic);
 						while((line = lineReader.readLine()) != null && line.startsWith("SLF4J")) {
 						}
-						exp.holdout = line;
-						exp.cv = lineReader.readLine();
+						Matcher m = PRECISION_AT_RECALL_PATTERN.matcher(line);
+						if(m.find()) {
+							exp.pr_level = Integer.parseInt(m.group(1));
+							exp.pr_curve = m.group(2);
+						} else {
+							exp.holdout = line;
+							exp.cv = lineReader.readLine();
+						}
 						datasets.put(dataset, testData);
 					}
 				}
@@ -86,27 +93,31 @@ public class ResultsParser {
 			Map.Entry<String, ExperimentData> entry = (Map.Entry<String, ExperimentData>) i.next();
 			ExperimentData data = entry.getValue();
 			for (Experiment exp : data.tests) {
-				Matcher matcher = MULTIPLE_MEASURES_PATTERN.matcher(exp.holdout);
-				if(matcher.find()) {
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "precision", "holdout", matcher.group(1));
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "recall", "holdout", matcher.group(2));
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "f-measure", "holdout", matcher.group(3));
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "specificity", "holdout", matcher.group(4));
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "fall-out", "holdout", matcher.group(5));
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "false-discovery-rate", "holdout", matcher.group(6));
-				} else {
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "accuracy", "holdout", exp.holdout);
+				if(exp.holdout != null) {
+					Matcher matcher = MULTIPLE_MEASURES_PATTERN.matcher(exp.holdout);
+					if(matcher.find()) {
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "precision", "holdout", matcher.group(1));
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "recall", "holdout", matcher.group(2));
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "f-measure", "holdout", matcher.group(3));
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "specificity", "holdout", matcher.group(4));
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "fall-out", "holdout", matcher.group(5));
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "false-discovery-rate", "holdout", matcher.group(6));
+					} else {
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "accuracy", "holdout", exp.holdout);
+					}
 				}
-				matcher = MULTIPLE_MEASURES_PATTERN.matcher(exp.cv);
-				if(matcher.find()) {
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "precision", "cross-validation", matcher.group(1));
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "recall", "cross-validation", matcher.group(2));
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "f-measure", "cross-validation", matcher.group(3));
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "specificity", "cross-validation", matcher.group(4));
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "fall-out", "cross-validation", matcher.group(5));
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "false-discovery-rate", "cross-validation", matcher.group(6));
-				} else {
-					csv.add(entry.getKey(), exp.stopSemantic, exp.method, "accuracy", "cross-validation", exp.cv);
+				if(exp.cv != null) {
+					Matcher matcher = MULTIPLE_MEASURES_PATTERN.matcher(exp.cv);
+					if(matcher.find()) {
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "precision", "cross-validation", matcher.group(1));
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "recall", "cross-validation", matcher.group(2));
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "f-measure", "cross-validation", matcher.group(3));
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "specificity", "cross-validation", matcher.group(4));
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "fall-out", "cross-validation", matcher.group(5));
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "false-discovery-rate", "cross-validation", matcher.group(6));
+					} else {
+						csv.add(entry.getKey(), exp.stopSemantic, exp.method, "accuracy", "cross-validation", exp.cv);
+					}
 				}
 			}
 		}
@@ -116,11 +127,64 @@ public class ResultsParser {
 		csv.printTo(printer);
 		printer.flush();
 		printer.close();
+
+		int bands = 0;
+		PrecisionRecallData pr = new PrecisionRecallData();
+		for (Iterator i = datasets.entrySet().iterator(); i.hasNext();) {
+			Map.Entry<String, ExperimentData> entry = (Map.Entry<String, ExperimentData>) i.next();
+			ExperimentData data = entry.getValue();
+			for (Experiment exp : data.tests) {
+				if(exp.pr_curve != null) {
+					bands = exp.pr_level;
+					pr.add(exp.method, entry.getKey(), exp.pr_level, exp.pr_curve);
+				}
+			}
+		}
+		
+		File prCurveOutput = new File(fileName.toFile().getAbsolutePath().toString().replaceFirst("\\.out", "-pr.csv"));
+		FileWriter prCurve = new FileWriter(prCurveOutput);
+		List<String> columns = new ArrayList<>(bands + 3);
+		columns.add("measure");
+		columns.add("dataset");
+		columns.add("0%");
+		for (int i = 0; i < bands; i++) {
+			columns.add(String.format("%.2f", ((i + 1) * (100.0 / bands))) + "%");
+		}
+		printer = new CSVPrinter(prCurve, CSVFormat.EXCEL.withDelimiter(';').withHeader(columns.toArray(new String[columns.size()])));
+		pr.printTo(printer);
+		printer.flush();
+		printer.close();
 	}
 
 	@Test
 	public void parseExecutionTime() throws Exception {
 		
+	}
+	
+	private static class PrecisionRecallData {
+
+		Multimap<String, CSVMeasureData> data = MultimapBuilder.hashKeys().arrayListValues().build();
+
+		public void add(String measure, String dataset, Integer recallLevel, String value) {
+			data.put(measure + "<&>" + dataset + "<&>" + recallLevel, new CSVMeasureData(String.valueOf(recallLevel), value));
+		}
+		public void printTo(CSVPrinter printer) {
+			data.asMap().forEach((String key, Collection<CSVMeasureData> measures) -> {
+				List<String> values = new ArrayList<>();
+				String[] split = key.split("<&>");
+				values.add(split[0]);
+				values.add(split[1]);
+				values.add(split[2]);
+				for (CSVMeasureData measureData : measures) {
+					values.add(measureData.value);
+				}
+				try {
+					printer.printRecord(values.toArray(new String[values.size()]));
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			});
+		}
 	}
 	
 	private static class CSVData {
@@ -177,6 +241,8 @@ public class ResultsParser {
 	
 	private static class Experiment {
 
+		private int pr_level;
+		private String pr_curve;
 		private String test;
 		private String method;
 		private String stopSemantic;
@@ -190,7 +256,7 @@ public class ResultsParser {
 		@Override
 		public String toString() {
 			return "Experiment [test=" + test + ", method=" + method + ", stopSemantic=" + stopSemantic + ", holdout="
-					+ holdout + ", cv=" + cv + "]";
+					+ holdout + ", cv=" + cv + ", p@r(" + pr_level + ")=]" + pr_curve;
 		}
 	}
 }

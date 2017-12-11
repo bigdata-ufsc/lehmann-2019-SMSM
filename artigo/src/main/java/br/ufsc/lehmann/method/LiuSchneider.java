@@ -25,9 +25,10 @@ public class LiuSchneider extends TrajectorySimilarityCalculator<SemanticTraject
 	
 	@Override
 	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
-		double geoDist = geoSimilarity(t1, t2);
-		double sem = sem(t1, t2);
-		return geoDist / (1 + semanticWeight * sem);
+		//		double geoDist = geoSimilarity(t1, t2);
+		//		double sem = sem(t1, t2);
+		//		return geoDist / (1 + semanticWeight * sem);
+		return 1 - getSimilarity(t1, t2);
 	}
 
 	@Override

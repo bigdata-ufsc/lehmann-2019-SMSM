@@ -1,7 +1,6 @@
 package br.ufsc.lehmann.method;
 
 import br.ufsc.core.IMeasureDistance;
-import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.Thresholds;
@@ -20,23 +19,23 @@ public interface SWALETest {
 
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		if(problem instanceof NElementProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Semantic.GEOGRAPHIC_EUCLIDEAN, 0.0, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(0.0, -10, 10));
 		} else if(problem instanceof NewYorkBusProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Semantic.GEOGRAPHIC_LATLON, Thresholds.STOP_CENTROID_LATLON, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_LATLON, -10, 10));
 		} else if(problem instanceof DublinBusProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Semantic.GEOGRAPHIC_LATLON, Thresholds.STOP_CENTROID_LATLON, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_LATLON, -10, 10));
 		} else if(problem instanceof PatelProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.STOP_CENTROID_EUCLIDEAN, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_EUCLIDEAN, -10, 10));
 		} else if(problem instanceof VehicleProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.STOP_CENTROID_EUCLIDEAN, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_EUCLIDEAN, -10, 10));
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Semantic.GEOGRAPHIC_LATLON, Thresholds.STOP_CENTROID_LATLON, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_LATLON, -10, 10));
 		} else if(problem instanceof SergipeTracksProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Semantic.GEOGRAPHIC_LATLON, Thresholds.STOP_CENTROID_LATLON, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_LATLON, -10, 10));
 		} else if(problem instanceof PrototypeProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.STOP_CENTROID_EUCLIDEAN, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_EUCLIDEAN, -10, 10));
 		} else if(problem instanceof PisaProblem) {
-			return new SWALEClassifier(new SWALE.SWALEParameters(Semantic.GEOGRAPHIC_LATLON, Thresholds.STOP_CENTROID_LATLON, -10, 10));
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_LATLON, -10, 10));
 		}
 		return null;
 	}

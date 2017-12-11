@@ -26,7 +26,7 @@ public enum EnumProblem {
 //	PATEL_HURRICANE_2vs3(new PatelProblem("hurricane_2vs3", "hurricane"), 2),//
 //	PATEL_HURRICANE_tsvs45(new PatelProblem("hurricane_tsvs45", "hurricane"), 2),//
 //	PATEL_HURRICANE_12vs45(new PatelProblem("hurricane_12vs45", "hurricane"), 2),//
-	TAXI_SANFRANCISCO_RAW_POINTS_DIRECTIONS_IN_ROADS_DEFINED_REGIONS(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "intersection_101_280", "bayshore_fwy", "airport"}, false), 4),//
+//	TAXI_SANFRANCISCO_RAW_POINTS_DIRECTIONS_IN_ROADS_DEFINED_REGIONS(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "intersection_101_280", "bayshore_fwy", "airport"}, false), 4),//
 //	TAXI_SANFRANCISCO_AIRPORT_MALL(new SanFranciscoCab_AirportMallRoad_Problem(new Integer[] {101, 280}, true, true), 2),//
 //	TAXI_SANFRANCISCO_AIRPORT_MALL_STREET_NAME(new SanFranciscoCab_AirportMallRoad_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, new Integer[] {101, 280}, true, true), 2),//
 //	TAXI_SANFRANCISCO(new SanFranciscoCabProblem(), 2),//
@@ -49,7 +49,7 @@ public enum EnumProblem {
 //	TAXI_SANFRANCISCO_AIRPORT_MALL_JUST_DIRECTION_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_AirportMallDirection_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new String[] {}, new String[] {"mall to airport", "airport to mall"}), 2),//
 //	TAXI_SANFRANCISCO_AIRPORT_MALL_DIRECTION_THROUGH_ROAD_ONLY_STOPS_STREET_NAME(new SanFranciscoCab_AirportMallDirection_Problem(SanFranciscoCabDataReader.STOP_STREET_NAME_SEMANTIC, true, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}), 4),//
 //	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_IN_ROADS(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}, new String[] {}, true), 4),//
-//	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_IN_ROADS_DEFINED_REGIONS(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "intersection_101_280", "bayshore_fwy", "airport"}, true), 4),//
+	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_IN_ROADS_DEFINED_REGIONS(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "intersection_101_280", "bayshore_fwy", "airport"}, true), 4),//
 //	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_ONLY_STOPS(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, null, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "airport"}, true), 4),//
 //	TAXI_SANFRANCISCO_REGIONS_ONLY_STOPS(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, null, new String[] {}, new String[] {"mall", "airport"}, true), 2),//
 //	VEHICLE_URBAN_ONLY_STOPS_STREET_NAME(new VehicleProblem(VehicleDataReader.STOP_STREET_NAME_SEMANTIC, true), 2),//

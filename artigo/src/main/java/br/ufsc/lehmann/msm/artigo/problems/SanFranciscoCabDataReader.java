@@ -358,34 +358,6 @@ public class SanFranciscoCabDataReader {
 		return records;
 	}
 
-	public List<CSVRecord> raw() throws IOException, ParseException {
-		System.out.println("Reading file...");
-		String filename = "./datasets/sanfrancisco." + strategy.name().toLowerCase() + ".data.zip";
-		ZipFile zipFile = new ZipFile(
-				java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource(filename).getFile(), "UTF-8"));
-		InputStreamReader rawPointsEntry = new InputStreamReader(
-				zipFile.getInputStream(zipFile.getEntry("taxi.sanfrancisco_taxicab_subset_cleaned.csv")));
-		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(),
-				CSVFormat.EXCEL.withHeader("gid", "tid", "taxi_id", "lat", "lon", "timestamp", "ocupation", "airport",
-						"mall", "road", "direction", "intersection_101_280", "bayshore_fwy", "stop", "semantic_stop_id",
-						"semantic_move_id", "route").withDelimiter(';'));
-
-		List<CSVRecord> ret = new ArrayList<>();
-		List<CSVRecord> csvRecords = pointsParser.getRecords();
-		Iterator<CSVRecord> pointsData = csvRecords.subList(1, csvRecords.size()).iterator();
-		Multimap<Integer, SanFranciscoCabRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
-		System.out.println("Fetching...");
-		while (pointsData.hasNext()) {
-			CSVRecord data = pointsData.next();
-			ret.add(data);
-		}
-		if (regions != null) {
-			records = filterRecordsByRegions(records, regions);
-		}
-		zipFile.close();
-		return ret;
-	}
-
 	private List<SemanticTrajectory> loadRawPoints(CSVParser pointsParser, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws NumberFormatException, ParseException, IOException {
 		List<CSVRecord> csvRecords = pointsParser.getRecords();
 		Iterator<CSVRecord> pointsData = csvRecords.subList(1, csvRecords.size()).iterator();
@@ -409,7 +381,7 @@ public class SanFranciscoCabDataReader {
 					Integer.parseInt(data.get("tid")),
 					Integer.parseInt(data.get("gid")),
 							Integer.parseInt(data.get("taxi_id")),
-				new Timestamp(DateUtils.parseDate(data.get("timestamp"), StopMoveCSVReader.TIMESTAMP).getTime()),
+				new Timestamp(DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP).getTime()),
 				Integer.parseInt(data.get("ocupation")),
 				Double.parseDouble(data.get("lon")),
 				Double.parseDouble(data.get("lat")),
@@ -419,8 +391,8 @@ public class SanFranciscoCabDataReader {
 				direction,
 				region,
 				route,
-				StringUtils.isEmpty(stop) ? null : Integer.parseInt(stop),
-				StringUtils.isEmpty(move) ? null : Integer.parseInt(move)
+				stop == null ? null : Integer.parseInt(stop),
+				move == null ? null : Integer.parseInt(move)
 			);
 			records.put(record.getTid(), record);
 		}

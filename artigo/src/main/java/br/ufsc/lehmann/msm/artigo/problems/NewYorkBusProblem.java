@@ -15,8 +15,6 @@ public class NewYorkBusProblem extends AbstractProblem {
 	
 	private String[] lines;
 	private boolean onlyStops;
-	private StopMoveStrategy strategy;
-	private boolean withDirection;
 	
 	public NewYorkBusProblem(String... lines) {
 		this(NewYorkBusDataReader.STOP_CENTROID_SEMANTIC, lines);
@@ -25,24 +23,15 @@ public class NewYorkBusProblem extends AbstractProblem {
 	public NewYorkBusProblem(StopSemantic stopSemantic, String... lines) {
 		this(stopSemantic, false, lines);
 	}
-
-	public NewYorkBusProblem(StopSemantic stopSemantic, boolean onlyStops, String... lines) {
-		this(stopSemantic, StopMoveStrategy.CBSMoT, onlyStops, false, lines);
-	}
 	
-	public NewYorkBusProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, boolean onlyStops, boolean withDirection, String... lines) {
+	public NewYorkBusProblem(StopSemantic stopSemantic, boolean onlyStops, String... lines) {
 		super(stopSemantic);
-		this.strategy = strategy;
 		this.onlyStops = onlyStops;
-		this.withDirection = withDirection;
 		this.lines = lines;
 	}
 	
 	@Override
 	public Semantic discriminator() {
-		if(withDirection) {
-			return NewYorkBusDataReader.ROUTE_WITH_DIRECTION;
-		}
 		return NewYorkBusDataReader.ROUTE;
 	}
 	
@@ -52,9 +41,8 @@ public class NewYorkBusProblem extends AbstractProblem {
 	}
 	
 	protected List<SemanticTrajectory> load() {
-		NewYorkBusDataReader.CSVRegisterFilter filter = new NewYorkBusDataReader.CSVRegisterFilter("route", lines, false);
 		try {
-			return new ArrayList<>(new NewYorkBusDataReader(onlyStops, strategy).read(filter));
+			return new ArrayList<>(new NewYorkBusDataReader(onlyStops).read(lines));
 		} catch (IOException | ParseException e) {
 			throw new RuntimeException(e);
 		}

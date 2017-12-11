@@ -54,14 +54,14 @@ public class LastsExperimentResults {
 		FileWriter out = new FileWriter(csvOutput);
 		CSVPrinter printer = new CSVPrinter(out, CSVFormat.EXCEL//
 				.withDelimiter(';')//
-				.withHeader("test-type", "dataset", "stop-semantic", "measure", "Accuracy", "Precision", "Recall", "F-Measure", "Specificity", "Fall-out", "FDR"));
+				.withHeader("dataset", "stop-semantic", "measure", "test-type", "Accuracy", "Precision", "Recall", "F-Measure", "Specificity", "Fall-out", "FDR"));
 		List<ExperimentDescriptor> orderedExperiments = data.keySet()//
 				.stream()//
-				.sorted(Comparator.comparing(ExperimentDescriptor::getTestType).thenComparing(ExperimentDescriptor::getDataset).thenComparing(ExperimentDescriptor::getStopSemantic).thenComparing(ExperimentDescriptor::getMeasure))//
+				.sorted(Comparator.comparing(ExperimentDescriptor::getDataset).thenComparing(ExperimentDescriptor::getStopSemantic).thenComparing(ExperimentDescriptor::getMeasure).thenComparing(ExperimentDescriptor::getTestType))//
 				.collect(Collectors.toList());
 		for (ExperimentDescriptor exp: orderedExperiments) {
 			printer.printRecord(//
-					exp.testType, exp.dataset, exp.stopSemantic, exp.measure, // 
+					exp.dataset, exp.stopSemantic, exp.measure, exp.testType,// 
 					data.get(exp)[0], data.get(exp)[1], data.get(exp)[2], data.get(exp)[3], data.get(exp)[4], data.get(exp)[5], data.get(exp)[6]);
 		}
 		printer.flush();

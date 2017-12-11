@@ -59,7 +59,7 @@ public abstract class AbstractCompactnessTest {
 	@Test
 	public void oneClassCompactness() throws Exception {
 		List<SemanticTrajectory> trajs = problem.data();
-		trajs = problem.balancedData();
+//		trajs = problem.balancedData();
 		
 		//
 		//459330,175302,347277,564396,525373 (a->m/101)
@@ -68,13 +68,12 @@ public abstract class AbstractCompactnessTest {
 		//431550,59000,801975,595185,983724 (m->a/280)
 		
 		trajs = trajs.stream()//
-				.filter(t -> t.length() > 2)//
+//				.filter(t -> t.length() > 6)//
 //				.filter(t -> Arrays.asList(
 //							172186,614059
 //						).contains(t.getTrajectoryId()))//
 //				.filter(t -> Arrays.asList("mall to airport").contains(SanFranciscoCabDataReader.DIRECTION.getData(t, 0)))//
-//				.filter(t -> Arrays.asList("MTA NYCT_MV_D4-Saturday-081100_M7_705", "MTA NYCT_MV_D4-Saturday-082100_M7_727").contains(t.getTrajectoryId()))//
-//				.filter(t -> Arrays.asList("MTA NYCT_X17", "MTA NYCT_X27").contains(NewYorkBusDataReader.ROUTE.getData(t, 0)))//
+//				.filter(t -> Arrays.asList("MTABC_7094061-YODD4-YO_D4-Saturday-10", "MTA NYCT_KB_D4-Saturday-106300_M100_332").contains(t.getTrajectoryId()))//
 				.sorted((o1, o2) -> ((Comparable) o1.getTrajectoryId()).compareTo(o2.getTrajectoryId()))//
 				.collect(Collectors.toList());
 		
@@ -99,32 +98,32 @@ public abstract class AbstractCompactnessTest {
 		for (int i = 0; i < trajsArray.length; i++) {
 			Object classData = semantic.getData(trajsArray[i], 0);
 			List<Map.Entry<SemanticTrajectory, Double>> rows = allDistances.row(trajsArray[i]).entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
-//			assertEquals(0.0, rows.get(0).getValue(), 0.0000001);
-			Object bestMatchClass = semantic.getData(rows.get(1).getKey(), 0);
+			assertEquals(0.0, rows.get(0).getValue(), 0.0000001);
+			Object bestMatchClass = problem.discriminator().getData(rows.get(1).getKey(), 0);
 			if(!Objects.equals(classData, bestMatchClass)) {
 				System.out.print(trajsArray[i].getTrajectoryId() + " -> " + classData + ": ");
-				System.out.printf("Best match: %s[%s](%.3f)\n", 
-						String.valueOf(rows.get(1).getKey().getTrajectoryId()),
+				System.out.printf("Best match: %d[%s](%.3f)\n", 
+						rows.get(1).getKey().getTrajectoryId(),
 						bestMatchClass.toString(),
 						rows.get(1).getValue());
 			}
 			
-//			boolean pureDistanceLine = true;
-//			int j = 1;
-//			for (; j < rows.size() || !pureDistanceLine; j++) {
-//				Object otherClassData = semantic.getData(rows.get(j).getKey(), 0);
-//				if(!Objects.equals(classData, otherClassData)) {
-//					pureDistanceLine = false;
-//					break;
-//				}
-//			}
-//			j++;
-//			for (; j < rows.size(); j++) {
-//				Object otherClassData = semantic.getData(rows.get(j).getKey(), 0);
-//				if(Objects.equals(classData, otherClassData)) {
-//					fail("Non pure distance vector");
-//				}
-//			}
+			boolean pureDistanceLine = true;
+			int j = 1;
+			for (; j < rows.size() || !pureDistanceLine; j++) {
+				Object otherClassData = semantic.getData(rows.get(j).getKey(), 0);
+				if(!Objects.equals(classData, otherClassData)) {
+					pureDistanceLine = false;
+					break;
+				}
+			}
+			j++;
+			for (; j < rows.size(); j++) {
+				Object otherClassData = semantic.getData(rows.get(j).getKey(), 0);
+				if(Objects.equals(classData, otherClassData)) {
+					//fail("Non pure distance vector");
+				}
+			}
 		}
 //		Multimap<Object, SemanticTrajectory> classifiedTrajectories = MultimapBuilder.linkedHashKeys().arrayListValues().build();
 //		for (SemanticTrajectory traj : trajs) {

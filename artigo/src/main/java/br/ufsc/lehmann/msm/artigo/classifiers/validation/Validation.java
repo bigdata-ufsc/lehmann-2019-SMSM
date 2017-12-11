@@ -16,11 +16,21 @@
 package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.google.common.collect.ArrayTable;
+import com.google.common.collect.Table;
+
 import br.ufsc.core.IMeasureDistance;
+import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.classifier.Binarizer;
 import br.ufsc.lehmann.msm.artigo.Problem;
@@ -48,6 +58,39 @@ public class Validation {
 		this.problem = problem;
 		this.measure = measure;
 		this.random = random;
+	}
+
+	public double[] precisionAtRecall(IMeasureDistance<SemanticTrajectory> measureDistance, SemanticTrajectory[] testData, int recallLevel) {
+		double[] ret = new double[recallLevel];
+		double[][] precisionRecall = new double[testData.length][recallLevel];
+		List<SemanticTrajectory> trajs = Arrays.asList(testData);
+		SemanticTrajectory[] trajsArray = trajs.toArray(new SemanticTrajectory[trajs.size()]);
+		Table<SemanticTrajectory, SemanticTrajectory, Double> allDistances = ArrayTable.create(trajs, trajs);
+		Semantic semantic = problem.discriminator();
+		for (int i = 0; i < trajsArray.length; i++) {
+			for (int j = i; j < trajsArray.length; j++) {
+				double distance = measureDistance.distance(trajsArray[i], trajsArray[j]);
+				allDistances.put(trajsArray[i], trajsArray[j], distance);
+				allDistances.put(trajsArray[j], trajsArray[i], distance);
+			}
+		}
+		for (int i = 0; i < trajsArray.length; i++) {
+			List<Map.Entry<SemanticTrajectory, Double>> rows = allDistances.row(trajsArray[i]).entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
+			Object classData = semantic.getData(trajsArray[i], 0);
+			int correctClass = 0;
+			for (int j = 0; correctClass < recallLevel && j < testData.length; j++) {
+				Entry<SemanticTrajectory, Double> entry = rows.get(j);
+				Object otherClassData = semantic.getData(entry.getKey(), 0);
+				if(Objects.equals(classData, otherClassData)) {
+					precisionRecall[i][correctClass++] = correctClass / (j + 1.0);
+				}
+			}
+		}
+		for (int i = 0; i < recallLevel; i++) {
+			final int finalI = i;
+			ret[i] = Arrays.stream(precisionRecall).mapToDouble(a -> a[finalI]).sum() / testData.length;
+		}
+		return ret;
 	}
 	
     /**

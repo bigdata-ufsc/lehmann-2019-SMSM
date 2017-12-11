@@ -80,7 +80,7 @@ public interface H_MSM_StopMove_TemporalDurationTest {
 		}
 		return new H_MSM_StopMove_Classifier(//
 				new H_MSM_StopMove.H_MSM_MoveSemanticParameters(moveSemantic, new H_MSM_StopMove.H_MSM_DimensionParameters[] {
-						new H_MSM_StopMove.H_MSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, null, 1)
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, Thresholds.MOVE_DURATION, 1)
 				}),
 				new H_MSM_StopMove.H_MSM_StopSemanticParameters(stopSemantic, new H_MSM_StopMove.H_MSM_DimensionParameters[] {
 						new H_MSM_StopMove.H_MSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_GEOGRAPHIC, geoThreshold, 1.0/3.0),
