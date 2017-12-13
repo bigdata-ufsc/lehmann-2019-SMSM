@@ -28,6 +28,8 @@ public enum AttributeType {
 		return ret;
 	}),
 	MOVE_STREET_NAME((Move m) -> m.getStreetName()),
+	MOVE_TRANSPORTATION_MODE((Move m) -> m.getTransportationMode()),
+	MOVE_ACTIVITY((Move m) -> m.getActivity()),
 	STOP((Stop s) -> s),
 	STOP_CENTROID((Stop s) -> s.getCentroid()),
 	STOP_STREET_NAME((Stop s) -> s.getStreetName()),

@@ -14,6 +14,7 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.EDRClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
@@ -58,6 +59,10 @@ public interface LCSSTest {
 			stopSemantic = PrototypeDataReader.STOP_SEMANTIC;
 		} else if(problem instanceof PisaProblem) {
 			stopSemantic = ((PisaProblem) problem).stopSemantic();
+		} else if(problem instanceof HermoupolisProblem) {
+			geoThreshold = Thresholds.GEOGRAPHIC_EUCLIDEAN;
+			geoSemantic = Semantic.GEOGRAPHIC_EUCLIDEAN;
+			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
 		}
 		return new LCSSClassifier(//
 				new LCSSSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//

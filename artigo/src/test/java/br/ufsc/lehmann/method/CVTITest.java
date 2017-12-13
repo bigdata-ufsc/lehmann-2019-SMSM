@@ -1,6 +1,7 @@
 package br.ufsc.lehmann.method;
 
 import br.ufsc.core.IMeasureDistance;
+import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.semantic.Stop;
@@ -9,6 +10,7 @@ import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.method.CVTI.CVTISemanticParameter;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
@@ -40,6 +42,8 @@ public interface CVTITest {
 			stopSemantic = PrototypeDataReader.STOP_SEMANTIC;
 		} else if(problem instanceof PisaProblem) {
 			stopSemantic = ((PisaProblem) problem).stopSemantic();
+		} else if(problem instanceof HermoupolisProblem) {
+			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
 		}
 		return new CVTI(new CVTISemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)));
 	}
