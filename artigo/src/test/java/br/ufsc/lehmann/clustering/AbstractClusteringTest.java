@@ -85,8 +85,7 @@ public abstract class AbstractClusteringTest {
 	@Test
 	public void simpleClusterizationBySimilarityMeasure() throws Exception {
 		HierarchicalClusteringDistanceBetweenTrajectoriesExecutor executor = new HierarchicalClusteringDistanceBetweenTrajectoriesExecutor(descriptor.numClasses());
-//		List<SemanticTrajectory> data = problem.data();
-		List<SemanticTrajectory> data = problem.balancedData();
+		List<SemanticTrajectory> data = problem.data();
 		IMeasureDistance<SemanticTrajectory> measurer = measurer(problem);
 		SemanticTrajectory[] training = data.toArray(new SemanticTrajectory[data.size()]);
 		double[][] distances = new double[training.length][training.length];

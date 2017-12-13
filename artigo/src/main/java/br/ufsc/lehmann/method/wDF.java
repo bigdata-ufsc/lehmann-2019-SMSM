@@ -11,15 +11,9 @@ import br.ufsc.core.trajectory.TPoint;
  */
 public class wDF implements IMeasureDistance<SemanticTrajectory> {
     private int w;
-    private Semantic<TPoint, Number> geoSemantic;
-
+    
     public wDF(int w) {
-    	this(w, Semantic.GEOGRAPHIC_EUCLIDEAN);
-    }
-
-    public wDF(int w, Semantic<TPoint, Number> geoSemantic) {
 		this.w = w;
-		this.geoSemantic = geoSemantic;
     }
 
     @Override
@@ -41,27 +35,25 @@ public class wDF implements IMeasureDistance<SemanticTrajectory> {
             return DF[i][j];
         } else if (Math.abs(i - j) > w) {
             DF[i][j] = Double.POSITIVE_INFINITY;
-        } else {
-			if (i > 0 && j > 0) {
-				TPoint p1 = geoSemantic.getData(R, i);
-				TPoint p2 = geoSemantic.getData(S, j);
-				DF[i][j] = Math.max(
-						Math.min(computeWDF(R, S, DF, i - 1, j), Math.min(computeWDF(R, S, DF, i - 1, j - 1), computeWDF(R, S, DF, i, j - 1))),
-						geoSemantic.distance(p1, p2));
-			} else if (i > 0 && j == 0) {
-				TPoint p1 = geoSemantic.getData(R, i);
-				TPoint p2 = geoSemantic.getData(S, 0);
-			    DF[i][j] = Math.max(computeWDF(R, S, DF, i - 1, 0), geoSemantic.distance(p1, p2));
-			} else if (i == 0 && j > 0) {
-				TPoint p1 = geoSemantic.getData(R, 0);
-				TPoint p2 = geoSemantic.getData(S, j);
-			    DF[i][j] = Math.max(computeWDF(R, S, DF, 0, j - 1), geoSemantic.distance(p1, p2));
-			} else if (i == 0 && j == 0) {
-				TPoint p1 = geoSemantic.getData(R, 0);
-				TPoint p2 = geoSemantic.getData(S, 0);
-				DF[i][j] = geoSemantic.distance(p1, p2);
-			}
-		}
+        } else if (i > 0 && j > 0) {
+        	TPoint p1 = Semantic.GEOGRAPHIC_EUCLIDEAN.getData(R, i);
+        	TPoint p2 = Semantic.GEOGRAPHIC_EUCLIDEAN.getData(S, j);
+        	DF[i][j] = Math.max(
+        			Math.min(computeWDF(R, S, DF, i - 1, j), Math.min(computeWDF(R, S, DF, i - 1, j - 1), computeWDF(R, S, DF, i, j - 1))),
+        			Semantic.GEOGRAPHIC_EUCLIDEAN.distance(p1, p2));
+        } else if (i > 0 && j == 0) {
+        	TPoint p1 = Semantic.GEOGRAPHIC_EUCLIDEAN.getData(R, i);
+        	TPoint p2 = Semantic.GEOGRAPHIC_EUCLIDEAN.getData(S, 0);
+            DF[i][j] = Math.max(computeWDF(R, S, DF, i - 1, 0), Semantic.GEOGRAPHIC_EUCLIDEAN.distance(p1, p2));
+        } else if (i == 0 && j > 0) {
+        	TPoint p1 = Semantic.GEOGRAPHIC_EUCLIDEAN.getData(R, 0);
+        	TPoint p2 = Semantic.GEOGRAPHIC_EUCLIDEAN.getData(S, j);
+            DF[i][j] = Math.max(computeWDF(R, S, DF, 0, j - 1), Semantic.GEOGRAPHIC_EUCLIDEAN.distance(p1, p2));
+        } else if (i == 0 && j == 0) {
+        	TPoint p1 = Semantic.GEOGRAPHIC_EUCLIDEAN.getData(R, 0);
+        	TPoint p2 = Semantic.GEOGRAPHIC_EUCLIDEAN.getData(S, 0);
+        	DF[i][j] = Semantic.GEOGRAPHIC_EUCLIDEAN.distance(p1, p2);
+        }
         return DF[i][j];
     }
     

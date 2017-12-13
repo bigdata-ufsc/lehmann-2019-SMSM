@@ -3,6 +3,7 @@ package br.ufsc.lehmann.classifier;
 import static org.junit.Assert.*;
 
 import java.io.StringWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -104,8 +106,8 @@ public abstract class AbstractClassifierTest {
 	
 	@Test
 	public void validation_accuracy() throws Exception {
-//		List<SemanticTrajectory> data = problem.data();
-		List<SemanticTrajectory> data = problem.balancedData();
+		List<SemanticTrajectory> data = problem.data();
+//		List<SemanticTrajectory> data = problem.balancedData();
 		List<SemanticTrajectory> trainingData = new ArrayList<>(data.subList(0, (int) (data.size() * (1.0 / 3))));
 		List<SemanticTrajectory> testingData = new ArrayList<>(data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3))));
 		List<SemanticTrajectory> validatingData = new ArrayList<>(data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1));
@@ -200,7 +202,27 @@ public abstract class AbstractClassifierTest {
 			assertMeasure(FDR, "Validation = " + validationAccuracy[5], validationAccuracy[5] < .2);
 		}
 	}
+	
+	@Test
+	public void precisionAtRecall() {
+		List<SemanticTrajectory> data = problem.balancedData();
+		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
+		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
+		Validation validation = new Validation(problem, classifier, random);
 
+		double[] precisionAtRecall = validation.precisionAtRecall(classifier, allData, data.size() / problemDescriptor.numClasses());
+		System.out.printf("Precision@recall(%d): %s\n", data.size() / problemDescriptor.numClasses(), ArrayUtils.toString(precisionAtRecall, "0.0"));
+		
+	}
+	
+	@Test
+	@Ignore
+	public void testName() throws Exception {
+		List<SemanticTrajectory> data = problem.data();
+		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
+		System.out.println(classifier.distance(data.get(0), data.get(1)));
+	}
+	
 	public void assertMeasure(ClassificationMeasure measure, double expected, double actual, double delta) {
 		if(expected != actual) {
 			measureFailures.put(measure, "Expected was " + expected + " but actual is " + actual);
