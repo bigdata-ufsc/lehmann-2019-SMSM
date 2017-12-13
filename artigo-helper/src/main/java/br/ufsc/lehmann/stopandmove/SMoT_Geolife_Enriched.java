@@ -28,18 +28,18 @@ public class SMoT_Geolife_Enriched {
 		long start = System.currentTimeMillis();
 		Connection conn = source.getRetriever().getConnection();
 
-		ResultSet lastStop = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.geolife_enriched_stop");
+		ResultSet lastStop = conn.createStatement().executeQuery("select max(stop_id) from stops_moves.geolife_with_pois_stop");
 		lastStop.next();
 		AtomicInteger sid = new AtomicInteger(lastStop.getInt(1));
-		ResultSet lastMove = conn.createStatement().executeQuery("select max(move_id) from stops_moves.geolife_enriched_move");
+		ResultSet lastMove = conn.createStatement().executeQuery("select max(move_id) from stops_moves.geolife_with_pois_move");
 		lastMove.next();
 		AtomicInteger mid = new AtomicInteger(lastMove.getInt(1));
-		PreparedStatement update = conn.prepareStatement("update geolife.geolife_enriched_transportation_means set semantic_stop_id = ?, semantic_move_id = ? where tid = ? and gid in (SELECT * FROM unnest(?))");
-		PreparedStatement insertStop = conn.prepareStatement("insert into stops_moves.geolife_enriched_stop(stop_id, start_time, start_lat, start_lon, begin, end_time, end_lat, end_lon, length, centroid_lat, centroid_lon, \"POI\") values (?,?,?,?,?,?,?,?,?,?,?,?)");
-		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.geolife_enriched_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
+		PreparedStatement update = conn.prepareStatement("update geolife.geolife_with_pois set semantic_stop_id = ?, semantic_move_id = ? where tid = ? and gid in (SELECT * FROM unnest(?))");
+		PreparedStatement insertStop = conn.prepareStatement("insert into stops_moves.geolife_with_pois_stop(stop_id, start_time, start_lat, start_lon, begin, end_time, end_lat, end_lon, length, centroid_lat, centroid_lon, \"POI\") values (?,?,?,?,?,?,?,?,?,?,?,?)");
+		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.geolife_with_pois_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
 		try {
 			conn.setAutoCommit(false);
-			FastSMoT<String, Number> fastSMoT = new FastSMoT<>(GeolifeDatabaseReader.REGION_INTEREST, 5 * 60 * 1000);
+			FastSMoT<String, Number> fastSMoT = new FastSMoT<>(GeolifeDatabaseReader.REGION_INTEREST);
 			List<StopAndMove> bestSMoT = new ArrayList<>();
 			for (SemanticTrajectory T : trajs) {
 				bestSMoT.add(fastSMoT.findStops(T, sid, mid));

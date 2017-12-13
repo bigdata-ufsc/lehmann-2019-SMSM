@@ -90,6 +90,10 @@ public class GeolifeDatabaseReader {
 
 		String stopTable = this.withTransportation ? "stops_moves.geolife_enriched_stop" : "stops_moves.geolife2_limited_stop";
 		String moveTable = this.withTransportation ? "stops_moves.geolife_enriched_move" : "stops_moves.geolife2_limited_move";
+		//
+		stopTable = "stops_moves.geolife_with_pois_stop";
+		moveTable = "stops_moves.geolife_with_pois_move";
+		//
 		ResultSet stopsData = st.executeQuery(
 				"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
 						"centroid_lon, start_time, end_time, street, \"POI\" " + //
@@ -160,6 +164,10 @@ public class GeolifeDatabaseReader {
 		System.out.println("Executing SQL...");
 		String stopTable = this.withTransportation ? "stops_moves.geolife_enriched_stop" : "stops_moves.geolife2_limited_stop";
 		String pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
+		//
+		stopTable = "stops_moves.geolife_with_pois_stop";
+		pointsTable = "geolife.geolife_with_pois";
+		//
 		Connection conn = retriever.getConnection();
 		conn.setAutoCommit(false);
 
@@ -200,7 +208,11 @@ public class GeolifeDatabaseReader {
 	private List<SemanticTrajectory> readStopsTrajectories(String[] zones, Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws SQLException {
 		String transportationColumn = this.withTransportation ? "mode" : "transportation_mean";
 		String pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
-		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, " + transportationColumn + ", \"POI\", semantic_stop_id, semantic_move_id "
+		//
+		transportationColumn = "'NONE'";
+		pointsTable = "geolife.geolife_with_pois";
+		//
+		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, " + transportationColumn + " as transporationMode, \"POI\", semantic_stop_id, semantic_move_id "
 		+ "from " + pointsTable//
 		+ " where 1=1 ";//
 		if(zones != null && zones.length > 0) {
@@ -231,7 +243,7 @@ public class GeolifeDatabaseReader {
 				data.getDouble("lon"),
 				data.getDouble("lat"),
 				data.getInt("user_id"),
-				data.getString(transportationColumn),
+				data.getString("transporationMode"),
 				data.getString("POI"),
 				stop,
 				move
@@ -320,7 +332,11 @@ public class GeolifeDatabaseReader {
 			Map<Integer, Move> moves) throws SQLException {
 		String pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
 		String transportationColumn = this.withTransportation ? "mode" : "transportation_mean";
-		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, " + transportationColumn  + ", \"POI\", semantic_stop_id, semantic_move_id "
+		//
+		transportationColumn = "'NONE'";
+		pointsTable = "geolife.geolife_with_pois";
+		//
+		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, " + transportationColumn  + " as transportationMode, \"POI\", semantic_stop_id, semantic_move_id "
 				+ "from " + pointsTable//
 				+ " where 1=1 ";//
 		if(zones != null && zones.length > 0) {
@@ -351,7 +367,7 @@ public class GeolifeDatabaseReader {
 				data.getDouble("lon"),
 				data.getDouble("lat"),
 				data.getInt("user_id"),
-				data.getString(transportationColumn),
+				data.getString("transportationMode"),
 				data.getString("POI"),
 				stop,
 				move

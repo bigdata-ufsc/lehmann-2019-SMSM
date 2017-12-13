@@ -1,6 +1,7 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.sql.SQLException;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,25 +55,17 @@ public class NewYorkBus_Zoned_Problem extends NewYorkBusProblem {
 	}
 	
 	protected List<SemanticTrajectory> load() {
-<<<<<<< HEAD
-=======
 		NewYorkBusDataReader.CSVRegisterFilter filter = new NewYorkBusDataReader.CSVRegisterFilter("POI", zones);
 		try {
 			return new ArrayList<>(new NewYorkBusDataReader(onlyStops, strategy).read(filter));
 		} catch (IOException | ParseException e) {
 			throw new RuntimeException(e);
 		}
->>>>>>> refs/remotes/origin/master
 //		try {
-//			return new ArrayList<>(new NewYorkBusDataReader(onlyStops, strategy).read(zones));
-//		} catch (IOException | ParseException e) {
+//			return new ArrayList<>(new NewYorkBus_Zoned_DatabaseReader(onlyStops).read(zones));
+//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 //			throw new RuntimeException(e);
 //		}
-		try {
-			return new ArrayList<>(new NewYorkBus_Zoned_DatabaseReader(onlyStops).read(zones));
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 }
