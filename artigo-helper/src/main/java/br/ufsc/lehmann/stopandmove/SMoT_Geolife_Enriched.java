@@ -14,14 +14,13 @@ import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
-import br.ufsc.lehmann.msm.artigo.problems.GeolifeWithTransportationProblem;
 
 public class SMoT_Geolife_Enriched {
 
 	private static DataSource source;
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		GeolifeProblem problem = new GeolifeWithTransportationProblem();
+		GeolifeProblem problem = new GeolifeProblem();
 		List<SemanticTrajectory> trajs = problem.data();
 		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.geolife_enriched_move", null, "geom");
 
