@@ -4,9 +4,11 @@ import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.NElementProblem;
+import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.DTWaClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
@@ -38,6 +40,8 @@ public interface DTWaTest {
 			return new DTWaClassifier(problem, PrototypeDataReader.STOP_SEMANTIC, Semantic.GEOGRAPHIC_EUCLIDEAN/*, Semantic.TEMPORAL*/);
 		} else if(problem instanceof PisaProblem) {
 			return new DTWaClassifier(problem, ((PisaProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON/*, Semantic.TEMPORAL*/);
+		} else if(problem instanceof HermoupolisProblem) {
+			return new DTWaClassifier(problem, ((HermoupolisProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_EUCLIDEAN/*, Semantic.TEMPORAL*/);
 		}
 		return null;
 	}

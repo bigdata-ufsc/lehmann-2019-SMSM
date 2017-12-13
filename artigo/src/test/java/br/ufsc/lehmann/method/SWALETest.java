@@ -7,6 +7,7 @@ import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.SWALEClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
@@ -35,6 +36,8 @@ public interface SWALETest {
 		} else if(problem instanceof PrototypeProblem) {
 			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_EUCLIDEAN, -10, 10));
 		} else if(problem instanceof PisaProblem) {
+			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_LATLON, -10, 10));
+		} else if(problem instanceof HermoupolisProblem) {
 			return new SWALEClassifier(new SWALE.SWALEParameters(Thresholds.STOP_CENTROID_LATLON, -10, 10));
 		}
 		return null;

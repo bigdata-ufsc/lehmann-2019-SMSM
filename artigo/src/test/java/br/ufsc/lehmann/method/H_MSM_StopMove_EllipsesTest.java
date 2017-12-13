@@ -14,6 +14,8 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.H_MSM_StopMove_Classifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.HermoupolisDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
@@ -76,6 +78,11 @@ public interface H_MSM_StopMove_EllipsesTest {
 		} else if(problem instanceof PisaProblem) {
 			stopSemantic = ((PisaProblem) problem).stopSemantic();
 			moveSemantic = PisaDataReader.MOVE_ELLIPSES_SEMANTIC;
+		} else if(problem instanceof HermoupolisProblem) {
+			geoThreshold = Thresholds.GEOGRAPHIC_EUCLIDEAN;
+			geoSemantic = Semantic.GEOGRAPHIC_EUCLIDEAN;
+			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
+			moveSemantic = HermoupolisDataReader.MOVE_ELLIPSES_SEMANTIC;
 		}
 		return new H_MSM_StopMove_Classifier(//
 				new H_MSM_StopMove.H_MSM_MoveSemanticParameters(moveSemantic, new H_MSM_StopMove.H_MSM_DimensionParameters[] {

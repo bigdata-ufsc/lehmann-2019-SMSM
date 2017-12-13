@@ -120,6 +120,14 @@ public class Move {
 	public String getStreetName() {
 		return (String) getAttribute(AttributeType.MOVE_STREET_NAME);
 	}
+
+	public String getActivity() {
+		return (String) getAttribute(AttributeType.MOVE_ACTIVITY);
+	}
+
+	public String getTransportationMode() {
+		return (String) getAttribute(AttributeType.MOVE_TRANSPORTATION_MODE);
+	}
 	
 	public double getDuration() {
 		return this.endTime - this.startTime;
