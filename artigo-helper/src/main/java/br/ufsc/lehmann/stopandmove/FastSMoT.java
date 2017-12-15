@@ -2,6 +2,7 @@ package br.ufsc.lehmann.stopandmove;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,19 +19,25 @@ public class FastSMoT<E, T> {
 	private Semantic<E, T> segmentationSemantic;
 	private StopDetector<E> detector;
 	private Semantic stopNameSemantic;
-
+	private long stopTime;
+	
 	public FastSMoT(Semantic<E, T> segmentationSemantic) {
-		this(segmentationSemantic, segmentationSemantic);
+		this(segmentationSemantic, 0);
 	}
 
-	public FastSMoT(Semantic<E, T> segmentationSemantic, Semantic stopNameSemantic) {
-		this(segmentationSemantic, stopNameSemantic, (StopDetector<E>) NOT_NULL_DETECTOR);
+	public FastSMoT(Semantic<E, T> segmentationSemantic, long stopTime) {
+		this(segmentationSemantic, segmentationSemantic, stopTime);
 	}
 
-	public FastSMoT(Semantic<E, T> segmentationSemantic, Semantic stopNameSemantic, StopDetector<E> detector) {
+	public FastSMoT(Semantic<E, T> segmentationSemantic, Semantic stopNameSemantic, long stopTime) {
+		this(segmentationSemantic, stopNameSemantic, (StopDetector<E>) NOT_NULL_DETECTOR, stopTime);
+	}
+
+	public FastSMoT(Semantic<E, T> segmentationSemantic, Semantic stopNameSemantic, StopDetector<E> detector, long stopTime) {
 		this.segmentationSemantic = segmentationSemantic;
 		this.stopNameSemantic = stopNameSemantic;
 		this.detector = detector;
+		this.stopTime = stopTime;
 	}
 
 	public StopAndMove findStops(SemanticTrajectory T, AtomicInteger sid, AtomicInteger mid) {
@@ -49,6 +56,9 @@ public class FastSMoT<E, T> {
 	
 		StopAndMove ret = new StopAndMove(T);
 		for (int i = 0; i < neighborhood.length; i++) {
+			if(neighborhood[i] == 0) {
+				continue;
+			}
 			Instant p1 = Semantic.TEMPORAL.getData(T, i).getStart();
 			Instant p2 = Semantic.TEMPORAL.getData(T, i + neighborhood[i]).getStart();
 
@@ -118,6 +128,11 @@ public class FastSMoT<E, T> {
 			if (Objects.equals(p, d)) {
 				neighbors++;
 			} else {
+				Instant startAtStop = Semantic.TEMPORAL.getData(T, i).getStart();
+				Instant endAtStop = Semantic.TEMPORAL.getData(T, j).getEnd();
+				if(startAtStop.plus(this.stopTime, ChronoUnit.MILLIS).isAfter(endAtStop)) {
+					return 0;
+				}
 				yet = false;
 			}
 			j++;

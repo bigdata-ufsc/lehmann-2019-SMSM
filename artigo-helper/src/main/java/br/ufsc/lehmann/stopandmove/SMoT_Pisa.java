@@ -48,7 +48,7 @@ public class SMoT_Pisa {
 				public boolean isStop(Number data) {
 					return data != null && data.equals(1);
 				}
-			});
+			}, 0);
 			List<StopAndMove> bestSMoT = new ArrayList<>();
 			for (SemanticTrajectory T : trajs) {
 				bestSMoT.add(fastSMoT.findStops(T, sid, mid));

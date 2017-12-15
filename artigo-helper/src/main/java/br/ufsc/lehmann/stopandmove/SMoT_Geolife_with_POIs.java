@@ -38,11 +38,16 @@ public class SMoT_Geolife_with_POIs {
 		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.geolife_with_pois_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
 		try {
 			conn.setAutoCommit(false);
-			FastSMoT<String, Number> fastSMoT = new FastSMoT<>(GeolifeDatabaseReader.REGION_INTEREST);
+			FastSMoT<String, Number> fastSMoT = new FastSMoT<>(GeolifeDatabaseReader.REGION_INTEREST, 30 * 60 * 1000);
 			List<StopAndMove> bestSMoT = new ArrayList<>();
 			for (SemanticTrajectory T : trajs) {
 				bestSMoT.add(fastSMoT.findStops(T, sid, mid));
 			}
+			int stopCount = 0;
+			for (StopAndMove stopAndMove : bestSMoT) {
+				stopCount += stopAndMove.getStops().size();
+			}
+			System.out.println("Stops found: " + stopCount);
 			StopAndMoveExtractor.persistStopAndMove(conn, update, insertStop, new StopAndMoveExtractor.StopPersisterCallback() {
 
 				@Override
