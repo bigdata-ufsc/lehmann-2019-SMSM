@@ -8,6 +8,7 @@ import br.ufsc.lehmann.msm.artigo.ComparableStopSemantic;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSTPClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
@@ -35,6 +36,12 @@ public interface MSTPTest {
 		} else if(problem instanceof DublinBusProblem) {
 			return new MSTPClassifier(//
 					new ComparableStopSemantic(((DublinBusProblem) problem).stopSemantic()),//
+					Semantic.GEOGRAPHIC_LATLON,//
+					Semantic.TEMPORAL//
+					);
+		} else if(problem instanceof GeolifeProblem) {
+			return new MSTPClassifier(//
+					new ComparableStopSemantic(((GeolifeProblem) problem).stopSemantic()),//
 					Semantic.GEOGRAPHIC_LATLON,//
 					Semantic.TEMPORAL//
 					);

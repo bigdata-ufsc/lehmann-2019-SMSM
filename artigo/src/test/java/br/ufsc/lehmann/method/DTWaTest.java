@@ -4,10 +4,10 @@ import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.NElementProblem;
-import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.DTWaClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
@@ -31,7 +31,9 @@ public interface DTWaTest {
 		} else if(problem instanceof NewYorkBusProblem) {
 			return new DTWaClassifier(problem, ((NewYorkBusProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON/*, Semantic.TEMPORAL*/);
 		} else if(problem instanceof DublinBusProblem) {
-			return new DTWaClassifier(problem, ((DublinBusProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC/*, Semantic.TEMPORAL*/);
+			return new DTWaClassifier(problem, ((DublinBusProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON/*, Semantic.TEMPORAL*/);
+		} else if(problem instanceof GeolifeProblem) {
+			return new DTWaClassifier(problem, ((GeolifeProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON/*, Semantic.TEMPORAL*/);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new DTWaClassifier(problem, ((SanFranciscoCabProblem) problem).stopSemantic(), Semantic.GEOGRAPHIC_LATLON/*, Semantic.TEMPORAL*/);
 		} else if(problem instanceof SergipeTracksProblem) {

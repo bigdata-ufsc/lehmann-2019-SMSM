@@ -13,6 +13,7 @@ import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
@@ -41,6 +42,8 @@ public interface MSMTest {
 			stopSemantic = ((NewYorkBusProblem) problem).stopSemantic();
 		} else if(problem instanceof DublinBusProblem) {
 			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
+		} else if(problem instanceof GeolifeProblem) {
+			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
 		} else if(problem instanceof PatelProblem) {
 			geoThreshold = Thresholds.GEOGRAPHIC_EUCLIDEAN;
 			geoSemantic = Semantic.GEOGRAPHIC_EUCLIDEAN;

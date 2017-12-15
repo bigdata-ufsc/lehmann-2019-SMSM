@@ -1,9 +1,8 @@
 package br.ufsc.lehmann;
 
 import br.ufsc.lehmann.msm.artigo.Problem;
-import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCab_Regions_Problem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
 import br.ufsc.lehmann.msm.artigo.problems.StopMoveStrategy;
 import smile.math.Random;
 
@@ -37,7 +36,8 @@ public enum EnumProblem {
 	/**
 	 * Trajectories constructed with only Stops&Moves
 	 */
-	HERMOUPOLIS(new HermoupolisProblem(true), 20),
+	GEOLIFE_WITH_POIS(new GeolifeProblem(GeolifeDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, true), 5),
+//	HERMOUPOLIS(new HermoupolisProblem(true), 20),
 	//	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_IN_ROADS_DEFINED_REGIONS(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "intersection_101_280", "bayshore_fwy", "airport"}, true), 4),//
 	;
 	private Problem p;

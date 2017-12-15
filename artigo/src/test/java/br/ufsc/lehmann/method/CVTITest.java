@@ -1,7 +1,6 @@
 package br.ufsc.lehmann.method;
 
 import br.ufsc.core.IMeasureDistance;
-import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.semantic.Stop;
@@ -10,6 +9,7 @@ import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.method.CVTI.CVTISemanticParameter;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
@@ -30,6 +30,8 @@ public interface CVTITest {
 			stopSemantic = ((NewYorkBusProblem) problem).stopSemantic();
 		} else if(problem instanceof DublinBusProblem) {
 			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
+		} else if(problem instanceof GeolifeProblem) {
+			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
 		} else if(problem instanceof PatelProblem) {
 			stopSemantic = ((PatelProblem) problem).stopSemantic();
 		} else if(problem instanceof VehicleProblem) {

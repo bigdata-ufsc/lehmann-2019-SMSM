@@ -14,6 +14,8 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.H_MSM_StopMove_Classifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
@@ -54,6 +56,9 @@ public interface H_MSM_StopMove_EllipsesTest {
 		} else if(problem instanceof DublinBusProblem) {
 			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
 			moveSemantic = DublinBusDataReader.MOVE_ELLIPSES_SEMANTIC;
+		} else if(problem instanceof GeolifeProblem) {
+			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
+			moveSemantic = GeolifeDataReader.MOVE_ELLIPSES_SEMANTIC;
 		} else if(problem instanceof PatelProblem) {
 			geoThreshold = Thresholds.GEOGRAPHIC_EUCLIDEAN;
 			geoSemantic = Semantic.GEOGRAPHIC_EUCLIDEAN;
