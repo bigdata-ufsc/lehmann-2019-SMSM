@@ -93,8 +93,8 @@ public class GeolifeDatabaseReader {
 		String stopTable = this.withTransportation ? "stops_moves.geolife_enriched_stop" : "stops_moves.geolife2_limited_stop";
 		String moveTable = this.withTransportation ? "stops_moves.geolife_enriched_move" : "stops_moves.geolife2_limited_move";
 		//
-		stopTable = "stops_moves.geolife_with_pois_stop";
-		moveTable = "stops_moves.geolife_with_pois_move";
+		//stopTable = "stops_moves.geolife_with_pois_university_stop";
+		//moveTable = "stops_moves.geolife_with_pois_university_move";
 		//
 		ResultSet stopsData = st.executeQuery(
 				"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
@@ -167,8 +167,8 @@ public class GeolifeDatabaseReader {
 		String stopTable = this.withTransportation ? "stops_moves.geolife_enriched_stop" : "stops_moves.geolife2_limited_stop";
 		String pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
 		//
-		stopTable = "stops_moves.geolife_with_pois_stop";
-		pointsTable = "geolife.geolife_with_pois";
+		//stopTable = "stops_moves.geolife_with_pois_university_stop";
+		//pointsTable = "geolife.geolife_with_pois_university";
 		//
 		Connection conn = retriever.getConnection();
 		conn.setAutoCommit(false);
@@ -211,8 +211,8 @@ public class GeolifeDatabaseReader {
 		String transportationColumn = this.withTransportation ? "mode" : "transportation_mean";
 		String pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
 		//
-		transportationColumn = "'NONE'";
-		pointsTable = "geolife.geolife_with_pois";
+		//transportationColumn = "'NONE'";
+		//pointsTable = "geolife.geolife_with_pois_university";
 		//
 		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, " + transportationColumn + " as transporationMode, \"POI\", semantic_stop_id, semantic_move_id "
 		+ "from " + pointsTable//
@@ -335,8 +335,8 @@ public class GeolifeDatabaseReader {
 		String pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
 		String transportationColumn = this.withTransportation ? "mode" : "transportation_mean";
 		//
-		transportationColumn = "'NONE'";
-		pointsTable = "geolife.geolife_with_pois";
+		//transportationColumn = "'NONE'";
+		//pointsTable = "geolife.geolife_with_pois_university";
 		//
 		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, " + transportationColumn  + " as transportationMode, \"POI\", semantic_stop_id, semantic_move_id "
 				+ "from " + pointsTable//
