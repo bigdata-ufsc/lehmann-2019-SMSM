@@ -18,11 +18,13 @@ package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -62,11 +64,16 @@ public class Validation {
 
 	public double[] precisionAtRecall(IMeasureDistance<SemanticTrajectory> measureDistance, SemanticTrajectory[] testData, int recallLevel) {
 		double[] ret = new double[recallLevel];
-		double[][] precisionRecall = new double[testData.length][recallLevel];
+		double[][] precisionRecall = new double[testData.length][];
 		List<SemanticTrajectory> trajs = Arrays.asList(testData);
 		SemanticTrajectory[] trajsArray = trajs.toArray(new SemanticTrajectory[trajs.size()]);
 		Table<SemanticTrajectory, SemanticTrajectory, Double> allDistances = ArrayTable.create(trajs, trajs);
+		Map<Object, LongAdder> occurrences = new HashMap<>();
 		Semantic semantic = problem.discriminator();
+		for (int i = 0; i < trajsArray.length; i++) {
+			Object classData = semantic.getData(trajsArray[i], 0);
+			occurrences.computeIfAbsent(classData, (t) -> new LongAdder()).increment();
+		}
 		for (int i = 0; i < trajsArray.length; i++) {
 			for (int j = i; j < trajsArray.length; j++) {
 				double distance = measureDistance.distance(trajsArray[i], trajsArray[j]);
@@ -77,8 +84,10 @@ public class Validation {
 		for (int i = 0; i < trajsArray.length; i++) {
 			List<Map.Entry<SemanticTrajectory, Double>> rows = allDistances.row(trajsArray[i]).entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
 			Object classData = semantic.getData(trajsArray[i], 0);
+			int groundTruthCounter = occurrences.get(classData).intValue();
+			precisionRecall[i] = new double[groundTruthCounter];
 			int correctClass = 0;
-			for (int j = 0; correctClass < recallLevel && j < testData.length; j++) {
+			for (int j = 0; correctClass < groundTruthCounter && j < testData.length; j++) {
 				Entry<SemanticTrajectory, Double> entry = rows.get(j);
 				Object otherClassData = semantic.getData(entry.getKey(), 0);
 				if(Objects.equals(classData, otherClassData)) {

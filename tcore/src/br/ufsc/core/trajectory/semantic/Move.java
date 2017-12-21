@@ -46,6 +46,8 @@ public class Move {
 				new Attribute(AttributeType.MOVE_POINTS, points)//
 				, new Attribute(AttributeType.MOVE_ANGLE, angle)//
 				, new Attribute(AttributeType.MOVE_TRAVELLED_DISTANCE, traveledDistance)//
+				, new Attribute(AttributeType.MOVE_TRANSPORTATION_MODE, null)//
+				, new Attribute(AttributeType.MOVE_ACTIVITY, null)//
 				, new Attribute(AttributeType.MOVE_STREET_NAME, streetName));
 	}
 

@@ -164,8 +164,8 @@ public class HermoupolisDataReader {
 						long endTime = (long) (Double.parseDouble(endMove.get("relativeTime")) * 1000);
 						List<TPoint> points = previousMove.stream().map(rec -> new TPoint(Double.parseDouble(rec.get("realX")), Double.parseDouble(rec.get("realY")))).collect(Collectors.toList());
 						Move move = new Move(moveId.hashCode(), initialStop, endStop, initialTime, endTime, startMoveIndex, previousMove.size(), points.toArray(new TPoint[points.size()]));
-						move.setAttribute(AttributeType.MOVE_STREET_NAME, initialMove.get("mode"));
-						move.setAttribute(AttributeType.MOVE_STREET_NAME, initialMove.get("activity"));
+						move.setAttribute(AttributeType.MOVE_TRANSPORTATION_MODE, initialMove.get("mode"));
+						move.setAttribute(AttributeType.MOVE_ACTIVITY, initialMove.get("activity"));
 						ret.put(moveId, move);
 					} else {
 						previousStop = record;

@@ -14,7 +14,12 @@ public class GeolifeRecord {
 	private String POI;
 	private Integer semanticStop;
 	private Integer semanticMoveId;
+	private String path;
 	public GeolifeRecord(int tid, int gid, Timestamp time, double longitude, double latitude, int userId, String transportationMode, String pOI,
+			Integer semanticStop, Integer semanticMoveId) {
+		this(tid, gid, time, longitude, latitude, userId, transportationMode, pOI, null, semanticStop, semanticMoveId);
+	}
+	public GeolifeRecord(int tid, int gid, Timestamp time, double longitude, double latitude, int userId, String transportationMode, String pOI, String path,
 			Integer semanticStop, Integer semanticMoveId) {
 		super();
 		this.tid = tid;
@@ -27,6 +32,7 @@ public class GeolifeRecord {
 		POI = pOI;
 		this.semanticStop = semanticStop;
 		this.semanticMoveId = semanticMoveId;
+		this.path = path;
 	}
 	public int getTid() {
 		return tid;
@@ -57,5 +63,8 @@ public class GeolifeRecord {
 	}
 	public Integer getSemanticMoveId() {
 		return semanticMoveId;
+	}
+	public String getPath() {
+		return path;
 	}
 }
