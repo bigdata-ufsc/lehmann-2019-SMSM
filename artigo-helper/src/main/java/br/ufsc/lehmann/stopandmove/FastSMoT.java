@@ -56,9 +56,6 @@ public class FastSMoT<E, T> {
 	
 		StopAndMove ret = new StopAndMove(T);
 		for (int i = 0; i < neighborhood.length; i++) {
-			if(neighborhood[i] == 0) {
-				continue;
-			}
 			Instant p1 = Semantic.TEMPORAL.getData(T, i).getStart();
 			Instant p2 = Semantic.TEMPORAL.getData(T, i + neighborhood[i]).getStart();
 
@@ -122,8 +119,8 @@ public class FastSMoT<E, T> {
 		int neighbors = 0;
 		boolean yet = true;
 		int j = i + 1;
+		E p = segmentationSemantic.getData(T, i);
 		while (j < T.length() && yet) {
-			E p = segmentationSemantic.getData(T, i);
 			E d = segmentationSemantic.getData(T, j);
 			if (Objects.equals(p, d)) {
 				neighbors++;

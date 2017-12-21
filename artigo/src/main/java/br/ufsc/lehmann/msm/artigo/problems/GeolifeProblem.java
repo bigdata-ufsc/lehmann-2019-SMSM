@@ -1,7 +1,6 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.io.IOException;
-import java.text.ParseException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,22 +13,22 @@ import br.ufsc.lehmann.msm.artigo.AbstractProblem;
 public class GeolifeProblem extends AbstractProblem {
 	
 	private boolean onlyStops;
-	private Integer[] zones;
+	private String[] zones;
 	private StopMoveStrategy strategy;
 
-	public GeolifeProblem(Integer... users) {
+	public GeolifeProblem(String... users) {
 		this(false, users);
 	}
 
-	public GeolifeProblem(boolean onlyStops, Integer... users) {
+	public GeolifeProblem(boolean onlyStops, String... users) {
 		this(GeolifeDatabaseReader.STOP_CENTROID_SEMANTIC, onlyStops, users);
 	}
 
-	public GeolifeProblem(StopSemantic stopSemantic,boolean onlyStops, Integer... users) {
+	public GeolifeProblem(StopSemantic stopSemantic,boolean onlyStops, String... users) {
 		this(stopSemantic, StopMoveStrategy.CBSMoT, onlyStops, users);
 	}
 	
-	public GeolifeProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, boolean onlyStops, Integer... users) {
+	public GeolifeProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, boolean onlyStops, String... users) {
 		super(stopSemantic);
 		this.strategy = strategy;
 		this.onlyStops = onlyStops;
@@ -47,16 +46,16 @@ public class GeolifeProblem extends AbstractProblem {
 	}
 
 	protected List<SemanticTrajectory> load() {
-		try {
-			return new ArrayList<>(new GeolifeDataReader(onlyStops, strategy).read(zones));
-		} catch (NumberFormatException | ParseException | IOException e) {
-			throw new RuntimeException(e);
-		}
 //		try {
-//			return new ArrayList<>(new GeolifeDatabaseReader(onlyStops).read(zones));
-//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+//			return new ArrayList<>(new GeolifeDataReader(onlyStops, strategy).read(zones));
+//		} catch (NumberFormatException | ParseException | IOException e) {
 //			throw new RuntimeException(e);
 //		}
+		try {
+			return new ArrayList<>(new GeolifeUniversityDatabaseReader(onlyStops).read(zones));
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
