@@ -38,7 +38,7 @@ public class SMoT_Geolife_with_POIs {
 		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.geolife_with_pois_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
 		try {
 			conn.setAutoCommit(false);
-			FastSMoT<String, Number> fastSMoT = new FastSMoT<>(GeolifeDatabaseReader.REGION_INTEREST, 30 * 60 * 1000);
+			FastSMoT<String, Number> fastSMoT = new FastSMoT<>(GeolifeDatabaseReader.REGION_INTEREST, 0);
 			List<StopAndMove> bestSMoT = new ArrayList<>();
 			for (SemanticTrajectory T : trajs) {
 				bestSMoT.add(fastSMoT.findStops(T, sid, mid));

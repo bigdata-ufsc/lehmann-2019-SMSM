@@ -58,24 +58,27 @@ public class GeolifeUniversityDataReader {
 
 	private static final GeographicDistanceFunction DISTANCE_FUNCTION = GEO_DISTANCE_FUNCTION;
 	
-	public static final BasicSemantic<Integer> USER_ID = new BasicSemantic<>(3);
-	public static final BasicSemantic<String> TRANSPORTATION_MODE = new BasicSemantic<>(4);
-	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(5);
-	public static final BasicSemantic<String> PATH = new BasicSemantic<>(6);
-	public static final StopSemantic STOP_REGION_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_REGION, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, GEO_DISTANCE_FUNCTION));
-	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
+	private static int SEMANTICS_COUNTER = 3;
 	
-	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
-	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
-	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION, Thresholds.MOVE_INNERPOINTS_DISTANCE)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
+	public static final BasicSemantic<Integer> USER_ID = new BasicSemantic<>(SEMANTICS_COUNTER++);
+	public static final BasicSemantic<String> TRANSPORTATION_MODE = new BasicSemantic<>(SEMANTICS_COUNTER++);
+	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(SEMANTICS_COUNTER++);
+	public static final BasicSemantic<String> PATH = new BasicSemantic<>(SEMANTICS_COUNTER++);
+	public static final BasicSemantic<String> DIRECTION = new BasicSemantic<>(SEMANTICS_COUNTER++);
+	public static final StopSemantic STOP_REGION_SEMANTIC = new StopSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Stop, String>(AttributeType.STOP_REGION, new EqualsDistanceFunction<String>()));
+	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, GEO_DISTANCE_FUNCTION));
+	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(SEMANTICS_COUNTER++, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
+	
+	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION, Thresholds.MOVE_INNERPOINTS_DISTANCE)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER++, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
 	
 	private boolean onlyStops;
 	private StopMoveStrategy strategy;
 
 	public GeolifeUniversityDataReader(boolean onlyStops) {
-		this(onlyStops, StopMoveStrategy.CBSMoT);
+		this(onlyStops, StopMoveStrategy.SMoT);
 	}
 
 	public GeolifeUniversityDataReader(boolean onlyStops, StopMoveStrategy strategy) {
@@ -89,7 +92,7 @@ public class GeolifeUniversityDataReader {
 		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource(filename).getFile(), "UTF-8"));
 		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("geolife.geolife_with_pois_university.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("gid", "tid", "lat", "lon", "time", "geom", "folder_id", "cid", "tid2", "POI", "semantic_stop_id", "semantic_move_id","path").withDelimiter(';'));
+				CSVFormat.EXCEL.withHeader("gid", "tid", "lat", "lon", "time", "geom", "folder_id", "cid", "tid2", "POI", "semantic_stop_id", "semantic_move_id","path", "direction").withDelimiter(';'));
 		
 		InputStreamReader rawStopsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("stops_moves.geolife_with_pois_university_stop.csv")));
 		CSVParser stopsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawStopsEntry).toString(), 
@@ -129,6 +132,7 @@ public class GeolifeUniversityDataReader {
 				null,
 				data.get("POI"),
 				data.get("path"),
+				data.get("direction"),
 				StringUtils.isEmpty(stop) ? null : Integer.parseInt(stop),
 						StringUtils.isEmpty(move) ? null : Integer.parseInt(move)
 			);
@@ -154,7 +158,7 @@ public class GeolifeUniversityDataReader {
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 9);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, SEMANTICS_COUNTER);
 			Collection<GeolifeRecord> collection = records.get(trajId);
 			int i = 0;
 			for (GeolifeRecord record : collection) {
@@ -213,6 +217,7 @@ public class GeolifeUniversityDataReader {
 				s.addData(i, USER_ID, record.getUserId());
 				s.addData(i, REGION_INTEREST, record.getPOI());
 				s.addData(i, PATH, record.getPath());
+				s.addData(i, DIRECTION, record.getDirection());
 				i++;
 			}
 			stats.addValue(s.length());
@@ -227,7 +232,7 @@ public class GeolifeUniversityDataReader {
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 9);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, SEMANTICS_COUNTER);
 			Collection<GeolifeRecord> collection = records.get(trajId);
 			int i = 0;
 			for (GeolifeRecord record : collection) {
@@ -238,6 +243,7 @@ public class GeolifeUniversityDataReader {
 				s.addData(i, USER_ID, record.getUserId());
 				s.addData(i, REGION_INTEREST, record.getPOI());
 				s.addData(i, PATH, record.getPath());
+				s.addData(i, DIRECTION, record.getDirection());
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
 					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
