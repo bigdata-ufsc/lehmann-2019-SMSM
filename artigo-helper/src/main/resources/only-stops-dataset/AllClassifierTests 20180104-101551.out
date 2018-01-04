@@ -1,0 +1,279 @@
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+MSMClassifierTest#validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+0.7288135593220338
+0.7371526456033497
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+MSMClassifierTest#validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]
+[0.85, 0.7555555555555555, 0.7999999999999998, 0.9178082191780822, 0.0821917808219178, 0.15]
+[0.7767241379310345, 0.7950211640211641, 0.7804507486209614, 0.8767452900430948, 0.12325470995690532, 0.22327586206896552]
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+MSMClassifierTest#precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]
+Precision@recall(10): {1.0,0.6859704283811426,0.544648496706777,0.44705262371013754,0.37952882595553544,0.3355538335866999,0.30484472439074334,0.285480068999216,0.28738129729372675,0.2842210646113158}
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+EDRClassifierTest#validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]
+0.7711864406779662
+0.7196802436239056
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+EDRClassifierTest#validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]
+[0.8, 0.9777777777777777, 0.8800000000000001, 0.8493150684931506, 0.15068493150684936, 0.2]
+[0.8816410256410256, 0.8326243386243386, 0.8480952380952381, 0.9374050224498545, 0.06259497755014554, 0.11835897435897436]
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+EDRClassifierTest#precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]
+Precision@recall(10): {0.7648809523809523,0.6022151459651459,0.5978661439970964,0.5834329977011007,0.5581682820678551,0.5416138881649298,0.5001999704469897,0.4899625570433473,0.46357026707714966,0.39085573698444487}
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+LCSSClassifierTest#validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]
+0.4830508474576271
+0.7449181575942139
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+LCSSClassifierTest#validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]
+[0.3333333333333333, 0.1111111111111111, 0.16666666666666666, 0.863013698630137, 0.136986301369863, 0.6666666666666666]
+[0.8597271342960997, 0.9688518518518519, 0.9087472666485951, 0.9155056970736221, 0.08449430292637802, 0.1402728657039002]
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+LCSSClassifierTest#precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]
+Precision@recall(10): {0.691468253968254,0.5137484539270253,0.48608977432735195,0.5051068747882473,0.5116061808807398,0.4914533510112371,0.4853837503397654,0.48069606364283063,0.48593129844368665,0.4843590942780104}
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+MSTPClassifierTest#validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]
+0.5508474576271186
+0.5728968405024742
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+MSTPClassifierTest#validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]
+[1.0, 0.26666666666666666, 0.4210526315789474, 1.0, 0.0, 0.0]
+[0.560833902939166, 0.8761904761904763, 0.6071966794380588, 0.42960673270007443, 0.5703932672999255, 0.43916609706083387]
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+MSTPClassifierTest#precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]
+Precision@recall(10): {1.0,0.5031857031857031,0.3110531994460566,0.3054253243165221,0.2988331596536589,0.2650189432310513,0.2664501118848945,0.26077819452339457,0.2630165277572116,0.26360187555732983}
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+CVTIClassifierTest#validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]
+0.5677966101694916
+0.5868671488389798
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+CVTIClassifierTest#validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]
+[1.0, 0.3111111111111111, 0.4745762711864407, 1.0, 0.0, 0.0]
+[0.5654036525004267, 0.8857142857142858, 0.6212639264210875, 0.4424651970849033, 0.5575348029150967, 0.43459634749957327]
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+CVTIClassifierTest#precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]
+Precision@recall(10): {1.0,0.5031857031857031,0.3110531994460566,0.3054253243165221,0.2988331596536589,0.2650189432310513,0.2664501118848945,0.26077819452339457,0.2630165277572116,0.26360187555732983}
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+wDFClassifierTest#validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]
+0.9322033898305084
+0.9385991625428245
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+wDFClassifierTest#validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]
+[0.9375, 1.0, 0.967741935483871, 0.958904109589041, 0.04109589041095896, 0.0625]
+[0.9450219780219781, 0.9592592592592594, 0.9495725562952455, 0.970886216466235, 0.029113783533765036, 0.05497802197802197]
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+wDFClassifierTest#precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]
+Precision@recall(10): {1.0,0.8982559107559108,0.839714270517842,0.8043775430723961,0.6668542594863552,0.6133480313326287,0.5777217588654653,0.5359334906890437,0.5106755111696388,0.42295333102169375}
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+SWALEClassifierTest#validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]
+0.4322033898305085
+0.3655881233346022
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+SWALEClassifierTest#validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]
+[0.2857142857142857, 0.044444444444444446, 0.07692307692307693, 0.9315068493150684, 0.06849315068493156, 0.7142857142857143]
+[0.3913990951821933, 0.8053915343915344, 0.5240772919351645, 0.3096972541233275, 0.6903027458766725, 0.6086009048178067]
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+SWALEClassifierTest#precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]
+Precision@recall(10): {0.49835858585858583,0.3534764226203302,0.32519460539864375,0.32588405739922816,0.2937411080962895,0.29260173547343776,0.27521177992621043,0.2579061390957283,0.2569006717973784,0.2632340843762254}
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+DTWaClassifierTest#validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]
+0.9322033898305084
+0.9356680624286259
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+DTWaClassifierTest#validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]
+[0.9574468085106383, 1.0, 0.9782608695652174, 0.9726027397260274, 0.0273972602739726, 0.0425531914893617]
+[0.9475600661207858, 0.9775925925925927, 0.9617798221803229, 0.9700081676857473, 0.029991832314252842, 0.05243993387921424]
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+DTWaClassifierTest#precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]
+Precision@recall(10): {1.0,0.8821290812362241,0.8452477241867998,0.7775806623716841,0.7210437036426642,0.6622875173510113,0.6133998421959246,0.5903187357485754,0.5639193532300817,0.504682218799812}
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+H_MSM_StopMove_TemporalDurationClassifierTest#validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]
+0.8220338983050848
+0.829425199847735
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+H_MSM_StopMove_TemporalDurationClassifierTest#validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]
+[0.88, 0.9777777777777777, 0.9263157894736842, 0.9178082191780822, 0.0821917808219178, 0.12]
+[0.8859259259259259, 0.9163280423280422, 0.8978998289374228, 0.9371497033009183, 0.06285029669908168, 0.11407407407407408]
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+H_MSM_StopMove_TemporalDurationClassifierTest#precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]
+Precision@recall(10): {1.0,0.722865527329813,0.6414459383209383,0.6263344634668163,0.6030665055340413,0.5777725410557336,0.5481437037453745,0.5161659122142253,0.5231317976827204,0.5218433249787944}
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+H_MSM_StopMove_DistanceClassifierTest#validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]
+0.423728813559322
+0.4978682908260373
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+H_MSM_StopMove_DistanceClassifierTest#validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]
+[0.84375, 0.6, 0.7012987012987012, 0.9315068493150684, 0.06849315068493156, 0.15625]
+[0.6506970324361628, 0.4290264550264551, 0.49663203463203465, 0.8458806434872859, 0.15411935651271408, 0.3493029675638371]
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+H_MSM_StopMove_DistanceClassifierTest#precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]
+Precision@recall(10): {1.0,0.13240356220052438,0.14721619797919377,0.18175675954042306,0.20217472319823163,0.1894862400038065,0.20246324316610065,0.2219180446478599,0.23401848018565632,0.249261922781955}
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+H_MSM_StopMove_AngleClassifierTest#validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]
+0.7288135593220338
+0.6893795203654358
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+H_MSM_StopMove_AngleClassifierTest#validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]
+[0.8367346938775511, 0.9111111111111111, 0.8723404255319148, 0.8904109589041096, 0.1095890410958904, 0.16326530612244897]
+[0.8523864734299517, 0.874111111111111, 0.8561849588320175, 0.915761016222558, 0.08423898377744185, 0.1476135265700483]
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+H_MSM_StopMove_AngleClassifierTest#precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]
+Precision@recall(10): {0.5990079365079365,0.5544505098076526,0.5695389266817839,0.5387879329410546,0.5147000842992018,0.5190550823621033,0.5129074755522853,0.5161006633394691,0.5152762044459,0.5083497249939882}
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+H_MSM_StopMove_EllipsesClassifierTest#validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]
+0.8389830508474576
+0.7507803578226113
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+H_MSM_StopMove_EllipsesClassifierTest#validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]
+[0.8775510204081632, 0.9555555555555556, 0.9148936170212767, 0.9178082191780822, 0.0821917808219178, 0.12244897959183673]
+[0.8724570193535712, 0.9695925925925927, 0.9156750700280114, 0.9246390650030459, 0.07536093499695404, 0.1275429806464289]
+Reading file...
+Fetching...
+Loaded 211733 GPS points from dataset
+Loaded 358 trajectories from dataset
+Semantic Trajectories statistics: mean - 7,81, min - 7,00, max - 19,00, sd - 1,76
+H_MSM_StopMove_EllipsesClassifierTest#precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]
+Precision@recall(10): {0.7440476190476191,0.6103993228993229,0.6062448629412915,0.6099961295297982,0.5868074402590538,0.5724259042003617,0.5424619639218977,0.5175694655553984,0.524229540241593,0.5211038171629561}
