@@ -8,7 +8,9 @@ public interface Thresholds {
 	public static final int GEOGRAPHIC_LATLON = 50;
 	public static final int GEOGRAPHIC_EUCLIDEAN = 500;
 	public static final int GEOGRAPHIC_PROTOTYPE = 1;
-	public static final double TEMPORAL = 0.7;
+	public static final double PROPORTION_TEMPORAL = 0.99;
+	public static final long SLACK_TEMPORAL = 30 * 60 * 1000;
+	public static final double TEMPORAL = PROPORTION_TEMPORAL;
 	public static final double STOP_CENTROID_LATLON = 500;
 	public static final int STOP_CENTROID_EUCLIDEAN = 5000;
 	public static final Double STOP_STREET_NAME = null;

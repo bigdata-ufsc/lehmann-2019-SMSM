@@ -97,7 +97,7 @@ public class Validation {
 		}
 		for (int i = 0; i < recallLevel; i++) {
 			final int finalI = i;
-			ret[i] = Arrays.stream(precisionRecall).mapToDouble(a -> a[finalI]).sum() / testData.length;
+			ret[i] = Arrays.stream(precisionRecall).mapToDouble(a -> a[Math.max(finalI, (int) ((a.length / (double) recallLevel) * finalI))]).sum() / testData.length;
 		}
 		return ret;
 	}

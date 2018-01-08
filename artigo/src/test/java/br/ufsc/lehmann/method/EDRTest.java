@@ -6,8 +6,10 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
+import br.ufsc.lehmann.H_MSM_StopMove;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.method.EDR.EDRSemanticParameter;
@@ -71,6 +73,7 @@ public interface EDRTest {
 		}
 		return new EDRClassifier(//
 				new EDRSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
+				new EDRSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL),
 				new EDRSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold)
 				);
 	}

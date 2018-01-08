@@ -5,6 +5,7 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
+import br.ufsc.core.trajectory.TemporalDuration;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.lehmann.NElementProblem;
@@ -69,6 +70,7 @@ public interface LCSSTest {
 		}
 		return new LCSSClassifier(//
 				new LCSSSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
+				new LCSSSemanticParameter<TemporalDuration, Number>(Semantic.TEMPORAL, Thresholds.TEMPORAL),
 				new LCSSSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold)
 				);
 	}

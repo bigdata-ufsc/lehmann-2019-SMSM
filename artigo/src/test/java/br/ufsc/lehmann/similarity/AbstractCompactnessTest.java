@@ -1,11 +1,10 @@
 package br.ufsc.lehmann.similarity;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -20,8 +19,6 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.google.common.collect.ArrayTable;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.Table;
 
 import br.ufsc.core.IMeasureDistance;
@@ -29,8 +26,6 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.EnumProblem;
 import br.ufsc.lehmann.msm.artigo.Problem;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import smile.math.Random;
 
 @RunWith(Parameterized.class)
@@ -69,9 +64,9 @@ public abstract class AbstractCompactnessTest {
 		
 		trajs = trajs.stream()//
 //				.filter(t -> t.length() > 6)//
-//				.filter(t -> Arrays.asList(
-//							172186,614059
-//						).contains(t.getTrajectoryId()))//
+				.filter(t -> Arrays.asList(
+						21587,13064
+						).contains(t.getTrajectoryId()))//
 //				.filter(t -> Arrays.asList("mall to airport").contains(SanFranciscoCabDataReader.DIRECTION.getData(t, 0)))//
 //				.filter(t -> Arrays.asList("MTABC_7094061-YODD4-YO_D4-Saturday-10", "MTA NYCT_KB_D4-Saturday-106300_M100_332").contains(t.getTrajectoryId()))//
 				.sorted((o1, o2) -> ((Comparable) o1.getTrajectoryId()).compareTo(o2.getTrajectoryId()))//
@@ -86,11 +81,6 @@ public abstract class AbstractCompactnessTest {
 		for (int i = 0; i < trajsArray.length; i++) {
 			for (int j = i; j < trajsArray.length; j++) {
 				double distance = measureDistance.distance(trajsArray[i], trajsArray[j]);
-				Object classData = semantic.getData(trajsArray[i], 0);
-				Object otherClassData = semantic.getData(trajsArray[j], 0);
-				if(!(Objects.equals(classData, otherClassData) && distance < 0.15)) {
-					distance = measureDistance.distance(trajsArray[i], trajsArray[j]);
-				}
 				allDistances.put(trajsArray[i], trajsArray[j], distance);
 				allDistances.put(trajsArray[j], trajsArray[i], distance);
 			}

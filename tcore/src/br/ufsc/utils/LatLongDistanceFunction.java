@@ -49,11 +49,11 @@ public class LatLongDistanceFunction implements GeographicDistanceFunction {
     final private static double R_MINOR = 6356752.3142;
 
 	public static double lat2y(double aLat) {
-		return Math.log(Math.tan(Math.PI / 4 + Math.toRadians(aLat) / 2)) * RADIUS;
+		return (Math.log(Math.tan(Math.PI / 4 + Math.toRadians(aLat % 90) / 2)) * RADIUS) * ((int) (aLat / 90) + 1);
 	}
 
 	public static double lon2x(double aLong) {
-		return Math.toRadians(aLong) * RADIUS;
+		return Math.toRadians(aLong % 90) * RADIUS * ((int) (aLong / 90) + 1);
 	}
 	
     public double[] merc(double x, double y) {

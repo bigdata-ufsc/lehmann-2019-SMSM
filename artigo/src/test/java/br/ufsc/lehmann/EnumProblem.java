@@ -1,9 +1,8 @@
 package br.ufsc.lehmann;
 
 import br.ufsc.lehmann.msm.artigo.Problem;
-import br.ufsc.lehmann.msm.artigo.problems.GeolifeDatabaseReader;
-import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDatabaseReader;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversitySubProblem;
 import br.ufsc.lehmann.msm.artigo.problems.StopMoveStrategy;
 import smile.math.Random;
 
@@ -37,10 +36,10 @@ public enum EnumProblem {
 	/**
 	 * Trajectories constructed with only Stops&Moves
 	 */
-	GEOLIFE_WITH_POIS_UNIVERSITY(new GeolifeProblem(GeolifeUniversityDatabaseReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, true), 5),
+	GEOLIFE_WITH_POIS_UNIVERSITY(new GeolifeUniversitySubProblem(GeolifeUniversityDatabaseReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, true), 4),
 //	GEOLIFE_WITH_POIS(new GeolifeProblem(GeolifeDatabaseReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, true), 5),
 //	HERMOUPOLIS(new HermoupolisProblem(true), 20),
-	//	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_IN_ROADS_DEFINED_REGIONS(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "intersection_101_280", "bayshore_fwy", "airport"}, true), 4),//
+//	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_IN_ROADS_DEFINED_REGIONS(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "intersection_101_280", "bayshore_fwy", "airport"}, true), 4),//
 	;
 	private Problem p;
 	private int numClasses;
