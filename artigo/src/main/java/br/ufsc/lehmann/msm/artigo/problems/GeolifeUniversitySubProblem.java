@@ -35,7 +35,7 @@ public class GeolifeUniversitySubProblem extends GeolifeProblem {
 
 	@Override
 	public Semantic discriminator() {
-		return GeolifeUniversityDataReader.PATH;
+		return GeolifeUniversityDataReader.PATH_WITH_DIRECTION;
 	}
 
 	@Override

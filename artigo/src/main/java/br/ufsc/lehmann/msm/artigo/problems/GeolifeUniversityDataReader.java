@@ -70,9 +70,17 @@ public class GeolifeUniversityDataReader {
 	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(SEMANTICS_COUNTER++, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
 	
 	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION, Thresholds.MOVE_INNERPOINTS_DISTANCE)));
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER++, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
+	
+	public static final BasicSemantic<String> PATH_WITH_DIRECTION = new BasicSemantic<String>(6) {
+		@Override
+		public String getData(SemanticTrajectory p, int i) {
+			return DIRECTION.getData(p, i) + "/" + PATH.getData(p, i);
+		}
+	};
 	
 	private boolean onlyStops;
 	private StopMoveStrategy strategy;
@@ -126,8 +134,8 @@ public class GeolifeUniversityDataReader {
 					Integer.parseInt(data.get("gid")),
 					new Timestamp(
 							DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss").getTime()),
-					Double.parseDouble(data.get("lat")),
 					Double.parseDouble(data.get("lon")),
+					Double.parseDouble(data.get("lat")),
 					Integer.parseInt(data.get("folder_id")),
 				null,
 				data.get("POI"),

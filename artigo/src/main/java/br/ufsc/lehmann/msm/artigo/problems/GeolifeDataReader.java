@@ -122,8 +122,8 @@ public class GeolifeDataReader {
 					Integer.parseInt(data.get("gid")),
 					new Timestamp(
 							DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss").getTime()),
-					Double.parseDouble(data.get("lat")),
 					Double.parseDouble(data.get("lon")),
+					Double.parseDouble(data.get("lat")),
 					Integer.parseInt(data.get("folder_id")),
 				null,
 				data.get("POI"),
