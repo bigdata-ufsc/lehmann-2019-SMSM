@@ -16,6 +16,10 @@ import br.ufsc.lehmann.msm.artigo.classifiers.H_MSM_StopMove_Classifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.H_MSM_StopMove_Classifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversitySubProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
@@ -51,26 +55,32 @@ public interface H_MSM_StopMove_AngleTest {
 					);
 		} else if(problem instanceof NewYorkBusProblem) {
 			stopSemantic = ((NewYorkBusProblem) problem).stopSemantic();
-			moveSemantic = NewYorkBusDataReader.MOVE_ELLIPSES_SEMANTIC;
+			moveSemantic = NewYorkBusDataReader.MOVE_ANGLE_SEMANTIC;
 		} else if(problem instanceof DublinBusProblem) {
 			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
-			moveSemantic = DublinBusDataReader.MOVE_ELLIPSES_SEMANTIC;
+			moveSemantic = DublinBusDataReader.MOVE_ANGLE_SEMANTIC;
 		} else if(problem instanceof PatelProblem) {
 			geoThreshold = Thresholds.GEOGRAPHIC_EUCLIDEAN;
 			geoSemantic = Semantic.GEOGRAPHIC_EUCLIDEAN;
 			stopSemantic = ((PatelProblem) problem).stopSemantic();
-			moveSemantic = PatelDataReader.MOVE_ELLIPSES_SEMANTIC;
+			moveSemantic = PatelDataReader.MOVE_ANGLE_SEMANTIC;
 		} else if(problem instanceof VehicleProblem) {
 			geoThreshold = Thresholds.GEOGRAPHIC_EUCLIDEAN;
 			geoSemantic = Semantic.GEOGRAPHIC_EUCLIDEAN;
 			stopSemantic = ((VehicleProblem) problem).stopSemantic();
-			moveSemantic = VehicleDataReader.MOVE_ELLIPSES_SEMANTIC;
+			moveSemantic = VehicleDataReader.MOVE_ANGLE_SEMANTIC;
+		} else if(problem instanceof GeolifeUniversitySubProblem) {
+			stopSemantic = ((GeolifeUniversitySubProblem) problem).stopSemantic();
+			moveSemantic = GeolifeUniversityDataReader.MOVE_ANGLE_SEMANTIC;
+		} else if(problem instanceof GeolifeProblem) {
+			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
+			moveSemantic = GeolifeDataReader.MOVE_ANGLE_SEMANTIC;
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			stopSemantic = ((SanFranciscoCabProblem) problem).stopSemantic();
-			moveSemantic = SanFranciscoCabDataReader.MOVE_ELLIPSES_SEMANTIC;
+			moveSemantic = SanFranciscoCabDataReader.MOVE_ANGLE_SEMANTIC;
 		} else if(problem instanceof SergipeTracksProblem) {
 			stopSemantic = SergipeTracksDataReader.STOP_CENTROID_SEMANTIC;
-			moveSemantic = SergipeTracksDataReader.MOVE_ELLIPSES_SEMANTIC;
+			moveSemantic = SergipeTracksDataReader.MOVE_ANGLE_SEMANTIC;
 		} else if(problem instanceof PrototypeProblem) {
 			geoThreshold = Thresholds.GEOGRAPHIC_EUCLIDEAN;
 			geoSemantic = Semantic.GEOGRAPHIC_EUCLIDEAN;
@@ -78,15 +88,16 @@ public interface H_MSM_StopMove_AngleTest {
 			moveSemantic = PrototypeDataReader.MOVE_SEMANTIC;
 		} else if(problem instanceof PisaProblem) {
 			stopSemantic = ((PisaProblem) problem).stopSemantic();
-			moveSemantic = PisaDataReader.MOVE_ELLIPSES_SEMANTIC;
+			moveSemantic = PisaDataReader.MOVE_ANGLE_SEMANTIC;
 		}
 		return new H_MSM_StopMove_Classifier(//
 				new H_MSM_StopMove.H_MSM_MoveSemanticParameters(moveSemantic, new H_MSM_StopMove.H_MSM_DimensionParameters[] {
 						new H_MSM_StopMove.H_MSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, Thresholds.MOVE_ANGLE, 1)
 					}),
 				new H_MSM_StopMove.H_MSM_StopSemanticParameters(stopSemantic, new H_MSM_StopMove.H_MSM_DimensionParameters[] {
-						new H_MSM_StopMove.H_MSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_GEOGRAPHIC, geoThreshold, 1.0/2.0),
-						new H_MSM_StopMove.H_MSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 1.0/2.0)
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_GEOGRAPHIC, geoThreshold, 1.0/3.0),
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 1.0/3.0)
 					})
 				);
 	}

@@ -14,6 +14,9 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.H_MSM_StopMove_Classifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversitySubProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
@@ -62,6 +65,12 @@ public interface H_MSM_StopMove_DistanceTest {
 			geoSemantic = Semantic.GEOGRAPHIC_EUCLIDEAN;
 			stopSemantic = ((VehicleProblem) problem).stopSemantic();
 			moveSemantic = VehicleDataReader.MOVE_DISTANCE_SEMANTIC;
+		} else if(problem instanceof GeolifeUniversitySubProblem) {
+			stopSemantic = ((GeolifeUniversitySubProblem) problem).stopSemantic();
+			moveSemantic = GeolifeUniversityDataReader.MOVE_DISTANCE_SEMANTIC;
+		} else if(problem instanceof GeolifeProblem) {
+			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
+			moveSemantic = GeolifeUniversityDataReader.MOVE_DISTANCE_SEMANTIC;
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			stopSemantic = ((SanFranciscoCabProblem) problem).stopSemantic();
 			moveSemantic = SanFranciscoCabDataReader.MOVE_DISTANCE_SEMANTIC;
@@ -82,8 +91,9 @@ public interface H_MSM_StopMove_DistanceTest {
 						new H_MSM_StopMove.H_MSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, Thresholds.MOVE_DISTANCE, 1)
 					}),
 				new H_MSM_StopMove.H_MSM_StopSemanticParameters(stopSemantic, new H_MSM_StopMove.H_MSM_DimensionParameters[] {
-						new H_MSM_StopMove.H_MSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_GEOGRAPHIC, geoThreshold, 1.0/2.0),
-						new H_MSM_StopMove.H_MSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 1.0/2.0)
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_GEOGRAPHIC, geoThreshold, 1.0/3.0),
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 1.0/3.0)
 					})
 				);
 	}

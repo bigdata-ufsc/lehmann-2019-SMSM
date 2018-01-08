@@ -25,6 +25,6 @@ public class H_MSM_StopMove_Classifier extends TrajectorySimilarityCalculator<Se
 
 	@Override
 	public String name() {
-		return "H_MSM_StopMove";
+		return "SMSM";
 	}
 }

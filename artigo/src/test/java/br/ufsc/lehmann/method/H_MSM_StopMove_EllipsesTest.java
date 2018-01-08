@@ -1,11 +1,15 @@
 package br.ufsc.lehmann.method;
 
+import java.time.Instant;
+
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
+import br.ufsc.core.trajectory.TemporalDuration;
 import br.ufsc.core.trajectory.semantic.AttributeType;
+import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.H_MSM_StopMove;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NElementProblem;
@@ -16,6 +20,8 @@ import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversitySubProblem;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
@@ -56,6 +62,9 @@ public interface H_MSM_StopMove_EllipsesTest {
 		} else if(problem instanceof DublinBusProblem) {
 			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
 			moveSemantic = DublinBusDataReader.MOVE_ELLIPSES_SEMANTIC;
+		} else if(problem instanceof GeolifeUniversitySubProblem) {
+			stopSemantic = ((GeolifeUniversitySubProblem) problem).stopSemantic();
+			moveSemantic = GeolifeUniversityDataReader.MOVE_ELLIPSES_SEMANTIC;
 		} else if(problem instanceof GeolifeProblem) {
 			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
 			moveSemantic = GeolifeDataReader.MOVE_ELLIPSES_SEMANTIC;
@@ -94,8 +103,11 @@ public interface H_MSM_StopMove_EllipsesTest {
 						new H_MSM_StopMove.H_MSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
 					}),
 				new H_MSM_StopMove.H_MSM_StopSemanticParameters(stopSemantic, new H_MSM_StopMove.H_MSM_DimensionParameters[] {
-						new H_MSM_StopMove.H_MSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_GEOGRAPHIC, geoThreshold, 1.0/2.0),
-						new H_MSM_StopMove.H_MSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 1.0/2.0)
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_GEOGRAPHIC, geoThreshold, 1.0/3.0),
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, new AttributeType(
+								(Stop s) -> new TemporalDuration(Instant.ofEpochMilli(s.getStartTime() - Thresholds.SLACK_TEMPORAL/2), Instant.ofEpochMilli(s.getEndTime() +  Thresholds.SLACK_TEMPORAL/2)), "SLACK_TEMPORAL"
+								), Thresholds.TEMPORAL, 1.0/3.0),
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 1.0/3.0)
 					})
 				);
 	}

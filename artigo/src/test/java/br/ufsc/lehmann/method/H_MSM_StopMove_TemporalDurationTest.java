@@ -1,12 +1,16 @@
 
 package br.ufsc.lehmann.method;
 
+import java.time.Instant;
+
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
+import br.ufsc.core.trajectory.TemporalDuration;
 import br.ufsc.core.trajectory.semantic.AttributeType;
+import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.H_MSM_StopMove;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NElementProblem;
@@ -15,6 +19,10 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.H_MSM_StopMove_Classifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversitySubProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
@@ -53,6 +61,12 @@ public interface H_MSM_StopMove_TemporalDurationTest {
 		} else if(problem instanceof DublinBusProblem) {
 			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
 			moveSemantic = DublinBusDataReader.MOVE_TEMPORAL_DURATION_SEMANTIC;
+		} else if(problem instanceof GeolifeUniversitySubProblem) {
+			stopSemantic = ((GeolifeUniversitySubProblem) problem).stopSemantic();
+			moveSemantic = GeolifeUniversityDataReader.MOVE_TEMPORAL_DURATION_SEMANTIC;
+		} else if(problem instanceof GeolifeProblem) {
+			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
+			moveSemantic = GeolifeUniversityDataReader.MOVE_TEMPORAL_DURATION_SEMANTIC;
 		} else if(problem instanceof PatelProblem) {
 			geoThreshold = Thresholds.GEOGRAPHIC_EUCLIDEAN;
 			geoSemantic = Semantic.GEOGRAPHIC_EUCLIDEAN;
@@ -84,7 +98,9 @@ public interface H_MSM_StopMove_TemporalDurationTest {
 				}),
 				new H_MSM_StopMove.H_MSM_StopSemanticParameters(stopSemantic, new H_MSM_StopMove.H_MSM_DimensionParameters[] {
 						new H_MSM_StopMove.H_MSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_GEOGRAPHIC, geoThreshold, 1.0/3.0),
-						new H_MSM_StopMove.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
+						new H_MSM_StopMove.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, new AttributeType(
+								(Stop s) -> new TemporalDuration(Instant.ofEpochMilli(s.getStartTime() - Thresholds.SLACK_TEMPORAL/2), Instant.ofEpochMilli(s.getEndTime() +  Thresholds.SLACK_TEMPORAL/2)), "SLACK_TEMPORAL"
+								), Thresholds.TEMPORAL, 1.0/3.0),
 						new H_MSM_StopMove.H_MSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 1.0/3.0)
 				})
 				);
