@@ -14,7 +14,7 @@ public class SemanticTrajectory {
 		List<TPoint> points = q.getPoints();
 		for (TPoint p : points) {
 			SemanticElement se = new SemanticElement(1);
-			se.addData(Semantic.GEOGRAPHIC, p);
+			se.addData(Semantic.SPATIAL, p);
 			elements.add(se);
 		}
 		this.semantics = 1;

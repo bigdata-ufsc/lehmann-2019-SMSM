@@ -147,7 +147,7 @@ public class TaxiShangaiDataReader {
 			for (TaxiShangaiRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, TID, record.getTid());
 				if(record.getStop() != null) {
 					Stop stop = stops.get(record.getStop());

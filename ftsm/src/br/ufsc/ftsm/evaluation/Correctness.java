@@ -51,11 +51,11 @@ public static void main(String[] args) throws InstantiationException, IllegalAcc
 	//System.out.println("::: Baseline: "+(t1.length()*t2.length()));
 	
 	//DTW-based measures
-	DTW dtw = new DTW(Semantic.GEOGRAPHIC);
+	DTW dtw = new DTW(Semantic.SPATIAL);
 	PDTW pdtw = new PDTW();
 	
 	//MSM-based measures
-	MSM msm = new MSM(new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 100.0, 1));
+	MSM msm = new MSM(new MSMSemanticParameter<TPoint, Number>(Semantic.SPATIAL, 100.0, 1));
 	FTSMBMSM ftsmbmsm = new FTSMBMSM(100);
 	FTSMBDMSM ftsmbdmsm = new FTSMBDMSM(100);
 	FTSMQMSM ftsmqmsm = new FTSMQMSM(100);
@@ -63,7 +63,7 @@ public static void main(String[] args) throws InstantiationException, IllegalAcc
 
 	
 	//LCSS-based measures
-	LCSS lcss = new LCSS(new LCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 100.0));
+	LCSS lcss = new LCSS(new LCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL, 100.0));
 	LCSSL lcssl = new LCSSL(100);
 	FTSMBLCSS ftsmblcss = new FTSMBLCSS(100);
 	FTSMQLCSS ftsmqlcss = new FTSMQLCSS(100);

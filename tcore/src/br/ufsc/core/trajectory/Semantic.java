@@ -22,11 +22,11 @@ public abstract class Semantic<Element, Threshold> {
 			return ((Comparable<Number>) d1).compareTo((Number) d2);
 		}
 	};
-	public static final Semantic<TPoint, Number> GEOGRAPHIC_EUCLIDEAN = new EuclideanGeographicalSemantic(1);
-	public static final Semantic<TPoint, Number> GEOGRAPHIC_LATLON = new LatLonGeographicalSemantic(1);
+	public static final Semantic<TPoint, Number> SPATIAL_EUCLIDEAN = new EuclideanGeographicalSemantic(1);
+	public static final Semantic<TPoint, Number> SPATIAL_LATLON = new LatLonGeographicalSemantic(1);
 	public static final Semantic<TemporalDuration, Number> TEMPORAL = new OverlapTemporalSemantic(2);
 	
-	public static final Semantic<TPoint, Number> GEOGRAPHIC = GEOGRAPHIC_EUCLIDEAN;
+	public static final Semantic<TPoint, Number> SPATIAL = SPATIAL_EUCLIDEAN;
 	
 	protected int index;
 	

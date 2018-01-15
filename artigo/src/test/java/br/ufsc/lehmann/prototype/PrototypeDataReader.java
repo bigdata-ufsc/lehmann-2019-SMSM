@@ -74,7 +74,7 @@ public class PrototypeDataReader {
 							null);
 					current.addData(stopId, STOP_SEMANTIC, s);
 					current.addData(stopId, Semantic.GID, stopId);
-					current.addData(stopId, Semantic.GEOGRAPHIC_EUCLIDEAN, //
+					current.addData(stopId, Semantic.SPATIAL_EUCLIDEAN, //
 							new TPoint(Integer.parseInt(startPoint.substring(0, startPoint.indexOf(','))), Integer.parseInt(startPoint.substring(startPoint.indexOf(',') + 1)))//
 						);
 					current.addData(stopId, Semantic.TEMPORAL, new TemporalDuration(//
@@ -100,7 +100,7 @@ public class PrototypeDataReader {
 					Move move = new Move(moveId, start, end, start.getEndTime(), end.getStartTime(), start.getBegin() + start.getLength(), end.getBegin() - (start.getBegin() + start.getLength()), null, 0, 0, streetName);
 					current.addData(moveId, MOVE_SEMANTIC, move);
 					current.addData(moveId, Semantic.GID, moveId);
-					current.addData(moveId, Semantic.GEOGRAPHIC_EUCLIDEAN, //
+					current.addData(moveId, Semantic.SPATIAL_EUCLIDEAN, //
 							points[0]//
 						);
 					current.addData(moveId, Semantic.TEMPORAL, new TemporalDuration(//

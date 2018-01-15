@@ -32,7 +32,9 @@ public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 				double semanticScore = 0;
 				for (int k = 0; k < semantics.length; k++) {
 					Semantic semantic = semantics[k].semantic;
-					semanticScore += (semantic.match(A, i, B, j, (Object) semantics[k].threshlod) ? 1 : 0) * semantics[k].weight;
+					Object threshlod = (Object) semantics[k].threshlod;
+					double weight = semantics[k].weight;
+					semanticScore += (semantic.match(A, i, B, j, threshlod) ? 1 : 0) * weight;
 				}
 				score = semanticScore;
 		

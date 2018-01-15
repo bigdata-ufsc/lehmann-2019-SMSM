@@ -155,7 +155,7 @@ public class TDriveDataReader {
 			int i = 0;
 			for (TDriveRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, new TPoint(record.getLatitude(), record.getLongitude()));
+				s.addData(i, Semantic.SPATIAL, new TPoint(record.getLatitude(), record.getLongitude()));
 				s.addData(i, TID, record.getTid());
 				if(record.getStop() != null) {
 					Stop stop = stops.get(record.getStop());

@@ -43,7 +43,7 @@ public class DTWClassifier<T, V> extends TrajectorySimilarityCalculator<Semantic
 			entries.add(new DataEntry<>(traj, y.nextBoolean() ? "chuva" : "sol"));
 		}
 		NearestNeighbour<SemanticTrajectory, String> nn = new NearestNeighbour<SemanticTrajectory, String>(entries, Math.min(trajectories.size(), 3),
-				new DTWClassifier(Semantic.GEOGRAPHIC));
+				new DTWClassifier(Semantic.SPATIAL));
 		Object classified = nn.classify(new DataEntry<>(trajectories.get(0), "descubra"));
 		System.out.println(classified);
 	}

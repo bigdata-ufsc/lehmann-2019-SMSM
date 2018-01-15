@@ -6,8 +6,8 @@ import java.time.ZoneId;
 
 import org.joda.time.Interval;
 
-final class OverlapTemporalSemantic extends Semantic<TemporalDuration, Number> {
-	OverlapTemporalSemantic(int index) {
+public class OverlapTemporalSemantic extends Semantic<TemporalDuration, Number> {
+	public OverlapTemporalSemantic(int index) {
 		super(index);
 	}
 

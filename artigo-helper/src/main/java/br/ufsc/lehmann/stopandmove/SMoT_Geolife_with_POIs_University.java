@@ -14,13 +14,14 @@ import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversitySubProblem;
 
 public class SMoT_Geolife_with_POIs_University {
 
 	private static DataSource source;
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		GeolifeProblem problem = new GeolifeProblem();
+		GeolifeProblem problem = new GeolifeUniversitySubProblem();
 		List<SemanticTrajectory> trajs = problem.data();
 		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.geolife_with_pois_university_stop", null, "geom");
 
@@ -52,7 +53,34 @@ public class SMoT_Geolife_with_POIs_University {
 
 				@Override
 				public void parameterize(PreparedStatement statement, Stop stop) throws SQLException {
+					//Home - POLYGON ((12948247.973819174 4866575.90590961, 12948247.973819174 4867187.41762101, 12948905.637357853 4867187.41762101, 12948905.637357853 4866575.90590961, 12948247.973819174 4866575.90590961))
+					//Park POLYGON ((12949234.988222102 4865626.93591852, 12949234.988222102 4866053.46494659, 12949689.747565899 4866053.46494659, 12949689.747565899 4865626.93591852, 12949234.988222102 4865626.93591852))
+					//Commercial Centre POLYGON ((12948986.403055586 4864510.61163902, 12948986.403055586 4865156.73722088, 12949574.838853352 4865156.73722088, 12949574.838853352 4864510.61163902, 12948986.403055586 4864510.61163902))
+					//Microsoft POLYGON ((12949367.15563061 4862122.2545775, 12949367.15563061 4862756.84220254, 12950047.895082928 4862756.84220254, 12950047.895082928 4862122.2545775, 12949367.15563061 4862122.2545775))
 					statement.setString(12, String.valueOf(stop.getStopName()));
+					double lat, lon;
+					if(stop.getStopName().equals("Home")) {
+						//'4866881.66176531','12948576.8055885'
+						lat = 4866881.66176531;
+						lon = 12948576.8055885;
+					} else if(stop.getStopName().equals("Park")) {
+						//'4865840.20043256','12949462.367894'
+						lat = 4865840.20043256;
+						lon = 12949462.367894;
+					} else if(stop.getStopName().equals("Commercial centre")) {
+						//'4864833.67442995','12949280.6209545'
+						lat = 4864833.67442995;
+						lon = 12949280.6209545;
+					} else if(stop.getStopName().equals("Work")) {
+						//'4862439.54839002','12949707.5253568'
+						lat = 4862439.54839002;
+						lon = 12949707.5253568;
+					} else {
+						lat = -1;
+						lon = -1;
+					}
+					statement.setDouble(11, lat);//lat
+					statement.setDouble(10, lon);//lon
 				}
 				
 			}, insertMove, bestSMoT);

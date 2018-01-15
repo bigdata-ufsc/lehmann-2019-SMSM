@@ -164,7 +164,7 @@ public class BikeDataReader {
 				double lat, lon;
 				lat = Double.parseDouble(record.get("start station latitude"));
 				lon = Double.parseDouble(record.get("start station longitude"));
-				t.addData(elementId, Semantic.GEOGRAPHIC, new TPoint(lat, lon));
+				t.addData(elementId, Semantic.SPATIAL, new TPoint(lat, lon));
 				try {
 					String st = record.get("starttime");
 					Date start = dateFormat.parse(st);
@@ -189,7 +189,7 @@ public class BikeDataReader {
 				double lat, lon;
 				lat = Double.parseDouble(lastRecord.get("end station latitude"));
 				lon = Double.parseDouble(lastRecord.get("end station longitude"));
-				t.addData(elementId, Semantic.GEOGRAPHIC, new TPoint(lat, lon));
+				t.addData(elementId, Semantic.SPATIAL, new TPoint(lat, lon));
 				try {
 					Date start = dateFormat.parse(lastRecord.get("stoptime"));
 					Date end = dateFormat.parse(lastRecord.get("stoptime"));

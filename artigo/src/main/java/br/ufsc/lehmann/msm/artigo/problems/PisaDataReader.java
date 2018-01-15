@@ -52,7 +52,7 @@ import cc.mallet.util.IoUtils;
 
 public class PisaDataReader {
 	
-	private static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
+	public static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
 	public static final BasicSemantic<Double> ELEVATION = new BasicSemantic<>(3);
 	public static final BasicSemantic<String> WEATHER = new BasicSemantic<>(4);
 	public static final BasicSemantic<Double> TEMPERATURE = new BasicSemantic<>(5);
@@ -221,7 +221,7 @@ public class PisaDataReader {
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 				}
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, ELEVATION, record.getEle());
 				s.addData(i, WEATHER, record.getWeather());
 				s.addData(i, TEMPERATURE, record.getTemperature());
@@ -252,7 +252,7 @@ public class PisaDataReader {
 			for (PisaRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLat(), record.getLon());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, ELEVATION, record.getEle());
 				s.addData(i, WEATHER, record.getWeather());

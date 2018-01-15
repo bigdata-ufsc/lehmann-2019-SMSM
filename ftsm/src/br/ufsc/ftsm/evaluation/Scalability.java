@@ -57,12 +57,12 @@ public class Scalability {
 		T = retriever.fastFetchTrajectories(); 
 
 		//DTW-based measures
-		DTW dtw = new DTW(Semantic.GEOGRAPHIC);
+		DTW dtw = new DTW(Semantic.SPATIAL);
 		DTW2 dtw2 = new DTW2();
 		PDTW pdtw = new PDTW();
 		
 		//MSM-based measures
-		MSM msm = new MSM(new MSMSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 100.0, 1));
+		MSM msm = new MSM(new MSMSemanticParameter<TPoint, Number>(Semantic.SPATIAL, 100.0, 1));
 		FTSMBMSM ftsmbmsm = new FTSMBMSM(100);
 		FTSMBDMSM ftsmbdmsm = new FTSMBDMSM(100);
 
@@ -73,7 +73,7 @@ public class Scalability {
 		FTSMOMSM ftsmomsm = new FTSMOMSM(100);
 		
 		//LCSS-based measures
-		LCSS lcss = new LCSS(new LCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, 100.0));
+		LCSS lcss = new LCSS(new LCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL, 100.0));
 		LCSSL lcssl = new LCSSL(100);
 		FTSMBLCSS ftsmblcss = new FTSMBLCSS(100);
 		FTSMQLCSS ftsmqlcss = new FTSMQLCSS(100);

@@ -44,7 +44,7 @@ public class MSTPClassifier extends TrajectorySimilarityCalculator<SemanticTraje
 			entries.add(new DataEntry<>(traj, y.nextBoolean() ? "chuva" : "sol"));
 		}
 		NearestNeighbour<SemanticTrajectory, String> nn = new NearestNeighbour<SemanticTrajectory, String>(entries, Math.min(trajectories.size(), 3),
-				new MSTPClassifier(new Semantic[] { Semantic.GEOGRAPHIC, //
+				new MSTPClassifier(new Semantic[] { Semantic.SPATIAL, //
 						Semantic.TEMPORAL, //
 						BikeDataReader.USER, //
 						BikeDataReader.GENDER, //

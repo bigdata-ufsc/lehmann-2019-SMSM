@@ -65,8 +65,11 @@ public abstract class AbstractCompactnessTest {
 		trajs = trajs.stream()//
 //				.filter(t -> t.length() > 6)//
 				.filter(t -> Arrays.asList(
-						21587,13064
+						22193, 35843
 						).contains(t.getTrajectoryId()))//
+//				.filter(t -> Arrays.asList(
+//						16987
+//				).contains(t.getTrajectoryId()))//
 //				.filter(t -> Arrays.asList("mall to airport").contains(SanFranciscoCabDataReader.DIRECTION.getData(t, 0)))//
 //				.filter(t -> Arrays.asList("MTABC_7094061-YODD4-YO_D4-Saturday-10", "MTA NYCT_KB_D4-Saturday-106300_M100_332").contains(t.getTrajectoryId()))//
 				.sorted((o1, o2) -> ((Comparable) o1.getTrajectoryId()).compareTo(o2.getTrajectoryId()))//
@@ -88,7 +91,7 @@ public abstract class AbstractCompactnessTest {
 		for (int i = 0; i < trajsArray.length; i++) {
 			Object classData = semantic.getData(trajsArray[i], 0);
 			List<Map.Entry<SemanticTrajectory, Double>> rows = allDistances.row(trajsArray[i]).entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
-			assertEquals(0.0, rows.get(0).getValue(), 0.0000001);
+			assertEquals(trajsArray[i].getTrajectoryId() + ": identity fail", 0.0, rows.get(0).getValue(), 0.0000001);
 			Object bestMatchClass = problem.discriminator().getData(rows.get(1).getKey(), 0);
 			if(!Objects.equals(classData, bestMatchClass)) {
 				System.out.print(trajsArray[i].getTrajectoryId() + " -> " + classData + ": ");

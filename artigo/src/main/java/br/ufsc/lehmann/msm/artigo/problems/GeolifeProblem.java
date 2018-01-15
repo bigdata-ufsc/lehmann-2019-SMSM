@@ -52,7 +52,7 @@ public class GeolifeProblem extends AbstractProblem {
 //			throw new RuntimeException(e);
 //		}
 		try {
-			return new ArrayList<>(new GeolifeUniversityDatabaseReader(onlyStops).read(zones));
+			return new ArrayList<>(new GeolifeUniversityDatabaseReader(onlyStops).read());
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}

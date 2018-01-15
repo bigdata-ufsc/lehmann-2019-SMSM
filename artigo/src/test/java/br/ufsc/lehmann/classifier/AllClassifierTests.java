@@ -17,7 +17,10 @@ import org.junit.runners.Suite.SuiteClasses;
 	DTWaClassifierTest.class, /*MTMClassifierTest.class*/
 	SMSMTemporalDurationClassifierTest.class, 
 	SMSMDistanceClassifierTest.class,
-	SMSMEllipsesClassifierTest.class, 
+	SMSMEllipsesClassifierTest.class,  
+	SMSMEllipsesWithDistanceClassifierTest.class,
+	SMSMEllipsesWithTemporalDurationClassifierTest.class,
+	SMSMEllipsesWithDistanceAndTemporalDurationClassifierTest.class, 
 	})
 public class AllClassifierTests {
 

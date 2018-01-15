@@ -31,7 +31,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
 import br.ufsc.core.trajectory.EqualsDistanceFunction;
-import br.ufsc.core.trajectory.GeographicDistanceFunction;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
@@ -55,7 +55,7 @@ import cc.mallet.util.IoUtils;
 
 public class HermoupolisDataReader {
 	
-	private static final GeographicDistanceFunction DISTANCE_FUNCTION = new EuclideanDistanceFunction();
+	public static final SpatialDistanceFunction DISTANCE_FUNCTION = new EuclideanDistanceFunction();
 	public static final BasicSemantic<Integer> USER_ID = new BasicSemantic<>(3);
 	public static final BasicSemantic<String> GOAL = new BasicSemantic<>(4);
 	public static final BasicSemantic<String> TRANSPORTATION = new BasicSemantic<>(5);
@@ -294,7 +294,7 @@ public class HermoupolisDataReader {
 					s.addData(i, MOVE_TRANSPORTATION_MODE, move);
 				}
 				s.addData(i, Semantic.GID, record.getEdgeId());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, USER_ID, record.getMoid());
 				s.addData(i, GOAL, record.getActivity());
 				s.addData(i, TRANSPORTATION, record.getTransportationMode());
@@ -319,7 +319,7 @@ public class HermoupolisDataReader {
 				TPoint point = new TPoint(record.getRealX(), record.getRealY());
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, Semantic.GID, record.getEdgeId());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, USER_ID, record.getMoid());
 				s.addData(i, GOAL, record.getActivity());
 				s.addData(i, TRANSPORTATION, record.getTransportationMode());

@@ -77,7 +77,7 @@ public class FastSMoT<E, T> {
 
 				List<Integer> points = new ArrayList<>(neighborhood[i]);
 				for (int x = 0; x <= neighborhood[i]; x++) {
-					TPoint p = Semantic.GEOGRAPHIC.getData(T, i + x);
+					TPoint p = Semantic.SPATIAL.getData(T, i + x);
 					points.add(Semantic.GID.getData(T, i + x).intValue());
 					s.addPoint(p);
 				}
@@ -105,7 +105,7 @@ public class FastSMoT<E, T> {
 		int total = 0;
 		while (i >= start && i <= end) {
 			total++;
-			TPoint point = Semantic.GEOGRAPHIC.getData(T, i);
+			TPoint point = Semantic.SPATIAL.getData(T, i);
 			x += point.getX();
 			y += point.getY();
 			i++;

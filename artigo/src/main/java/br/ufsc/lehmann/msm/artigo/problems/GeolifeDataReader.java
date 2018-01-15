@@ -28,7 +28,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
 import br.ufsc.core.trajectory.EqualsDistanceFunction;
-import br.ufsc.core.trajectory.GeographicDistanceFunction;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
@@ -38,25 +38,24 @@ import br.ufsc.core.trajectory.semantic.AttributeDescriptor;
 import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
-import br.ufsc.core.trajectory.semantic.StopMove;
 import br.ufsc.lehmann.AngleDistance;
 import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
+import br.ufsc.lehmann.ProportionalDistance;
 import br.ufsc.lehmann.Thresholds;
-import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.lehmann.msm.artigo.problems.StopMoveCSVReader.StopReaderCallback;
 import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
-import br.ufsc.utils.LatLongDistanceFunction;
+import br.ufsc.utils.EuclideanDistanceFunction;
 import cc.mallet.util.IoUtils;
 
 public class GeolifeDataReader {
 
-	private static final GeographicDistanceFunction GEO_DISTANCE_FUNCTION = new LatLongDistanceFunction();
+	public static final SpatialDistanceFunction GEO_DISTANCE_FUNCTION = new EuclideanDistanceFunction();
 
-	private static final GeographicDistanceFunction DISTANCE_FUNCTION = GEO_DISTANCE_FUNCTION;
+	private static final SpatialDistanceFunction DISTANCE_FUNCTION = GEO_DISTANCE_FUNCTION;
 	
 	public static final BasicSemantic<Integer> USER_ID = new BasicSemantic<>(3);
 	public static final BasicSemantic<String> TRANSPORTATION_MODE = new BasicSemantic<>(4);
@@ -69,7 +68,8 @@ public class GeolifeDataReader {
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION, Thresholds.MOVE_INNERPOINTS_DISTANCE)));
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
-	
+	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new ProportionalDistance(Thresholds.SLACK_TEMPORAL)));
+
 	private boolean onlyStops;
 	private StopMoveStrategy strategy;
 
@@ -207,7 +207,7 @@ public class GeolifeDataReader {
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 				}
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, USER_ID, record.getUserId());
 				s.addData(i, REGION_INTEREST, record.getPOI());
 				i++;
@@ -230,7 +230,7 @@ public class GeolifeDataReader {
 			for (GeolifeRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, USER_ID, record.getUserId());
 				s.addData(i, REGION_INTEREST, record.getPOI());

@@ -46,7 +46,7 @@ public class LCSSClassifier extends TrajectorySimilarityCalculator<SemanticTraje
 		}
 		NearestNeighbour<SemanticTrajectory, String> nn = new NearestNeighbour<SemanticTrajectory, String>(entries, Math.min(trajectories.size(), 3),
 				new LCSSClassifier(new LCSSSemanticParameter[] {//
-						new LCSSSemanticParameter(Semantic.GEOGRAPHIC, 100.0), //
+						new LCSSSemanticParameter(Semantic.SPATIAL, 100.0), //
 						new LCSSSemanticParameter(Semantic.TEMPORAL, 30 * 60 * 1000L), //
 						new LCSSSemanticParameter(BikeDataReader.USER, null), //
 						new LCSSSemanticParameter(BikeDataReader.GENDER, null), //

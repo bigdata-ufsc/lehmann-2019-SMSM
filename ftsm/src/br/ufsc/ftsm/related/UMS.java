@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import br.ufsc.core.trajectory.GeographicDistanceFunction;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.base.ETrajectory;
@@ -15,13 +15,13 @@ import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 
-	private GeographicDistanceFunction distanceFunc;
+	private SpatialDistanceFunction distanceFunc;
 
 	public UMS() {
 		this(new EuclideanDistanceFunction());
 	}
 
-	public UMS(GeographicDistanceFunction distanceFunc) {
+	public UMS(SpatialDistanceFunction distanceFunc) {
 		this.distanceFunc = distanceFunc;
 	}
 

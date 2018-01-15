@@ -45,7 +45,7 @@ import br.ufsc.utils.LatLongDistanceFunction;
 
 public class SergipeTracksDataReader {
 	
-	private static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
+	public static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
 	public static final BasicSemantic<Double> DISTANCE = new BasicSemantic<>(3);
 	public static final BasicSemantic<Integer> CAR_OR_BUS = new BasicSemantic<>(4);
 	public static final BasicSemantic<Double> AVERAGE_SPEED = new BasicSemantic<>(5);
@@ -172,7 +172,7 @@ public class SergipeTracksDataReader {
 			for (SergipeTracksRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, AVERAGE_SPEED, record.getAverageSpeed());
 				s.addData(i, CAR_OR_BUS, record.getCar_or_bus());
 				s.addData(i, LINHA, record.getLinha());

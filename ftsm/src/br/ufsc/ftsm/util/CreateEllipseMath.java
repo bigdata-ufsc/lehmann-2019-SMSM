@@ -1,6 +1,6 @@
 package br.ufsc.ftsm.util;
 
-import br.ufsc.core.trajectory.GeographicDistanceFunction;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.base.ETrajectory;
@@ -10,13 +10,13 @@ import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class CreateEllipseMath {
 	
-	private GeographicDistanceFunction distanceFunction;
+	private SpatialDistanceFunction distanceFunction;
 
 	public CreateEllipseMath() {
 		this(new EuclideanDistanceFunction());
 	}
 	
-	public CreateEllipseMath(GeographicDistanceFunction distanceFunction) {
+	public CreateEllipseMath(SpatialDistanceFunction distanceFunction) {
 		this.distanceFunction = distanceFunction;
 	}
 	

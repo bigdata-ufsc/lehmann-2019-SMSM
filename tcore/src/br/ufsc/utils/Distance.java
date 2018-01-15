@@ -1,14 +1,14 @@
 package br.ufsc.utils;
 
 import br.ufsc.core.base.Point;
-import br.ufsc.core.trajectory.GeographicDistanceFunction;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
 
 public class Distance {
 	
 	public static final double EARTH_RADIUS = 6371000d;
 
-	public static double getDistance(TPoint[] points, GeographicDistanceFunction func) {
+	public static double getDistance(TPoint[] points, SpatialDistanceFunction func) {
 		double ret = 0;
 		for (int i = 0; i < points.length - 1; i++) {
 			ret += func.distance(points[i], points[i + 1]);

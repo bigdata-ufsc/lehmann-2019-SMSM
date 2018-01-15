@@ -30,7 +30,7 @@ public class DBSCAN {
 		IntStream.iterate(20, i -> i + 5).limit(4).parallel().forEach((threshold) -> {
 //			EDR measurer = new EDR(new EDRSemanticParameter(NewYorkBusDataReader.STOP_SEMANTIC, threshold));
 			LCSSClassifier measurer = new LCSSClassifier(
-					new LCSSSemanticParameter(Semantic.GEOGRAPHIC_LATLON, threshold),//
+					new LCSSSemanticParameter(Semantic.SPATIAL_LATLON, threshold),//
 					new LCSSSemanticParameter(NewYorkBusDataReader.STOP_CENTROID_SEMANTIC, threshold * 2)//
 					);
 			IntStream.iterate(150, i -> i + 50).limit(4).parallel().forEach((meters) -> {

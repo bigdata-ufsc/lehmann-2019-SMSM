@@ -17,7 +17,7 @@ public class SWALE extends TrajectorySimilarityCalculator<SemanticTrajectory> im
 	private LCSS lcss;
 
 	public SWALE(SWALEParameters params) {
-		this.lcss = new LCSS(new LCSS.LCSSSemanticParameter(Semantic.GEOGRAPHIC_EUCLIDEAN, params.epsilon));
+		this.lcss = new LCSS(new LCSS.LCSSSemanticParameter(Semantic.SPATIAL_EUCLIDEAN, params.epsilon));
 		this.penalty = params.penalty;
 		this.reward = params.reward;
 	}

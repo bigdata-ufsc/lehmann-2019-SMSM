@@ -1,11 +1,11 @@
 package br.ufsc.utils;
 
-import br.ufsc.core.trajectory.GeographicDistanceFunction;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 
-public class EuclideanDistanceFunction implements GeographicDistanceFunction {
+public class EuclideanDistanceFunction implements SpatialDistanceFunction {
 
 	@Override
 	public double distance(TPoint p, TPoint d) {
@@ -16,7 +16,7 @@ public class EuclideanDistanceFunction implements GeographicDistanceFunction {
 	public double length(SemanticTrajectory trajectory) {
 		double ret = 0;
 		for (int i = 0; i < trajectory.length() - 2; i++) {
-			ret += Semantic.GEOGRAPHIC.distance(trajectory, i, trajectory, i + 1).doubleValue();
+			ret += Semantic.SPATIAL.distance(trajectory, i, trajectory, i + 1).doubleValue();
 		}
 		return ret;
 	}

@@ -22,7 +22,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
 import br.ufsc.core.trajectory.EqualsDistanceFunction;
-import br.ufsc.core.trajectory.GeographicDistanceFunction;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
@@ -49,9 +49,9 @@ import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class GeolifeDatabaseReader {
 	
-	private static final GeographicDistanceFunction GEO_DISTANCE_FUNCTION = new EuclideanDistanceFunction();
+	private static final SpatialDistanceFunction GEO_DISTANCE_FUNCTION = new EuclideanDistanceFunction();
 
-	private static final GeographicDistanceFunction DISTANCE_FUNCTION = GEO_DISTANCE_FUNCTION;
+	private static final SpatialDistanceFunction DISTANCE_FUNCTION = GEO_DISTANCE_FUNCTION;
 	
 	public static final BasicSemantic<Integer> USER_ID = new BasicSemantic<>(3);
 	public static final BasicSemantic<String> TRANSPORTATION_MODE = new BasicSemantic<>(4);
@@ -276,16 +276,16 @@ public class GeolifeDatabaseReader {
 							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
 							//injecting a move between two consecutives stops
 							stops.put(record.getSemanticStop(), stop);
-							s.addData(i, Semantic.GEOGRAPHIC, point);
+							s.addData(i, Semantic.SPATIAL, point);
 						} else {
 							s.addData(i, STOP_CENTROID_SEMANTIC, stop);
 							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
-							s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
+							s.addData(i, Semantic.SPATIAL, stop.getCentroid());
 						}
 					} else {
 						s.addData(i, STOP_CENTROID_SEMANTIC, stop);
 						s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
-						s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
+						s.addData(i, Semantic.SPATIAL, stop.getCentroid());
 					}
 					stop.setRegion(record.getPOI());
 				} else if(record.getSemanticMoveId() != null) {
@@ -313,7 +313,7 @@ public class GeolifeDatabaseReader {
 					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
-					s.addData(i, Semantic.GEOGRAPHIC, point);
+					s.addData(i, Semantic.SPATIAL, point);
 				}
 				s.addData(i, Semantic.GID, record.getGid());
 				s.addData(i, USER_ID, record.getUserId());
@@ -387,7 +387,7 @@ public class GeolifeDatabaseReader {
 			for (GeolifeRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, USER_ID, record.getUserId());
 				s.addData(i, TRANSPORTATION_MODE, record.getTransportationMode());

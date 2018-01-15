@@ -1,7 +1,6 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.io.IOException;
-import java.text.ParseException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,16 +55,16 @@ public class SanFranciscoCab_AirportMallDirection_Problem extends SanFranciscoCa
 	}
 	
 	protected List<SemanticTrajectory> load() {
-		try {
-			return new ArrayList<>(new SanFranciscoCabDataReader(onlyStop, roads, directions).read());
-		} catch (IOException | ParseException e) {
-			throw new RuntimeException(e);
-		}
 //		try {
-//			return new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop, roads).read());
-//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+//			return new ArrayList<>(new SanFranciscoCabDataReader(onlyStop, roads, directions).read());
+//		} catch (IOException | ParseException e) {
 //			throw new RuntimeException(e);
 //		}
+		try {
+			return new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop, roads, directions).read());
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

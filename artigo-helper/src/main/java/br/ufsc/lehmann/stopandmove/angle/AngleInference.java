@@ -34,10 +34,10 @@ public class AngleInference {
 		for (Map.Entry<Move, SemanticTrajectory> entry : moves.entrySet()) {
 			registers++;
 			Move move = entry.getKey();
-			TPoint start = Semantic.GEOGRAPHIC.getData(entry.getValue(), move.getBegin());
+			TPoint start = Semantic.SPATIAL.getData(entry.getValue(), move.getBegin());
 			TPoint end = null;
 			int endIndex = move.getBegin() + move.getLength() - 1;
-			end = Semantic.GEOGRAPHIC.getData(entry.getValue(), endIndex);
+			end = Semantic.SPATIAL.getData(entry.getValue(), endIndex);
 			double angle = Angle.getAngle(start, end);
 			ps.setDouble(1, angle);
 			ps.setInt(2, move.getMoveId());

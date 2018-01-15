@@ -22,7 +22,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
 import br.ufsc.core.trajectory.EqualsDistanceFunction;
-import br.ufsc.core.trajectory.GeographicDistanceFunction;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
@@ -49,9 +49,9 @@ import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class GeolifeUniversityDatabaseReader {
 	
-	private static final GeographicDistanceFunction GEO_DISTANCE_FUNCTION = new EuclideanDistanceFunction();
+	private static final SpatialDistanceFunction GEO_DISTANCE_FUNCTION = new EuclideanDistanceFunction();
 
-	private static final GeographicDistanceFunction DISTANCE_FUNCTION = GEO_DISTANCE_FUNCTION;
+	private static final SpatialDistanceFunction DISTANCE_FUNCTION = GEO_DISTANCE_FUNCTION;
 	
 	private static int SEMANTICS_COUNTER = 3;
 	
@@ -67,7 +67,7 @@ public class GeolifeUniversityDatabaseReader {
 	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION, Thresholds.MOVE_INNERPOINTS_DISTANCE)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER++, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 
@@ -83,82 +83,86 @@ public class GeolifeUniversityDatabaseReader {
 		this.withTransportation = withTransportation;
 	}
 
-	public List<SemanticTrajectory> read(String[] zones) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "public.geolife2_limited", null, null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
 		Connection conn = retriever.getConnection();
-		conn.setAutoCommit(false);
-		Statement st = conn.createStatement();
-		st.setFetchSize(1000);
-
-		String stopTable = this.withTransportation ? "stops_moves.geolife_enriched_stop" : "stops_moves.geolife2_limited_stop";
-		String moveTable = this.withTransportation ? "stops_moves.geolife_enriched_move" : "stops_moves.geolife2_limited_move";
-		//
-		stopTable = "stops_moves.geolife_with_pois_university_stop";
-		moveTable = "stops_moves.geolife_with_pois_university_move";
-		//
-		ResultSet stopsData = st.executeQuery(
-				"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
-						"centroid_lon, start_time, end_time, street, \"POI\" " + //
-						"FROM "
-						+ stopTable);
-		Map<Integer, Stop> stops = new HashMap<>();
-		while (stopsData.next()) {
-			int stopId = stopsData.getInt("stop_id");
-			Stop stop = stops.get(stopId);
-			if (stop == null) {
-				stop = new Stop(stopId, null, //
-						stopsData.getTimestamp("start_time").getTime(), //
-						stopsData.getTimestamp("end_time").getTime(), //
-						new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
-						stopsData.getInt("begin"), //
-						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
-						stopsData.getInt("length"), //
-						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")),//
-						stopsData.getString("POI"),//
-						stopsData.getString("street")//
-				);
-				stops.put(stopId, stop);
-			}
-		}
-		Map<Integer, Move> moves = new HashMap<>();
-		ResultSet movesData = st.executeQuery(
-				"SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length " + //
-						"FROM "
-						+ moveTable);
-		while(movesData.next()) {
-			int moveId = movesData.getInt("move_id");
-				Move move = moves.get(moveId);
-			if (move == null) {
-				int startStopId = movesData.getInt("start_stop_id");
-				if (movesData.wasNull()) {
-					startStopId = -1;
-				}
-				int endStopId = movesData.getInt("end_stop_id");
-				if (movesData.wasNull()) {
-					endStopId = -1;
-				}
-				move = new Move(moveId, //
-						stops.get(startStopId), //
-						stops.get(endStopId), //
-						movesData.getTimestamp("start_time").getTime(), //
-						movesData.getTimestamp("end_time").getTime(), //
-						movesData.getInt("begin"), //
-						movesData.getInt("length"), //
-						null);
-				moves.put(moveId, move);
-			}
-		}
-		st.close();
 		List<SemanticTrajectory> ret = null;
-		List<Move> usedMoves = new ArrayList<Move>();
-		if(onlyStops) {
-			ret = readStopsTrajectories(zones, conn, stops, moves, usedMoves);
-		} else {
-			ret = readRawPoints(zones, conn, stops, moves);
+		try {
+			conn.setAutoCommit(false);
+			Statement st = conn.createStatement();
+			st.setFetchSize(1000);
+
+			String stopTable = this.withTransportation ? "stops_moves.geolife_enriched_stop"
+					: "stops_moves.geolife2_limited_stop";
+			String moveTable = this.withTransportation ? "stops_moves.geolife_enriched_move"
+					: "stops_moves.geolife2_limited_move";
+			//
+			stopTable = "stops_moves.geolife_with_pois_university_stop";
+			moveTable = "stops_moves.geolife_with_pois_university_move";
+			//
+			ResultSet stopsData = st.executeQuery(
+					"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
+							"centroid_lon, start_time, end_time, street, \"POI\" " + //
+							"FROM " + stopTable);
+			Map<Integer, Stop> stops = new HashMap<>();
+			while (stopsData.next()) {
+				int stopId = stopsData.getInt("stop_id");
+				Stop stop = stops.get(stopId);
+				if (stop == null) {
+					stop = new Stop(stopId, stopsData.getString("POI"), //
+							stopsData.getTimestamp("start_time").getTime(), //
+							stopsData.getTimestamp("end_time").getTime(), //
+							new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
+							stopsData.getInt("begin"), //
+							new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
+							stopsData.getInt("length"), //
+							new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")), //
+							stopsData.getString("POI"), //
+							stopsData.getString("street")//
+					);
+					stops.put(stopId, stop);
+				}
+			}
+			Map<Integer, Move> moves = new HashMap<>();
+			ResultSet movesData = st
+					.executeQuery("SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length " + //
+							"FROM " + moveTable);
+			while (movesData.next()) {
+				int moveId = movesData.getInt("move_id");
+				Move move = moves.get(moveId);
+				if (move == null) {
+					int startStopId = movesData.getInt("start_stop_id");
+					if (movesData.wasNull()) {
+						startStopId = -1;
+					}
+					int endStopId = movesData.getInt("end_stop_id");
+					if (movesData.wasNull()) {
+						endStopId = -1;
+					}
+					move = new Move(moveId, //
+							stops.get(startStopId), //
+							stops.get(endStopId), //
+							movesData.getTimestamp("start_time").getTime(), //
+							movesData.getTimestamp("end_time").getTime(), //
+							movesData.getInt("begin"), //
+							movesData.getInt("length"), //
+							null);
+					moves.put(moveId, move);
+				}
+			}
+			st.close();
+			List<Move> usedMoves = new ArrayList<Move>();
+			if (onlyStops) {
+				ret = readStopsTrajectories(null, conn, stops, moves, usedMoves);
+			} else {
+				ret = readRawPoints(null, conn, stops, moves);
+			}
+			compute(usedMoves);
+		} finally {
+			conn.close();
 		}
-		compute(usedMoves);
 		return ret;
 	}
 
@@ -265,72 +269,51 @@ public class GeolifeUniversityDatabaseReader {
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 8);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, SEMANTICS_COUNTER);
 			Collection<GeolifeRecord> collection = records.get(trajId);
 			int i = 0;
 			for (GeolifeRecord record : collection) {
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
 				if(record.getSemanticStop() != null) {
-					Stop stop = stops.remove(record.getSemanticStop());
+					Stop stop = stops.get(record.getSemanticStop());
 					if(stop == null) {
-						continue;
+						throw new RuntimeException("Stop does not found");
 					}
+					stop.addPoint(point);
 					if(i > 0) {
+						if(STOP_CENTROID_SEMANTIC.getData(s, i - 1) == stop) {
+							continue;
+						}
 						Stop previousStop = STOP_CENTROID_SEMANTIC.getData(s, i - 1);
-						if(previousStop != null) {
+						if(previousStop != null && previousStop.getNextMove() == null) {
 							Move move = new Move(-1, previousStop, stop, previousStop.getEndTime(), stop.getStartTime(), stop.getBegin() - 1, 0, new TPoint[0], 
 									Angle.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
 									Distance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
-							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
-							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
-							//injecting a move between two consecutives stops
-							stops.put(record.getSemanticStop(), stop);
-							s.addData(i, Semantic.GEOGRAPHIC, point);
-						} else {
-							s.addData(i, STOP_CENTROID_SEMANTIC, stop);
-							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
-							s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
+							previousStop.setNextMove(move);
+							stop.setPreviousMove(move);
 						}
-					} else {
-						s.addData(i, STOP_CENTROID_SEMANTIC, stop);
-						s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
-						s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
 					}
-					stop.setRegion(record.getPOI());
+					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
+					s.addData(i, Semantic.GID, record.getGid());
+					s.addData(i, Semantic.SPATIAL_LATLON, stop.getCentroid());
+					s.addData(i, USER_ID, record.getUserId());
+					s.addData(i, REGION_INTEREST, record.getPOI());
+					s.addData(i, PATH, record.getPath());
+					s.addData(i, DIRECTION, record.getDirection());
+					i++;
 				} else if(record.getSemanticMoveId() != null) {
-					Move move = moves.remove(record.getSemanticMoveId());
+					Move move = moves.get(record.getSemanticMoveId());
 					if(move == null) {
-						for (int j = i - 1; j > -1; j--) {
-							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
-							if(move != null) {
-								break;
-							}
-						}
-						if(move != null) {
-							TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
-							List<TPoint> a = new ArrayList<TPoint>(Arrays.asList(points));
-							a.add(point);
-							move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
-							continue;
-						}
-					} else {
-						usedMoves.add(move);
+						throw new RuntimeException("Move does not found");
 					}
+					move.getStart().setNextMove(move);
+					move.getEnd().setPreviousMove(move);
 					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
 					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
 					a.add(point);
 					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
-					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
-					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
-					s.addData(i, Semantic.GEOGRAPHIC, point);
 				}
-				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, USER_ID, record.getUserId());
-				s.addData(i, TRANSPORTATION_MODE, record.getTransportationMode());
-				s.addData(i, REGION_INTEREST, record.getPOI());
-				s.addData(i, DIRECTION, record.getDirection());
-				s.addData(i, PATH, record.getPath());
-				i++;
 			}
 			stats.addValue(s.length());
 			ret.add(s);
@@ -403,7 +386,7 @@ public class GeolifeUniversityDatabaseReader {
 			for (GeolifeRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, USER_ID, record.getUserId());
 				s.addData(i, TRANSPORTATION_MODE, record.getTransportationMode());

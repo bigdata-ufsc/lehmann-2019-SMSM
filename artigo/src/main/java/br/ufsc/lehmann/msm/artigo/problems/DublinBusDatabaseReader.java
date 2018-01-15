@@ -243,7 +243,7 @@ public class DublinBusDatabaseReader {
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 				}
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, LINE_INFO, record.getLineId());
 				s.addData(i, JOURNEY, record.getJourney_pattern());
@@ -318,7 +318,7 @@ public class DublinBusDatabaseReader {
 			for (DublinBusRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, LINE_INFO, record.getLineId());
 				s.addData(i, JOURNEY, record.getJourney_pattern());

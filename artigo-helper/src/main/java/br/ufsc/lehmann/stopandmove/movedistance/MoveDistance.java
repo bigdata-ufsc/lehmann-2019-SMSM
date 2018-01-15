@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
 
-import br.ufsc.core.trajectory.GeographicDistanceFunction;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
@@ -17,11 +17,11 @@ import br.ufsc.utils.Distance;
 public class MoveDistance {
 	
 	private final String database;
-	private GeographicDistanceFunction func;
-	public MoveDistance(GeographicDistanceFunction func) {
+	private SpatialDistanceFunction func;
+	public MoveDistance(SpatialDistanceFunction func) {
 		this("postgis", func);
 	}
-	public MoveDistance(String database, GeographicDistanceFunction func) {
+	public MoveDistance(String database, SpatialDistanceFunction func) {
 		this.database = database;
 		this.func = func;
 	}
@@ -38,7 +38,7 @@ public class MoveDistance {
 			Move move = entry.getKey();
 			TPoint[] points = new TPoint[move.getLength()];
 			for (int i = 0; i < move.getLength(); i++) {
-				points[i] = Semantic.GEOGRAPHIC.getData(entry.getValue(), move.getBegin() + i);
+				points[i] = Semantic.SPATIAL.getData(entry.getValue(), move.getBegin() + i);
 			}
 			double traveledDistance = Distance.getDistance(points, func);
 			ps.setDouble(1, traveledDistance);

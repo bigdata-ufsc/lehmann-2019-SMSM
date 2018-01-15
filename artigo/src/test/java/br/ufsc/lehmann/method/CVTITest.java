@@ -5,6 +5,7 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.NElementProblem;
+import br.ufsc.lehmann.SlackTemporalSemantic;
 import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.method.CVTI.CVTISemanticParameter;
 import br.ufsc.lehmann.msm.artigo.Problem;
@@ -47,6 +48,6 @@ public interface CVTITest {
 		} else if(problem instanceof HermoupolisProblem) {
 			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
 		}
-		return new CVTI(new CVTISemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)));
+		return new CVTI(new CVTISemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)), SlackTemporalSemantic.SLACK_TEMPORAL);
 	}
 }

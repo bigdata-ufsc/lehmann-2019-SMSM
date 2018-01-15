@@ -12,6 +12,11 @@
 		</dependency>
 		<dependency>
 			<groupId>br.ufsc.lehmann.msm</groupId>
+			<artifactId>tcore</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>br.ufsc.lehmann.msm</groupId>
 			<artifactId>msm-move</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

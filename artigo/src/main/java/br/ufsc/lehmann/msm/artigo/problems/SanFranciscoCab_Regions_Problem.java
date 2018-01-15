@@ -1,7 +1,6 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.io.IOException;
-import java.text.ParseException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,11 +60,11 @@ public class SanFranciscoCab_Regions_Problem extends SanFranciscoCabProblem {
 	}
 	
 	protected List<SemanticTrajectory> load() {
-		try {
-			return new ArrayList<>(new SanFranciscoCabDataReader(onlyStop, strategy, roads, directions, regions).read());
-		} catch (IOException | ParseException e) {
-			throw new RuntimeException(e);
-		}
+//		try {
+//			return new ArrayList<>(new SanFranciscoCabDataReader(onlyStop, strategy, roads, directions, regions).read());
+//		} catch (IOException | ParseException e) {
+//			throw new RuntimeException(e);
+//		}
 
 //		data = data.stream()//
 //				.filter(t -> Arrays.asList(
@@ -76,11 +75,11 @@ public class SanFranciscoCab_Regions_Problem extends SanFranciscoCabProblem {
 //						).contains(t.getTrajectoryId()))//
 //				.sorted((o1, o2) -> ((Comparable) o1.getTrajectoryId()).compareTo(o2.getTrajectoryId()))//
 //				.collect(Collectors.toList());
-//		try {
-//			data = new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop, roads, directions, regions).read());
-//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-//			throw new RuntimeException(e);
-//		}
+		try {
+			return new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop, roads, directions, regions).read());
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

@@ -261,16 +261,16 @@ public class NewYorkBus_Zoned_DatabaseReader {
 							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
 							//injecting a move between two consecutives stops
 							stops.put(record.getSemanticStop(), stop);
-							s.addData(i, Semantic.GEOGRAPHIC, point);
+							s.addData(i, Semantic.SPATIAL, point);
 						} else {
 							s.addData(i, STOP_CENTROID_SEMANTIC, stop);
 							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
-							s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
+							s.addData(i, Semantic.SPATIAL, stop.getCentroid());
 						}
 					} else {
 						s.addData(i, STOP_CENTROID_SEMANTIC, stop);
 						s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
-						s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
+						s.addData(i, Semantic.SPATIAL, stop.getCentroid());
 					}
 					stop.setRegion(record.getPOI());
 				} else if(record.getSemanticMoveId() != null) {
@@ -298,7 +298,7 @@ public class NewYorkBus_Zoned_DatabaseReader {
 					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
-					s.addData(i, Semantic.GEOGRAPHIC, point);
+					s.addData(i, Semantic.SPATIAL, point);
 				}
 				s.addData(i, Semantic.GID, record.getGid());
 				s.addData(i, DIRECTION, record.getDirection());
@@ -377,7 +377,7 @@ public class NewYorkBus_Zoned_DatabaseReader {
 			for (NewYorkBusRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, DIRECTION, record.getDirection());
 				s.addData(i, ROUTE, record.getRoute());

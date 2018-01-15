@@ -45,7 +45,7 @@ public class EDRClassifier extends TrajectorySimilarityCalculator<SemanticTrajec
 			entries.add(new DataEntry<>(traj, y.nextBoolean() ? "chuva" : "sol"));
 		}
 		NearestNeighbour<SemanticTrajectory, String> nn = new NearestNeighbour<SemanticTrajectory, String>(entries, Math.min(trajectories.size(), 3),
-				new EDRClassifier(new EDRSemanticParameter(Semantic.GEOGRAPHIC, 100.0), //
+				new EDRClassifier(new EDRSemanticParameter(Semantic.SPATIAL, 100.0), //
 						new EDRSemanticParameter(Semantic.TEMPORAL, 30 * 60 * 1000L), //
 						new EDRSemanticParameter(BikeDataReader.USER, null), //
 						new EDRSemanticParameter(BikeDataReader.GENDER, null), //

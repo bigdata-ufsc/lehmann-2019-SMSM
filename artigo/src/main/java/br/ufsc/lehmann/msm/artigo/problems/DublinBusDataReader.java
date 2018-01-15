@@ -52,7 +52,7 @@ import br.ufsc.utils.LatLongDistanceFunction;
 import cc.mallet.util.IoUtils;
 
 public class DublinBusDataReader {
-	private static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
+	public static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
 	
 	public static final BasicSemantic<Integer> LINE_INFO = new BasicSemantic<>(3);
 	public static final BasicSemantic<String> JOURNEY = new BasicSemantic<>(4);
@@ -61,7 +61,7 @@ public class DublinBusDataReader {
 	public static final BasicSemantic<Integer> STOP = new BasicSemantic<>(7);
 	public static final BasicSemantic<String> OPERATOR = new BasicSemantic<>(8);
 	
-	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(9, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, new LatLongDistanceFunction()));
+	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(9, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
 	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(9, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
 	public static final StopSemantic STOP_TRAFFIC_LIGHT_SEMANTIC = new StopSemantic(9, new AttributeDescriptor<Stop, String>(AttributeType.STOP_TRAFFIC_LIGHT, new EqualsDistanceFunction<String>()));
 	public static final StopSemantic STOP_TRAFFIC_LIGHT_DISTANCE_SEMANTIC = new StopSemantic(9, new AttributeDescriptor<Stop, Double>(AttributeType.STOP_TRAFFIC_LIGHT_DISTANCE, new NumberDistance()));
@@ -69,8 +69,8 @@ public class DublinBusDataReader {
 	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
-	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(new LatLongDistanceFunction(), 10)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(new LatLongDistanceFunction())));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, 10)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(10, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(DISTANCE_FUNCTION)));
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 
@@ -244,7 +244,7 @@ public class DublinBusDataReader {
 					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
 				}
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, LINE_INFO, record.getLineId());
 				s.addData(i, JOURNEY, record.getJourney_pattern());
 				s.addData(i, CONGESTION, record.isCongestion());
@@ -302,7 +302,7 @@ public class DublinBusDataReader {
 			for (DublinBusRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, LINE_INFO, record.getLineId());
 				s.addData(i, JOURNEY, record.getJourney_pattern());

@@ -26,8 +26,8 @@ public class DTWa<Label> extends TrajectorySimilarityCalculator<SemanticTrajecto
 	}
 	
 	public void training(List<DataEntry<SemanticTrajectory, Label>> trajectories) {
-		dwtiNN = new NearestNeighbour<>(trajectories, Math.min(trajectories.size(), 3), new DTWiMeasurer(semantics));
-		dwtdNN = new NearestNeighbour<>(trajectories, Math.min(trajectories.size(), 3), new DTWdMeasurer(semantics));
+		dwtiNN = new NearestNeighbour<>(trajectories, Math.min(trajectories.size(), 1), new DTWiMeasurer(semantics));
+		dwtdNN = new NearestNeighbour<>(trajectories, Math.min(trajectories.size(), 1), new DTWdMeasurer(semantics));
 	}
 
 	@Override

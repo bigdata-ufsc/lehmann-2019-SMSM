@@ -11,9 +11,15 @@ import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 public class CVTI extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 
 	private CVTISemanticParameter parameter;
+	private Semantic<TemporalDuration, Number> temporal = Semantic.TEMPORAL;
 
 	public CVTI(CVTISemanticParameter<?, ?> parameter) {
+		this(parameter, Semantic.TEMPORAL);
+	}
+
+	public CVTI(CVTISemanticParameter<?, ?> parameter, Semantic<TemporalDuration, Number> temp) {
 		this.parameter = parameter;
+		this.temporal = temp;
 	}
 
 	@Override
@@ -41,9 +47,9 @@ public class CVTI extends TrajectorySimilarityCalculator<SemanticTrajectory> imp
 		for (int i = 1; i <= R.length(); i++) {
 			for (int j = 1; j <= S.length(); j++) {
 				if (parameter.semantic.match(R, i - 1, S, j - 1, parameter.threshlod)) {
-					TemporalDuration temporalDuration = Semantic.TEMPORAL.getData(R, i - 1);
+					TemporalDuration temporalDuration = temporal.getData(R, i - 1);
 					Interval interval = new Interval(temporalDuration.getStart().toEpochMilli(), temporalDuration.getEnd().toEpochMilli());
-					TemporalDuration temporalDuration2 = Semantic.TEMPORAL.getData(S, j - 1);
+					TemporalDuration temporalDuration2 = temporal.getData(S, j - 1);
 					Interval interval2 = new Interval(temporalDuration2.getStart().toEpochMilli(), temporalDuration2.getEnd().toEpochMilli());
 					Interval overlap = interval.overlap(interval2);
 					if(overlap != null && overlap.toDurationMillis() > 0) {

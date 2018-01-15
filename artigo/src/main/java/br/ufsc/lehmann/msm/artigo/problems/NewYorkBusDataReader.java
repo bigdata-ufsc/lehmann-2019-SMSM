@@ -54,7 +54,7 @@ import cc.mallet.util.IoUtils;
 
 public class NewYorkBusDataReader {
 	
-	private static final LatLongDistanceFunction GEO_DISTANCE_FUNCTION = new LatLongDistanceFunction();
+	public static final LatLongDistanceFunction GEO_DISTANCE_FUNCTION = new LatLongDistanceFunction();
 
 	public static final BasicSemantic<Double> DISTANCE = new BasicSemantic<>(3);
 	public static final BasicSemantic<String> ROUTE = new BasicSemantic<>(4);
@@ -282,7 +282,7 @@ public class NewYorkBusDataReader {
 					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
 				}
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, DIRECTION, record.getDirection());
 				s.addData(i, ROUTE, record.getRoute());
 				s.addData(i, DISTANCE, record.getDistanceAlongTrip());
@@ -346,7 +346,7 @@ public class NewYorkBusDataReader {
 			for (NewYorkBusRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, DIRECTION, record.getDirection());
 				s.addData(i, ROUTE, record.getRoute());

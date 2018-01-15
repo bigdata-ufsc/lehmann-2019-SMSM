@@ -1,9 +1,7 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.io.IOException;
-import java.text.ParseException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
@@ -44,16 +42,16 @@ public class GeolifeUniversitySubProblem extends GeolifeProblem {
 	}
 
 	protected List<SemanticTrajectory> load() {
-		try {
-			return new ArrayList<>(new GeolifeUniversityDataReader(onlyStops, strategy).read());
-		} catch (NumberFormatException | ParseException | IOException e) {
-			throw new RuntimeException(e);
-		}
 //		try {
-//			return new ArrayList<>(new GeolifeDatabaseReader(onlyStops).read(zones));
-//		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+//			return new ArrayList<>(new GeolifeUniversityDataReader(onlyStops, strategy).read());
+//		} catch (NumberFormatException | ParseException | IOException e) {
 //			throw new RuntimeException(e);
 //		}
+		try {
+			return new ArrayList<>(new GeolifeUniversityDatabaseReader(onlyStops).read());
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

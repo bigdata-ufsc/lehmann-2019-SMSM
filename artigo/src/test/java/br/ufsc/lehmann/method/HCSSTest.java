@@ -24,23 +24,23 @@ public interface HCSSTest {
 
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
 		if(problem instanceof NElementProblem) {
-			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, .5), new WeightSemantic(-1, NElementProblem.stop));
+			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL, .5), new WeightSemantic(-1, NElementProblem.stop));
 		} else if(problem instanceof NewYorkBusProblem) {
-			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON), new WeightSemantic(-1, ((NewYorkBusProblem) problem).stopSemantic()));
+			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL_LATLON, Thresholds.SPATIAL_LATLON), new WeightSemantic(-1, ((NewYorkBusProblem) problem).stopSemantic()));
 		} else if(problem instanceof DublinBusProblem) {
-			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON), new WeightSemantic(-1, ((DublinBusProblem) problem).stopSemantic()));
+			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL_LATLON, Thresholds.SPATIAL_LATLON), new WeightSemantic(-1, ((DublinBusProblem) problem).stopSemantic()));
 		} else if(problem instanceof PatelProblem) {
-			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN), new WeightSemantic(-1, ((PatelProblem) problem).stopSemantic()));
+			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL, Thresholds.SPATIAL_EUCLIDEAN), new WeightSemantic(-1, ((PatelProblem) problem).stopSemantic()));
 		} else if(problem instanceof VehicleProblem) {
-			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC, Thresholds.GEOGRAPHIC_EUCLIDEAN), new WeightSemantic(-1, ((VehicleProblem) problem).stopSemantic()));
+			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL, Thresholds.SPATIAL_EUCLIDEAN), new WeightSemantic(-1, ((VehicleProblem) problem).stopSemantic()));
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON), new WeightSemantic(-1, ((SanFranciscoCabProblem) problem).stopSemantic()));
+			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL_LATLON, Thresholds.SPATIAL_LATLON), new WeightSemantic(-1, ((SanFranciscoCabProblem) problem).stopSemantic()));
 		} else if(problem instanceof SergipeTracksProblem) {
-			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON), new WeightSemantic(-1, SergipeTracksDataReader.STOP_CENTROID_SEMANTIC));
+			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL_LATLON, Thresholds.SPATIAL_LATLON), new WeightSemantic(-1, SergipeTracksDataReader.STOP_CENTROID_SEMANTIC));
 		} else if(problem instanceof PrototypeProblem) {
-			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_EUCLIDEAN, Thresholds.GEOGRAPHIC_EUCLIDEAN), new WeightSemantic(-1, PrototypeDataReader.STOP_SEMANTIC));
+			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL_EUCLIDEAN, Thresholds.SPATIAL_EUCLIDEAN), new WeightSemantic(-1, PrototypeDataReader.STOP_SEMANTIC));
 		} else if(problem instanceof PisaProblem) {
-			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.GEOGRAPHIC_LATLON, Thresholds.GEOGRAPHIC_LATLON), new WeightSemantic(-1, ((PisaProblem) problem).stopSemantic()));
+			return new HCSS(new HCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL_LATLON, Thresholds.SPATIAL_LATLON), new WeightSemantic(-1, ((PisaProblem) problem).stopSemantic()));
 		}
 		return null;
 	}

@@ -1,8 +1,9 @@
 package br.ufsc.core.trajectory.semantic;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ public class Stop {
 	private double avg;
 
 	private int begin, length;
-	private Set<TPoint> points = new HashSet<TPoint>();
+	private List<TPoint> points = new ArrayList<>();
 	private TPoint centroid;
 	private TPoint startPoint;
 	private TPoint endPoint;
@@ -72,7 +73,7 @@ public class Stop {
 		return avg;
 	}
 
-	public Set<TPoint> getPoints() {
+	public List<TPoint> getPoints() {
 		return points;
 	}
 
@@ -83,6 +84,20 @@ public class Stop {
 	public TPoint getCentroid() {
 		return centroid;
 	}
+
+	public TPoint centroid() {
+		double x = 0;
+		double y = 0;
+		for (Iterator iterator = points.iterator(); iterator.hasNext();) {
+			TPoint point = (TPoint) iterator.next();
+			x += point.getX();
+			y += point.getY();
+		}
+
+		TPoint p = new TPoint(0, x / points.size(), y / points.size(), new Timestamp(0));
+		return p;
+	}
+
 	
 	public Long getTrafficLight() {
 		return (Long) getAttribute(AttributeType.STOP_TRAFFIC_LIGHT);
@@ -148,6 +163,14 @@ public class Stop {
 	public int getLength() {
 		return length;
 	}
+	
+	public Move getNextMove() {
+		return (Move) getAttribute(AttributeType.NEXT_MOVE);
+	}
+	
+	public Move getPreviousMove() {
+		return (Move) getAttribute(AttributeType.PREVIOUS_MOVE);
+	}
 
 	public void setLength(int length) {
 		this.length = length;
@@ -155,6 +178,14 @@ public class Stop {
 
 	public void setCentroid(TPoint centroid) {
 		this.centroid = centroid;
+	}
+
+	public void setNextMove(Move move) {
+		setAttribute(AttributeType.NEXT_MOVE, move);
+	}
+
+	public void setPreviousMove(Move move) {
+		setAttribute(AttributeType.PREVIOUS_MOVE, move);
 	}
 	
 	private void setAttribute(AttributeType type, Object value) {

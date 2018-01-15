@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import br.ufsc.core.trajectory.GeographicDistanceFunction;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
@@ -15,9 +15,9 @@ import br.ufsc.core.trajectory.semantic.Stop;
 
 public class FastCBSMoT {
 	
-	private GeographicDistanceFunction distance;
+	private SpatialDistanceFunction distance;
 
-	public FastCBSMoT(GeographicDistanceFunction distance) {
+	public FastCBSMoT(SpatialDistanceFunction distance) {
 		this.distance = distance;
 	}
 
@@ -50,7 +50,7 @@ public class FastCBSMoT {
 					s.setCentroid(centroid(T, i, i + neighborhood[i] - 1));
 	
 					for (int x = 0; x <= neighborhood[i]; x++) {
-						TPoint p = Semantic.GEOGRAPHIC.getData(T, i + x);
+						TPoint p = Semantic.SPATIAL.getData(T, i + x);
 						s.addPoint(p);
 						points.add(Semantic.GID.getData(T, i + x).intValue());
 					}
@@ -127,7 +127,7 @@ public class FastCBSMoT {
 		int total = 0;
 		while (i >= start && i <= end) {
 			total++;
-			TPoint point = Semantic.GEOGRAPHIC.getData(T, i);
+			TPoint point = Semantic.SPATIAL.getData(T, i);
 			x += point.getX();
 			y += point.getY();
 			i++;
@@ -142,8 +142,8 @@ public class FastCBSMoT {
 		boolean yet = true;
 		int j = i + 1;
 		while (j < T.length() && yet) {
-			TPoint p = Semantic.GEOGRAPHIC.getData(T, i);
-			TPoint d = Semantic.GEOGRAPHIC.getData(T, j);
+			TPoint p = Semantic.SPATIAL.getData(T, i);
+			TPoint d = Semantic.SPATIAL.getData(T, j);
 			if (distance.distance(p, d) < distance.convert(maxDist)) {
 				neighbors++;
 			} else {

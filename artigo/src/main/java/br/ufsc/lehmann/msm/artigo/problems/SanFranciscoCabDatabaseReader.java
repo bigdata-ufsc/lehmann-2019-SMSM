@@ -54,18 +54,14 @@ public class SanFranciscoCabDatabaseReader {
 	public static final BasicSemantic<Integer> OCUPATION = new BasicSemantic<>(4);
 	public static final BasicSemantic<Integer> ROAD = new BasicSemantic<>(5);
 	public static final BasicSemantic<String> DIRECTION = new BasicSemantic<>(6);
+	public static final StopSemantic STOP_REGION_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_REGION, new EqualsDistanceFunction<String>()));
 	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
-	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_TRAFFIC_LIGHT_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_TRAFFIC_LIGHT, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_TRAFFIC_LIGHT_DISTANCE_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, Double>(AttributeType.STOP_TRAFFIC_LIGHT_DISTANCE, new NumberDistance()));
 	
 	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, 10)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(DISTANCE_FUNCTION)));
-	
-	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 	
 	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(9);
 	public static final BasicSemantic<String> ROUTE = new BasicSemantic<>(10);
@@ -115,81 +111,86 @@ public class SanFranciscoCabDatabaseReader {
 	}
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "taxi.sanfrancisco_taxicab_crawdad", null, null);
+		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "taxi.sanfrancisco_taxicab", null, null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
 		Connection conn = retriever.getConnection();
-		conn.setAutoCommit(false);
-		Statement st = conn.createStatement();
-		st.setFetchSize(1000);
-
-		ResultSet stopsData = st.executeQuery(
-				"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
-						"centroid_lon, start_time, end_time, street, \"POI\" " + //
-						"FROM stops_moves.taxi_sanfrancisco_stop");
-		Map<Integer, Stop> stops = new HashMap<>();
-		while (stopsData.next()) {
-			int stopId = stopsData.getInt("stop_id");
-			Stop stop = stops.get(stopId);
-			if (stop == null) {
-				stop = new Stop(stopId, null, //
-						stopsData.getTimestamp("start_time").getTime(), //
-						stopsData.getTimestamp("end_time").getTime(), //
-						new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
-						stopsData.getInt("begin"), //
-						new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
-						stopsData.getInt("length"), //
-						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")),//
-						stopsData.getString("street"),//
-						stopsData.getString("POI")//
-				);
-				stops.put(stopId, stop);
-			}
-		}
-		Map<Integer, Move> moves = new HashMap<>();
-		ResultSet movesData = st.executeQuery(
-				"SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length, angle " + //
-						"FROM stops_moves.taxi_sanfrancisco_move");
-		while(movesData.next()) {
-			int moveId = movesData.getInt("move_id");
-				Move move = moves.get(moveId);
-			if (move == null) {
-				int startStopId = movesData.getInt("start_stop_id");
-				if (movesData.wasNull()) {
-					startStopId = -1;
-				}
-				int endStopId = movesData.getInt("end_stop_id");
-				if (movesData.wasNull()) {
-					endStopId = -1;
-				}
-				Stop startStop = stops.get(startStopId);
-				Stop endStop = stops.get(endStopId);
-				move = new Move(moveId, //
-						startStop, //
-						endStop, //
-						movesData.getTimestamp("start_time").getTime(), //
-						movesData.getTimestamp("end_time").getTime(), //
-						movesData.getInt("begin"), //
-						movesData.getInt("length"), //
-						null);
-				moves.put(moveId, move);
-			}
-		}
-		st.close();
-		List<Move> allMoves = new ArrayList<>(moves.values());
 		List<SemanticTrajectory> ret = null;
-		if(onlyStops) {
-			ret = readStopsTrajectories(conn, stops, moves);
-		} else {
-			ret = loadRawPoints(conn, stops, moves);
+		try {
+
+			conn.setAutoCommit(false);
+			Statement st = conn.createStatement();
+			st.setFetchSize(1000);
+
+			ResultSet stopsData = st.executeQuery(
+					"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
+							"centroid_lon, start_time, end_time, street, \"POI\" " + //
+							"FROM stops_moves.taxi_sanfrancisco_stop");
+			Map<Integer, Stop> stops = new HashMap<>();
+			while (stopsData.next()) {
+				int stopId = stopsData.getInt("stop_id");
+				Stop stop = stops.get(stopId);
+				if (stop == null) {
+					stop = new Stop(stopId, stopsData.getString("POI"), //
+							stopsData.getTimestamp("start_time").getTime(), //
+							stopsData.getTimestamp("end_time").getTime(), //
+							new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
+							stopsData.getInt("begin"), //
+							new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
+							stopsData.getInt("length"), //
+							new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")), //
+							stopsData.getString("street"), //
+							stopsData.getString("POI")//
+					);
+					stops.put(stopId, stop);
+				}
+			}
+			Map<Integer, Move> moves = new HashMap<>();
+			ResultSet movesData = st
+					.executeQuery("SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length " + //
+							"FROM stops_moves.taxi_sanfrancisco_move");
+			while (movesData.next()) {
+				int moveId = movesData.getInt("move_id");
+				Move move = moves.get(moveId);
+				if (move == null) {
+					int startStopId = movesData.getInt("start_stop_id");
+					if (movesData.wasNull()) {
+						startStopId = -1;
+					}
+					int endStopId = movesData.getInt("end_stop_id");
+					if (movesData.wasNull()) {
+						endStopId = -1;
+					}
+					Stop startStop = stops.get(startStopId);
+					Stop endStop = stops.get(endStopId);
+					move = new Move(moveId, //
+							startStop, //
+							endStop, //
+							movesData.getTimestamp("start_time").getTime(), //
+							movesData.getTimestamp("end_time").getTime(), //
+							movesData.getInt("begin"), //
+							movesData.getInt("length"), //
+							null);
+					moves.put(moveId, move);
+				}
+			}
+			st.close();
+			List<Move> allMoves = new ArrayList<>(moves.values());
+			if (onlyStops) {
+				ret = readStopsTrajectories(conn, stops, moves);
+			} else {
+				ret = loadRawPoints(conn, stops, moves);
+			}
+			compute(CollectionUtils.removeAll(allMoves, moves.values()));
+		} finally {
+			conn.close();			
 		}
-		compute(CollectionUtils.removeAll(allMoves, moves.values()));
 		return ret;
 	}
 
 	private List<SemanticTrajectory> readStopsTrajectories(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
 		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, direction, stop, semantic_stop_id, semantic_move_id, stop, route" + //
-				" FROM taxi.sanfrancisco_taxicab_subset_cleaned where 1=1";
+				" FROM taxi.sanfrancisco_taxicab where 1=1";
 		if(!ArrayUtils.isEmpty(roads)) {
 			sql += " and road in (SELECT * FROM unnest(?))";
 		} else if(roads != null) {
@@ -201,7 +202,7 @@ public class SanFranciscoCabDatabaseReader {
 			sql += " and direction is not null";
 		}
 		if(regions != null) {
-			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab_subset_cleaned r where r.stop in (SELECT * FROM unnest(?)))";
+			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab r where r.stop in (SELECT * FROM unnest(?)))";
 		}
 		sql +=" order by tid, \"timestamp\"";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -267,63 +268,40 @@ public class SanFranciscoCabDatabaseReader {
 					}
 					if(i > 0) {
 						Stop previousStop = STOP_CENTROID_SEMANTIC.getData(s, i - 1);
-						if(previousStop != null) {
+						if(previousStop != null && previousStop.getNextMove() == null) {
 							Move move = new Move(-1, previousStop, stop, previousStop.getEndTime(), stop.getStartTime(), stop.getBegin() - 1, 0, new TPoint[0], 
 									Angle.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
 									Distance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
-							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
-							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
+							previousStop.setNextMove(move);
+							stop.setPreviousMove(move);
 							//injecting a move between two consecutives stops
 							stops.put(record.getSemanticStop(), stop);
-							s.addData(i, Semantic.GEOGRAPHIC, point);
-						} else {
-							s.addData(i, STOP_CENTROID_SEMANTIC, stop);
-							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
-							s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
 						}
-					} else {
-						s.addData(i, STOP_CENTROID_SEMANTIC, stop);
-						s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
-						s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
 					}
-					stop.setRegion(record.getRegion());
+					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
+					s.addData(i, Semantic.SPATIAL, stop.getCentroid());
+					s.addData(i, Semantic.GID, record.getGid());
+					s.addData(i, TID, record.getTid());
+					s.addData(i, OCUPATION, record.getOcupation());
+					s.addData(i, ROAD, record.getRoad());
+					s.addData(i, DIRECTION, record.getDirection());
+					s.addData(i, REGION_INTEREST, record.getRegion());
+					s.addData(i, ROUTE, record.getRoute());
+					i++;
 				} else if(record.getSemanticMoveId() != null) {
-					Move move = moves.remove(record.getSemanticMoveId());
+					Move move = moves.get(record.getSemanticMoveId());
 					if(move == null) {
-						for (int j = i - 1; j > -1; j--) {
-							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
-							if(move != null) {
-								break;
-							}
-						}
-						if(move != null) {
-							TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
-							List<TPoint> a = new ArrayList<TPoint>(Arrays.asList(points));
-							a.add(point);
-							points = a.toArray(new TPoint[a.size()]);
-							move.setAttribute(AttributeType.MOVE_POINTS, points);
-							continue;
-						}
+						throw new RuntimeException("Move does not found");
 					}
+					move.getStart().setNextMove(move);
+					move.getEnd().setPreviousMove(move);
 					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
 					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
 					a.add(point);
 					points = a.toArray(new TPoint[a.size()]);
 					move.setAttribute(AttributeType.MOVE_POINTS, points);
-					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
-					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
-					s.addData(i, Semantic.GEOGRAPHIC, point);
 				}
-				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
-				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
-				s.addData(i, TID, record.getTid());
-				s.addData(i, OCUPATION, record.getOcupation());
-				s.addData(i, ROAD, record.getRoad());
-				s.addData(i, DIRECTION, record.getDirection());
-				s.addData(i, REGION_INTEREST, record.getRegion());
-				s.addData(i, ROUTE, record.getRoute());
-				i++;
 			}
 			stats.addValue(s.length());
 			ret.add(s);
@@ -335,7 +313,7 @@ public class SanFranciscoCabDatabaseReader {
 
 	private List<SemanticTrajectory> loadRawPoints(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
 		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, direction, semantic_stop_id, semantic_move_id, stop, route" + //
-				" FROM taxi.sanfrancisco_taxicab_subset_cleaned where 1=1";
+				" FROM taxi.sanfrancisco_taxicab where 1=1";
 		if(!ArrayUtils.isEmpty(roads)) {
 			sql += " and road in (SELECT * FROM unnest(?))";
 		} else if(roads != null) {
@@ -347,7 +325,7 @@ public class SanFranciscoCabDatabaseReader {
 			sql += " and direction is not null";
 		}
 		if(regions != null) {
-			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab_subset_cleaned r where r.stop in (SELECT * FROM unnest(?)))";
+			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab r where r.stop in (SELECT * FROM unnest(?)))";
 		}
 		sql +=" order by tid, \"timestamp\"";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -407,7 +385,7 @@ public class SanFranciscoCabDatabaseReader {
 			for (SanFranciscoCabRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, TID, record.getTid());
 				s.addData(i, OCUPATION, record.getOcupation());

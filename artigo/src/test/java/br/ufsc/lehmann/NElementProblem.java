@@ -26,19 +26,21 @@ import smile.math.Random;
 
 public class NElementProblem implements Problem {
 	
+	public static final EuclideanDistanceFunction DISTANCE_FUNCTION = new EuclideanDistanceFunction();
+
 	List<SemanticTrajectory> data;
 	List<SemanticTrajectory> testing;
 	List<SemanticTrajectory> validating;
 	List<SemanticTrajectory> training;
 	public static final BasicSemantic<Number> dataSemantic = new BasicSemantic<>(0);
 	public static final BasicSemantic<String> discriminator = new BasicSemantic<>(3);
-	public static final StopSemantic stop = new StopSemantic(4, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, new EuclideanDistanceFunction()));
+	public static final StopSemantic stop = new StopSemantic(4, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
 	
 	public static final MoveSemantic move = new MoveSemantic(5, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
 	public static final MoveSemantic move_distance = new MoveSemantic(5, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic move_duration = new MoveSemantic(5, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
-	public static final MoveSemantic move_points = new MoveSemantic(5, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(new EuclideanDistanceFunction(), 10)));
-	public static final MoveSemantic move_ellipses = new MoveSemantic(5, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(new EuclideanDistanceFunction())));
+	public static final MoveSemantic move_points = new MoveSemantic(5, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, 10)));
+	public static final MoveSemantic move_ellipses = new MoveSemantic(5, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(DISTANCE_FUNCTION)));
 	
 	public static final StopMoveSemantic stopmove = new StopMoveSemantic(stop, move, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 	private int elements;
@@ -64,7 +66,7 @@ public class NElementProblem implements Problem {
 			for (int j = 0; j < 15; j++) {
 				t.addData(j, dataSemantic, k * k);
 				TPoint point = new TPoint(k + (j / 20.0), k + (j / 20.0));
-				t.addData(j, Semantic.GEOGRAPHIC, point);
+				t.addData(j, Semantic.SPATIAL, point);
 				t.addData(j, Semantic.TEMPORAL, new TemporalDuration(now.plus(j, ChronoUnit.MINUTES), now.plus(j + 1, ChronoUnit.MINUTES)));
 				t.addData(j, discriminator, String.valueOf(k));
 				long future = now.plus(j, ChronoUnit.MINUTES).toEpochMilli();

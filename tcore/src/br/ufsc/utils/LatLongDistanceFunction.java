@@ -1,11 +1,11 @@
 package br.ufsc.utils;
 
-import br.ufsc.core.trajectory.GeographicDistanceFunction;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 
-public class LatLongDistanceFunction implements GeographicDistanceFunction {
+public class LatLongDistanceFunction implements SpatialDistanceFunction {
 
 	@Override
 	public double distance(TPoint p, TPoint d) {
@@ -16,8 +16,8 @@ public class LatLongDistanceFunction implements GeographicDistanceFunction {
 	public double length(SemanticTrajectory trajectory) {
 		double ret = 0;
 		for (int i = 0; i < trajectory.length() - 2; i++) {
-			ret += distance(Semantic.GEOGRAPHIC_LATLON.getData(trajectory, i),
-					Semantic.GEOGRAPHIC_LATLON.getData(trajectory, i + 1));
+			ret += distance(Semantic.SPATIAL_LATLON.getData(trajectory, i),
+					Semantic.SPATIAL_LATLON.getData(trajectory, i + 1));
 		}
 		return ret;
 	}
@@ -53,7 +53,7 @@ public class LatLongDistanceFunction implements GeographicDistanceFunction {
 	}
 
 	public static double lon2x(double aLong) {
-		return Math.toRadians(aLong % 90) * RADIUS * ((int) (aLong / 90) + 1);
+		return Math.toRadians(aLong) * RADIUS;
 	}
 	
     public double[] merc(double x, double y) {

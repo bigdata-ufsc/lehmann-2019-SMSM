@@ -254,7 +254,7 @@ public class PisaDatabaseReader {
 					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 				}
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, ELEVATION, record.getEle());
 				s.addData(i, WEATHER, record.getWeather());
@@ -286,7 +286,7 @@ public class PisaDatabaseReader {
 			for (PisaRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLat(), record.getLon());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, ELEVATION, record.getEle());
 				s.addData(i, WEATHER, record.getWeather());

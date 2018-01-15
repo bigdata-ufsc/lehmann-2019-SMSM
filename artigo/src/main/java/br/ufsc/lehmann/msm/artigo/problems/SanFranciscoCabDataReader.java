@@ -56,7 +56,7 @@ import cc.mallet.util.IoUtils;
 
 public class SanFranciscoCabDataReader {
 	
-	private static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
+	public static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
 	
 	public static final BasicSemantic<Integer> TID = new BasicSemantic<>(3);
 	public static final BasicSemantic<Integer> OCUPATION = new BasicSemantic<>(4);
@@ -72,7 +72,7 @@ public class SanFranciscoCabDataReader {
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, Thresholds.MOVE_INNERPOINTS_DISTANCE)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(DISTANCE_FUNCTION)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 
@@ -275,60 +275,40 @@ public class SanFranciscoCabDataReader {
 					}
 					if(i > 0) {
 						Stop previousStop = STOP_CENTROID_SEMANTIC.getData(s, i - 1);
-						if(previousStop != null) {
+						if(previousStop != null && previousStop.getNextMove() == null) {
 							Move move = new Move(-1, previousStop, stop, previousStop.getEndTime(), stop.getStartTime(), stop.getBegin() - 1, 0, new TPoint[0], 
 									Angle.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
 									Distance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
-							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
-							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
+							previousStop.setNextMove(move);
+							stop.setPreviousMove(move);
 							//injecting a move between two consecutives stops
 							stops.put(record.getSemanticStop(), stop);
-							s.addData(i, Semantic.GEOGRAPHIC, point);
-						} else {
-							s.addData(i, STOP_CENTROID_SEMANTIC, stop);
-							s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
-							s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
 						}
-					} else {
-						s.addData(i, STOP_CENTROID_SEMANTIC, stop);
-						s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
-						s.addData(i, Semantic.GEOGRAPHIC, stop.getCentroid());
 					}
+					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
+					s.addData(i, Semantic.SPATIAL, stop.getCentroid());
+					s.addData(i, Semantic.GID, record.getGid());
+					s.addData(i, TID, record.getTid());
+					s.addData(i, OCUPATION, record.getOcupation());
+					s.addData(i, ROAD, record.getRoad());
+					s.addData(i, DIRECTION, record.getDirection());
+					s.addData(i, REGION_INTEREST, record.getRegion());
+					s.addData(i, ROUTE, record.getRoute());
+					i++;
 				} else if(record.getSemanticMoveId() != null) {
-					Move move = moves.remove(record.getSemanticMoveId());
+					Move move = moves.get(record.getSemanticMoveId());
 					if(move == null) {
-						for (int j = i; j > 0; j--) {
-							move = MOVE_ANGLE_SEMANTIC.getData(s, j - 1);
-							if(move != null) {
-								break;
-							}
-						}
-						if(move != null) {
-							TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
-							List<TPoint> a = new ArrayList<TPoint>(Arrays.asList(points));
-							a.add(point);
-							points = a.toArray(new TPoint[a.size()]);
-							move.setAttribute(AttributeType.MOVE_POINTS, points);
-							continue;
-						}
+						throw new RuntimeException("Move does not found");
 					}
+					move.getStart().setNextMove(move);
+					move.getEnd().setPreviousMove(move);
 					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
 					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
 					a.add(point);
 					points = a.toArray(new TPoint[a.size()]);
 					move.setAttribute(AttributeType.MOVE_POINTS, points);
-					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
-					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
-					s.addData(i, Semantic.GEOGRAPHIC, point);
 				}
-				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, TID, record.getTid());
-				s.addData(i, OCUPATION, record.getOcupation());
-				s.addData(i, ROAD, record.getRoad());
-				s.addData(i, DIRECTION, record.getDirection());
-				s.addData(i, REGION_INTEREST, record.getRegion());
-				s.addData(i, ROUTE, record.getRoute());
-				i++;
 			}
 			stats.addValue(s.length());
 			ret.add(s);
@@ -411,7 +391,7 @@ public class SanFranciscoCabDataReader {
 			for (SanFranciscoCabRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, TID, record.getTid());
 				s.addData(i, OCUPATION, record.getOcupation());

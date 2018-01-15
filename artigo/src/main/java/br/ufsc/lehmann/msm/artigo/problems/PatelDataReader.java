@@ -46,7 +46,7 @@ import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class PatelDataReader {
 	
-	private static final EuclideanDistanceFunction DISTANCE_FUNCTION = new EuclideanDistanceFunction();
+	public static final EuclideanDistanceFunction DISTANCE_FUNCTION = new EuclideanDistanceFunction();
 
 	public static final BasicSemantic<String> TID = new BasicSemantic<>(3);
 	public static final BasicSemantic<String> CLASS = new BasicSemantic<>(4);
@@ -231,7 +231,7 @@ public class PatelDataReader {
 					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
 				}
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, TID, record.getTid());
 				s.addData(i, CLASS, record.getClazz());
 				i++;
@@ -254,7 +254,7 @@ public class PatelDataReader {
 			for (PatelRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
-				s.addData(i, Semantic.GEOGRAPHIC, point);
+				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli((long) record.getTime()), Instant.ofEpochMilli((long) record.getTime())));
 				s.addData(i, TID, record.getTid());
 				s.addData(i, CLASS, record.getClazz());

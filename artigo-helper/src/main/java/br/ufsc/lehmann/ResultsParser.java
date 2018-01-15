@@ -58,8 +58,8 @@ public class ResultsParser {
 		String line = null;
 		Map<String, ExperimentData> datasets = new HashMap<>();
 		while((line = lineReader.readLine()) != null) {
-			if(line.equals("Reading file...")) {
-//			if(line.equals("Executing SQL...")) {
+//			if(line.equals("Reading file...")) {
+			if(line.equals("Executing SQL...")) {
 				do {
 					line = lineReader.readLine();
 				} while(line != null && !TEST_NAME_PATTERN.matcher(line).matches());
@@ -150,7 +150,7 @@ public class ResultsParser {
 		for (int i = 0; i < bands; i++) {
 			columns.add(String.format("%.2f", ((i + 1) * (100.0 / bands))) + "%");
 		}
-		printer = new CSVPrinter(prCurve, CSVFormat.EXCEL.withDelimiter(';').withHeader(columns.toArray(new String[columns.size()])));
+		printer = new CSVPrinter(prCurve, CSVFormat.EXCEL.withDelimiter(',').withHeader(columns.toArray(new String[columns.size()])));
 		pr.printTo(printer);
 		printer.flush();
 		printer.close();
