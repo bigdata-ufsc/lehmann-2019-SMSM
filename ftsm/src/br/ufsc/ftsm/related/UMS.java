@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.ufsc.core.IMeasureDistance;
+import br.ufsc.core.trajectory.Semantic;
+import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.Trajectory;
@@ -13,7 +16,7 @@ import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.util.CreateEllipseMath;
 import br.ufsc.utils.EuclideanDistanceFunction;
 
-public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
+public class UMS extends TrajectorySimilarityCalculator<Trajectory> implements IMeasureDistance<SemanticTrajectory> {
 
 	private SpatialDistanceFunction distanceFunc;
 
@@ -23,6 +26,24 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 
 	public UMS(SpatialDistanceFunction distanceFunc) {
 		this.distanceFunc = distanceFunc;
+	}
+
+	@Override
+	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+		TPoint[] points1 = new TPoint[t1.length()];
+		for (int i = 0; i < t1.length(); i++) {
+			points1[i] = Semantic.SPATIAL.getData(t1, i);
+		}
+		TPoint[] points2 = new TPoint[t2.length()];
+		for (int i = 0; i < t2.length(); i++) {
+			points2[i] = Semantic.SPATIAL.getData(t2, i);
+		}
+		TPoint[] mercatorP = distanceFunc.convertToMercator(points1);
+		TPoint[] mercatorD = distanceFunc.convertToMercator(points2);
+		CreateEllipseMath ellipseMath = new CreateEllipseMath();
+		ETrajectory T1 = ellipseMath.createEllipticalTrajectoryFixed(-1, mercatorP);
+		ETrajectory T2 = ellipseMath.createEllipticalTrajectoryFixed(1, mercatorD);
+		return 1 - getSimilarity(T1, T2);
 	}
 
 	public double getSimilarity(ETrajectory E1, ETrajectory E2) {
@@ -229,5 +250,8 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> {
 		return getSimilarity(E1,E2);
 	}
 
-
+	@Override
+	public String name() {
+		return "UMS";
+	}
 }
