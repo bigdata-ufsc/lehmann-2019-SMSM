@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="AllClassifierTests" project="artigo" tests="39" started="39" failures="0" errors="0" ignored="26">
+  <testsuite name="br.ufsc.lehmann.classifier.AllClassifierTests" time="36.301">
+    <testsuite name="br.ufsc.lehmann.classifier.MSMClassifierTest" time="2.465">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="2.465">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.MSMClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.MSMClassifierTest" time="1.359" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.MSMClassifierTest" time="1.106"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.EDRClassifierTest" time="1.646">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="1.646">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.EDRClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.EDRClassifierTest" time="0.721" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.EDRClassifierTest" time="0.925"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.LCSSClassifierTest" time="1.364">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="1.364">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.LCSSClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.LCSSClassifierTest" time="0.63" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.LCSSClassifierTest" time="0.734"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.MSTPClassifierTest" time="1.146">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="1.146">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.MSTPClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.MSTPClassifierTest" time="0.64" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.MSTPClassifierTest" time="0.506"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.CVTIClassifierTest" time="1.088">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="1.088">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.CVTIClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.CVTIClassifierTest" time="0.778" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.CVTIClassifierTest" time="0.31"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.wDFClassifierTest" time="1.001">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="1.001">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.wDFClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.wDFClassifierTest" time="0.788" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.wDFClassifierTest" time="0.213"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.DTWaClassifierTest" time="2.701">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="2.701">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.DTWaClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.DTWaClassifierTest" time="0.693" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.DTWaClassifierTest" time="2.008"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.SMSMTemporalDurationClassifierTest" time="1.551">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="1.551">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMTemporalDurationClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMTemporalDurationClassifierTest" time="0.639" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMTemporalDurationClassifierTest" time="0.912"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.SMSMDistanceClassifierTest" time="1.45">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="1.45">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMDistanceClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMDistanceClassifierTest" time="0.628" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMDistanceClassifierTest" time="0.822"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.SMSMEllipsesClassifierTest" time="5.851">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="5.851">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMEllipsesClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMEllipsesClassifierTest" time="0.641" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMEllipsesClassifierTest" time="5.209"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.SMSMEllipsesWithDistanceClassifierTest" time="5.275">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="5.275">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMEllipsesWithDistanceClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMEllipsesWithDistanceClassifierTest" time="0.72" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMEllipsesWithDistanceClassifierTest" time="4.555"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.SMSMEllipsesWithTemporalDurationClassifierTest" time="5.335">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="5.335">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMEllipsesWithTemporalDurationClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMEllipsesWithTemporalDurationClassifierTest" time="0.642" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMEllipsesWithTemporalDurationClassifierTest" time="4.693"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="br.ufsc.lehmann.classifier.SMSMEllipsesWithDistanceAndTemporalDurationClassifierTest" time="5.428">
+      <testsuite name="[Geolife University [STOP_REGION][onlyStops=true]]" time="5.428">
+        <testcase name="validation_accuracy[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMEllipsesWithDistanceAndTemporalDurationClassifierTest" time="0.0" ignored="true"/>
+        <testcase name="validation_precision_recall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMEllipsesWithDistanceAndTemporalDurationClassifierTest" time="0.695" ignored="true"/>
+        <testcase name="precisionAtRecall[Geolife University [STOP_REGION][onlyStops=true]]" classname="br.ufsc.lehmann.classifier.SMSMEllipsesWithDistanceAndTemporalDurationClassifierTest" time="4.733"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testrun>
