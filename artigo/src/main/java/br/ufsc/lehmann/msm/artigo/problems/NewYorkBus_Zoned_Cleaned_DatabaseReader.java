@@ -66,7 +66,7 @@ public class NewYorkBus_Zoned_Cleaned_DatabaseReader {
 	
 	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
-	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION, Thresholds.MOVE_INNERPOINTS_DISTANCE)));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION)));
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));

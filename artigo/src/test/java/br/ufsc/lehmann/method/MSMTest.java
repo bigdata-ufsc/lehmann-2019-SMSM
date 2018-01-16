@@ -73,9 +73,11 @@ public interface MSMTest {
 			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
 		}
 		return new MSMClassifier(//
-					new MSMSemanticParameter<TemporalDuration, Number>(SlackTemporalSemantic.SLACK_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
-					new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold.intValue(), 1.0/3.0),
-					new MSMSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic), 1.0/3.0)
+//					new MSMSemanticParameter<TemporalDuration, Number>(SlackTemporalSemantic.SLACK_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
+//					new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold.intValue(), 1.0/3.0),
+//					new MSMSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic), 1.0/3.0)
+				new MSMSemanticParameter<TemporalDuration, Number>(SlackTemporalSemantic.SLACK_TEMPORAL, Thresholds.TEMPORAL, 1.0/2.0),
+				new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold.intValue(), 1.0/2.0)
 				);
 	}
 }

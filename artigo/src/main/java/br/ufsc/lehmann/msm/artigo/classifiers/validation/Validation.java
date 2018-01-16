@@ -15,6 +15,8 @@
  *******************************************************************************/
 package br.ufsc.lehmann.msm.artigo.classifiers.validation;
 
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -24,6 +26,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.concurrent.Callable;
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.Delayed;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -36,6 +48,7 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.classifier.Binarizer;
 import br.ufsc.lehmann.msm.artigo.Problem;
+import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;
 import smile.math.Math;
@@ -74,13 +87,47 @@ public class Validation {
 			Object classData = semantic.getData(trajsArray[i], 0);
 			occurrences.computeIfAbsent(classData, (t) -> new LongAdder()).increment();
 		}
+		
+		ExecutorService executorService = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() / 2,
+				Runtime.getRuntime().availableProcessors() / 2, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+		DelayQueue<DelayedDistanceMeasure> queueProcess = new DelayQueue<>();
 		for (int i = 0; i < trajsArray.length; i++) {
+			int finalI = i;
 			for (int j = i; j < trajsArray.length; j++) {
-				double distance = measureDistance.distance(trajsArray[i], trajsArray[j]);
-				allDistances.put(trajsArray[i], trajsArray[j], distance);
-				allDistances.put(trajsArray[j], trajsArray[i], distance);
+				int finalJ = j;
+				Future<Double> future = executorService.submit(new Callable<Double>() {
+					
+					@Override
+					public Double call() throws Exception {
+						return measureDistance.distance(trajsArray[finalI], trajsArray[finalJ]);
+					}
+				});
+				queueProcess.add(new DelayedDistanceMeasure(trajsArray[i], trajsArray[j], future, 0));
 			}
 		}
+		while (!queueProcess.isEmpty()) {
+			DelayedDistanceMeasure toProcess = queueProcess.poll();
+			if (toProcess == null) {
+				try {
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				continue;
+			}
+			Future<Double> fut = toProcess.distance;
+			if (!fut.isDone()) {
+				queueProcess.add(new DelayedDistanceMeasure(toProcess.a, toProcess.b, toProcess.distance, 50/* ms */));
+			} else {
+				try {
+					double distance = fut.get();
+					allDistances.put(toProcess.a, toProcess.b, distance);
+					allDistances.put(toProcess.b, toProcess.a, distance);
+				} catch (InterruptedException | ExecutionException e) {
+				}
+			}
+		}
+		executorService.shutdown();
 		for (int i = 0; i < trajsArray.length; i++) {
 			List<Map.Entry<SemanticTrajectory, Double>> rows = allDistances.row(trajsArray[i]).entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
 			Object classData = semantic.getData(trajsArray[i], 0);
@@ -101,6 +148,46 @@ public class Validation {
 		}
 		return ret;
 	}
+	
+	static class DelayedDistanceMeasure implements Delayed {
+
+		private SemanticTrajectory a;
+		private SemanticTrajectory b;
+		private Future<Double> distance;
+		private long delay;
+
+		DelayedDistanceMeasure(SemanticTrajectory a, SemanticTrajectory b, Future<Double> distance, int delay) {
+			this.a = a;
+			this.b = b;
+			this.distance = distance;
+			this.delay = TimeUnit.MILLISECONDS.toNanos(delay);
+		}
+
+		@Override
+		public int compareTo(Delayed other) {
+			if (other == this) // compare zero if same object
+				return 0;
+			if (other instanceof DelayedDistanceMeasure) {
+				DelayedDistanceMeasure x = (DelayedDistanceMeasure) other;
+				long diff = delay - x.delay;
+				if (diff < 0)
+					return -1;
+				else if (diff > 0)
+					return 1;
+				else
+					return 1;
+			}
+			long diff = getDelay(NANOSECONDS) - other.getDelay(NANOSECONDS);
+			return (diff < 0) ? -1 : (diff > 0) ? 1 : 0;
+		}
+
+		@Override
+		public long getDelay(TimeUnit unit) {
+			return unit.convert(delay - System.nanoTime(), TimeUnit.NANOSECONDS);
+		}
+
+	}
+
 	
     /**
      * Tests a classifier on a validation set.

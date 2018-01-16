@@ -71,7 +71,7 @@ public interface LCSSTest {
 			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
 		}
 		return new LCSSClassifier(//
-				new LCSSSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
+//				new LCSSSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
 				new LCSSSemanticParameter<TemporalDuration, Number>(SlackTemporalSemantic.SLACK_TEMPORAL, Thresholds.TEMPORAL),
 				new LCSSSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold.intValue())
 				);

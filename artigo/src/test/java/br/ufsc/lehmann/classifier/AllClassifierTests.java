@@ -15,12 +15,13 @@ import org.junit.runners.Suite.SuiteClasses;
 	CVTIClassifierTest.class, wDFClassifierTest.class, 
 //	SWALEClassifierTest.class, LiuSchneiderClassifierTest.class, 
 	DTWaClassifierTest.class, /*MTMClassifierTest.class*/
-	SMSMTemporalDurationClassifierTest.class, 
-	SMSMDistanceClassifierTest.class,
+//	UMSClassifierTest.class,
+//	SMSMTemporalDurationClassifierTest.class, 
+//	SMSMDistanceClassifierTest.class,
 	SMSMEllipsesClassifierTest.class,  
-	SMSMEllipsesWithDistanceClassifierTest.class,
-	SMSMEllipsesWithTemporalDurationClassifierTest.class,
-	SMSMEllipsesWithDistanceAndTemporalDurationClassifierTest.class, 
+//	SMSMEllipsesWithDistanceClassifierTest.class,
+//	SMSMEllipsesWithTemporalDurationClassifierTest.class,
+//	SMSMEllipsesWithDistanceAndTemporalDurationClassifierTest.class, 
 	})
 public class AllClassifierTests {
 

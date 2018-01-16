@@ -12,8 +12,8 @@ public interface Thresholds {
 	public static final MutableInt SPATIAL_LATLON = new MutableInt(50);
 	public static final MutableInt SPATIAL_EUCLIDEAN = new MutableInt(50);
 	public static final MutableInt SPATIAL_PROTOTYPE = new MutableInt(1);
-	public static final MutableDouble PROPORTION_TEMPORAL = new MutableDouble(.9);
-	public static final MutableLong SLACK_TEMPORAL = new MutableLong(30 * 60 * 1000);
+	public static final MutableDouble PROPORTION_TEMPORAL = new MutableDouble(.8);
+	public static final MutableLong SLACK_TEMPORAL = new MutableLong(120 * 60 * 1000);
 	public static final MutableDouble TEMPORAL = PROPORTION_TEMPORAL;
 	public static final MutableInt STOP_CENTROID_LATLON = new MutableInt(500);
 	public static final MutableInt STOP_CENTROID_EUCLIDEAN = new MutableInt(500);

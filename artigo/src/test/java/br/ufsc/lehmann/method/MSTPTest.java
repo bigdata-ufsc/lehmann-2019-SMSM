@@ -42,7 +42,7 @@ public interface MSTPTest {
 					);
 		} else if(problem instanceof GeolifeProblem) {
 			return new MSTPClassifier(//
-					new ComparableStopSemantic(((GeolifeProblem) problem).stopSemantic()),//
+//					new ComparableStopSemantic(((GeolifeProblem) problem).stopSemantic()),//
 					Semantic.SPATIAL_EUCLIDEAN,//
 					SlackTemporalSemantic.SLACK_TEMPORAL//
 					);
@@ -60,7 +60,7 @@ public interface MSTPTest {
 					);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new MSTPClassifier(//
-					new ComparableStopSemantic(((SanFranciscoCabProblem) problem).stopSemantic()),//
+//					new ComparableStopSemantic(((SanFranciscoCabProblem) problem).stopSemantic()),//
 					Semantic.SPATIAL_LATLON,//
 					SlackTemporalSemantic.SLACK_TEMPORAL//
 					);

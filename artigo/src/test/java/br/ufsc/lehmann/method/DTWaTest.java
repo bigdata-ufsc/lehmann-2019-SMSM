@@ -34,9 +34,9 @@ public interface DTWaTest {
 //		} else if(problem instanceof DublinBusProblem) {
 //			return new DTWaClassifier(problem, ((DublinBusProblem) problem).stopSemantic(), Semantic.SPATIAL_LATLON, Semantic.TEMPORAL);
 		} else if(problem instanceof GeolifeProblem) {
-			return new DTWaClassifier(problem, ((GeolifeProblem) problem).stopSemantic(), Semantic.SPATIAL, SlackTemporalSemantic.SLACK_TEMPORAL);
+			return new DTWaClassifier(problem, /*((GeolifeProblem) problem).stopSemantic(), */Semantic.SPATIAL, SlackTemporalSemantic.SLACK_TEMPORAL);
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new DTWaClassifier(problem, ((SanFranciscoCabProblem) problem).stopSemantic(), Semantic.SPATIAL_LATLON, SlackTemporalSemantic.SLACK_TEMPORAL);
+			return new DTWaClassifier(problem, /*((SanFranciscoCabProblem) problem).stopSemantic(), */Semantic.SPATIAL_LATLON, SlackTemporalSemantic.SLACK_TEMPORAL);
 //		} else if(problem instanceof SergipeTracksProblem) {
 //			return new DTWaClassifier(problem, SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Semantic.SPATIAL_LATLON, Semantic.TEMPORAL);
 //		} else if(problem instanceof PrototypeProblem) {

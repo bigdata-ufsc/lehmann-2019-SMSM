@@ -121,12 +121,14 @@ public class ResultsParser {
 				}
 			}
 		}
-		File csvOutput = new File(fileName.toFile().getAbsolutePath().toString().replaceFirst("\\.out", ".csv"));
-		FileWriter out = new FileWriter(csvOutput);
-		CSVPrinter printer = new CSVPrinter(out, CSVFormat.EXCEL.withDelimiter(';').withHeader("dataset", "stop-semantic", "measure", "test-type", "Accuracy", "Precision", "Recall", "F-Measure", "Specificity", "Fall-out", "FDR"));
-		csv.printTo(printer);
-		printer.flush();
-		printer.close();
+		if(!csv.isEmpty()) {
+			File csvOutput = new File(fileName.toFile().getAbsolutePath().toString().replaceFirst("\\.out", ".csv"));
+			FileWriter out = new FileWriter(csvOutput);
+			CSVPrinter printer = new CSVPrinter(out, CSVFormat.EXCEL.withDelimiter(';').withHeader("dataset", "stop-semantic", "measure", "test-type", "Accuracy", "Precision", "Recall", "F-Measure", "Specificity", "Fall-out", "FDR"));
+			csv.printTo(printer);
+			printer.flush();
+			printer.close();
+		}
 
 		int bands = 0;
 		PrecisionRecallData pr = new PrecisionRecallData();
@@ -141,19 +143,21 @@ public class ResultsParser {
 			}
 		}
 		
-		File prCurveOutput = new File(fileName.toFile().getAbsolutePath().toString().replaceFirst("\\.out", "-pr.csv"));
-		FileWriter prCurve = new FileWriter(prCurveOutput);
-		List<String> columns = new ArrayList<>(bands + 3);
-		columns.add("measure");
-		columns.add("dataset");
-		columns.add("0%");
-		for (int i = 0; i < bands; i++) {
-			columns.add(String.format("%.2f", ((i + 1) * (100.0 / bands))) + "%");
+		if(!pr.isEmpty()) {
+			File prCurveOutput = new File(fileName.toFile().getAbsolutePath().toString().replaceFirst("\\.out", "-pr.csv"));
+			FileWriter prCurve = new FileWriter(prCurveOutput);
+			List<String> columns = new ArrayList<>(bands + 3);
+			columns.add("measure");
+			columns.add("dataset");
+			columns.add("0%");
+			for (int i = 0; i < bands; i++) {
+				columns.add(String.format("%.2f", ((i + 1) * (100.0 / bands))) + "%");
+			}
+			CSVPrinter printer = new CSVPrinter(prCurve, CSVFormat.EXCEL.withDelimiter(',').withHeader(columns.toArray(new String[columns.size()])));
+			pr.printTo(printer);
+			printer.flush();
+			printer.close();
 		}
-		printer = new CSVPrinter(prCurve, CSVFormat.EXCEL.withDelimiter(',').withHeader(columns.toArray(new String[columns.size()])));
-		pr.printTo(printer);
-		printer.flush();
-		printer.close();
 	}
 
 	@Test
@@ -167,6 +171,9 @@ public class ResultsParser {
 
 		public void add(String measure, String dataset, Integer recallLevel, String value) {
 			data.put(measure + "<&>" + dataset + "<&>" + recallLevel, new CSVMeasureData(String.valueOf(recallLevel), value));
+		}
+		public boolean isEmpty() {
+			return data.isEmpty();
 		}
 		public void printTo(CSVPrinter printer) {
 			data.asMap().forEach((String key, Collection<CSVMeasureData> measures) -> {
@@ -192,6 +199,10 @@ public class ResultsParser {
 		
 		public void add(String dataset, String stopSemantic, String method, String measure, String testType, String value) {
 			data.put(dataset + "<&>" + stopSemantic+ "<&>" + method+ "<&>" +  testType, new CSVMeasureData(measure, value));
+		}
+
+		public boolean isEmpty() {
+			return data.isEmpty();
 		}
 
 		public void printTo(CSVPrinter printer) {

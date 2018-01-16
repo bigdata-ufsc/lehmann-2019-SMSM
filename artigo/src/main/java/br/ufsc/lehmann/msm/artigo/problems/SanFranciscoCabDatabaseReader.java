@@ -60,7 +60,7 @@ public class SanFranciscoCabDatabaseReader {
 	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
-	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, 10)));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION)));
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 	
 	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(9);

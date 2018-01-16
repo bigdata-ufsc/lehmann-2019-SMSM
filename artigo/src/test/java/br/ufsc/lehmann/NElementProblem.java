@@ -39,7 +39,7 @@ public class NElementProblem implements Problem {
 	public static final MoveSemantic move = new MoveSemantic(5, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
 	public static final MoveSemantic move_distance = new MoveSemantic(5, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
 	public static final MoveSemantic move_duration = new MoveSemantic(5, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
-	public static final MoveSemantic move_points = new MoveSemantic(5, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION, 10)));
+	public static final MoveSemantic move_points = new MoveSemantic(5, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION)));
 	public static final MoveSemantic move_ellipses = new MoveSemantic(5, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(DISTANCE_FUNCTION)));
 	
 	public static final StopMoveSemantic stopmove = new StopMoveSemantic(stop, move, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));

@@ -72,7 +72,7 @@ public interface EDRTest {
 			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
 		}
 		return new EDRClassifier(//
-				new EDRSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
+//				new EDRSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
 				new EDRSemanticParameter<TemporalDuration, Number>(SlackTemporalSemantic.SLACK_TEMPORAL, Thresholds.TEMPORAL),
 				new EDRSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold)
 				);

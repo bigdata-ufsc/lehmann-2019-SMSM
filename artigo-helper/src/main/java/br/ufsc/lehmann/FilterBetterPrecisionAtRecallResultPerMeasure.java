@@ -14,10 +14,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
@@ -26,15 +24,9 @@ import org.junit.Test;
 
 public class FilterBetterPrecisionAtRecallResultPerMeasure {
 
-	private Path fileName;
-	
-	private static final Pattern TEST_NAME_PATTERN = Pattern.compile("(.+)#(.+)\\[(.+)\\[(.+)\\]\\[(.+)\\](.+\\[.+\\].+)?\\]");
-	private static final Pattern MULTIPLE_MEASURES_PATTERN = Pattern.compile("\\[(\\d+\\.\\d+).*,.*(\\d+\\.\\d+).*,.*(\\d+\\.\\d+).*,.*(\\d+\\.\\d+).*,.*(\\d+\\.\\d+).*,.*(\\d+\\.\\d+)\\]");
-	private static final Pattern PRECISION_AT_RECALL_PATTERN = Pattern.compile("Precision@recall\\((\\d+)\\): \\{(.+)\\}");
-
     public static Collection<Path> individualResults() throws IOException {
     	List<Path> files = Files.list(Paths.get(new File("./src/main/resources/only-stops-dataset").toURI())).filter((Path p) -> {
-    		return p.getFileName().toString().endsWith("Proportion-pr.csv");
+    		return p.getFileName().toString().startsWith("Raw") && p.getFileName().toString().endsWith("Proportion-pr.csv");
     	}).collect(Collectors.toList());
         return files;
     }
@@ -57,6 +49,7 @@ public class FilterBetterPrecisionAtRecallResultPerMeasure {
 				Double map = Arrays.asList(values).stream().mapToDouble((s) -> Double.parseDouble(s)).average().getAsDouble();
 				betterResults.computeIfAbsent(key, (e) -> new BetterResult(map, values, filePath, csvRecord)).setValues(map, values, filePath, csvRecord);
 			}
+			parser.close();
 		}
 		File csvOutput = new File(new File("./src/main/resources/only-stops-dataset"), "better-results.csv");
 		if(csvOutput.exists()) {
