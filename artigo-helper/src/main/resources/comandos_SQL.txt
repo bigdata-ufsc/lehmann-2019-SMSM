@@ -193,33 +193,88 @@ order by tid, max(time)
 
 -----------------------------------------------
 
-
-create table geolife.geolife_with_pois_university as (select * from geolife.geolife_with_pois where tid in (
-SELECT y.tid
-  FROM (select t.tid as tid from (select a.tid, a.geom from geolife.geolife_with_pois a ) t 
-where
-st_intersects(t.geom, ST_SetSRID(ST_GeomFromText('POLYGON((1.2948247973819174E7 4866575.90590961,1.2948247973819174E7 4867187.41762101,1.2948905637357853E7 4867187.41762101,1.2948905637357853E7 4866575.90590961,1.2948247973819174E7 4866575.90590961))'), 900913)) or
-st_intersects(t.geom, ST_SetSRID(ST_GeomFromText('POLYGON((1.2948986403055586E7 4864510.61163902,1.2948986403055586E7 4865156.73722088,1.2949574838853352E7 4865156.73722088,1.2949574838853352E7 4864510.61163902,1.2948986403055586E7 4864510.61163902))'), 900913)) or
-st_intersects(t.geom, ST_SetSRID(ST_GeomFromText('POLYGON((1.2946494204382695E7 4863783.72035942,1.2946494204382695E7 4864337.54228673,1.2947059564266823E7 4864337.54228673,1.2947059564266823E7 4863783.72035942,1.2946494204382695E7 4863783.72035942))'), 900913)) or
-st_intersects(t.geom, ST_SetSRID(ST_GeomFromText('POLYGON((1.294936715563061E7 4862122.2545775,1.294936715563061E7 4862756.84220254,1.2950047895082928E7 4862756.84220254,1.2950047895082928E7 4862122.2545775,1.294936715563061E7 4862122.2545775))'), 900913)) or
-st_intersects(t.geom, ST_SetSRID(ST_GeomFromText('POLYGON((1.2949194086278327E7 4865722.09710501,1.2949194086278327E7 4866172.07742094,1.2949563300896533E7 4866172.07742094,1.2949563300896533E7 4865722.09710501,1.2949194086278327E7 4865722.09710501))'), 900913))
-	group by t.tid) y))
+create table geolife.geolife_inside_university as (select * from geolife.geolife_with_pois);
 ----------------------------------------------
-	
+CREATE TABLE stops_moves.geolife_inside_university_move
+(
+  move_id integer NOT NULL,
+  start_time timestamp without time zone,
+  start_stop_id double precision,
+  begin integer,
+  end_time timestamp without time zone,
+  end_stop_id double precision,
+  length integer
+)
+WITH (
+  OIDS=FALSE
+)
+TABLESPACE data_trajectories;
+ALTER TABLE stops_moves.geolife_inside_university_move
+  OWNER TO postgres;
+------------------------------------------------
 
-update geolife.geolife_with_pois_university set "POI"=(
+CREATE TABLE stops_moves.geolife_inside_university_stop
+(
+  stop_id integer NOT NULL,
+  start_lat double precision,
+  start_lon double precision,
+  end_lat double precision,
+  end_lon double precision,
+  centroid_lat double precision,
+  centroid_lon double precision,
+  start_time timestamp without time zone,
+  end_time timestamp without time zone,
+  begin integer,
+  length integer,
+  street character(100),
+  "POI" character varying(100)
+)
+WITH (
+  OIDS=FALSE
+)
+TABLESPACE data_trajectories;
+ALTER TABLE stops_moves.geolife_inside_university_stop
+  OWNER TO postgres;
+-------------------------------------------------
+ALTER TABLE geolife.geolife_inside_university ADD COLUMN segmented_tid integer;
+ALTER TABLE geolife.geolife_inside_university ADD COLUMN direction character varying(100);
+ALTER TABLE geolife.geolife_inside_university ADD COLUMN path character varying(10);
+----------------------------------------------
+ALTER TABLE geolife.geolife_inside_university
+  ADD CONSTRAINT "GEOLIFE_INSIDE_GID_PK" PRIMARY KEY(gid)
+  USING INDEX TABLESPACE data_trajectories;
+----------------------------------------------
+CREATE INDEX "GEOLIFE_INSIDE_TID_IDX"
+  ON geolife.geolife_inside_university
+  USING btree
+  (tid)
+TABLESPACE data_trajectories;
+----------------------------------------------
+update geolife.geolife_inside_university set semantic_stop_id = null, semantic_move_id = null;
+-----------------------------------------------
+update geolife.geolife_inside_university set segmented_tid = tid;
+----------------------------------------------
+update geolife.geolife_inside_university set tid = old_tid;
+----------------------------------------------
+update geolife.geolife_inside_university set "POI"=(
 CASE 
 WHEN st_intersects(ST_SetSRID(geom, 900913), ST_SetSRID(ST_GeomFromText('POLYGON((1.2948247973819174E7 4866575.90590961,1.2948247973819174E7 4867187.41762101,1.2948905637357853E7 4867187.41762101,1.2948905637357853E7 4866575.90590961,1.2948247973819174E7 4866575.90590961))'), 900913))
-THEN 'Home'
+THEN 'Dormitory'
 WHEN st_intersects(ST_SetSRID(geom, 900913), ST_SetSRID(ST_GeomFromText('POLYGON((1.2948986403055586E7 4864510.61163902,1.2948986403055586E7 4865156.73722088,1.2949574838853352E7 4865156.73722088,1.2949574838853352E7 4864510.61163902,1.2948986403055586E7 4864510.61163902))'), 900913))
 THEN 'Commercial centre'
-WHEN st_intersects(ST_SetSRID(geom, 900913), ST_SetSRID(ST_GeomFromText('POLYGON((1.2949212595691524E7 4865630.38092322,1.2949212595691524E7 4866092.37945761,1.294968568002637E7 4866092.37945761,1.294968568002637E7 4865630.38092322,1.2949212595691524E7 4865630.38092322))'), 900913))
+WHEN st_intersects(ST_SetSRID(geom, 900913), ST_SetSRID(ST_GeomFromText('POLYGON((1.2949234988222102E7 4865626.93591852,1.2949234988222102E7 4866053.46494659,1.2949689747565899E7 4866053.46494659,1.2949689747565899E7 4865626.93591852,1.2949234988222102E7 4865626.93591852))'), 900913))
 THEN 'Park'
 WHEN st_intersects(ST_SetSRID(geom, 900913), ST_SetSRID(ST_GeomFromText('POLYGON((1.294936715563061E7 4862122.2545775,1.294936715563061E7 4862756.84220254,1.2950047895082928E7 4862756.84220254,1.2950047895082928E7 4862122.2545775,1.294936715563061E7 4862122.2545775))'), 900913))
-THEN 'Work'
+THEN 'Microsoft'
 ELSE null
 END
- )
+ );
+-----------------------------------------------
+
+delete from geolife.geolife_inside_university where tid in (
+select tid from geolife.geolife_inside_university
+group by tid
+having count(distinct "POI") < 4)
 ------------------------------------------------
 
 CREATE OR REPLACE FUNCTION public.first_agg ( anyelement, anyelement )
