@@ -24,9 +24,12 @@ import org.junit.Test;
 
 public class FilterBetterPrecisionAtRecallResultPerMeasure {
 
-    public static Collection<Path> individualResults() throws IOException {
-    	List<Path> files = Files.list(Paths.get(new File("./src/main/resources/only-stops-dataset").toURI())).filter((Path p) -> {
-    		return p.getFileName().toString().startsWith("Raw") && p.getFileName().toString().endsWith("Proportion-pr.csv");
+    private static final String FOLDER_PATH = "./src/main/resources/only-stops-dataset/test";
+
+	public static Collection<Path> individualResults() throws IOException {
+    	List<Path> files = Files.list(Paths.get(new File(FOLDER_PATH).toURI())).filter((Path p) -> {
+    		String string = p.getFileName().toString();
+			return string.endsWith("-pr.csv") && string.contains("0hs");
     	}).collect(Collectors.toList());
         return files;
     }
@@ -51,7 +54,7 @@ public class FilterBetterPrecisionAtRecallResultPerMeasure {
 			}
 			parser.close();
 		}
-		File csvOutput = new File(new File("./src/main/resources/only-stops-dataset"), "better-results.csv");
+		File csvOutput = new File(new File(FOLDER_PATH), "better-results.csv");
 		if(csvOutput.exists()) {
 			csvOutput.delete();
 		}

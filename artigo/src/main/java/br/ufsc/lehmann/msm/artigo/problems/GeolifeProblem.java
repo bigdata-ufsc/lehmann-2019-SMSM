@@ -40,6 +40,10 @@ public class GeolifeProblem extends AbstractProblem {
 		return GeolifeDatabaseReader.USER_ID;
 	}
 
+	public boolean isRawTrajectory() {
+		return !onlyStops;
+	}
+
 	@Override
 	public String shortDescripton() {
 		return "Geolife [" + stopSemantic().name() + "][onlyStops=" + onlyStops + "]" + (zones != null ? "(Users " + Arrays.toString(zones) + ")" : "");

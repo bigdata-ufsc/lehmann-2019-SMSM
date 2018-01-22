@@ -51,6 +51,11 @@ public class TPoint extends Point {
 		this.occupation=occupation;
 	}
 	
+	public TPoint(double x, double y, Timestamp time) {
+		super(x,y);
+		t = time;
+	}
+	
 	public TPoint(double x, double y) {
 		super(x,y);
 	}

@@ -22,15 +22,17 @@ public class MultipleThresholdRunner {
 
 	public static void main(String[] args) {
 		JUnitCore junit = new JUnitCore();
-		String folder = "C:\\Users\\André\\git\\ArtigoMSM_UFSC\\artigo-helper\\src\\main\\resources\\only-stops-dataset";
+		String folderPath = "C:\\Users\\André\\git\\ArtigoMSM_UFSC\\artigo-helper\\src\\main\\resources\\only-stops-dataset\\test";
+		File folder = new File(folderPath);
+		folder.mkdirs();
 		
 		for (int spatialThreshold = 0; spatialThreshold <= 500; spatialThreshold +=100) {
-			for (int timeThreshold = 0; timeThreshold <= 12; timeThreshold+=2) {
+			for (int timeThreshold = 0; timeThreshold <= 0; timeThreshold+=2) {
 				for (double proportionalTimeThreshold = 0.1; proportionalTimeThreshold < 1.; proportionalTimeThreshold += .2) {
 					FileOutputStream out = null;
 					try {
 						File file = new File(folder
-								+ String.format("\\RawTrajectoriesClassifierTest Thresholds-%dms %dhs %.1fTimeProportion.out",
+								+ String.format("\\SMSMClassifierTest Thresholds-%dms %dhs %.1fTimeProportion.out",
 										spatialThreshold, timeThreshold, proportionalTimeThreshold));
 						if(file.exists()) {
 							file.delete();
@@ -43,12 +45,12 @@ public class MultipleThresholdRunner {
 						Thresholds.TEMPORAL.setValue(proportionalTimeThreshold);
 						Thresholds.SLACK_TEMPORAL.setValue(timeThreshold * 60 * 60 * 1000);
 						junit.run( 
-								EDRClassifierTest.class,
-								MSMClassifierTest.class, 
-								LCSSClassifierTest.class
+//								EDRClassifierTest.class,
+//								MSMClassifierTest.class, 
+//								LCSSClassifierTest.class
 //								SMSMTemporalDurationClassifierTest.class, 
 //								SMSMDistanceClassifierTest.class,
-//								SMSMEllipsesClassifierTest.class,  
+								SMSMEllipsesClassifierTest.class  
 //								SMSMEllipsesWithDistanceClassifierTest.class,
 //								SMSMEllipsesWithTemporalDurationClassifierTest.class,
 //								SMSMEllipsesWithDistanceAndTemporalDurationClassifierTest.class 

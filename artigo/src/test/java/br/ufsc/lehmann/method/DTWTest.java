@@ -1,12 +1,15 @@
 package br.ufsc.lehmann.method;
 
 import br.ufsc.core.IMeasureDistance;
+import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.DTWClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
@@ -32,6 +35,8 @@ public interface DTWTest {
 			return new DTWClassifier<Stop, Number>(((DublinBusProblem) problem).stopSemantic());
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			return new DTWClassifier<Stop, Number>(((SanFranciscoCabProblem) problem).stopSemantic());
+		} else if(problem instanceof GeolifeProblem) {
+			return new DTWClassifier<TPoint, Number>(Semantic.SPATIAL);
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new DTWClassifier<Stop, Number>(SergipeTracksDataReader.STOP_CENTROID_SEMANTIC);
 		} else if(problem instanceof PrototypeProblem) {

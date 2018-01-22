@@ -3,22 +3,13 @@ package br.ufsc.lehmann.method;
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.TimestampSemantic;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.SlackTemporalSemantic;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.DTWaClassifier;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
-import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
-import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
-import br.ufsc.lehmann.msm.artigo.problems.VehicleProblem;
-import br.ufsc.lehmann.prototype.PrototypeDataReader;
-import br.ufsc.lehmann.prototype.PrototypeProblem;
 
 public interface DTWaTest {
 
@@ -34,9 +25,17 @@ public interface DTWaTest {
 //		} else if(problem instanceof DublinBusProblem) {
 //			return new DTWaClassifier(problem, ((DublinBusProblem) problem).stopSemantic(), Semantic.SPATIAL_LATLON, Semantic.TEMPORAL);
 		} else if(problem instanceof GeolifeProblem) {
-			return new DTWaClassifier(problem, /*((GeolifeProblem) problem).stopSemantic(), */Semantic.SPATIAL, SlackTemporalSemantic.SLACK_TEMPORAL);
+			GeolifeProblem geolifeProblem = (GeolifeProblem) problem;
+			if(geolifeProblem.isRawTrajectory()) {
+				return new DTWaClassifier(problem, Semantic.SPATIAL, TimestampSemantic.TIMESTAMP_TEMPORAL);
+			}
+			return new DTWaClassifier(problem, geolifeProblem.stopSemantic(), Semantic.SPATIAL, SlackTemporalSemantic.SLACK_TEMPORAL);
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new DTWaClassifier(problem, /*((SanFranciscoCabProblem) problem).stopSemantic(), */Semantic.SPATIAL_LATLON, SlackTemporalSemantic.SLACK_TEMPORAL);
+			SanFranciscoCabProblem sanFranciscoCabProblem = (SanFranciscoCabProblem) problem;
+			if(sanFranciscoCabProblem.isRawTrajectory()) {
+				return new DTWaClassifier(problem, Semantic.SPATIAL_LATLON, TimestampSemantic.TIMESTAMP_TEMPORAL);
+			}
+			return new DTWaClassifier(problem, sanFranciscoCabProblem.stopSemantic(), Semantic.SPATIAL_LATLON, SlackTemporalSemantic.SLACK_TEMPORAL);
 //		} else if(problem instanceof SergipeTracksProblem) {
 //			return new DTWaClassifier(problem, SergipeTracksDataReader.STOP_CENTROID_SEMANTIC, Semantic.SPATIAL_LATLON, Semantic.TEMPORAL);
 //		} else if(problem instanceof PrototypeProblem) {

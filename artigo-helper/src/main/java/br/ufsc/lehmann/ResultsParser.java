@@ -33,7 +33,8 @@ import com.google.common.io.LineReader;
 @RunWith(Parameterized.class)
 public class ResultsParser {
 
-    @Rule public TestName name = new TestName();
+    private static final String FOLDER_PATH = "./src/main/resources/only-stops-dataset/test";
+	@Rule public TestName name = new TestName();
 	private Path fileName;
 	
 	private static final Pattern TEST_NAME_PATTERN = Pattern.compile("(.+)#(.+)\\[(.+)\\[(.+)\\]\\[(.+)\\](.+\\[.+\\].+)?\\]");
@@ -42,7 +43,7 @@ public class ResultsParser {
     
     @Parameters(name="{0}")
     public static Collection<Path> data() throws IOException {
-    	List<Path> files = Files.list(Paths.get(new File("./src/main/resources/only-stops-dataset").toURI())).filter((Path p) -> {
+    	List<Path> files = Files.list(Paths.get(new File(FOLDER_PATH).toURI())).filter((Path p) -> {
     		return p.getFileName().toString().endsWith(".out");
     	}).collect(Collectors.toList());
         return files;

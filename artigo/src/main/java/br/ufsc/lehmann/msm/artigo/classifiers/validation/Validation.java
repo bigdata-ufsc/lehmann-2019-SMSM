@@ -99,7 +99,8 @@ public class Validation {
 					
 					@Override
 					public Double call() throws Exception {
-						return measureDistance.distance(trajsArray[finalI], trajsArray[finalJ]);
+						double distance = measureDistance.distance(trajsArray[finalI], trajsArray[finalJ]);
+						return distance;
 					}
 				});
 				queueProcess.add(new DelayedDistanceMeasure(trajsArray[i], trajsArray[j], future, 0));
@@ -124,6 +125,7 @@ public class Validation {
 					allDistances.put(toProcess.a, toProcess.b, distance);
 					allDistances.put(toProcess.b, toProcess.a, distance);
 				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
 				}
 			}
 		}

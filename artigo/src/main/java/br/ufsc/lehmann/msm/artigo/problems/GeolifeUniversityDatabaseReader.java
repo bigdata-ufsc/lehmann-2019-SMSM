@@ -49,6 +49,8 @@ import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class GeolifeUniversityDatabaseReader {
 	
+	private static final int SAMPLING_RATE = 1;
+	
 	private static final SpatialDistanceFunction GEO_DISTANCE_FUNCTION = new EuclideanDistanceFunction();
 
 	private static final SpatialDistanceFunction DISTANCE_FUNCTION = GEO_DISTANCE_FUNCTION;
@@ -273,7 +275,7 @@ public class GeolifeUniversityDatabaseReader {
 			Collection<GeolifeRecord> collection = records.get(trajId);
 			int i = 0;
 			for (GeolifeRecord record : collection) {
-				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
+				TPoint point = new TPoint(record.getLatitude(), record.getLongitude(), record.getTime());
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
 					if(stop == null) {
@@ -311,7 +313,14 @@ public class GeolifeUniversityDatabaseReader {
 					move.getEnd().setPreviousMove(move);
 					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
 					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
-					a.add(point);
+					if(a.isEmpty()) {
+						a.add(point);
+					} else {
+						TPoint tPoint = a.get(a.size() - 1);
+						if(tPoint.getTime() + (SAMPLING_RATE * 1000) < record.getTime().getTime()) {
+							a.add(point);
+						}
+					}
 					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
 				}
 			}
@@ -384,8 +393,14 @@ public class GeolifeUniversityDatabaseReader {
 			Collection<GeolifeRecord> collection = records.get(trajId);
 			int i = 0;
 			for (GeolifeRecord record : collection) {
+				if(i > 0) {
+					TPoint p = Semantic.SPATIAL.getData(s, i - 1);
+					if(p.getTime() + (SAMPLING_RATE * 1000) > record.getTime().getTime()) {
+						continue;
+					}
+				}
 				s.addData(i, Semantic.GID, record.getGid());
-				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
+				TPoint point = new TPoint(record.getLatitude(), record.getLongitude(), record.getTime());
 				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, USER_ID, record.getUserId());

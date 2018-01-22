@@ -22,6 +22,10 @@ public class SanFranciscoCabProblem extends AbstractProblem {
 	public Semantic discriminator() {
 		return SanFranciscoCabDataReader.OCUPATION;
 	}
+
+	public boolean isRawTrajectory() {
+		return !onlyStop;
+	}
 	
 	@Override
 	public String shortDescripton() {
