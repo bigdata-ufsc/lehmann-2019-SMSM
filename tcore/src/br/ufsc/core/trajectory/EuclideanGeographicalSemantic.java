@@ -23,11 +23,15 @@ final class EuclideanGeographicalSemantic extends Semantic<TPoint, Number> {
 	}
 
 	public double distance(TPoint d1, TPoint d2) {
+		return 1 - similarity(d1, d2);
+	}
+
+	public double _distance(TPoint d1, TPoint d2) {
 		return Distance.euclidean(d1, d2);
 	}
 
 	public double similarity(TPoint d1, TPoint d2) {
-		return 1 / Math.max(1, distance(d1, d2));
+		return 1 / Math.max(1, _distance(d1, d2));
 	}
 
 	public double similarity(TPoint d1, TPoint d2, Number threshold) {

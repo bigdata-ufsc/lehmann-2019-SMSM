@@ -1,5 +1,6 @@
 package br.ufsc.lehmann.method;
 
+import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import br.ufsc.core.IMeasureDistance;
@@ -8,10 +9,10 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.core.trajectory.TimestampSemantic;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 import br.ufsc.lehmann.NElementProblem;
-import br.ufsc.lehmann.SlackTemporalSemantic;
 import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
@@ -34,6 +35,8 @@ public interface MSMTest {
 		StopSemantic stopSemantic = null;
 		Semantic<TPoint, Number> geoSemantic = Semantic.SPATIAL_LATLON;
 		MutableInt geoThreshold = Thresholds.SPATIAL_LATLON;
+		Semantic<?, Number> timeSemantic = Semantic.TEMPORAL;
+		Number timeThreshold = Thresholds.TEMPORAL;
 		if(problem instanceof NElementProblem) {
 			return new MSMClassifier(//
 					new MSMSemanticParameter<Stop, Number>(NElementProblem.stop, 0.5, 1.0/4.0),
@@ -44,6 +47,11 @@ public interface MSMTest {
 		} else if(problem instanceof NewYorkBusProblem) {
 			stopSemantic = ((NewYorkBusProblem) problem).stopSemantic();
 		} else if(problem instanceof DublinBusProblem) {
+			GeolifeProblem geolifeProblem = (GeolifeProblem) problem;
+			if(geolifeProblem.isRawTrajectory()) {
+				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
+				timeThreshold = Thresholds.SLACK_TEMPORAL;
+			}
 			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
 		} else if(problem instanceof GeolifeProblem) {
 			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
@@ -76,7 +84,7 @@ public interface MSMTest {
 //					new MSMSemanticParameter<TemporalDuration, Number>(SlackTemporalSemantic.SLACK_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
 //					new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold.intValue(), 1.0/3.0),
 //					new MSMSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic), 1.0/3.0)
-				new MSMSemanticParameter<TemporalDuration, Number>(SlackTemporalSemantic.SLACK_TEMPORAL, Thresholds.TEMPORAL, 1.0/2.0),
+				new MSMSemanticParameter(timeSemantic, timeThreshold, 1.0/2.0),
 				new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold.intValue(), 1.0/2.0)
 				);
 	}

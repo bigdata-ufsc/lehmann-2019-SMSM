@@ -8,6 +8,7 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.core.trajectory.TimestampSemantic;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.SlackTemporalSemantic;
@@ -34,6 +35,8 @@ public interface EDRTest {
 		StopSemantic stopSemantic = null;
 		Semantic<TPoint, Number> geoSemantic = Semantic.SPATIAL_LATLON;
 		MutableInt geoThreshold = Thresholds.STOP_CENTROID_LATLON;
+		Semantic<?, Number> timeSemantic = Semantic.TEMPORAL;
+		Number timeThreshold = Thresholds.TEMPORAL;
 		if(problem instanceof NElementProblem) {
 			return new EDRClassifier(//
 					new EDRSemanticParameter<Stop, Number>(NElementProblem.stop, 0.5),
@@ -46,6 +49,11 @@ public interface EDRTest {
 		} else if(problem instanceof DublinBusProblem) {
 			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
 		} else if(problem instanceof GeolifeProblem) {
+			GeolifeProblem geolifeProblem = (GeolifeProblem) problem;
+			if(geolifeProblem.isRawTrajectory()) {
+				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
+				timeThreshold = Thresholds.SLACK_TEMPORAL;
+			}
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
 		} else if(problem instanceof PatelProblem) {
@@ -73,7 +81,7 @@ public interface EDRTest {
 		}
 		return new EDRClassifier(//
 //				new EDRSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
-				new EDRSemanticParameter<TemporalDuration, Number>(SlackTemporalSemantic.SLACK_TEMPORAL, Thresholds.TEMPORAL),
+				new EDRSemanticParameter(timeSemantic, timeThreshold),
 				new EDRSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold)
 				);
 	}
