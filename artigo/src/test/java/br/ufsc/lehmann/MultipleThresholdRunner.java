@@ -8,31 +8,26 @@ import java.io.PrintStream;
 
 import org.junit.runner.JUnitCore;
 
+import br.ufsc.lehmann.classifier.DTWaClassifierTest;
 import br.ufsc.lehmann.classifier.EDRClassifierTest;
 import br.ufsc.lehmann.classifier.LCSSClassifierTest;
 import br.ufsc.lehmann.classifier.MSMClassifierTest;
-import br.ufsc.lehmann.classifier.SMSMDistanceClassifierTest;
-import br.ufsc.lehmann.classifier.SMSMEllipsesClassifierTest;
-import br.ufsc.lehmann.classifier.SMSMEllipsesWithDistanceAndTemporalDurationClassifierTest;
-import br.ufsc.lehmann.classifier.SMSMEllipsesWithDistanceClassifierTest;
-import br.ufsc.lehmann.classifier.SMSMEllipsesWithTemporalDurationClassifierTest;
-import br.ufsc.lehmann.classifier.SMSMTemporalDurationClassifierTest;
 
 public class MultipleThresholdRunner {
 
 	public static void main(String[] args) {
 		JUnitCore junit = new JUnitCore();
-		String folderPath = "C:\\Users\\André\\git\\ArtigoMSM_UFSC\\artigo-helper\\src\\main\\resources\\only-stops-dataset\\RAW";
+		String folderPath = "C:\\Users\\uuario\\Desktop\\Lehmann\\ArtigoMSM_UFSC\\artigo-helper\\src\\main\\resources\\only-stops-dataset\\RAW_20180123";
 		File folder = new File(folderPath);
 		folder.mkdirs();
 		
-		for (int spatialThreshold = 0; spatialThreshold <= 500; spatialThreshold +=100) {
-			for (int timeThreshold = 0; timeThreshold <= 12; timeThreshold+=2) {
+		for (int spatialThreshold = 0; spatialThreshold <= 300; spatialThreshold +=50) {
+			for (int timeThreshold = 0; timeThreshold <= 6; timeThreshold+=1) {
 				for (double proportionalTimeThreshold = 0.1; proportionalTimeThreshold <= 0.1; proportionalTimeThreshold += .2) {
 					FileOutputStream out = null;
 					try {
 						File file = new File(folder
-								+ String.format("\\SMSMClassifierTest Thresholds-%dms %dhs %.1fTimeProportion.out",
+								+ String.format("\\RawTrajectoriesClassifierTest Thresholds-%dms %dhs.out",
 										spatialThreshold, timeThreshold, proportionalTimeThreshold));
 						if(file.exists()) {
 							file.delete();
@@ -47,7 +42,7 @@ public class MultipleThresholdRunner {
 						junit.run( 
 								EDRClassifierTest.class,
 								MSMClassifierTest.class, 
-								LCSSClassifierTest.class
+								LCSSClassifierTest.class 
 //								SMSMTemporalDurationClassifierTest.class, 
 //								SMSMDistanceClassifierTest.class,
 //								SMSMEllipsesClassifierTest.class,  

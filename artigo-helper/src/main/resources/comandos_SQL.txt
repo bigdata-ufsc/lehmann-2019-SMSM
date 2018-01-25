@@ -302,3 +302,56 @@ CREATE AGGREGATE public.LAST (
         stype    = anyelement
 );
 ----------------------------------------------
+create table amsterdan.amsterdan_park_2005 as SELECT traj.gid, (traj.name) as name, (traj.lat) as lat, 
+	(traj.lon) as lon, (traj.q) as q, (traj."time") as time, 
+	(traj.zonename) as zonename, (traj.label) as label, 
+	(traj.geom) as geom, (stops.stop_name) as stop_name
+FROM amsterdan.shp_tracks_freq1550 traj left join amsterdan.shp_stops stops 
+  on traj.label = stops.label and st_intersects(stops.geom, traj.geom) and traj.zonename = stops.zonename and traj.name = stops.name and (DATE '2006-06-01' + ((traj."time" || ' second')::interval))::timestamp between (stops.start_time::timestamp) and (stops.end_time::timestamp)
+
+
+ALTER TABLE amsterdan.amsterdan_park_2005 ADD COLUMN semantic_stop_id integer;
+
+ALTER TABLE amsterdan.amsterdan_park_2005 ADD COLUMN semantic_move_id integer;
+
+------------------------------------------------
+CREATE TABLE amsterdan.amsterdan_park_2005_move
+(
+  move_id integer NOT NULL,
+  start_time timestamp without time zone,
+  start_stop_id double precision,
+  begin integer,
+  end_time timestamp without time zone,
+  end_stop_id double precision,
+  length integer
+)
+WITH (
+  OIDS=FALSE
+)
+TABLESPACE data_trajectories;
+ALTER TABLE amsterdan.amsterdan_park_2005_move
+  OWNER TO postgres;
+
+CREATE TABLE amsterdan.amsterdan_park_2005_stop
+(
+  stop_id integer NOT NULL,
+  start_lat double precision,
+  start_lon double precision,
+  end_lat double precision,
+  end_lon double precision,
+  centroid_lat double precision,
+  centroid_lon double precision,
+  start_time timestamp without time zone,
+  end_time timestamp without time zone,
+  begin integer,
+  length integer,
+  street character(100)
+)
+WITH (
+  OIDS=FALSE
+)
+TABLESPACE data_trajectories;
+ALTER TABLE amsterdan.amsterdan_park_2005_stop
+  OWNER TO postgres;
+
+------------------------------------------------

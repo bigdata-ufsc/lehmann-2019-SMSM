@@ -53,7 +53,7 @@ public class StopAndMoveExtractor {
 
 	public static void persistStopAndMove(Connection conn, PreparedStatement update, PreparedStatement insertStop,
 			PreparedStatement insertMove, List<StopAndMove> findBestCBSMoT) throws SQLException {
-		persistStopAndMove(conn, update, insertStop, null, insertMove, findBestCBSMoT);
+		persistStopAndMove(conn, update, insertStop, EMPTY, insertMove, findBestCBSMoT);
 	}
 
 	public static void persistStopAndMove(Connection conn, PreparedStatement update, PreparedStatement insertStop, StopPersisterCallback stopCallback,
@@ -154,12 +154,12 @@ public class StopAndMoveExtractor {
 		Map<String, Integer> bestCombinations = new HashMap<>();
 		for (int i = 200; i > 40; i-=25) {//ratio
 			final int finalI = i;
-			IntStream.iterate(20 * 1000, j -> j + 2 * 1000).limit(10).parallel().forEach((j) -> {//timeTolerance
+			IntStream.iterate(30 * 1000, j -> j + 30 * 1000).limit(5).parallel().forEach((j) -> {//timeTolerance
 				final int finalJ = j;
 				for (int k = 300; k <= 475; k+=25) {//maxDist
 					final int finalK = k;
-					IntStream.iterate(30 * 1000, l -> l + 2000).limit(15).parallel().forEach((l) -> {//mergeTolerance
-						for (int m = 30 * 1000; m <= 90 * 1000; m+=1000) {//minTime
+					IntStream.iterate(30 * 1000, l -> l + 30 * 1000).limit(5).parallel().forEach((l) -> {//mergeTolerance
+						for (int m = 30 * 1000; m <= 120 * 1000; m+=30 * 1000) {//minTime
 							List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), finalI, finalJ, finalK, l, m, sid, mid);
 							int stopsCount = 0;
 							for (StopAndMove stopAndMove : findBestCBSMoT) {

@@ -88,8 +88,8 @@ public class Validation {
 			occurrences.computeIfAbsent(classData, (t) -> new LongAdder()).increment();
 		}
 		
-		ExecutorService executorService = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() / 2,
-				Runtime.getRuntime().availableProcessors() / 2, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 1.5),
+				(int) (Runtime.getRuntime().availableProcessors() / 1.5), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 		DelayQueue<DelayedDistanceMeasure> queueProcess = new DelayQueue<>();
 		for (int i = 0; i < trajsArray.length; i++) {
 			int finalI = i;

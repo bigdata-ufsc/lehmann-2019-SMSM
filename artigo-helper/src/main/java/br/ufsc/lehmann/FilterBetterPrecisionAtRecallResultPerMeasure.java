@@ -24,7 +24,7 @@ import org.junit.Test;
 
 public class FilterBetterPrecisionAtRecallResultPerMeasure {
 
-    private static final String FOLDER_PATH = "./src/main/resources/only-stops-dataset/test";
+    private static final String FOLDER_PATH = "./src/main/resources/only-stops-dataset/RAW_20180123";
 
 	public static Collection<Path> individualResults() throws IOException {
     	List<Path> files = Files.list(Paths.get(new File(FOLDER_PATH).toURI())).filter((Path p) -> {

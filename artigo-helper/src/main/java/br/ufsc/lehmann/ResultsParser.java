@@ -33,7 +33,7 @@ import com.google.common.io.LineReader;
 @RunWith(Parameterized.class)
 public class ResultsParser {
 
-    private static final String FOLDER_PATH = "./src/main/resources/only-stops-dataset/test";
+    private static final String FOLDER_PATH = "./src/main/resources/only-stops-dataset/RAW_20180123";
 	@Rule public TestName name = new TestName();
 	private Path fileName;
 	

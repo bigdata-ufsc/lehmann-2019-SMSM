@@ -52,6 +52,9 @@ public interface LCSSTest {
 			if(geolifeProblem.isRawTrajectory()) {
 				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
 				timeThreshold = Thresholds.SLACK_TEMPORAL;
+			} else {
+				timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
+				timeThreshold = Thresholds.SLACK_TEMPORAL;
 			}
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
@@ -64,7 +67,15 @@ public interface LCSSTest {
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((VehicleProblem) problem).stopSemantic();
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			stopSemantic = ((SanFranciscoCabProblem) problem).stopSemantic();
+			SanFranciscoCabProblem sanFranciscoCabProblem = (SanFranciscoCabProblem) problem;
+			if(sanFranciscoCabProblem.isRawTrajectory()) {
+				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
+				timeThreshold = Thresholds.SLACK_TEMPORAL;
+			} else {
+				timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
+				timeThreshold = Thresholds.SLACK_TEMPORAL;
+			}
+			stopSemantic = sanFranciscoCabProblem.stopSemantic();
 		} else if(problem instanceof SergipeTracksProblem) {
 			stopSemantic = SergipeTracksDataReader.STOP_CENTROID_SEMANTIC;
 		} else if(problem instanceof PrototypeProblem) {

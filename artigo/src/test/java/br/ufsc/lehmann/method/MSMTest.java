@@ -13,6 +13,7 @@ import br.ufsc.core.trajectory.TimestampSemantic;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 import br.ufsc.lehmann.NElementProblem;
+import br.ufsc.lehmann.SlackTemporalSemantic;
 import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
@@ -47,16 +48,19 @@ public interface MSMTest {
 		} else if(problem instanceof NewYorkBusProblem) {
 			stopSemantic = ((NewYorkBusProblem) problem).stopSemantic();
 		} else if(problem instanceof DublinBusProblem) {
-			GeolifeProblem geolifeProblem = (GeolifeProblem) problem;
-			if(geolifeProblem.isRawTrajectory()) {
-				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
-				timeThreshold = Thresholds.SLACK_TEMPORAL;
-			}
 			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
 		} else if(problem instanceof GeolifeProblem) {
+			GeolifeProblem geolifeProblem = (GeolifeProblem) problem;
 			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
+			if(geolifeProblem.isRawTrajectory()) {
+				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
+				timeThreshold = Thresholds.SLACK_TEMPORAL;
+			} else {
+				timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
+				timeThreshold = Thresholds.SLACK_TEMPORAL;
+			}
 		} else if(problem instanceof PatelProblem) {
 			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
@@ -66,7 +70,15 @@ public interface MSMTest {
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((VehicleProblem) problem).stopSemantic();
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			stopSemantic = ((SanFranciscoCabProblem) problem).stopSemantic();
+			SanFranciscoCabProblem sanFranciscoCabProblem = (SanFranciscoCabProblem) problem;
+			if(sanFranciscoCabProblem.isRawTrajectory()) {
+				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
+				timeThreshold = Thresholds.SLACK_TEMPORAL;
+			} else {
+				timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
+				timeThreshold = Thresholds.SLACK_TEMPORAL;
+			}
+			stopSemantic = sanFranciscoCabProblem.stopSemantic();
 		} else if(problem instanceof SergipeTracksProblem) {
 			stopSemantic = SergipeTracksDataReader.STOP_CENTROID_SEMANTIC;
 		} else if(problem instanceof PrototypeProblem) {

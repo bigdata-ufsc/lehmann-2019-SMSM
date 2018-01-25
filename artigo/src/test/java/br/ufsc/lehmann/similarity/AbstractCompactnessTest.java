@@ -64,9 +64,9 @@ public abstract class AbstractCompactnessTest {
 		
 		trajs = trajs.stream()//
 //				.filter(t -> t.length() > 6)//
-//				.filter(t -> Arrays.asList(
-//						22193, 35843
-//						).contains(t.getTrajectoryId()))//
+				.filter(t -> Arrays.asList(
+						944553,945889
+						).contains(t.getTrajectoryId()))//
 //				.filter(t -> Arrays.asList(
 //						16987
 //				).contains(t.getTrajectoryId()))//

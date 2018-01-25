@@ -86,7 +86,7 @@ public class GeolifeUniversityDatabaseReader {
 	}
 
 	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "public.geolife2_limited", null, null);
+		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "lehmann", DataSourceType.PGSQL, "stops_moves.geolife_with_pois_university_stop", null, null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
 		Connection conn = retriever.getConnection();
@@ -169,7 +169,7 @@ public class GeolifeUniversityDatabaseReader {
 	}
 
 	public List<Stop> exportStops(String... zones) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "public.geolife2_limited", null, null);
+		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "lehmann", DataSourceType.PGSQL, "stops_moves.geolife_with_pois_university_stop", null, null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
 		String stopTable = this.withTransportation ? "stops_moves.geolife_enriched_stop" : "stops_moves.geolife2_limited_stop";
