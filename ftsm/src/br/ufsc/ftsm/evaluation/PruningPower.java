@@ -21,11 +21,11 @@ import br.ufsc.ftsm.method.msm.FTSMQMSM;
 import br.ufsc.ftsm.related.DTW;
 import br.ufsc.ftsm.related.FTSELCSS;
 import br.ufsc.ftsm.related.LCSS;
+import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.ftsm.related.LCSSL;
 import br.ufsc.ftsm.related.MSM;
-import br.ufsc.ftsm.related.PDTW;
-import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
+import br.ufsc.ftsm.related.PDTW;
 
 
 

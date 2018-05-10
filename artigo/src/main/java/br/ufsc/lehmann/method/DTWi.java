@@ -14,7 +14,7 @@ public class DTWi extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 
 	@Override
 	public double getSimilarity(SemanticTrajectory A, SemanticTrajectory B) {
-		return 1 - distance(A, B) / Math.max(A.length(), B.length()) * semantics.length;
+		return 1 - distance(A, B) / (Math.max(A.length(), B.length()) * semantics.length);
 	}
 
 	double distance(SemanticTrajectory A, SemanticTrajectory B) {

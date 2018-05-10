@@ -7,7 +7,6 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
-import br.ufsc.core.trajectory.TemporalDuration;
 import br.ufsc.core.trajectory.TimestampSemantic;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.NElementProblem;
@@ -58,6 +57,7 @@ public interface EDRTest {
 				timeThreshold = Thresholds.SLACK_TEMPORAL;
 			}
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
 		} else if(problem instanceof PatelProblem) {
 			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
@@ -91,8 +91,8 @@ public interface EDRTest {
 			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
 		}
 		return new EDRClassifier(//
-//				new EDRSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
-				new EDRSemanticParameter(timeSemantic, timeThreshold),
+				new EDRSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
+//				new EDRSemanticParameter(timeSemantic, timeThreshold),
 				new EDRSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold)
 				);
 	}

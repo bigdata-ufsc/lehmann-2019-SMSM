@@ -1,8 +1,6 @@
 package br.ufsc.ftsm.method;
 
 import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Queue;
 
 import br.ufsc.core.trajectory.Trajectory;

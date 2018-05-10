@@ -13,7 +13,6 @@ import java.util.zip.ZipException;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDatabaseReader;
 import br.ufsc.utils.Distance;
 import cc.mallet.util.FileUtils;
 

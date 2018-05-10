@@ -9,14 +9,13 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
-import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.base.ETrajectory;
 import br.ufsc.ftsm.base.Ellipse;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.util.CreateEllipseMath;
 import br.ufsc.utils.EuclideanDistanceFunction;
 
-public class UMS extends TrajectorySimilarityCalculator<Trajectory> implements IMeasureDistance<SemanticTrajectory> {
+public class UMS extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 
 	private SpatialDistanceFunction distanceFunc;
 
@@ -43,7 +42,8 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> implements I
 		CreateEllipseMath ellipseMath = new CreateEllipseMath();
 		ETrajectory T1 = ellipseMath.createEllipticalTrajectoryFixed(-1, mercatorP);
 		ETrajectory T2 = ellipseMath.createEllipticalTrajectoryFixed(1, mercatorD);
-		return 1 - getSimilarity(T1, T2);
+		double ret = 1 - getSimilarity(T1, T2);
+		return ret;
 	}
 
 	public double getSimilarity(ETrajectory E1, ETrajectory E2) {
@@ -243,11 +243,22 @@ public class UMS extends TrajectorySimilarityCalculator<Trajectory> implements I
 	}
 	
 	@Override
-	public double getSimilarity(Trajectory T1, Trajectory T2) {
+	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
+		TPoint[] points1 = new TPoint[t1.length()];
+		for (int i = 0; i < t1.length(); i++) {
+			points1[i] = Semantic.SPATIAL.getData(t1, i);
+		}
+		TPoint[] points2 = new TPoint[t2.length()];
+		for (int i = 0; i < t2.length(); i++) {
+			points2[i] = Semantic.SPATIAL.getData(t2, i);
+		}
+		TPoint[] mercatorP = distanceFunc.convertToMercator(points1);
+		TPoint[] mercatorD = distanceFunc.convertToMercator(points2);
+		CreateEllipseMath ellipseMath = new CreateEllipseMath();
 		CreateEllipseMath createEllipseMath = new CreateEllipseMath(distanceFunc);
-		ETrajectory E1 = new CreateEllipseMath().createEllipticalTrajectoryFixed(T1);
-		ETrajectory E2 = new CreateEllipseMath().createEllipticalTrajectoryFixed(T2);
-		return getSimilarity(E1,E2);
+		ETrajectory T1 = ellipseMath.createEllipticalTrajectoryFixed(-1, mercatorP);
+		ETrajectory T2 = ellipseMath.createEllipticalTrajectoryFixed(1, mercatorD);
+		return getSimilarity(T1,T2);
 	}
 
 	@Override

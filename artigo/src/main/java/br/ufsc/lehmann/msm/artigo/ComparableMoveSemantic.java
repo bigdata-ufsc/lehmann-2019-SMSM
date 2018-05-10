@@ -3,7 +3,6 @@ package br.ufsc.lehmann.msm.artigo;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.semantic.Move;
-import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.lehmann.MoveSemantic;
 
 public class ComparableMoveSemantic extends Semantic<Move, Number> {

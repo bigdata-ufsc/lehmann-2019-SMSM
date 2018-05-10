@@ -6,11 +6,11 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-//	MSMClassifierTest.class, 
+	MSMClassifierTest.class, 
 //	//DTWClassifierTest.class, //
-//	EDRClassifierTest.class, 
+	EDRClassifierTest.class, 
 //	//ERPClassifierTest.class, 
-//	LCSSClassifierTest.class, 
+	LCSSClassifierTest.class, 
 //	MSTPClassifierTest.class,//
 //	//HCSSClassifierTest.class, 
 //	CVTIClassifierTest.class, 
@@ -18,12 +18,12 @@ import org.junit.runners.Suite.SuiteClasses;
 ////	SWALEClassifierTest.class, LiuSchneiderClassifierTest.class, 
 //	DTWaClassifierTest.class, /*MTMClassifierTest.class*/
 //	UMSClassifierTest.class,
-	SMSMTemporalDurationClassifierTest.class, 
-	SMSMDistanceClassifierTest.class,
-	SMSMEllipsesClassifierTest.class,  
-	SMSMEllipsesWithDistanceClassifierTest.class,
-	SMSMEllipsesWithTemporalDurationClassifierTest.class,
-	SMSMEllipsesWithDistanceAndTemporalDurationClassifierTest.class, 
+//	SMSMTemporalDurationClassifierTest.class, 
+//	SMSMDistanceClassifierTest.class,
+//	SMSMEllipsesClassifierTest.class,  
+//	SMSMEllipsesWithDistanceClassifierTest.class,
+//	SMSMEllipsesWithTemporalDurationClassifierTest.class,
+//	SMSMEllipsesWithDistanceAndTemporalDurationClassifierTest.class, 
 	})
 public class AllClassifierTests {
 

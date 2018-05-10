@@ -94,11 +94,11 @@ public static void main(String[] args) throws InstantiationException, IllegalAcc
 	System.out.println("FTSMOLCSS: "+ftsmolcss.getSimilarity(t1, t2));
 	
 	
-	System.out.println("### UMS-Based:");
-	System.out.println("UMS: "+ums.getSimilarity(t1, t2));
-	System.out.println("UMS3: "+ums3.getSimilarity(t1, t2));
-	System.out.println("FTSMBUMS: "+ftsmbums.getSimilarity(t1, t2));
-	System.out.println("FTSMBUMS3: "+ftsmbums2.getSimilarity(t1, t2));
+//	System.out.println("### UMS-Based:");
+//	System.out.println("UMS: "+ums.getSimilarity(t1, t2));
+//	System.out.println("UMS3: "+ums3.getSimilarity(t1, t2));
+//	System.out.println("FTSMBUMS: "+ftsmbums.getSimilarity(t1, t2));
+//	System.out.println("FTSMBUMS3: "+ftsmbums2.getSimilarity(t1, t2));
 
 
 	

@@ -1,5 +1,3 @@
-import org.apache.commons.lang3.ArrayUtils;
-
 public class DTWAula {
 
 	public static void main(String[] args) {

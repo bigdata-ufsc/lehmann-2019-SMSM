@@ -1,16 +1,12 @@
 package br.ufsc.lehmann.classifier;
 
-import static org.junit.Assert.*;
-
 import java.io.StringWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.After;
@@ -30,7 +26,9 @@ import com.google.common.collect.MultimapBuilder;
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.EnumProblem;
+import br.ufsc.lehmann.classifier.Binarizer;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;
@@ -44,7 +42,6 @@ import br.ufsc.lehmann.msm.artigo.classifiers.validation.Precision;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Recall;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Specificity;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Validation;
-import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import smile.math.Random;
 
 @RunWith(Parameterized.class)
@@ -210,8 +207,8 @@ public abstract class AbstractClassifierTest {
 //		List<SemanticTrajectory> data = problem.balancedData();
 		List<SemanticTrajectory> data = problem.data();
 		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
-		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		Validation validation = new Validation(problem, classifier, random);
+		TrajectorySimilarityCalculator<SemanticTrajectory> classifier = (TrajectorySimilarityCalculator<SemanticTrajectory>) measurer(problem);
+		Validation validation = new Validation(problem, (IMeasureDistance<SemanticTrajectory>) classifier, random);
 
 		double[] precisionAtRecall = validation.precisionAtRecall(classifier, allData, /*data.size() / problemDescriptor.numClasses()*/10);
 		System.out.printf("Precision@recall(%d): %s\n", /*data.size() / problemDescriptor.numClasses()*/10, ArrayUtils.toString(precisionAtRecall, "0.0"));

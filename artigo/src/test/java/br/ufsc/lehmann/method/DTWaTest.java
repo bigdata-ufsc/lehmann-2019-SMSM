@@ -27,9 +27,9 @@ public interface DTWaTest {
 		} else if(problem instanceof GeolifeProblem) {
 			GeolifeProblem geolifeProblem = (GeolifeProblem) problem;
 			if(geolifeProblem.isRawTrajectory()) {
-				return new DTWaClassifier(problem, Semantic.SPATIAL, TimestampSemantic.TIMESTAMP_TEMPORAL);
+				return new DTWaClassifier(problem, Semantic.SPATIAL, geolifeProblem.stopSemantic());
 			}
-			return new DTWaClassifier(problem, geolifeProblem.stopSemantic(), Semantic.SPATIAL, SlackTemporalSemantic.SLACK_TEMPORAL);
+			return new DTWaClassifier(problem, geolifeProblem.stopSemantic(), Semantic.SPATIAL);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			SanFranciscoCabProblem sanFranciscoCabProblem = (SanFranciscoCabProblem) problem;
 			if(sanFranciscoCabProblem.isRawTrajectory()) {

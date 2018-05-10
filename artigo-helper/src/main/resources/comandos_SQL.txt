@@ -355,3 +355,51 @@ ALTER TABLE amsterdan.amsterdan_park_2005_stop
   OWNER TO postgres;
 
 ------------------------------------------------
+CREATE TABLE stops_moves.geolife_university_move
+(
+  move_id integer NOT NULL,
+  start_time timestamp without time zone,
+  start_stop_id double precision,
+  begin integer,
+  end_time timestamp without time zone,
+  end_stop_id double precision,
+  length integer
+)
+WITH (
+  OIDS=FALSE
+);
+
+CREATE TABLE stops_moves.geolife_university_stop
+(
+  stop_id integer NOT NULL,
+  start_lat double precision,
+  start_lon double precision,
+  end_lat double precision,
+  end_lon double precision,
+  centroid_lat double precision,
+  centroid_lon double precision,
+  start_time timestamp without time zone,
+  end_time timestamp without time zone,
+  begin integer,
+  length integer,
+  street character(100),
+  "POI" character varying(100)
+)
+WITH (
+  OIDS=FALSE
+);
+update geolife.geolife_inside_university set "POI"=(
+CASE 
+WHEN st_intersects(ST_SetSRID(geom, 900913), ST_SetSRID(ST_GeomFromText('POLYGON((1.2948247973819174E7 4866575.90590961,1.2948247973819174E7 4867187.41762101,1.2948905637357853E7 4867187.41762101,1.2948905637357853E7 4866575.90590961,1.2948247973819174E7 4866575.90590961))'), 900913))
+THEN 'Dormitory'
+WHEN st_intersects(ST_SetSRID(geom, 900913), ST_SetSRID(ST_GeomFromText('POLYGON((1.2949129492226938E7 4864510.61163902,1.2949129492226938E7 4865155.72337913,1.2949421936024217E7 4865155.72337913,1.2949421936024217E7 4864510.61163902,1.2949129492226938E7 4864510.61163902))'), 900913))
+THEN 'Starbucks'
+WHEN st_intersects(ST_SetSRID(geom, 900913), ST_SetSRID(ST_GeomFromText('POLYGON((1.2949421625986239E7 4864510.64276728,1.2949421625986239E7 4865156.95972689,1.2949756605852714E7 4865156.95972689,1.2949756605852714E7 4864510.64276728,1.2949421625986239E7 4864510.64276728))'), 900913))
+THEN 'Market'
+WHEN st_intersects(ST_SetSRID(geom, 900913), ST_SetSRID(ST_GeomFromText('POLYGON((1.2949234988222102E7 4865626.93591852,1.2949234988222102E7 4866053.46494659,1.2949689747565899E7 4866053.46494659,1.2949689747565899E7 4865626.93591852,1.2949234988222102E7 4865626.93591852))'), 900913))
+THEN 'Park'
+WHEN st_intersects(ST_SetSRID(geom, 900913), ST_SetSRID(ST_GeomFromText('POLYGON((1.294936715563061E7 4862122.2545775,1.294936715563061E7 4862756.84220254,1.2950047895082928E7 4862756.84220254,1.2950047895082928E7 4862122.2545775,1.294936715563061E7 4862122.2545775))'), 900913))
+THEN 'Microsoft'
+ELSE null
+END
+ );

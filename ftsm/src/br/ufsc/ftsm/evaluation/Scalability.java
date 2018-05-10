@@ -2,7 +2,6 @@ package br.ufsc.ftsm.evaluation;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
@@ -29,13 +28,13 @@ import br.ufsc.ftsm.related.DTW;
 import br.ufsc.ftsm.related.DTW2;
 import br.ufsc.ftsm.related.FTSELCSS;
 import br.ufsc.ftsm.related.LCSS;
+import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.ftsm.related.LCSSL;
 import br.ufsc.ftsm.related.MSM;
+import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 import br.ufsc.ftsm.related.PDTW;
 import br.ufsc.ftsm.related.UMS;
 import br.ufsc.ftsm.related.UMS3;
-import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
-import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 import br.ufsc.ftsm.util.CreateEllipseMath;
 
 

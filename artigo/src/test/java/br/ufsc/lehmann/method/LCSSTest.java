@@ -7,7 +7,6 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
-import br.ufsc.core.trajectory.TemporalDuration;
 import br.ufsc.core.trajectory.TimestampSemantic;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
@@ -57,6 +56,7 @@ public interface LCSSTest {
 				timeThreshold = Thresholds.SLACK_TEMPORAL;
 			}
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
 		} else if(problem instanceof PatelProblem) {
 			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
@@ -90,9 +90,9 @@ public interface LCSSTest {
 			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
 		}
 		return new LCSSClassifier(//
-//				new LCSSSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
-				new LCSSSemanticParameter(timeSemantic, timeThreshold),
-				new LCSSSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold.intValue())
+				new LCSSSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
+//				new LCSSSemanticParameter(timeSemantic, timeThreshold),
+				new LCSSSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold)
 				);
 	}
 }

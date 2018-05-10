@@ -43,7 +43,7 @@ public class StopToStopTrajectoryTransformer {
 		while(true) {
 			Statement statement = conn.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT tid, gid, semantic_stop_id, semantic_move_id "+
-					"from geolife.geolife_enriched_transportation_means "+
+					"from geolife.geolife_university "+
 					"order by tid,time,gid");
 			Integer currentTid = null;
 			Set<Long> gidsToRemove = new LinkedHashSet<>();
@@ -92,7 +92,7 @@ public class StopToStopTrajectoryTransformer {
 				List<Long> collect = gidsToRemove.stream().skip(i).limit(min).collect(Collectors.toList());
 				String string = collect.toString();
 				
-				conn.prepareStatement("delete from geolife.geolife_enriched_transportation_means where gid in (" + string.substring(1, string.length() - 1) + ")").execute();
+				conn.prepareStatement("delete from geolife.geolife_university where gid in (" + string.substring(1, string.length() - 1) + ")").execute();
 				conn.commit();
 			}
 		}

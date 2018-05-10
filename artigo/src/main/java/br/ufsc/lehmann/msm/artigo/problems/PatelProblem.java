@@ -2,7 +2,6 @@ package br.ufsc.lehmann.msm.artigo.problems;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +10,6 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.lehmann.msm.artigo.AbstractProblem;
-import smile.math.Random;
 
 public class PatelProblem extends AbstractProblem {
 	

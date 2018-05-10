@@ -3,6 +3,7 @@ package br.ufsc.core.trajectory.semantic;
 import java.util.Arrays;
 import java.util.List;
 
+import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 
 /**
@@ -130,6 +131,10 @@ public class Move {
 	public String getTransportationMode() {
 		return (String) getAttribute(AttributeType.MOVE_TRANSPORTATION_MODE);
 	}
+
+	public SemanticTrajectory getTrajectory() {
+		return (SemanticTrajectory) getAttribute(AttributeType.TRAJECTORY);
+	}
 	
 	public double getDuration() {
 		return this.endTime - this.startTime;
@@ -176,7 +181,6 @@ public class Move {
 
 	@Override
 	public String toString() {
-		return String.format("Move (from '%s' to '%s') [moveId=" + moveId + ", startTime=" + startTime + ", endTime=" + endTime + ", begin="
-				+ begin + ", length=" + length + ", attributes=" + attributes + "]", this.start == null ? "" : this.start.getStopName(), this.end == null ? "" : this.end.getStopName());
+		return String.format("Move (from '%s' to '%s')", this.start == null ? "" : this.start.getStopName(), this.end == null ? "" : this.end.getStopName());
 	}
 }

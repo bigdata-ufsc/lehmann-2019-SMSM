@@ -42,9 +42,9 @@ public interface MSTPTest {
 					);
 		} else if(problem instanceof GeolifeProblem) {
 			return new MSTPClassifier(//
-//					new ComparableStopSemantic(((GeolifeProblem) problem).stopSemantic()),//
-					Semantic.SPATIAL_EUCLIDEAN,//
-					SlackTemporalSemantic.SLACK_TEMPORAL//
+					new ComparableStopSemantic(((GeolifeProblem) problem).stopSemantic()),//
+					Semantic.SPATIAL_EUCLIDEAN//
+//					SlackTemporalSemantic.SLACK_TEMPORAL//
 					);
 		} else if(problem instanceof PatelProblem) {
 			return new MSTPClassifier(//

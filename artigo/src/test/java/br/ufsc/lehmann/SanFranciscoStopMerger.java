@@ -16,7 +16,6 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
-import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCab_Regions_Problem;
 import br.ufsc.lehmann.msm.artigo.problems.StopMoveStrategy;

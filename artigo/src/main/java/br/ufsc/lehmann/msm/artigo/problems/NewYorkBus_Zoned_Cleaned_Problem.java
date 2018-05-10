@@ -1,17 +1,13 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import cc.mallet.util.ArrayUtils;
-import smile.math.Random;
 
 public class NewYorkBus_Zoned_Cleaned_Problem extends NewYorkBusProblem {
 	

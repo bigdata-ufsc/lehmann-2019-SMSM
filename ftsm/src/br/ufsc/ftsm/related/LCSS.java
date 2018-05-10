@@ -48,7 +48,7 @@ public class LCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 			semantic: for (int j = 1; j <= S.length(); j++) {
 				for (int k = 0; k < parameters.length; k++) {
 					LCSSSemanticParameter p = parameters[k];
-					if (!p.semantic.match(R, i - 1, S, j - 1, p.threshlod)/* Distance.euclidean(R.getPoint(i - 1), S.getPoint(j - 1)) < threshold */) {
+					if (!p.semantic.match(R, i - 1, S, j - 1, p.threshold)/* Distance.euclidean(R.getPoint(i - 1), S.getPoint(j - 1)) < threshold */) {
 						LCSSMetric[i][j] = Math.max(LCSSMetric[i][j - 1], LCSSMetric[i - 1][j]);
 						continue semantic;
 					}
@@ -63,12 +63,12 @@ public class LCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 
 	public static class LCSSSemanticParameter<V, T> {
 		private Semantic<V, T> semantic;
-		private T threshlod;
+		private T threshold;
 
 		public LCSSSemanticParameter(Semantic<V, T> semantic, T threshlod) {
 			super();
 			this.semantic = semantic;
-			this.threshlod = threshlod;
+			this.threshold = threshlod;
 		}
 	}
 }

@@ -35,7 +35,7 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 				int subcost = 0;
 				for (int k = 0; k < parameters.length; k++) {
 					EDRSemanticParameter param = parameters[k];
-					if(!param.semantic.match(r, i - 1, s, j - 1, param.threshlod)) {
+					if(!param.semantic.match(r, i - 1, s, j - 1, param.threshold)) {
 						subcost += 1;
 					}
 				}
@@ -65,11 +65,11 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 	
 	public static class EDRSemanticParameter<V, T> {
 		private Semantic<V, T> semantic;
-		private T threshlod;
+		private T threshold;
 		public EDRSemanticParameter(Semantic<V, T> semantic, T threshlod) {
 			super();
 			this.semantic = semantic;
-			this.threshlod = threshlod;
+			this.threshold = threshlod;
 		}
 	}
 }

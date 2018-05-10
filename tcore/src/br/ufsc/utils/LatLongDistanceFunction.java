@@ -1,8 +1,8 @@
 package br.ufsc.utils;
 
-import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
 
 public class LatLongDistanceFunction implements SpatialDistanceFunction {

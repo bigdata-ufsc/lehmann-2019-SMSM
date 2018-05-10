@@ -1,0 +1,11 @@
+dataset;stop-semantic;measure;test-type;Accuracy;Precision;Recall;F-Measure;Specificity;Fall-out;FDR
+Geolife University;STOP_REGION;EDRClassifierTest;cross-validation;Dormitory-Microsoft via Starbucks/E: 115;;;;;;
+Geolife University;STOP_REGION;MSMClassifierTest;cross-validation;Dormitory-Microsoft via Starbucks/E: 115;;;;;;
+Geolife University;STOP_REGION;MSTPClassifierTest;holdout;Microsoft-Dormitory via Market/B: 5;;;;;;
+Geolife University;STOP_REGION;MSTPClassifierTest;cross-validation;Dormitory-Microsoft via Starbucks/E: 115;;;;;;
+Geolife University;STOP_REGION;EDRClassifierTest;holdout;Microsoft-Dormitory via Market/B: 5;;;;;;
+Geolife University;STOP_REGION;MSMClassifierTest;holdout;Microsoft-Dormitory via Market/B: 5;;;;;;
+Geolife University;STOP_REGION;LCSSClassifierTest;cross-validation;Dormitory-Microsoft via Starbucks/E: 115;;;;;;
+Geolife University;STOP_REGION;LCSSClassifierTest;holdout;Microsoft-Dormitory via Market/B: 5;;;;;;
+Geolife University;STOP_REGION;CVTIClassifierTest;holdout;Microsoft-Dormitory via Market/B: 5;;;;;;
+Geolife University;STOP_REGION;CVTIClassifierTest;cross-validation;Dormitory-Microsoft via Starbucks/E: 115;;;;;;

@@ -15,6 +15,7 @@ public class AttributeType {
 	public static final AttributeType MOVE_ANGLE = new AttributeType((Move m) -> m.getAngle(), "MOVE_ANGLE");
 	public static final AttributeType MOVE_TRAVELLED_DISTANCE = new AttributeType((Move m) -> m.getTravelledDistance(), "MOVE_TRAVELLED_DISTANCE");
 	public static final AttributeType MOVE_DURATION = new AttributeType((Move m) -> m.getDuration(), "MOVE_DURATION");
+	public static final AttributeType TRAJECTORY = new AttributeType((Move m) -> m.getTrajectory(), "TRAJECTORY");
 	public static final AttributeType MOVE_POINTS = new AttributeType((Move m) -> {
 		Stop start = m.getStart();
 		TPoint lastStartPoint = start.getEndPoint();

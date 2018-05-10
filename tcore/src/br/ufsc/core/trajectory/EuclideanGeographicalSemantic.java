@@ -14,16 +14,16 @@ final class EuclideanGeographicalSemantic extends Semantic<TPoint, Number> {
 
 	@Override
 	public boolean match(TPoint d1, TPoint d2, Number threshold) {
-		return distance(d1, d2) <= threshold.doubleValue();
+		return _distance(d1, d2) <= threshold.doubleValue();
 	}
 
 	@Override
 	public Double distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
-		return distance((TPoint) a.getDimensionData(index, i), (TPoint) b.getDimensionData(index, j));
+		return _distance((TPoint) a.getDimensionData(index, i), (TPoint) b.getDimensionData(index, j));
 	}
 
 	public double distance(TPoint d1, TPoint d2) {
-		return 1 - similarity(d1, d2);
+		return _distance(d1, d2);
 	}
 
 	public double _distance(TPoint d1, TPoint d2) {

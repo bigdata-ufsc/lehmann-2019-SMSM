@@ -1,6 +1,5 @@
 package br.ufsc.lehmann.method;
 
-import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import br.ufsc.core.IMeasureDistance;
@@ -95,9 +94,9 @@ public interface MSMTest {
 		return new MSMClassifier(//
 //					new MSMSemanticParameter<TemporalDuration, Number>(SlackTemporalSemantic.SLACK_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
 //					new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold.intValue(), 1.0/3.0),
-//					new MSMSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic), 1.0/3.0)
-				new MSMSemanticParameter(timeSemantic, timeThreshold, 1.0/2.0),
-				new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold.intValue(), 1.0/2.0)
+					new MSMSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic), 1.0/2.0),
+//				new MSMSemanticParameter(timeSemantic, timeThreshold, 1.0/2.0),
+					new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold, 1.0/2.0)
 				);
 	}
 }

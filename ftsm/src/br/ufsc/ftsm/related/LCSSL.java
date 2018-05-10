@@ -1,7 +1,5 @@
 package br.ufsc.ftsm.related;
 
-import java.util.Arrays;
-
 import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.utils.Distance;

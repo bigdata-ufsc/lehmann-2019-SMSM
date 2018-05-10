@@ -1,16 +1,17 @@
 package br.ufsc.lehmann.method;
 
 import br.ufsc.core.IMeasureDistance;
-import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
+import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 /**
  * 
  * @author Andre Salvaro Furtado
  *
  */
-public class wDF implements IMeasureDistance<SemanticTrajectory> {
+public class wDF extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
     private int w;
 	private SpatialDistanceFunction distanceFunction;
     
@@ -65,5 +66,14 @@ public class wDF implements IMeasureDistance<SemanticTrajectory> {
     public String name() {
     	return "wDF";
     }
+
+	@Override
+	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
+		double distance = distance(t1, t2);
+		if(distance == Double.POSITIVE_INFINITY) {
+			return 0;
+		}
+		return 1 - (distance / Math.max(distanceFunction.length(t1), distanceFunction.length(t2)));
+	}
 
 }

@@ -31,7 +31,6 @@ import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -40,15 +39,16 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+
 import com.google.common.collect.ArrayTable;
-import com.google.common.collect.Table;
 
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.classifier.Binarizer;
 import br.ufsc.lehmann.msm.artigo.Problem;
-import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;
 import smile.math.Math;
@@ -75,18 +75,19 @@ public class Validation {
 		this.random = random;
 	}
 
-	public double[] precisionAtRecall(IMeasureDistance<SemanticTrajectory> measureDistance, SemanticTrajectory[] testData, int recallLevel) {
+	public double[] precisionAtRecall(TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance, SemanticTrajectory[] testData, int recallLevel) {
 		double[] ret = new double[recallLevel];
 		double[][] precisionRecall = new double[testData.length][];
 		List<SemanticTrajectory> trajs = Arrays.asList(testData);
 		SemanticTrajectory[] trajsArray = trajs.toArray(new SemanticTrajectory[trajs.size()]);
-		Table<SemanticTrajectory, SemanticTrajectory, Double> allDistances = ArrayTable.create(trajs, trajs);
+		ArrayTable<SemanticTrajectory, SemanticTrajectory, Double> allDistances = ArrayTable.create(trajs, trajs);
 		Map<Object, LongAdder> occurrences = new HashMap<>();
 		Semantic semantic = problem.discriminator();
 		for (int i = 0; i < trajsArray.length; i++) {
 			Object classData = semantic.getData(trajsArray[i], 0);
 			occurrences.computeIfAbsent(classData, (t) -> new LongAdder()).increment();
 		}
+		occurrences.forEach((key, qntd) -> System.out.println(key + ": " + qntd.intValue()));
 		
 		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 1.5),
 				(int) (Runtime.getRuntime().availableProcessors() / 1.5), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
@@ -99,7 +100,7 @@ public class Validation {
 					
 					@Override
 					public Double call() throws Exception {
-						double distance = measureDistance.distance(trajsArray[finalI], trajsArray[finalJ]);
+						double distance = 1 - measureDistance.getSimilarity(trajsArray[finalI], trajsArray[finalJ]);
 						return distance;
 					}
 				});
@@ -129,6 +130,7 @@ public class Validation {
 				}
 			}
 		}
+		Map<Object, DescriptiveStatistics> stats = new HashMap<>();
 		executorService.shutdown();
 		for (int i = 0; i < trajsArray.length; i++) {
 			List<Map.Entry<SemanticTrajectory, Double>> rows = allDistances.row(trajsArray[i]).entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
@@ -136,13 +138,33 @@ public class Validation {
 			int groundTruthCounter = occurrences.get(classData).intValue();
 			precisionRecall[i] = new double[groundTruthCounter];
 			int correctClass = 0;
+			boolean first = false;
+			Object lastTraj = null, lastClass = null;
 			for (int j = 0; correctClass < groundTruthCounter && j < testData.length; j++) {
 				Entry<SemanticTrajectory, Double> entry = rows.get(j);
 				Object otherClassData = semantic.getData(entry.getKey(), 0);
 				if(Objects.equals(classData, otherClassData)) {
+					stats.computeIfAbsent(classData, (t) -> new DescriptiveStatistics()).addValue(1 - entry.getValue());
+					if(lastTraj !=null && first) {
+//						System.out.println("Traj[" + classData + "]: " + trajsArray[i].getTrajectoryId() + " - Others [" + lastClass + ", " + lastTraj + "][" + otherClassData + ", "+ entry.getKey().getTrajectoryId() +  "]");
+						first = false;
+					}
 					precisionRecall[i][correctClass++] = correctClass / (j + 1.0);
+				} else {
+					//if(first) {
+					//	System.out.println("Traj[" + classData + "]: " + trajsArray[i].getTrajectoryId() + " - Other traj[" + otherClassData + "]: " + entry.getKey().getTrajectoryId() + " = " + entry.getValue());
+						//	first = false;
+						//}
+					if(lastTraj == null && !first) {
+						first = true;
+						lastTraj = entry.getKey().getTrajectoryId();
+						lastClass = otherClassData;
+					}
 				}
 			}
+		}
+		for (Map.Entry<Object, DescriptiveStatistics> entry : stats.entrySet()) {
+			System.out.printf("%s = %.2f +/- %.2f\n", entry.getKey(), entry.getValue().getMean(), entry.getValue().getStandardDeviation());
 		}
 		for (int i = 0; i < recallLevel; i++) {
 			final int finalI = i;
