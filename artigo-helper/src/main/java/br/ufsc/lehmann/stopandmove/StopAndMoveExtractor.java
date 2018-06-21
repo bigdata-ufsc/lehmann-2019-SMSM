@@ -66,7 +66,7 @@ public class StopAndMoveExtractor {
 			for (Stop stop : stops) {
 				registers++;
 //				System.out.println("From " + stop.getStartTime() + " to " + stop.getEndTime());
-				List<Integer> gids = stopAndMove.getGids(stop);
+				List<Long> gids = stopAndMove.getGids(stop);
 				Array array = conn.createArrayOf("integer", gids.toArray(new Integer[gids.size()]));
 				update.setInt(1, stop.getStopId());
 				update.setNull(2, Types.NUMERIC);
@@ -108,7 +108,7 @@ public class StopAndMoveExtractor {
 			for (Move move : moves) {
 				registers++;
 //				System.out.println("From " + move.getStartTime() + " to " + move.getEndTime());
-				List<Integer> gids = stopAndMove.getGids(move);
+				List<Long> gids = stopAndMove.getGids(move);
 				Array array = conn.createArrayOf("integer", gids.toArray(new Integer[gids.size()]));
 				update.setNull(1, Types.NUMERIC);
 				update.setInt(2, move.getMoveId());
@@ -196,6 +196,20 @@ public class StopAndMoveExtractor {
 
 		@Override
 		public void parameterize(PreparedStatement statement, Stop stop) {
+		}
+		
+	};
+
+	public static interface PropertiesCallback {
+		void addProperties(SemanticTrajectory traj, Stop stop);
+		void addProperties(SemanticTrajectory traj, Move move);
+	}
+	static PropertiesCallback EMPTY_PROPERTIES = new PropertiesCallback() {
+
+		@Override
+		public void addProperties(SemanticTrajectory traj, Stop stop) {
+		}
+		public void addProperties(SemanticTrajectory traj, Move move) {
 		}
 		
 	};

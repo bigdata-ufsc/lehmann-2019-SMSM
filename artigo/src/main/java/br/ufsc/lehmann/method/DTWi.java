@@ -55,8 +55,8 @@ public class DTWi extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 
 				for (int j = beg; j <= end; j++) {
 					// DTW(i,j) = c(i-1,j-1) + min(DTW(i-1,j-1), DTW(i,j-1), DTW(i-1,j)).
-					dtwMatrix[i%2][j] = semantic.distance(q, i-1, p, j-1).doubleValue()
-						+ Math.min(dtwMatrix[thisI][j-1],Math.min(dtwMatrix[prevI][j], dtwMatrix[prevI][j-1]));
+					dtwMatrix[i%2][j] = Math.pow(semantic.distance(q, i-1, p, j-1).doubleValue()
+						+ Math.min(dtwMatrix[thisI][j-1],Math.min(dtwMatrix[prevI][j], dtwMatrix[prevI][j-1])), 2);
 				}
 			}
 			score += dtwMatrix[q.length()%2][p.length()];

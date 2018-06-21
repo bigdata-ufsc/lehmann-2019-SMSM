@@ -1,8 +1,8 @@
 public class LevenshteinAula {
 
 	public static void main(String[] args) {
-		String A = "What tensions you";
-		String B = "O a tem som de u";
+		String A = "Avaí";
+		String B = "Hawaii";
 		
 		double distance = distance(A, B);
 		System.out.println("Distance: " + distance);

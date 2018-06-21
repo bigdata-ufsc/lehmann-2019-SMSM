@@ -1,14 +1,36 @@
+import br.ufsc.core.base.Point;
+import br.ufsc.utils.Distance;
+
 public class DTWAula {
 
+//	public static void main(String[] args) {
+//		String A = "Restaurante Universitario";
+//		String B = "Mirantes Restaurante";
+//		System.out.println(Math.min(A.length(), B.length()) * (('Z' - 'A')));
+//		double distance = distance(A.toCharArray(), B.toCharArray());
+//		System.out.println("Distance: " + distance);
+//		System.out.println("Similarity: " + (1 - (distance / (Math.min(A.length(), B.length()) * (('Z' - 'A'))))));
+//	}
+
 	public static void main(String[] args) {
-		String A = "Restaurante Universitario";
-		String B = "Mirantes Restaurante";
-		System.out.println(Math.min(A.length(), B.length()) * (('Z' - 'A')));
-		double distance = distance(A.toCharArray(), B.toCharArray());
+		double distance = distanceOptimized(new Point[] {new Point(6,39),
+				new Point(21,39),
+				new Point(29,45),
+				new Point(36,48),
+				new Point(49,69),
+				new Point(64,76),
+				new Point(114,20)}, new Point[] {
+						new Point(4,9),
+						new Point(16,18),
+						new Point(24,29),
+						new Point(36,44),
+						new Point(44,51),
+						new Point(79,66),
+						new Point(111,6)
+				});
 		System.out.println("Distance: " + distance);
-		System.out.println("Similarity: " + (1 - (distance / (Math.min(A.length(), B.length()) * (('Z' - 'A'))))));
 	}
-	
+
 	public static double distance(char[] r, char[]s) {
 		double[][] dist = new double[r.length + 1][s.length + 1];
 
@@ -35,8 +57,8 @@ public class DTWAula {
 		return dist[r.length][s.length];
 	}
 
-	public static double distanceOptimized(char[] A, char[]B) {
-		char[] p,q;
+	public static double distanceOptimized(Point[] A, Point[]B) {
+		Point[] p,q;
 		if (A.length>=B.length){
 			p = A;
 			q = B;
@@ -71,7 +93,7 @@ public class DTWAula {
 
 			for (int j = beg; j <= end; j++) {
 				// DTW(i,j) = c(i-1,j-1) + min(DTW(i-1,j-1), DTW(i,j-1), DTW(i-1,j)).
-				dtwMatrix[i%2][j] = Math.abs(Character.toUpperCase(q[i-1]) - Character.toUpperCase(p[j-1]))
+				dtwMatrix[i%2][j] = Math.abs(Distance.euclidean(q[i-1], p[j-1]))
 					+ Math.min(dtwMatrix[thisI][j-1],Math.min(dtwMatrix[prevI][j], dtwMatrix[prevI][j-1]));
 			}
 		}

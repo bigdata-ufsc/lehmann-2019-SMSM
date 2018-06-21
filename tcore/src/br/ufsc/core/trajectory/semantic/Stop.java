@@ -84,6 +84,14 @@ public class Stop {
 		return centroid;
 	}
 
+	public TPoint medianPoint() {
+		ArrayList<TPoint> p2 = new ArrayList<>(points);
+		p2.sort((t1, t2) -> {
+			return Long.compare(t1.getTime(), t2.getTime());
+		});
+		return p2.get(Math.max(p2.size() / 2, 0));
+	}
+
 	public TPoint centroid() {
 		double x = 0;
 		double y = 0;
@@ -171,12 +179,20 @@ public class Stop {
 		return (Move) getAttribute(AttributeType.PREVIOUS_MOVE);
 	}
 
+	public int getUser() {
+		return (int) getAttribute(AttributeType.STOP_USER);
+	}
+
 	public void setLength(int length) {
 		this.length = length;
 	}
 
 	public void setCentroid(TPoint centroid) {
 		this.centroid = centroid;
+	}
+
+	public void setUser(int user) {
+		setAttribute(AttributeType.STOP_USER, user);
 	}
 
 	public void setNextMove(Move move) {

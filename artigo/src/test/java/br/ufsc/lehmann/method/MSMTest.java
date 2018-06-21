@@ -18,6 +18,7 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversitySubProblem;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
@@ -48,17 +49,22 @@ public interface MSMTest {
 			stopSemantic = ((NewYorkBusProblem) problem).stopSemantic();
 		} else if(problem instanceof DublinBusProblem) {
 			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
+//		} else if(problem instanceof GeolifeUniversitySubProblem) {
+//			geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
+//			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+//			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
 		} else if(problem instanceof GeolifeProblem) {
 			GeolifeProblem geolifeProblem = (GeolifeProblem) problem;
-			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
 			if(geolifeProblem.isRawTrajectory()) {
+				timeThreshold = Thresholds.SLACK_TEMPORAL;
 				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
-				timeThreshold = Thresholds.SLACK_TEMPORAL;
+				geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
 			} else {
+				timeThreshold = Thresholds.PROPORTION_TEMPORAL;
 				timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
-				timeThreshold = Thresholds.SLACK_TEMPORAL;
+				geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
 			}
 		} else if(problem instanceof PatelProblem) {
 			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
@@ -94,9 +100,9 @@ public interface MSMTest {
 		return new MSMClassifier(//
 //					new MSMSemanticParameter<TemporalDuration, Number>(SlackTemporalSemantic.SLACK_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
 //					new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold.intValue(), 1.0/3.0),
-					new MSMSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic), 1.0/2.0),
-//				new MSMSemanticParameter(timeSemantic, timeThreshold, 1.0/2.0),
-					new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold, 1.0/2.0)
+					new MSMSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic), 1.0/3.0),
+					new MSMSemanticParameter<>(timeSemantic, timeThreshold, 1.0/3.0),
+					new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold, 1.0/3.0)
 				);
 	}
 }

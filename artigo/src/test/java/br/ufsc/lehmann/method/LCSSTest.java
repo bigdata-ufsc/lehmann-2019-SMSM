@@ -51,12 +51,13 @@ public interface LCSSTest {
 			if(geolifeProblem.isRawTrajectory()) {
 				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
 				timeThreshold = Thresholds.SLACK_TEMPORAL;
+				geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
 			} else {
 				timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
-				timeThreshold = Thresholds.SLACK_TEMPORAL;
+				timeThreshold = Thresholds.PROPORTION_TEMPORAL;
+				geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
 			}
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
-			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
 		} else if(problem instanceof PatelProblem) {
 			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;

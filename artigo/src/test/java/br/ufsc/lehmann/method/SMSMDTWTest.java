@@ -29,7 +29,11 @@ public interface SMSMDTWTest {
 			stopSemantic = ((SanFranciscoCabProblem) problem).stopSemantic();
 			moveSemantic = SanFranciscoCabDataReader.MOVE_POINTS_SEMANTIC;
 		} else if(problem instanceof GeolifeUniversitySubProblem) {
-			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
+			if(((GeolifeUniversitySubProblem) problem).isRawTrajectory()) {
+				geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
+			} else {
+				geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
+			}
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeUniversitySubProblem) problem).stopSemantic();
 			moveSemantic = GeolifeUniversityDataReader.MOVE_POINTS_SEMANTIC;

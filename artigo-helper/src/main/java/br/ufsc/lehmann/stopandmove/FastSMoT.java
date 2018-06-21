@@ -75,19 +75,19 @@ public class FastSMoT<E, T> {
 				s.setCentroid(centroid(T, i, i + neighborhood[i]));
 				s.setStopName(stopName);
 
-				List<Integer> points = new ArrayList<>(neighborhood[i]);
+				List<Long> points = new ArrayList<>(neighborhood[i]);
 				for (int x = 0; x <= neighborhood[i]; x++) {
 					TPoint p = Semantic.SPATIAL.getData(T, i + x);
-					points.add(Semantic.GID.getData(T, i + x).intValue());
+					points.add(Semantic.GID.getData(T, i + x).longValue());
 					s.addPoint(p);
 				}
 				ret.addStop(s, points);
 				i += neighborhood[i];
 			} else {
-				List<Integer> gids = new ArrayList<>();
+				List<Long> gids = new ArrayList<>();
 				int init = i, j = i;
 				for (; j < neighborhood.length && j < i + neighborhood[i] + 1; j++) {
-					gids.add(Semantic.GID.getData(T, j).intValue());
+					gids.add(Semantic.GID.getData(T, j).longValue());
 				}
 				ret.addMove(new Move(mid.incrementAndGet(), ret.lastStop(), null, p1Milli, p2Milli, init, j - init, null), gids);
 				i += neighborhood[i];

@@ -11,40 +11,29 @@ import br.ufsc.core.base.Point;
 public class TPoint extends Point {
 	
 	private Timestamp t;
-	private int gid;
+	private long gid;
 	private int occupation;
 	
-	public TPoint(int gid, double x, double y, Timestamp time, double speed, double transfX, double transfY) {
+	public TPoint(long gid, double x, double y, Timestamp time, double transfX, double transfY) {
 		super(x,y);
 		this.t = time;
 		this.gid=gid;
 	}
 	
-	public TPoint(int gid, double x, double y, Timestamp time, double transfX, double transfY) {
+	public TPoint(long gid,double x, double y, Timestamp time, double speed) {
 		super(x,y);
 		this.t = time;
-	//	this.transformedGeom = new Geom2D(transfX, transfY);
-		//	System.out.println("gid = "+gid);
-//		System.out.println("x = "+transfX+" y ="+transfY);
-//		System.out.println(transformedGeom);
-		this.gid=gid;
-	}
-	
-	public TPoint(int gid,double x, double y, Timestamp time, double speed) {
-		super(x,y);
-		this.t = time;
-//		this.speed=speed;
 
 		this.gid=gid;
 	}
 	
-	public TPoint(int gid,double x, double y, Timestamp time) {
+	public TPoint(long gid,double x, double y, Timestamp time) {
 		super(x,y);
 		this.t = time;
 		this.gid=gid;
 	}
 	
-	public TPoint(int gid,double x, double y, Timestamp time,int occupation) {
+	public TPoint(long gid,double x, double y, Timestamp time,int occupation) {
 		super(x,y);
 		this.t = time;
 		this.gid=gid;
@@ -128,11 +117,11 @@ public class TPoint extends Point {
 //		return Double.valueOf(x).hashCode() ^ Double.valueOf(y).hashCode() ^ Double.valueOf(t.getTime()).hashCode();
 //	}
 
-	public int getGid() {
+	public long getGid() {
 		return gid;
 	}
 
-	public void setGid(int gid) {
+	public void setGid(long gid) {
 		this.gid = gid;
 	}
 	
