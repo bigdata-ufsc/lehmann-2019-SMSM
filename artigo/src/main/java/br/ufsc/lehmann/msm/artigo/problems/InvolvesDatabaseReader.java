@@ -66,14 +66,16 @@ public class InvolvesDatabaseReader {
 	};
 	private boolean onlyStops;
 	private String year_month;
+	private String stopMove_table;
 
 	public InvolvesDatabaseReader(boolean onlyStops) {
-		this(onlyStops, null);
+		this(onlyStops, null, null);
 	}
 
-	public InvolvesDatabaseReader(boolean onlyStops2, String year_month) {
+	public InvolvesDatabaseReader(boolean onlyStops2, String year_month, String stopMove_table) {
 		onlyStops = onlyStops2;
 		this.year_month = year_month == null ? "" : year_month;
+		this.stopMove_table = stopMove_table == null ? "" : stopMove_table;
 	}
 
 	public List<SemanticTrajectory> read(Integer... users) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
@@ -88,7 +90,7 @@ public class InvolvesDatabaseReader {
 		Map<Integer, Stop> stops = new HashMap<>();
 		ResultSet stopsData = st.executeQuery(
 				"SELECT id, start_timestamp, end_timestamp, longitude, latitude, \"closest_PDV\", \"PDV_distance\", is_home, id_colaborador_unidade, \"closest_colab_PDV\", \"colab_PDV_distance\"\r\n" + 
-				"	FROM involves.\"stops_FastCBSMoT" + year_month + "\";");
+				"	FROM involves.\"stops_FastCBSMoT" + stopMove_table + "\";");
 		while (stopsData.next()) {
 			int stopId = stopsData.getInt("id");
 			Stop stop = stops.get(stopId);
@@ -110,7 +112,7 @@ public class InvolvesDatabaseReader {
 		Map<Integer, Move> moves = new HashMap<>();
 		ResultSet movesData = st
 				.executeQuery("SELECT id, id_colaborador_unidade, start_timestamp, end_timestamp\r\n" + 
-						"	FROM involves.\"moves_FastCBSMoT" + year_month + "\"");
+						"	FROM involves.\"moves_FastCBSMoT" + stopMove_table + "\"");
 		while (movesData.next()) {
 			int moveId = movesData.getInt("id");
 			Move move = moves.get(moveId);
@@ -136,7 +138,7 @@ public class InvolvesDatabaseReader {
 				+ "case when map.is_stop = true then map.semantic_id else null end as semantic_stop_id, "//
 				+ "case when map.is_move = true then map.semantic_id else null end as semantic_move_id "//
 				+ "from involves.\"dadoGps" + year_month + "\" gps ";//
-		sql += "left join involves.\"stops_moves_FastCBSMoT" + year_month + "\" map on (id_usuario::text || id_dimensao_data::text || gps.id_dado_gps::text)::bigint = map.gps_point_id ";
+		sql += "left join involves.\"stops_moves_FastCBSMoT" + stopMove_table + "\" map on (id_usuario::text || id_dimensao_data::text || gps.id_dado_gps::text)::bigint = map.gps_point_id ";
 		sql += "where provedor = 'gps' ";//
 		sql += "order by id_usuario, id_dimensao_data, dt_coordenada, id_dado_gps";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);

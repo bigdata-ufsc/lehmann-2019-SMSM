@@ -16,6 +16,7 @@ public class InvolvesProblem extends AbstractProblem {
 	private Integer[] users;
 	private StopMoveStrategy strategy;
 	private String year_month;
+	private String stopMove_table;
 
 	public InvolvesProblem(Integer... users) {
 		this(false, users);
@@ -30,19 +31,20 @@ public class InvolvesProblem extends AbstractProblem {
 	}
 	
 	public InvolvesProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, boolean onlyStops, Integer... users) {
-		this(PisaDataReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, null, false);
+		this(PisaDataReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, null, null, false);
 	}
 	
-	public InvolvesProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, String year_month, boolean onlyStops, Integer... users) {
+	public InvolvesProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, String year_month, String stopMove_table, boolean onlyStops, Integer... users) {
 		super(stopSemantic);
 		this.strategy = strategy;
 		this.year_month = year_month;
+		this.stopMove_table = stopMove_table;
 		this.onlyStops = onlyStops;
 		this.users = users;
 	}
 
-	public InvolvesProblem(boolean b, String year_month) {
-		this(PisaDataReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, year_month, false);
+	public InvolvesProblem(boolean b, String year_month, String stopMove_table) {
+		this(PisaDataReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, year_month, stopMove_table, false);
 	}
 
 	@Override
@@ -57,7 +59,7 @@ public class InvolvesProblem extends AbstractProblem {
 
 	protected List<SemanticTrajectory> load() {
 		try {
-			return new ArrayList<>(new InvolvesDatabaseReader(onlyStops, year_month).read());
+			return new ArrayList<>(new InvolvesDatabaseReader(onlyStops, year_month, stopMove_table).read());
 		} catch (NumberFormatException | InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException  e) {
 			throw new RuntimeException(e);
 		}
