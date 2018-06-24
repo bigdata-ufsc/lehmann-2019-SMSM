@@ -1,6 +1,5 @@
 package br.ufsc.lehmann.stopandmove;
 
-import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,8 +30,26 @@ import br.ufsc.utils.EuclideanDistanceFunction;
 public class FastCBSMoT_Involves {
 
 	private static DataSource source;
+	private static String YEAR_MONTH = "_com_auditoria";
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		// FIND STOPS
+		double ratio = 200; // distance in meters to find neighbors
+		int timeTolerance = 30 * 60 * 1000; // time in ms dif do ponto final para o inicial deve ser maior que timeTolerance
+
+		// Merge - Será feito merge nos stops em que a distância dos centroid estiver há até maxDist de distância
+		// e em que o tempo do ponto inicial do primeiro stop e do ponto final do segundo stop
+		// seja menor ou igual a mergeTolerance
+		double maxDist = 200; // distance in meters to merge stops
+		int mergeTolerance = 2 * 60 * 60 * 1000;// time in ms
+
+		// Clean - Os stops devem ter pelo menos o minTime
+		int minTime = 30 * 60  * 1000; // time in ms
+		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.amsterdan_stop", null, "geom");
+		
+		prepareDatabase(source);
+		
+		
 		FastCBSMoT fastCBSMoT = new FastCBSMoT(new EuclideanDistanceFunction(), new StopAndMoveExtractor.PropertiesCallback() {
 			
 			@Override
@@ -45,45 +62,31 @@ public class FastCBSMoT_Involves {
 				move.setUser(InvolvesDatabaseReader.USER_ID.getData(traj, 0));
 			}
 		});
-		InvolvesProblem problem = new InvolvesProblem(false);
+		InvolvesProblem problem = new InvolvesProblem(false, YEAR_MONTH);
 		List<SemanticTrajectory> trajs = problem.data();
-		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.amsterdan_stop", null, "geom");
 
 		// Trajectory t = retriever.fastFetchTrajectory(9543);
-		// FIND STOPS
-		//125-30000-300-60000-30000
-		double ratio = 200; // distance in meters to find neighbors
-		int timeTolerance = 30 * 60 * 1000; // time in ms dif do ponto final para o inicial deve ser maior que timeTolerance
-
-		// Merge - Será feito merge nos stops em que a distância dos centroid estiver há até maxDist de distância
-		// e em que o tempo do ponto inicial do primeiro stop e do ponto final do segundo stop
-		// seja menor ou igual a mergeTolerance
-		double maxDist = 200; // distance in meters to merge stops
-		int mergeTolerance = 2 * 60 * 60 * 1000;// time in ms
-
-		// Clean - Os stops devem ter pelo menos o minTime
-		int minTime = 30 * 60  * 1000; // time in ms
 
 		// System.out.println(T.size());
 		long start = System.currentTimeMillis();
 		Connection conn = source.getRetriever().getConnection();
 
-		ResultSet lastStop = conn.createStatement().executeQuery("select max(id) from involves.\"stops_FastCBSMoT\"");
+		ResultSet lastStop = conn.createStatement().executeQuery("select max(id) from involves.\"stops_FastCBSMoT" + YEAR_MONTH + "\"");
 		lastStop.next();
 		AtomicInteger sid = new AtomicInteger(lastStop.getInt(1));
-		ResultSet lastMove = conn.createStatement().executeQuery("select max(id) from involves.\"moves_FastCBSMoT\"");
+		ResultSet lastMove = conn.createStatement().executeQuery("select max(id) from involves.\"moves_FastCBSMoT" + YEAR_MONTH + "\"");
 		lastMove.next();
 		AtomicInteger mid = new AtomicInteger(lastMove.getInt(1));
 //		PreparedStatement update = conn.prepareStatement("update public.amsterdan_park_cbsmot set semantic_stop_id = ?, semantic_move_id = ? where tid = ? and gid in (SELECT * FROM unnest(?))");
 //		PreparedStatement insertStop = conn.prepareStatement("insert into stops_moves.amsterdan_stop(stop_id, start_time, start_lat, start_lon, begin, end_time, end_lat, end_lon, length, centroid_lat, centroid_lon) values (?,?,?,?,?,?,?,?,?,?,?)");
 //		PreparedStatement insertMove = conn.prepareStatement("insert into stops_moves.amsterdan_move(move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length) values (?,?,?,?,?,?,?)");
 		
-		PreparedStatement insertStop = conn.prepareStatement("insert into involves.\"stops_FastCBSMoT\"(id, start_timestamp, end_timestamp, longitude, latitude, \"closest_PDV\", \"PDV_distance\", \"closest_colab_PDV\", \"colab_PDV_distance\", is_home, id_colaborador_unidade) values (?,?,?,?,?,?,?,?,?,?,?)");
-		PreparedStatement insertMove = conn.prepareStatement("insert into involves.\"moves_FastCBSMoT\"(id, start_timestamp, end_timestamp, id_colaborador_unidade) values (?,?,?,?)");
-		PreparedStatement insertMapping = conn.prepareStatement("insert into involves.\"stops_moves_FastCBSMoT\"(gps_point_id, is_stop, is_move, semantic_id) values (?,?,?,?)");
+		PreparedStatement insertStop = conn.prepareStatement("insert into involves.\"stops_FastCBSMoT" + YEAR_MONTH + "\"(id, start_timestamp, end_timestamp, longitude, latitude, \"closest_PDV\", \"PDV_distance\", \"closest_colab_PDV\", \"colab_PDV_distance\", is_home, id_colaborador_unidade) values (?,?,?,?,?,?,?,?,?,?,?)");
+		PreparedStatement insertMove = conn.prepareStatement("insert into involves.\"moves_FastCBSMoT" + YEAR_MONTH + "\"(id, start_timestamp, end_timestamp, id_colaborador_unidade) values (?,?,?,?)");
+		PreparedStatement insertMapping = conn.prepareStatement("insert into involves.\"stops_moves_FastCBSMoT" + YEAR_MONTH + "\"(gps_point_id, is_stop, is_move, semantic_id) values (?,?,?,?)");
 
 		List<PDV> pdvs = new ArrayList<>();
-		PreparedStatement pdvsPS = conn.prepareStatement("select id_ponto_de_venda_unidade, nome, bairro, endereco, numero, cep, st_x(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lat, st_y(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lon from involves.pontos_venda");
+		PreparedStatement pdvsPS = conn.prepareStatement("select id_ponto_de_venda_unidade, nome, bairro, endereco, numero, complemento, st_x(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lat, st_y(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lon from involves.pontos_venda");
 		ResultSet pdvsR = pdvsPS.executeQuery();
 		while(pdvsR.next()) {
 			pdvs.add(new PDV(pdvsR.getInt("id_ponto_de_venda_unidade"), pdvsR.getDouble("lon"), pdvsR.getDouble("lat")));
@@ -178,6 +181,82 @@ public class FastCBSMoT_Involves {
 		System.out.println("Time: " + (end - start));
 	}
 	
+	private static void prepareDatabase(DataSource source2) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		Connection conn = source2.getRetriever().getConnection();
+
+		try {
+			conn.createStatement().execute("DROP TABLE involves.\"stops_FastCBSMoT" + YEAR_MONTH + "\";");
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+		
+		conn.createStatement().execute("CREATE TABLE involves.\"stops_FastCBSMoT" + YEAR_MONTH + "\"\n" + 
+				"(\n" + 
+				"    id bigint NOT NULL,\n" + 
+				"    start_timestamp timestamp(6) without time zone,\n" + 
+				"    end_timestamp timestamp without time zone,\n" + 
+				"    longitude double precision,\n" + 
+				"    latitude double precision,\n" + 
+				"    \"closest_PDV\" integer,\n" + 
+				"    \"PDV_distance\" double precision,\n" + 
+				"    is_home boolean,\n" + 
+				"    id_colaborador_unidade integer,\n" + 
+				"    \"closest_colab_PDV\" integer,\n" + 
+				"    \"colab_PDV_distance\" double precision\n" + 
+				")\n" + 
+				"WITH (\n" + 
+				"    OIDS = FALSE\n" + 
+				")\n" + 
+				"TABLESPACE data_trajectories;\n" + 
+				"\n" + 
+				"ALTER TABLE involves.\"stops_FastCBSMoT" + YEAR_MONTH + "\"\n" + 
+				"    OWNER to postgres;");
+
+		try {
+			conn.createStatement().execute("DROP TABLE involves.\"moves_FastCBSMoT" + YEAR_MONTH + "\";");
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+		
+		conn.createStatement().execute("\n" + 
+				"CREATE TABLE involves.\"moves_FastCBSMoT" + YEAR_MONTH + "\"\n" + 
+				"(\n" + 
+				"    id bigint,\n" + 
+				"    id_colaborador_unidade bigint,\n" + 
+				"    start_timestamp timestamp without time zone,\n" + 
+				"    end_timestamp timestamp without time zone\n" + 
+				")" +
+				"WITH (\n" + 
+				"    OIDS = FALSE\n" + 
+				")\n" + 
+				"TABLESPACE data_trajectories;\n" + 
+				"\n" + 
+				"ALTER TABLE involves.\"moves_FastCBSMoT" + YEAR_MONTH + "\"\n" + 
+				"    OWNER to postgres;");
+
+		try {
+			conn.createStatement().execute("DROP TABLE involves.\"stops_moves_FastCBSMoT" + YEAR_MONTH + "\";");
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+		
+		conn.createStatement().execute("\n" + 
+				"CREATE TABLE involves.\"stops_moves_FastCBSMoT" + YEAR_MONTH + "\"\n" + 
+				"(\n" + 
+				"    gps_point_id bigint NOT NULL,\n" + 
+				"    is_stop boolean,\n" + 
+				"    is_move boolean,\n" + 
+				"    semantic_id integer\n" + 
+				")" +
+				"WITH (\n" + 
+				"    OIDS = FALSE\n" + 
+				")\n" + 
+				"TABLESPACE data_trajectories;\n" + 
+				"\n" + 
+				"ALTER TABLE involves.\"stops_moves_FastCBSMoT" + YEAR_MONTH + "\"\n" + 
+				"    OWNER to postgres;");
+	}
+
 	private static PDV closestPDV(List<PDV> allPDVs, List<PDV> houses, Multimap<Integer, PDV> pdvsPerUser, double x, double y, Integer userId) {
 		Point p2 = new Point(x, y);
 		double minDist = Double.POSITIVE_INFINITY;

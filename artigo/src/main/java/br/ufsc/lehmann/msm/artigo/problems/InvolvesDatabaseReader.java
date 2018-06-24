@@ -65,9 +65,15 @@ public class InvolvesDatabaseReader {
 		}
 	};
 	private boolean onlyStops;
+	private String year_month;
 
 	public InvolvesDatabaseReader(boolean onlyStops) {
-		this.onlyStops = onlyStops;
+		this(onlyStops, null);
+	}
+
+	public InvolvesDatabaseReader(boolean onlyStops2, String year_month) {
+		onlyStops = onlyStops2;
+		this.year_month = year_month == null ? "" : year_month;
 	}
 
 	public List<SemanticTrajectory> read(Integer... users) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
@@ -82,7 +88,7 @@ public class InvolvesDatabaseReader {
 		Map<Integer, Stop> stops = new HashMap<>();
 		ResultSet stopsData = st.executeQuery(
 				"SELECT id, start_timestamp, end_timestamp, longitude, latitude, \"closest_PDV\", \"PDV_distance\", is_home, id_colaborador_unidade, \"closest_colab_PDV\", \"colab_PDV_distance\"\r\n" + 
-				"	FROM involves.\"stops_FastCBSMoT\";");
+				"	FROM involves.\"stops_FastCBSMoT" + year_month + "\";");
 		while (stopsData.next()) {
 			int stopId = stopsData.getInt("id");
 			Stop stop = stops.get(stopId);
@@ -104,7 +110,7 @@ public class InvolvesDatabaseReader {
 		Map<Integer, Move> moves = new HashMap<>();
 		ResultSet movesData = st
 				.executeQuery("SELECT id, id_colaborador_unidade, start_timestamp, end_timestamp\r\n" + 
-						"	FROM involves.\"moves_FastCBSMoT\"");
+						"	FROM involves.\"moves_FastCBSMoT" + year_month + "\"");
 		while (movesData.next()) {
 			int moveId = movesData.getInt("id");
 			Move move = moves.get(moveId);
@@ -123,21 +129,29 @@ public class InvolvesDatabaseReader {
 			}
 		}
 
-		String sql = "select (to_number(_id, 'X999')::text || id_dado_gps::text) as id_dado_gps, "//
+		String sql = "select (id_usuario::text || id_dimensao_data::text || id_dado_gps::text) as id_dado_gps, "//
 				+ "id_usuario, id_dimensao_data, dt_coordenada, "//
 				+ "st_x(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lat, "//
 				+ "st_y(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lon, "
-				+ "case when map.is_stop then map.semantic_id else null end as semantic_stop_id, "//
-				+ "case when map.is_move then map.semantic_id else null end as semantic_move_id "//
-				+ "from involves.dados_colaboradores gps ";//
-		sql += "left join involves.\"stops_moves_FastCBSMoT\" map on (to_number(gps._id, 'X999')::text || gps.id_dado_gps::text)::bigint = map.gps_point_id ";
+				+ "case when map.is_stop = true then map.semantic_id else null end as semantic_stop_id, "//
+				+ "case when map.is_move = true then map.semantic_id else null end as semantic_move_id "//
+				+ "from involves.\"dadoGps" + year_month + "\" gps ";//
+		sql += "left join involves.\"stops_moves_FastCBSMoT" + year_month + "\" map on (id_usuario::text || id_dimensao_data::text || gps.id_dado_gps::text)::bigint = map.gps_point_id ";
 		sql += "where provedor = 'gps' ";//
-		sql += "order by id_usuario, id_dimensao_data, dt_coordenada, _id";
+		sql += "order by id_usuario, id_dimensao_data, dt_coordenada, id_dado_gps";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		ResultSet data = preparedStatement.executeQuery();
 		Multimap<String, InvolvesRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
 		System.out.println("Fetching...");
 		while(data.next()) {
+			Integer stopId = data.getInt("semantic_stop_id");
+			if(data.wasNull()) {
+				stopId = null;
+			}
+			Integer moveId = data.getInt("semantic_move_id");
+			if(data.wasNull()) {
+				moveId = null;
+			}
 			InvolvesRecord record = new InvolvesRecord(
 					data.getLong("id_dado_gps"),
 					data.getInt("id_usuario"),
@@ -145,8 +159,8 @@ public class InvolvesDatabaseReader {
 					data.getTimestamp("dt_coordenada"),
 				data.getDouble("lat"),
 				data.getDouble("lon"),
-				data.getInt("semantic_stop_id"),
-				data.getInt("semantic_move_id")
+				stopId,
+				moveId
 			);
 			records.put(record.getId_usuario() + "/" + record.getId_dimensao_data(), record);
 		}

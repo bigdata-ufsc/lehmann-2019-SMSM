@@ -15,6 +15,7 @@ public class InvolvesProblem extends AbstractProblem {
 	private boolean onlyStops;
 	private Integer[] users;
 	private StopMoveStrategy strategy;
+	private String year_month;
 
 	public InvolvesProblem(Integer... users) {
 		this(false, users);
@@ -29,10 +30,19 @@ public class InvolvesProblem extends AbstractProblem {
 	}
 	
 	public InvolvesProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, boolean onlyStops, Integer... users) {
+		this(PisaDataReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, null, false);
+	}
+	
+	public InvolvesProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, String year_month, boolean onlyStops, Integer... users) {
 		super(stopSemantic);
 		this.strategy = strategy;
+		this.year_month = year_month;
 		this.onlyStops = onlyStops;
 		this.users = users;
+	}
+
+	public InvolvesProblem(boolean b, String year_month) {
+		this(PisaDataReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, year_month, false);
 	}
 
 	@Override
@@ -42,12 +52,12 @@ public class InvolvesProblem extends AbstractProblem {
 
 	@Override
 	public String shortDescripton() {
-		return "Involves [" + stopSemantic().name() + "][onlyStops=" + onlyStops + "]" + (users != null ? "(Users " + Arrays.toString(users) + ")" : "");
+		return "Involves " + (year_month != null ? "(year_month " + year_month + ")" : "") + "[" + stopSemantic().name() + "][onlyStops=" + onlyStops + "]" + (users != null ? "(Users " + Arrays.toString(users) + ")" : "");
 	}
 
 	protected List<SemanticTrajectory> load() {
 		try {
-			return new ArrayList<>(new InvolvesDatabaseReader(onlyStops).read());
+			return new ArrayList<>(new InvolvesDatabaseReader(onlyStops, year_month).read());
 		} catch (NumberFormatException | InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException  e) {
 			throw new RuntimeException(e);
 		}
