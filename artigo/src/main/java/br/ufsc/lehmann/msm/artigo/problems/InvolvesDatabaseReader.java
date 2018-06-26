@@ -31,7 +31,6 @@ import br.ufsc.core.trajectory.semantic.AttributeDescriptor;
 import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
-import br.ufsc.core.trajectory.semantic.StopMove;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
@@ -40,7 +39,6 @@ import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
-import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
 import br.ufsc.utils.LatLongDistanceFunction;
@@ -49,126 +47,151 @@ public class InvolvesDatabaseReader {
 	
 	private static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
 	public static final BasicSemantic<Integer> DIMENSAO_DATA = new BasicSemantic<>(3);
-	public static final BasicSemantic<Integer> USER_ID = new BasicSemantic<>(4);
-	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(5, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
-	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(5, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
+	public static final BasicSemantic<Integer> WEEK = new BasicSemantic<>(4);
+	public static final BasicSemantic<Integer> USER_ID = new BasicSemantic<>(5);
+	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
+	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
 	
-	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(6, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
-	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(6, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
-	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(6, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(6, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(DISTANCE_FUNCTION)));
+	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(DISTANCE_FUNCTION)));
 
-	public static final BasicSemantic<String> TRAJECTORY_IDENTIFIER = new BasicSemantic<String>(7) {
+	public static final BasicSemantic<String> TRAJECTORY_IDENTIFIER = new BasicSemantic<String>(8) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
 			return USER_ID.getData(p, i) + "/" + DIMENSAO_DATA.getData(p, i);
 		}
 	};
+
+	public static final BasicSemantic<String> WEEKLY_TRAJECTORY_IDENTIFIER = new BasicSemantic<String>(8) {
+		@Override
+		public String getData(SemanticTrajectory p, int i) {
+			return USER_ID.getData(p, i) + "/" + WEEK.getData(p, i);
+		}
+	};
 	private boolean onlyStops;
-	private String year_month;
+	private String baseTable;
 	private String stopMove_table;
+	private boolean weekly;
 
 	public InvolvesDatabaseReader(boolean onlyStops) {
-		this(onlyStops, null, null);
+		this(onlyStops, false, null, null);
 	}
 
-	public InvolvesDatabaseReader(boolean onlyStops2, String year_month, String stopMove_table) {
-		onlyStops = onlyStops2;
-		this.year_month = year_month == null ? "" : year_month;
+	public InvolvesDatabaseReader(boolean onlyStops, boolean weakly, String year_month, String stopMove_table) {
+		this.onlyStops = onlyStops;
+		this.weekly = weakly;
+		this.baseTable = year_month == null ? "" : year_month;
 		this.stopMove_table = stopMove_table == null ? "" : stopMove_table;
 	}
 
 	public List<SemanticTrajectory> read(Integer... users) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "public.amsterdan_park_cbsmot", null, null);
 		DataRetriever retriever = source.getRetriever();
-		System.out.println("Executing SQL...");
-		Connection conn = retriever.getConnection();
-		conn.setAutoCommit(false);
-		Statement st = conn.createStatement();
-		st.setFetchSize(1000);
-
 		Map<Integer, Stop> stops = new HashMap<>();
-		ResultSet stopsData = st.executeQuery(
-				"SELECT id, start_timestamp, end_timestamp, longitude, latitude, \"closest_PDV\", \"PDV_distance\", is_home, id_colaborador_unidade, \"closest_colab_PDV\", \"colab_PDV_distance\"\r\n" + 
-				"	FROM involves.\"stops_FastCBSMoT" + stopMove_table + "\";");
-		while (stopsData.next()) {
-			int stopId = stopsData.getInt("id");
-			Stop stop = stops.get(stopId);
-			if (stop == null) {
-				stop = new Stop(stopId, null, //
-						stopsData.getTimestamp("start_timestamp").getTime(), //
-						stopsData.getTimestamp("end_timestamp").getTime(), //
-						null, //
-						-1, //
-						null, //
-						-1, //
-						new TPoint(stopsData.getDouble("latitude"), stopsData.getDouble("longitude")), //
-						null, //
-						null//
-				);
-				stops.put(stopId, stop);
-			}
-		}
 		Map<Integer, Move> moves = new HashMap<>();
-		ResultSet movesData = st
-				.executeQuery("SELECT id, id_colaborador_unidade, start_timestamp, end_timestamp\r\n" + 
-						"	FROM involves.\"moves_FastCBSMoT" + stopMove_table + "\"");
-		while (movesData.next()) {
-			int moveId = movesData.getInt("id");
-			Move move = moves.get(moveId);
-			if (move == null) {
-				move = new Move(moveId, //
-						null, //
-						null, //
-						movesData.getTimestamp("start_timestamp").getTime(), //
-						movesData.getTimestamp("end_timestamp").getTime(), //
-						-1, //
-						-1, //
-						null);
-				move.setAttribute(AttributeType.MOVE_USER, movesData.getInt("id_colaborador_unidade"));
-				moves.put(moveId, move);
-				
-			}
-		}
-
-		String sql = "select (id_usuario::text || id_dimensao_data::text || id_dado_gps::text) as id_dado_gps, "//
-				+ "id_usuario, id_dimensao_data, dt_coordenada, "//
-				+ "st_x(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lat, "//
-				+ "st_y(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lon, "
-				+ "case when map.is_stop = true then map.semantic_id else null end as semantic_stop_id, "//
-				+ "case when map.is_move = true then map.semantic_id else null end as semantic_move_id "//
-				+ "from involves.\"dadoGps" + year_month + "\" gps ";//
-		sql += "left join involves.\"stops_moves_FastCBSMoT" + stopMove_table + "\" map on (id_usuario::text || id_dimensao_data::text || gps.id_dado_gps::text)::bigint = map.gps_point_id ";
-		sql += "where provedor = 'gps' ";//
-		sql += "order by id_usuario, id_dimensao_data, dt_coordenada, id_dado_gps";
-		PreparedStatement preparedStatement = conn.prepareStatement(sql);
-		ResultSet data = preparedStatement.executeQuery();
 		Multimap<String, InvolvesRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
-		System.out.println("Fetching...");
-		while(data.next()) {
-			Integer stopId = data.getInt("semantic_stop_id");
-			if(data.wasNull()) {
-				stopId = null;
+		Connection conn = retriever.getConnection();
+		try {
+			System.out.println("Executing SQL...");
+			conn.setAutoCommit(false);
+			Statement st = conn.createStatement();
+			st.setFetchSize(1000);
+	
+			ResultSet stopsData = st.executeQuery(
+					"SELECT id, start_timestamp, end_timestamp, longitude, latitude, \"closest_PDV\", \"PDV_distance\", is_home, id_colaborador_unidade, \"closest_colab_PDV\", \"colab_PDV_distance\"\r\n" + 
+					"	FROM involves.\"stops_FastCBSMoT" + stopMove_table + "\";");
+			while (stopsData.next()) {
+				int stopId = stopsData.getInt("id");
+				Stop stop = stops.get(stopId);
+				if (stop == null) {
+					stop = new Stop(stopId, null, //
+							stopsData.getTimestamp("start_timestamp").getTime(), //
+							stopsData.getTimestamp("end_timestamp").getTime(), //
+							null, //
+							-1, //
+							null, //
+							-1, //
+							new TPoint(stopsData.getDouble("latitude"), stopsData.getDouble("longitude")), //
+							null, //
+							null//
+					);
+					stops.put(stopId, stop);
+				}
 			}
-			Integer moveId = data.getInt("semantic_move_id");
-			if(data.wasNull()) {
-				moveId = null;
+			stopsData.close();
+			ResultSet movesData = st
+					.executeQuery("SELECT id, id_colaborador_unidade, start_timestamp, end_timestamp\r\n" + 
+							"	FROM involves.\"moves_FastCBSMoT" + stopMove_table + "\"");
+			while (movesData.next()) {
+				int moveId = movesData.getInt("id");
+				Move move = moves.get(moveId);
+				if (move == null) {
+					move = new Move(moveId, //
+							null, //
+							null, //
+							movesData.getTimestamp("start_timestamp").getTime(), //
+							movesData.getTimestamp("end_timestamp").getTime(), //
+							-1, //
+							-1, //
+							null);
+					move.setAttribute(AttributeType.MOVE_USER, movesData.getInt("id_colaborador_unidade"));
+					moves.put(moveId, move);
+					
+				}
 			}
-			InvolvesRecord record = new InvolvesRecord(
-					data.getLong("id_dado_gps"),
-					data.getInt("id_usuario"),
-					data.getInt("id_dimensao_data"),
-					data.getTimestamp("dt_coordenada"),
-				data.getDouble("lat"),
-				data.getDouble("lon"),
-				stopId,
-				moveId
-			);
-			records.put(record.getId_usuario() + "/" + record.getId_dimensao_data(), record);
+			movesData.close();
+			st.close();
+	
+			String sql = "select (gps.id_usuario::text || gps.id_dimensao_data::text || gps.id_dado_gps::text) as id_dado_gps, "//
+					+ "gps.id_usuario, col.id_colaborador_unidade, gps.id_dimensao_data, dt.semana, dt_coordenada, "//
+					+ "st_x(st_transform(st_setsrid(st_makepoint(gps.longitude, gps.latitude), 4326), 900913)) as lat, "//
+					+ "st_y(st_transform(st_setsrid(st_makepoint(gps.longitude, gps.latitude), 4326), 900913)) as lon, "
+					+ "case when map.is_stop = true then map.semantic_id else null end as semantic_stop_id, "//
+					+ "case when map.is_move = true then map.semantic_id else null end as semantic_move_id "//
+					+ "from involves.\"dadoGps" + baseTable + "\" gps ";//
+			sql += "inner join involves.dimensao_data dt on dt.id = gps.id_dimensao_data ";
+			sql += "inner join involves.colaboradores col on col.id_usuario = gps.id_usuario ";
+			sql += "left join involves.\"stops_moves_FastCBSMoT" + stopMove_table + "\" map on (gps.id_usuario::text || gps.id_dimensao_data::text || gps.id_dado_gps::text)::bigint = map.gps_point_id ";
+			sql += "where provedor = 'gps' ";//
+			sql += "order by gps.id_usuario, gps.id_dimensao_data, gps.dt_coordenada, gps.id_dado_gps";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			ResultSet data = preparedStatement.executeQuery();
+			System.out.println("Fetching...");
+			while(data.next()) {
+				Integer stopId = data.getInt("semantic_stop_id");
+				if(data.wasNull()) {
+					stopId = null;
+				}
+				Integer moveId = data.getInt("semantic_move_id");
+				if(data.wasNull()) {
+					moveId = null;
+				}
+				InvolvesRecord record = new InvolvesRecord(
+						data.getLong("id_dado_gps"),
+						data.getInt("id_usuario"),
+						data.getInt("id_colaborador_unidade"),
+						data.getInt("id_dimensao_data"),
+						data.getInt("semana"),
+						data.getTimestamp("dt_coordenada"),
+					data.getDouble("lat"),
+					data.getDouble("lon"),
+					stopId,
+					moveId
+				);
+				if(weekly) {
+					records.put(record.getId_usuario() + "/" + record.getSemana(), record);
+				} else {
+					records.put(record.getId_usuario() + "/" + record.getId_dimensao_data(), record);
+				}
+			}
+			data.close();
+			preparedStatement.close();
+		} finally {
+			conn.close();
 		}
-		preparedStatement.close();
 		
-		st.close();
 		System.out.printf("Loaded %d GPS points from database\n", records.size());
 		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
 
@@ -203,7 +226,6 @@ public class InvolvesDatabaseReader {
 						if(previousStop != null) {
 							Move move = new Move(-1, previousStop, stop, previousStop.getEndTime(), stop.getStartTime(), stop.getBegin() - 1, 0, new TPoint[0], 
 									-1,
-//									Angle.getAngle(previousStop.getEndPoint(), stop.getStartPoint()),
 									Distance.getDistance(new TPoint[] {previousStop.getCentroid(), stop.getCentroid()}, DISTANCE_FUNCTION));
 							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
 							//injecting a move between two consecutives stops
@@ -244,6 +266,7 @@ public class InvolvesDatabaseReader {
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getDt_coordenada().getTime()), Instant.ofEpochMilli(record.getDt_coordenada().getTime())));
 				s.addData(i, USER_ID, record.getId_usuario());
 				s.addData(i, DIMENSAO_DATA, record.getId_dimensao_data());
+				s.addData(i, WEEK, record.getSemana());
 				i++;
 			}
 			stats.addValue(s.length());
@@ -258,7 +281,7 @@ public class InvolvesDatabaseReader {
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 7);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 8);
 			Collection<InvolvesRecord> collection = records.get(trajId);
 			int i = 0;
 			for (InvolvesRecord record : collection) {
@@ -267,6 +290,7 @@ public class InvolvesDatabaseReader {
 				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getDt_coordenada().getTime()), Instant.ofEpochMilli(record.getDt_coordenada().getTime())));
 				s.addData(i, USER_ID, record.getId_usuario());
+				s.addData(i, WEEK, record.getSemana());
 				s.addData(i, DIMENSAO_DATA, record.getId_dimensao_data());
 				if(record.getSemanticStopId() != null) {
 					Stop stop = stops.get(record.getSemanticStopId());

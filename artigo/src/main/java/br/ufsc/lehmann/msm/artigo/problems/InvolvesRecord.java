@@ -12,11 +12,21 @@ public class InvolvesRecord {
 	private Timestamp dt_coordenada;
 	private Integer semanticMoveId;
 	private Integer semanticStopId;
-	public InvolvesRecord(long id, int id_usuario, int id_dimensao_data, Timestamp dt_coordenada, double lat, double lon, Integer semanticStopId, Integer semanticMoveId) {
+	private int semana;
+	public int getId_colaborador_unidade() {
+		return id_colaborador_unidade;
+	}
+	private int id_colaborador_unidade;
+	public int getSemana() {
+		return semana;
+	}
+	public InvolvesRecord(long id, int id_usuario, int id_colaborador_unidade, int id_dimensao_data, int semana, Timestamp dt_coordenada, double lat, double lon, Integer semanticStopId, Integer semanticMoveId) {
 		super();
 		this.id = id;
 		this.id_usuario = id_usuario;
+		this.id_colaborador_unidade = id_colaborador_unidade;
 		this.id_dimensao_data = id_dimensao_data;
+		this.semana = semana;
 		this.dt_coordenada = dt_coordenada;
 		this.lat = lat;
 		this.lon = lon;

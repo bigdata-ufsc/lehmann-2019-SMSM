@@ -37,24 +37,32 @@ public class DiscoverUnknownPOIs {
 	}
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		int ratio = 200; // distance in meters to find neighbors
-		int stopMinutes = 30;
-		int maxDist = 200; // distance in meters to merge stops
-		int toleranceMinutes = 2;
+//		int ratio = 200; // distance in meters to find neighbors
+//		int stopMinutes = 30;
+
+		for (int ratio = 100; ratio <= 300; ratio+=100) {
+			for (int stopMinutes = 15; stopMinutes <= 60; stopMinutes+=15) {
+				unknownPOIs(ratio, stopMinutes, true);
+			}
+		}
 		
+	}
+
+	private static void unknownPOIs(int ratio, int stopMinutes, boolean weekly)
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.amsterdan_stop", null, "geom");
 		Connection conn = source.getRetriever().getConnection();
 		
 		try {
-			prepareDatabase(ratio, stopMinutes, conn);
+			String tableSuffix = YEAR_MONTH + (weekly ? "_weekly_" : "_") + ratio + "mts_" + stopMinutes + "_mins";
+			prepareDatabase(ratio, stopMinutes, tableSuffix, conn);
 
-			Map<Stop, Object> dbscan = extractUnknownPOIs(ratio, stopMinutes, conn);
+			Map<Stop, Object> dbscan = extractUnknownPOIs(ratio, stopMinutes, tableSuffix, conn);
 			Set<Stop> stops = dbscan.keySet();
 
 			conn.setAutoCommit(false);
 			PreparedStatement ps = conn.prepareStatement(
-					"update involves.\"stops_FastCBSMoT" + YEAR_MONTH + "_" + ratio + "mts_" + stopMinutes + "_mins"
-							+ "\" " + "set \"global_unknown_POI\" = ?, \"unknown_POI\" = ? where id = ?");
+					"update involves.\"stops_FastCBSMoT" + tableSuffix + "\" " + "set \"global_unknown_POI\" = ?, \"unknown_POI\" = ? where id = ?");
 			for (Stop s : stops) {
 				StopData roi = (StopData) s.getRegion();
 				ps.setString(1, roi.globalUnknownPOIName);
@@ -63,33 +71,32 @@ public class DiscoverUnknownPOIs {
 				ps.execute();
 			}
 			conn.commit();
-			stops.forEach(stop -> System.out.println(stop));
+//			stops.forEach(stop -> System.out.println(stop));
 		} finally {
 			conn.close();
 		}
-		
 	}
 
-	private static void prepareDatabase(int ratio, int stopMinutes, Connection conn) throws SQLException {
+	private static void prepareDatabase(int ratio, int stopMinutes, String tableSuffix, Connection conn) throws SQLException {
 		try {
-			conn.createStatement().execute("ALTER TABLE involves.\"stops_FastCBSMoT" + YEAR_MONTH + "_" + ratio + "mts_" + stopMinutes + "_mins" + "\" DROP COLUMN \"global_unknown_POI\";");
+			conn.createStatement().execute("ALTER TABLE involves.\"stops_FastCBSMoT" + tableSuffix + "\" DROP COLUMN \"global_unknown_POI\";");
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
-		conn.createStatement().execute("ALTER TABLE involves.\"stops_FastCBSMoT" + YEAR_MONTH + "_" + ratio + "mts_" + stopMinutes + "_mins" + "\" ADD COLUMN \"global_unknown_POI\" character varying(100);");
+		conn.createStatement().execute("ALTER TABLE involves.\"stops_FastCBSMoT" + tableSuffix + "\" ADD COLUMN \"global_unknown_POI\" character varying(100);");
 		try {
-			conn.createStatement().execute("ALTER TABLE involves.\"stops_FastCBSMoT" + YEAR_MONTH + "_" + ratio + "mts_" + stopMinutes + "_mins" + "\" DROP COLUMN \"unknown_POI\";");
+			conn.createStatement().execute("ALTER TABLE involves.\"stops_FastCBSMoT" + tableSuffix + "\" DROP COLUMN \"unknown_POI\";");
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
-		conn.createStatement().execute("ALTER TABLE involves.\"stops_FastCBSMoT" + YEAR_MONTH + "_" + ratio + "mts_" + stopMinutes + "_mins" + "\" ADD COLUMN \"unknown_POI\" character varying(100);");
+		conn.createStatement().execute("ALTER TABLE involves.\"stops_FastCBSMoT" + tableSuffix + "\" ADD COLUMN \"unknown_POI\" character varying(100);");
 	}
 
-	private static Map<Stop, Object> extractUnknownPOIs(int ratio, int stopMinutes, Connection conn)
+	private static Map<Stop, Object> extractUnknownPOIs(int ratio, int stopMinutes, String tableSuffix, Connection conn)
 			throws SQLException {
 		ResultSet stopsData = conn.createStatement().executeQuery(
 				"SELECT id, start_timestamp, end_timestamp, longitude, latitude, \"closest_PDV\", \"PDV_distance\", is_home, id_colaborador_unidade, \"closest_colab_PDV\", \"colab_PDV_distance\"\r\n" + 
-				"	FROM involves.\"stops_FastCBSMoT" + YEAR_MONTH + "_" + ratio + "mts_" + stopMinutes + "_mins" + "\";");
+				"	FROM involves.\"stops_FastCBSMoT" + tableSuffix + "\";");
 		Map<Integer, Stop> stops = new HashMap<>();
 		while (stopsData.next()) {
 			int stopId = stopsData.getInt("id");

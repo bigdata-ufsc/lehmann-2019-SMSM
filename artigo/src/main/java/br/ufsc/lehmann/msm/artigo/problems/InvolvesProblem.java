@@ -17,6 +17,7 @@ public class InvolvesProblem extends AbstractProblem {
 	private StopMoveStrategy strategy;
 	private String year_month;
 	private String stopMove_table;
+	private boolean weeklyTrajectories;
 
 	public InvolvesProblem(Integer... users) {
 		this(false, users);
@@ -31,35 +32,36 @@ public class InvolvesProblem extends AbstractProblem {
 	}
 	
 	public InvolvesProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, boolean onlyStops, Integer... users) {
-		this(PisaDataReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, null, null, false);
+		this(PisaDataReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, null, null, false, false);
 	}
 	
-	public InvolvesProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, String year_month, String stopMove_table, boolean onlyStops, Integer... users) {
+	public InvolvesProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, String year_month, String stopMove_table, boolean onlyStops, boolean weeklyTrajectories, Integer... users) {
 		super(stopSemantic);
 		this.strategy = strategy;
 		this.year_month = year_month;
 		this.stopMove_table = stopMove_table;
 		this.onlyStops = onlyStops;
+		this.weeklyTrajectories = weeklyTrajectories;
 		this.users = users;
 	}
 
-	public InvolvesProblem(boolean b, String year_month, String stopMove_table) {
-		this(PisaDataReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, year_month, stopMove_table, false);
+	public InvolvesProblem(boolean onlyStops, boolean weeklyTrajectories, String year_month, String stopMove_table) {
+		this(InvolvesDatabaseReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, year_month, stopMove_table, onlyStops, weeklyTrajectories);
 	}
 
 	@Override
 	public Semantic discriminator() {
-		return InvolvesDatabaseReader.TRAJECTORY_IDENTIFIER;
+		return weeklyTrajectories ? InvolvesDatabaseReader.WEEKLY_TRAJECTORY_IDENTIFIER : InvolvesDatabaseReader.TRAJECTORY_IDENTIFIER;
 	}
 
 	@Override
 	public String shortDescripton() {
-		return "Involves " + (year_month != null ? "(year_month " + year_month + ")" : "") + "[" + stopSemantic().name() + "][onlyStops=" + onlyStops + "]" + (users != null ? "(Users " + Arrays.toString(users) + ")" : "");
+		return "Involves " + (year_month != null ? "(year_month " + year_month + ")" : "") + (weeklyTrajectories ? "(weekly)" : "(daily)") + "[" + stopSemantic().name() + "][onlyStops=" + onlyStops + "]" + (users != null ? "(Users " + Arrays.toString(users) + ")" : "");
 	}
 
 	protected List<SemanticTrajectory> load() {
 		try {
-			return new ArrayList<>(new InvolvesDatabaseReader(onlyStops, year_month, stopMove_table).read());
+			return new ArrayList<>(new InvolvesDatabaseReader(onlyStops, weeklyTrajectories, year_month, stopMove_table).read());
 		} catch (NumberFormatException | InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException  e) {
 			throw new RuntimeException(e);
 		}
