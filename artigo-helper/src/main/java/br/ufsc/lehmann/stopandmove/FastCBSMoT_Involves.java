@@ -32,7 +32,7 @@ import br.ufsc.utils.EuclideanDistanceFunction;
 public class FastCBSMoT_Involves {
 
 	private static String YEAR_MONTH = "_com_auditoria";
-	private static final String SCHEMA = "colab1300";
+	private static final String SCHEMA = "involves";
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		// FIND STOPS
