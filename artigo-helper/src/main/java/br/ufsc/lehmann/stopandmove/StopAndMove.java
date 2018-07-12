@@ -53,9 +53,16 @@ public class StopAndMove {
 		Set<Move> removedMoves = moves.asMap().entrySet().parallelStream().filter((Map.Entry<Move, Collection<Long>> entry) -> {
 			return entry.getKey().getStart() == s1 && entry.getKey().getEnd() == s2;
 		}).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet();
+
+		Set<Move> movesToUpdate = moves.asMap().entrySet().parallelStream().filter((Map.Entry<Move, Collection<Long>> entry) -> {
+			return entry.getKey().getStart() == s2;
+		}).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet();
 		removedMoves.forEach((Move m) -> {
 			stops.putAll(s1, moves.removeAll(m));
 			s1.getPoints().addAll(Arrays.asList(m.getPoints()));
+		});
+		movesToUpdate.forEach((Move m) -> {
+			m.setStart(s1);
 		});
 		s1.setLength((s2.getBegin() + s2.getLength()) - s1.getBegin());
 	}

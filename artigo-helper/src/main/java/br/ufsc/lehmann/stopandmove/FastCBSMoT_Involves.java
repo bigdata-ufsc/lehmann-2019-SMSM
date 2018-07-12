@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,18 +32,23 @@ import br.ufsc.utils.EuclideanDistanceFunction;
 public class FastCBSMoT_Involves {
 
 	private static String YEAR_MONTH = "_com_auditoria";
+	private static final String SCHEMA = "colab1300";
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		// FIND STOPS
-		//double ratio = 200; // distance in meters to find neighbors
-		//int stopMinutes = 30;
+//		int ratio = 200; // distance in meters to find neighbors
+//		int stopMinutes = 30;
 		//double maxDist = 200; // distance in meters to merge stops
 		int toleranceMinutes = 2;
 		FastCBSMoT_Involves fastCBSMoT_Involves = new FastCBSMoT_Involves();
+
+//		int maxDist = ratio;
+//		fastCBSMoT_Involves.fastCBSMoT((int) ratio, stopMinutes, (int) maxDist, toleranceMinutes, false);
+		
 		for (int ratio = 100; ratio <= 300; ratio+=100) {
 			for (int stopMinutes = 15; stopMinutes <= 60; stopMinutes+=15) {
 				int maxDist = ratio;
-				fastCBSMoT_Involves.fastCBSMoT((int) ratio, stopMinutes, (int) maxDist, toleranceMinutes, true);
+				fastCBSMoT_Involves.fastCBSMoT((int) ratio, stopMinutes, (int) maxDist, toleranceMinutes, false);
 			}
 		}
 	}
@@ -83,26 +89,26 @@ public class FastCBSMoT_Involves {
 		long start = System.currentTimeMillis();
 		Connection conn = source.getRetriever().getConnection();
 
-		ResultSet lastStop = conn.createStatement().executeQuery("select max(id) from involves.\"stops_FastCBSMoT" + tableSuffix + "\"");
+		ResultSet lastStop = conn.createStatement().executeQuery("select max(id) from " + SCHEMA + ".\"stops_FastCBSMoT" + tableSuffix + "\"");
 		lastStop.next();
 		AtomicInteger sid = new AtomicInteger(lastStop.getInt(1));
-		ResultSet lastMove = conn.createStatement().executeQuery("select max(id) from involves.\"moves_FastCBSMoT" + tableSuffix + "\"");
+		ResultSet lastMove = conn.createStatement().executeQuery("select max(id) from " + SCHEMA + ".\"moves_FastCBSMoT" + tableSuffix + "\"");
 		lastMove.next();
 		AtomicInteger mid = new AtomicInteger(lastMove.getInt(1));
 		
-		PreparedStatement insertStop = conn.prepareStatement("insert into involves.\"stops_FastCBSMoT" + tableSuffix + "\"(id, start_timestamp, end_timestamp, longitude, latitude, \"closest_PDV\", \"PDV_distance\", \"closest_colab_PDV\", \"colab_PDV_distance\", is_home, id_colaborador_unidade) values (?,?,?,?,?,?,?,?,?,?,?)");
-		PreparedStatement insertMove = conn.prepareStatement("insert into involves.\"moves_FastCBSMoT" + tableSuffix + "\"(id, start_timestamp, end_timestamp, id_colaborador_unidade) values (?,?,?,?)");
-		PreparedStatement insertMapping = conn.prepareStatement("insert into involves.\"stops_moves_FastCBSMoT" + tableSuffix + "\"(gps_point_id, is_stop, is_move, semantic_id) values (?,?,?,?)");
+		PreparedStatement insertStop = conn.prepareStatement("insert into " + SCHEMA + ".\"stops_FastCBSMoT" + tableSuffix + "\"(id, start_timestamp, end_timestamp, start_lat, start_lon, end_lat, end_lon, begin, length, latitude, longitude, \"closest_PDV\", \"PDV_distance\", \"closest_colab_PDV\", \"colab_PDV_distance\", is_home, id_colaborador_unidade) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		PreparedStatement insertMove = conn.prepareStatement("insert into " + SCHEMA + ".\"moves_FastCBSMoT" + tableSuffix + "\"(id, start_timestamp, end_timestamp, id_colaborador_unidade, start_stop_id, end_stop_id) values (?,?,?,?,?,?)");
+		PreparedStatement insertMapping = conn.prepareStatement("insert into " + SCHEMA + ".\"stops_moves_FastCBSMoT" + tableSuffix + "\"(gps_point_id, is_stop, is_move, semantic_id) values (?,?,?,?)");
 
 		List<PDV> pdvs = new ArrayList<>();
-		PreparedStatement pdvsPS = conn.prepareStatement("select id_ponto_de_venda_unidade, nome, bairro, endereco, numero, complemento, st_x(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lat, st_y(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lon from involves.pontos_venda");
+		PreparedStatement pdvsPS = conn.prepareStatement("select id_ponto_de_venda_unidade, nome, bairro, endereco, numero, complemento, st_x(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lat, st_y(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lon from " + SCHEMA + ".pontos_venda");
 		ResultSet pdvsR = pdvsPS.executeQuery();
 		while(pdvsR.next()) {
 			pdvs.add(new PDV(pdvsR.getInt("id_ponto_de_venda_unidade"), pdvsR.getDouble("lon"), pdvsR.getDouble("lat")));
 		}
 		pdvsPS.close();
 		List<PDV> houses = new ArrayList<>();
-		PreparedStatement housesPS = conn.prepareStatement("SELECT id_colaborador_unidade, st_x(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lat, st_y(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lon	FROM involves.colaboradores;");
+		PreparedStatement housesPS = conn.prepareStatement("SELECT id_colaborador_unidade, st_x(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lat, st_y(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lon	FROM " + SCHEMA + ".colaboradores;");
 		ResultSet pdvsH = housesPS.executeQuery();
 		while(pdvsH.next()) {
 			houses.add(new PDV(true, pdvsH.getInt("id_colaborador_unidade"), pdvsH.getDouble("lon"), pdvsH.getDouble("lat")));
@@ -110,7 +116,7 @@ public class FastCBSMoT_Involves {
 		housesPS.close();
 
 		Multimap<Integer, PDV> pdvsPerUser = MultimapBuilder.hashKeys().arrayListValues().build();
-		PreparedStatement pdvsPerUserPS = conn.prepareStatement("select id_ponto_de_venda_unidade, id_colaborador_unidade from involves.auditoria");
+		PreparedStatement pdvsPerUserPS = conn.prepareStatement("select id_ponto_de_venda_unidade, id_colaborador_unidade from " + SCHEMA + ".auditoria");
 		ResultSet pdvsPerUserRS = pdvsPerUserPS.executeQuery();
 		while(pdvsPerUserRS.next()) {
 			pdvsPerUser.put(pdvsPerUserRS.getInt("id_colaborador_unidade"), new PDV(pdvsPerUserRS.getInt("id_ponto_de_venda_unidade"), 0, 0));
@@ -125,7 +131,7 @@ public class FastCBSMoT_Involves {
 				List<Stop> stops = stopAndMove.getStops();
 				stopsCount += stops.size();
 				for (Stop stop : stops) {
-					int stopId = sid.incrementAndGet();
+					int stopId = stop.getStopId();
 					List<TPoint> gpsPoints = stop.getPoints();
 					for (TPoint tPoint : gpsPoints) {
 						insertMapping.setLong(1, tPoint.getGid());
@@ -140,20 +146,32 @@ public class FastCBSMoT_Involves {
 					insertStop.setInt(1, stopId);
 					insertStop.setTimestamp(toleranceMinutes, Timestamp.from(Instant.ofEpochMilli(stop.getStartTime())));
 					insertStop.setTimestamp(3, Timestamp.from(Instant.ofEpochMilli(stop.getEndTime())));
-					insertStop.setDouble(4, meanPoint.getX());
-					insertStop.setDouble(5, meanPoint.getY());
+
+					List<TPoint> points = new ArrayList<>(stop.getPoints());
+					insertStop.setDouble(4, points.get(0).getX());
+					insertStop.setDouble(5, points.get(0).getY());
+					insertStop.setDouble(6, points.get(points.size() - 1).getX());
+					insertStop.setDouble(7, points.get(points.size() - 1).getY());
+					insertStop.setInt(8, stop.getBegin());
+					insertStop.setInt(9, stop.getLength());
+					
+					insertStop.setDouble(10, meanPoint.getX());
+					insertStop.setDouble(11, meanPoint.getY());
 					PDV closestPdv = closestPDV(pdvs, houses, null, meanPoint.getX(), meanPoint.getY(), stop.getUser());
 					PDV closestUserPdv = closestPDV(pdvs, houses, pdvsPerUser, meanPoint.getX(), meanPoint.getY(), stop.getUser());
-					insertStop.setInt(6, closestPdv.getId());
-					insertStop.setDouble(7, closestPdv.distanceFrom(meanPoint.getX(), meanPoint.getY()));
-					insertStop.setInt(8, closestUserPdv.getId());
-					insertStop.setDouble(9, closestUserPdv.distanceFrom(meanPoint.getX(), meanPoint.getY()));
-					insertStop.setBoolean(10, closestPdv.isHome(stop.getUser()));
-					insertStop.setInt(11, stop.getUser());
+					insertStop.setInt(12, closestPdv.getId());
+					insertStop.setDouble(13, closestPdv.distanceFrom(meanPoint.getX(), meanPoint.getY()));
+					insertStop.setInt(14, closestUserPdv.getId());
+					insertStop.setDouble(15, closestUserPdv.distanceFrom(meanPoint.getX(), meanPoint.getY()));
+					insertStop.setBoolean(16, closestPdv.isHome(stop.getUser()));
+					insertStop.setInt(17, stop.getUser());
 					insertStop.execute();
 				}
 				List<Move> moves = stopAndMove.getMoves();
 				for (Move move : moves) {
+					if(move.getStart() == null || move.getEnd() == null) {
+						continue;
+					}
 					TPoint[] gpsPoints = move.getPoints();
 					int moveId = mid.incrementAndGet();
 					if(gpsPoints != null) {
@@ -170,6 +188,8 @@ public class FastCBSMoT_Involves {
 					insertMove.setTimestamp(toleranceMinutes, Timestamp.from(Instant.ofEpochMilli(move.getStartTime())));
 					insertMove.setTimestamp(3, Timestamp.from(Instant.ofEpochMilli(move.getEndTime())));
 					insertMove.setInt(4, move.getUser());
+					insertMove.setInt(5, move.getStart().getStopId());
+					insertMove.setInt(6, move.getEnd().getStopId());
 					insertMove.execute();
 				}
 				conn.commit();
@@ -187,32 +207,38 @@ public class FastCBSMoT_Involves {
 
 		Statement st = conn.createStatement();
 		try {
-			st.execute("DROP VIEW involves.\"vw_agendada_vs_realizada_CBSMoT" + tableSuffix + "\"");
+			st.execute("DROP VIEW " + SCHEMA + ".\"vw_agendada_vs_realizada_CBSMoT" + tableSuffix + "\"");
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 		try {
-			st.execute("DROP VIEW involves.\"vw_realizada_CBSMoT" + tableSuffix + "\"");
+			st.execute("DROP VIEW " + SCHEMA + ".\"vw_realizada_CBSMoT" + tableSuffix + "\"");
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 		try {
-			st.execute("DROP TABLE involves.\"stops_FastCBSMoT" + tableSuffix + "\"");
+			st.execute("DROP TABLE " + SCHEMA + ".\"stops_FastCBSMoT" + tableSuffix + "\"");
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 		try {
-			st.execute("ALTER TABLE involves.\"dadoGps" + baseTable + "\" ADD COLUMN \"id_colaborador_unidade\" integer;");
-			st.execute("update involves.\"dadoGps" + baseTable + "\" gps set id_colaborador_unidade = (select col.id_colaborador_unidade from involves.colaboradores col where col.id_usuario = gps.id_usuario) where id_colaborador_unidade is null");
+			st.execute("ALTER TABLE " + SCHEMA + ".\"dadoGps" + baseTable + "\" ADD COLUMN \"id_colaborador_unidade\" integer;");
+			st.execute("update " + SCHEMA + ".\"dadoGps" + baseTable + "\" gps set id_colaborador_unidade = (select col.id_colaborador_unidade from " + SCHEMA + ".colaboradores col where col.id_usuario = gps.id_usuario) where id_colaborador_unidade is null");
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 		
-		st.execute("CREATE TABLE involves.\"stops_FastCBSMoT" + tableSuffix + "\"\n" + 
+		st.execute("CREATE TABLE " + SCHEMA + ".\"stops_FastCBSMoT" + tableSuffix + "\"\n" + 
 				"(\n" + 
 				"    id bigint NOT NULL,\n" + 
 				"    start_timestamp timestamp(6) without time zone,\n" + 
-				"    end_timestamp timestamp without time zone,\n" + 
+				"    end_timestamp timestamp without time zone,\n" +
+				"    start_lat double precision,\n" + 
+				"    start_lon double precision,\n" + 
+				"    end_lat double precision,\n" + 
+				"    end_lon double precision,\n" +  
+				"    begin integer,\n" + 
+				"    length integer,\n" + 
 				"    longitude double precision,\n" + 
 				"    latitude double precision,\n" + 
 				"    \"closest_PDV\" integer,\n" + 
@@ -227,39 +253,41 @@ public class FastCBSMoT_Involves {
 				")\n" + 
 				"TABLESPACE data_trajectories;\n" + 
 				"\n" + 
-				"ALTER TABLE involves.\"stops_FastCBSMoT" + tableSuffix + "\"\n" + 
+				"ALTER TABLE " + SCHEMA + ".\"stops_FastCBSMoT" + tableSuffix + "\"\n" + 
 				"    OWNER to postgres;");
 
 		try {
-			st.execute("DROP TABLE involves.\"moves_FastCBSMoT" + tableSuffix + "\"");
+			st.execute("DROP TABLE " + SCHEMA + ".\"moves_FastCBSMoT" + tableSuffix + "\"");
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 		
 		st.execute("\n" + 
-				"CREATE TABLE involves.\"moves_FastCBSMoT" + tableSuffix + "\"\n" + 
+				"CREATE TABLE " + SCHEMA + ".\"moves_FastCBSMoT" + tableSuffix + "\"\n" + 
 				"(\n" + 
 				"    id bigint,\n" + 
 				"    id_colaborador_unidade bigint,\n" + 
 				"    start_timestamp timestamp without time zone,\n" + 
-				"    end_timestamp timestamp without time zone\n" + 
+				"    end_timestamp timestamp without time zone,\n" +
+				"    start_stop_id bigint,\n" + 
+				"    end_stop_id bigint\n" +  
 				")" +
 				"WITH (\n" + 
 				"    OIDS = FALSE\n" + 
 				")\n" + 
 				"TABLESPACE data_trajectories;\n" + 
 				"\n" + 
-				"ALTER TABLE involves.\"moves_FastCBSMoT" + tableSuffix + "\"\n" + 
+				"ALTER TABLE " + SCHEMA + ".\"moves_FastCBSMoT" + tableSuffix + "\"\n" + 
 				"    OWNER to postgres;");
 
 		try {
-			st.execute("DROP TABLE involves.\"stops_moves_FastCBSMoT" + tableSuffix + "\"");
+			st.execute("DROP TABLE " + SCHEMA + ".\"stops_moves_FastCBSMoT" + tableSuffix + "\"");
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 		
 		st.execute("\n" + 
-				"CREATE TABLE involves.\"stops_moves_FastCBSMoT" + tableSuffix + "\"\n" + 
+				"CREATE TABLE " + SCHEMA + ".\"stops_moves_FastCBSMoT" + tableSuffix + "\"\n" + 
 				"(\n" + 
 				"    gps_point_id bigint NOT NULL,\n" + 
 				"    is_stop boolean,\n" + 
@@ -271,11 +299,11 @@ public class FastCBSMoT_Involves {
 				")\n" + 
 				"TABLESPACE data_trajectories;\n" + 
 				"\n" + 
-				"ALTER TABLE involves.\"stops_moves_FastCBSMoT" + tableSuffix + "\"\n" + 
+				"ALTER TABLE " + SCHEMA + ".\"stops_moves_FastCBSMoT" + tableSuffix + "\"\n" + 
 				"    OWNER to postgres;");
 
 		st.execute("\n" + 
-				"CREATE OR REPLACE FUNCTION involves.array_uniq_stable(\n" + 
+				"CREATE OR REPLACE FUNCTION " + SCHEMA + ".array_uniq_stable(\n" + 
 				"	anyarray)\n" + 
 				"    RETURNS anyarray\n" + 
 				"    LANGUAGE 'sql'\n" + 
@@ -297,21 +325,21 @@ public class FastCBSMoT_Involves {
 				"$BODY$;");
 		
 		st.execute("\n" + 
-				"CREATE OR REPLACE VIEW involves.\"vw_realizada_CBSMoT" + tableSuffix + "\" AS\n" + 
+				"CREATE OR REPLACE VIEW " + SCHEMA + ".\"vw_realizada_CBSMoT" + tableSuffix + "\" AS\n" + 
 				" SELECT gps_1.id_usuario,\n" + 
 				"    col.id_colaborador_unidade,\n" +
 				"    gps_1.id_dimensao_data,\n" + 
-				"    array_to_string(involves.array_uniq_stable(array_agg(aud_1.\"closest_colab_PDV\")), ','::text) AS pdvs_visitados\n" + 
-				"   FROM involves.\"dadoGps" + baseTable + "\" gps_1\n" + 
-				"     JOIN involves.dimensao_data dt ON gps_1.id_dimensao_data = dt.id\n" + 
-				"     JOIN involves.colaboradores col ON gps_1.id_usuario = col.id_usuario\n" + 
-				"     JOIN involves.\"stops_FastCBSMoT" + tableSuffix + "\" aud_1 ON col.id_colaborador_unidade = aud_1.id_colaborador_unidade AND aud_1.start_timestamp >= to_date((((dt.dia || '/'::text) || dt.mes) || '/'::text) || dt.ano, 'DD/MM/YYYY'::text) AND aud_1.start_timestamp <= (to_date((((dt.dia || '/'::text) || dt.mes) || '/'::text) || dt.ano, 'DD/MM/YYYY'::text) + 1)\n" + 
-				"     JOIN involves.auditoria aud ON aud.id_dimensao_data = dt.id::numeric AND col.id_colaborador_unidade = aud.id_colaborador_unidade\n" + 
+				"    array_to_string(" + SCHEMA + ".array_uniq_stable(array_agg(aud_1.\"closest_colab_PDV\")), ','::text) AS pdvs_visitados\n" + 
+				"   FROM " + SCHEMA + ".\"dadoGps" + baseTable + "\" gps_1\n" + 
+				"     JOIN " + SCHEMA + ".dimensao_data dt ON gps_1.id_dimensao_data = dt.id\n" + 
+				"     JOIN " + SCHEMA + ".colaboradores col ON gps_1.id_usuario = col.id_usuario\n" + 
+				"     JOIN " + SCHEMA + ".\"stops_FastCBSMoT" + tableSuffix + "\" aud_1 ON col.id_colaborador_unidade = aud_1.id_colaborador_unidade AND aud_1.start_timestamp >= to_date((((dt.dia || '/'::text) || dt.mes) || '/'::text) || dt.ano, 'DD/MM/YYYY'::text) AND aud_1.start_timestamp <= (to_date((((dt.dia || '/'::text) || dt.mes) || '/'::text) || dt.ano, 'DD/MM/YYYY'::text) + 1)\n" + 
+				"     JOIN " + SCHEMA + ".auditoria aud ON aud.id_dimensao_data = dt.id::numeric AND col.id_colaborador_unidade = aud.id_colaborador_unidade\n" + 
 				"  WHERE aud_1.is_home = false AND gps_1.provedor::text = 'gps'::text AND gps_1.dt_coordenada >= aud_1.start_timestamp AND gps_1.dt_coordenada <= aud_1.end_timestamp\n" + 
 				"  GROUP BY gps_1.id_usuario, col.id_colaborador_unidade, gps_1.id_dimensao_data;\n" + 
 				"");
 		
-		st.execute("CREATE OR REPLACE VIEW involves.\"vw_agendada_vs_realizada_CBSMoT"  + tableSuffix + "\" AS\n" +
+		st.execute("CREATE OR REPLACE VIEW " + SCHEMA + ".\"vw_agendada_vs_realizada_CBSMoT"  + tableSuffix + "\" AS\n" +
 				" SELECT aud.id_colaborador_unidade,\n" + 
 				"    aud.id_dimensao_data,\n" + 
 				"    aud.pdvs_agendados,\n" + 
@@ -323,14 +351,14 @@ public class FastCBSMoT_Involves {
 				"                    aud_2.id_ponto_de_venda_unidade,\n" + 
 				"                    aud_2.id_dimensao_data,\n" + 
 				"                    aud_2.ordem_prevista\n" + 
-				"                   FROM involves.auditoria aud_2\n" + 
+				"                   FROM " + SCHEMA + ".auditoria aud_2\n" + 
 				"                  ORDER BY aud_2.id_colaborador_unidade, aud_2.ordem_prevista) aud_1\n" + 
 				"          GROUP BY aud_1.id_colaborador_unidade, aud_1.id_dimensao_data) aud\n" + 
-				"     JOIN involves.colaboradores col ON aud.id_colaborador_unidade = col.id_colaborador_unidade\n" + 
+				"     JOIN " + SCHEMA + ".colaboradores col ON aud.id_colaborador_unidade = col.id_colaborador_unidade\n" + 
 				"     LEFT JOIN ( SELECT realizada.id_colaborador_unidade,\n" + 
 				"            realizada.id_dimensao_data,\n" + 
 				"            realizada.pdvs_visitados\n" + 
-				"           FROM involves.\"vw_realizada_CBSMoT" +tableSuffix + "\" realizada) gps ON aud.id_colaborador_unidade::numeric = gps.id_colaborador_unidade AND gps.id_dimensao_data::numeric = aud.id_dimensao_data;\n" + 
+				"           FROM " + SCHEMA + ".\"vw_realizada_CBSMoT" +tableSuffix + "\" realizada) gps ON aud.id_colaborador_unidade::numeric = gps.id_colaborador_unidade AND gps.id_dimensao_data::numeric = aud.id_dimensao_data;\n" + 
 				"");
 		
 		st.close();

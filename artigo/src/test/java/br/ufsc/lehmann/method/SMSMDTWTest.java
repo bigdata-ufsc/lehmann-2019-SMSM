@@ -15,6 +15,8 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversitySubProblem;
+import br.ufsc.lehmann.msm.artigo.problems.InvolvesDatabaseReader;
+import br.ufsc.lehmann.msm.artigo.problems.InvolvesProblem;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 
@@ -29,14 +31,15 @@ public interface SMSMDTWTest {
 			stopSemantic = ((SanFranciscoCabProblem) problem).stopSemantic();
 			moveSemantic = SanFranciscoCabDataReader.MOVE_POINTS_SEMANTIC;
 		} else if(problem instanceof GeolifeUniversitySubProblem) {
-			if(((GeolifeUniversitySubProblem) problem).isRawTrajectory()) {
-				geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
-			} else {
-				geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
-			}
+			geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeUniversitySubProblem) problem).stopSemantic();
 			moveSemantic = GeolifeUniversityDataReader.MOVE_POINTS_SEMANTIC;
+		} else if(problem instanceof InvolvesProblem) {
+			geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
+			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+			stopSemantic = ((InvolvesProblem) problem).stopSemantic();
+			moveSemantic = InvolvesDatabaseReader.MOVE_POINTS_SEMANTIC;
 		}
 		return new SMSMClassifier(//
 				new SMSM.H_MSM_MoveSemanticParameters(moveSemantic, new SMSM.H_MSM_DimensionParameters[] {

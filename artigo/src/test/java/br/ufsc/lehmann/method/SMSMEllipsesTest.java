@@ -11,7 +11,6 @@ import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.SMSM;
-import br.ufsc.lehmann.SlackTemporalSemantic;
 import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMClassifier;
@@ -23,6 +22,8 @@ import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversitySubProblem;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
+import br.ufsc.lehmann.msm.artigo.problems.InvolvesDatabaseReader;
+import br.ufsc.lehmann.msm.artigo.problems.InvolvesProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelDataReader;
@@ -45,61 +46,67 @@ public interface SMSMEllipsesTest {
 		MoveSemantic moveSemantic = null;
 		Semantic<TPoint, Number> geoSemantic = Semantic.SPATIAL_LATLON;
 		MutableInt geoThreshold = Thresholds.STOP_CENTROID_LATLON;
-		if(problem instanceof NElementProblem) {
-			return new SMSMClassifier(//
-						new SMSM.H_MSM_MoveSemanticParameters(NElementProblem.move_ellipses, new SMSM.H_MSM_DimensionParameters[] {
-								new SMSM.H_MSM_DimensionParameters<>(NElementProblem.move_ellipses, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
-							}),
-						new SMSM.H_MSM_StopSemanticParameters(NElementProblem.stop, new SMSM.H_MSM_DimensionParameters[] {
-								new SMSM.H_MSM_DimensionParameters<>(Semantic.SPATIAL, AttributeType.STOP_SPATIAL, 0.5, 1.0/2.0, true),
-								new SMSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/2.0)
-							})
-						);
-		} else if(problem instanceof NewYorkBusProblem) {
-			stopSemantic = ((NewYorkBusProblem) problem).stopSemantic();
-			moveSemantic = NewYorkBusDataReader.MOVE_ELLIPSES_SEMANTIC;
-		} else if(problem instanceof DublinBusProblem) {
-			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
-			moveSemantic = DublinBusDataReader.MOVE_ELLIPSES_SEMANTIC;
-		} else if(problem instanceof GeolifeUniversitySubProblem) {
+//		if(problem instanceof NElementProblem) {
+//			return new SMSMClassifier(//
+//						new SMSM.H_MSM_MoveSemanticParameters(NElementProblem.move_ellipses, new SMSM.H_MSM_DimensionParameters[] {
+//								new SMSM.H_MSM_DimensionParameters<>(NElementProblem.move_ellipses, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
+//							}),
+//						new SMSM.H_MSM_StopSemanticParameters(NElementProblem.stop, new SMSM.H_MSM_DimensionParameters[] {
+//								new SMSM.H_MSM_DimensionParameters<>(Semantic.SPATIAL, AttributeType.STOP_SPATIAL, 0.5, 1.0/2.0, true),
+//								new SMSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/2.0)
+//							})
+//						);
+//		} else if(problem instanceof NewYorkBusProblem) {
+//			stopSemantic = ((NewYorkBusProblem) problem).stopSemantic();
+//			moveSemantic = NewYorkBusDataReader.MOVE_ELLIPSES_SEMANTIC;
+//		} else if(problem instanceof DublinBusProblem) {
+//			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
+//			moveSemantic = DublinBusDataReader.MOVE_ELLIPSES_SEMANTIC;
+//		} else 
+			if(problem instanceof GeolifeUniversitySubProblem) {
 			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeUniversitySubProblem) problem).stopSemantic();
 			moveSemantic = GeolifeUniversityDataReader.MOVE_ELLIPSES_SEMANTIC;
+		} else if(problem instanceof InvolvesProblem) {
+			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
+			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+			stopSemantic = ((InvolvesProblem) problem).stopSemantic();
+			moveSemantic = InvolvesDatabaseReader.MOVE_ELLIPSES_SEMANTIC;
 		} else if(problem instanceof GeolifeProblem) {
 			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
 			moveSemantic = GeolifeDataReader.MOVE_ELLIPSES_SEMANTIC;
-		} else if(problem instanceof PatelProblem) {
-			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
-			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
-			stopSemantic = ((PatelProblem) problem).stopSemantic();
-			moveSemantic = PatelDataReader.MOVE_ELLIPSES_SEMANTIC;
-		} else if(problem instanceof VehicleProblem) {
-			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
-			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
-			stopSemantic = ((VehicleProblem) problem).stopSemantic();
-			moveSemantic = VehicleDataReader.MOVE_ELLIPSES_SEMANTIC;
+//		} else if(problem instanceof PatelProblem) {
+//			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
+//			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+//			stopSemantic = ((PatelProblem) problem).stopSemantic();
+//			moveSemantic = PatelDataReader.MOVE_ELLIPSES_SEMANTIC;
+//		} else if(problem instanceof VehicleProblem) {
+//			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
+//			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+//			stopSemantic = ((VehicleProblem) problem).stopSemantic();
+//			moveSemantic = VehicleDataReader.MOVE_ELLIPSES_SEMANTIC;
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			stopSemantic = ((SanFranciscoCabProblem) problem).stopSemantic();
 			moveSemantic = SanFranciscoCabDataReader.MOVE_ELLIPSES_SEMANTIC;
-		} else if(problem instanceof SergipeTracksProblem) {
-			stopSemantic = SergipeTracksDataReader.STOP_CENTROID_SEMANTIC;
-			moveSemantic = SergipeTracksDataReader.MOVE_ELLIPSES_SEMANTIC;
-		} else if(problem instanceof PrototypeProblem) {
-			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
-			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
-			stopSemantic = PrototypeDataReader.STOP_SEMANTIC;
-			moveSemantic = PrototypeDataReader.MOVE_SEMANTIC;
-		} else if(problem instanceof PisaProblem) {
-			stopSemantic = ((PisaProblem) problem).stopSemantic();
-			moveSemantic = PisaDataReader.MOVE_ELLIPSES_SEMANTIC;
-		} else if(problem instanceof HermoupolisProblem) {
-			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
-			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
-			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
-			moveSemantic = HermoupolisDataReader.MOVE_ELLIPSES_SEMANTIC;
+//		} else if(problem instanceof SergipeTracksProblem) {
+//			stopSemantic = SergipeTracksDataReader.STOP_CENTROID_SEMANTIC;
+//			moveSemantic = SergipeTracksDataReader.MOVE_ELLIPSES_SEMANTIC;
+//		} else if(problem instanceof PrototypeProblem) {
+//			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
+//			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+//			stopSemantic = PrototypeDataReader.STOP_SEMANTIC;
+//			moveSemantic = PrototypeDataReader.MOVE_SEMANTIC;
+//		} else if(problem instanceof PisaProblem) {
+//			stopSemantic = ((PisaProblem) problem).stopSemantic();
+//			moveSemantic = PisaDataReader.MOVE_ELLIPSES_SEMANTIC;
+//		} else if(problem instanceof HermoupolisProblem) {
+//			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
+//			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+//			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
+//			moveSemantic = HermoupolisDataReader.MOVE_ELLIPSES_SEMANTIC;
 		}
 		return new SMSMClassifier(//
 				new SMSM.H_MSM_MoveSemanticParameters(moveSemantic, new SMSM.H_MSM_DimensionParameters[] {

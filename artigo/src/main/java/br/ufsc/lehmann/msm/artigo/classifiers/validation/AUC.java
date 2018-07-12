@@ -96,4 +96,14 @@ public class AUC {
         auc = (auc - (pos * (pos+1) / 2.0)) / (pos * neg);
         return auc;
     }
+    
+    public static double precisionAtRecall(double[] prLevels) {
+    	double ret = 0;
+    	double x = 1.0;
+    	for (int i = 0; i < prLevels.length; i++) {
+			ret += (x + prLevels[i]) / 2;
+			x = prLevels[i];
+		}
+    	return ret / prLevels.length;
+    }
 }

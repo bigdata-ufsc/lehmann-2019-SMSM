@@ -33,6 +33,7 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.KNNSmileTrainer;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.AUC;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Accuracy;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.ClassificationMeasure;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.FDR;
@@ -212,7 +213,8 @@ public abstract class AbstractClassifierTest {
 
 		double[] precisionAtRecall = validation.precisionAtRecall(classifier, allData, /*data.size() / problemDescriptor.numClasses()*/10);
 		System.out.printf("Precision@recall(%d): %s\n", /*data.size() / problemDescriptor.numClasses()*/10, ArrayUtils.toString(precisionAtRecall, "0.0"));
-		
+		double auc = AUC.precisionAtRecall(precisionAtRecall);
+		System.out.printf("AUC: %.2f\n", auc);
 	}
 
 	public void assertMeasure(ClassificationMeasure measure, double expected, double actual, double delta) {
@@ -239,5 +241,5 @@ public abstract class AbstractClassifierTest {
 		}
 	}
 	
-	abstract IMeasureDistance<SemanticTrajectory> measurer(Problem problem);
+	public abstract IMeasureDistance<SemanticTrajectory> measurer(Problem problem);
 }

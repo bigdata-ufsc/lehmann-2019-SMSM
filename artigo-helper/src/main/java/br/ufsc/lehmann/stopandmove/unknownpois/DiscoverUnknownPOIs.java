@@ -42,7 +42,7 @@ public class DiscoverUnknownPOIs {
 
 		for (int ratio = 100; ratio <= 300; ratio+=100) {
 			for (int stopMinutes = 15; stopMinutes <= 60; stopMinutes+=15) {
-				unknownPOIs(ratio, stopMinutes, true);
+				unknownPOIs(ratio, stopMinutes, false);
 			}
 		}
 		

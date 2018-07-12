@@ -144,7 +144,9 @@ public class Validation {
 				Entry<SemanticTrajectory, Double> entry = rows.get(j);
 				Object otherClassData = semantic.getData(entry.getKey(), 0);
 				if(Objects.equals(classData, otherClassData)) {
-					stats.computeIfAbsent(classData, (t) -> new DescriptiveStatistics()).addValue(1 - entry.getValue());
+					double v = 1 - entry.getValue();
+					DescriptiveStatistics s = stats.computeIfAbsent(classData, (t) -> new DescriptiveStatistics());
+					s.addValue(v);
 					if(lastTraj !=null && first) {
 //						System.out.println("Traj[" + classData + "]: " + trajsArray[i].getTrajectoryId() + " - Others [" + lastClass + ", " + lastTraj + "][" + otherClassData + ", "+ entry.getKey().getTrajectoryId() +  "]");
 						first = false;

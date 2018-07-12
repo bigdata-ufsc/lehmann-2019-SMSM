@@ -24,7 +24,7 @@ public class InvolvesProblem extends AbstractProblem {
 	}
 
 	public InvolvesProblem(boolean onlyStops, Integer... users) {
-		this(PisaDataReader.STOP_CENTROID_SEMANTIC, onlyStops, users);
+		this(InvolvesDatabaseReader.STOP_CENTROID_SEMANTIC, onlyStops, users);
 	}
 
 	public InvolvesProblem(StopSemantic stopSemantic,boolean onlyStops, Integer... users) {
@@ -32,7 +32,7 @@ public class InvolvesProblem extends AbstractProblem {
 	}
 	
 	public InvolvesProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, boolean onlyStops, Integer... users) {
-		this(PisaDataReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, null, null, false, false);
+		this(InvolvesDatabaseReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, null, null, false, false);
 	}
 	
 	public InvolvesProblem(StopSemantic stopSemantic, StopMoveStrategy strategy, String year_month, String stopMove_table, boolean onlyStops, boolean weeklyTrajectories, Integer... users) {
