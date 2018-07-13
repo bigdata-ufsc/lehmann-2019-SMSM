@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
+import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Move;
@@ -187,6 +188,24 @@ public class StopAndMoveExtractor {
 			ret.add(stopAndMove);
 		}
 		return ret;
+	}
+
+	public static TPoint centroid(SemanticTrajectory T, int start, int end) {
+		double x = 0;
+		double y = 0;
+
+		int i = start;
+		int total = 0;
+		while (i >= start && i <= end) {
+			total++;
+			TPoint point = Semantic.SPATIAL.getData(T, i);
+			x += point.getX();
+			y += point.getY();
+			i++;
+		}
+
+		TPoint p = new TPoint(0, x / total, y / total, new Timestamp(0));
+		return p;
 	}
 
 	public static interface StopPersisterCallback {

@@ -17,6 +17,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
 import br.ufsc.core.base.Point;
+import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Move;
@@ -26,61 +27,25 @@ import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.msm.artigo.problems.InvolvesDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.InvolvesProblem;
 import br.ufsc.utils.Distance;
-import br.ufsc.utils.EuclideanDistanceFunction;
 
-public class FastCBSMoT_Involves {
+public class StopMoveDetector_Auditoria_Involves {
 
 	private static String YEAR_MONTH = "_com_auditoria";
 	private static final String SCHEMA = "colab1300";
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		// FIND STOPS
-//		int ratio = 200; // distance in meters to find neighbors
-//		int stopMinutes = 30;
-		//double maxDist = 200; // distance in meters to merge stops
-		int toleranceMinutes = 2;
-		FastCBSMoT_Involves fastCBSMoT_Involves = new FastCBSMoT_Involves();
-
-//		int maxDist = ratio;
-//		fastCBSMoT_Involves.fastCBSMoT((int) ratio, stopMinutes, (int) maxDist, toleranceMinutes, false);
-		
-		for (int ratio = 100; ratio <= 300; ratio+=100) {
-			for (int stopMinutes = 15; stopMinutes <= 60; stopMinutes+=15) {
-				int maxDist = ratio;
-				fastCBSMoT_Involves.fastCBSMoT((int) ratio, stopMinutes, (int) maxDist, toleranceMinutes, false);
-			}
-		}
+		StopMoveDetector_Auditoria_Involves fastCBSMoT_Involves = new StopMoveDetector_Auditoria_Involves();
+		fastCBSMoT_Involves.fastCBSMoT(false);
 	}
 
-	private void fastCBSMoT(int ratio, int stopMinutes, int maxDist, int toleranceMinutes, boolean weeklyTrajectories)
+	private void fastCBSMoT(boolean weeklyTrajectories)
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		int timeTolerance = stopMinutes * 60 * 1000; // time in ms dif do ponto final para o inicial deve ser maior que timeTolerance
-
-		// Merge - Será feito merge nos stops em que a distância dos centroid estiver há até maxDist de distância
-		// e em que o tempo do ponto inicial do primeiro stop e do ponto final do segundo stop
-		// seja menor ou igual a mergeTolerance
-		int mergeTolerance = toleranceMinutes * 60 * 60 * 1000;// time in ms
-
-		// Clean - Os stops devem ter pelo menos o minTime
-		int minTime = stopMinutes * 60  * 1000; // time in ms
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.amsterdan_stop", null, "geom");
 
-		String tableSuffix = YEAR_MONTH + (weeklyTrajectories ? "_weekly_" : "_") + ratio + "mts_" + stopMinutes + "_mins";
-		prepareDatabase(source, ratio, stopMinutes, maxDist, toleranceMinutes, YEAR_MONTH, tableSuffix);
+		String tableSuffix = YEAR_MONTH + "_checkin_manual";
+		prepareDatabase(source, YEAR_MONTH, tableSuffix);
 		
 		
-		FastCBSMoT fastCBSMoT = new FastCBSMoT(new EuclideanDistanceFunction(), new StopAndMoveExtractor.PropertiesCallback() {
-			
-			@Override
-			public void addProperties(SemanticTrajectory traj, Stop stop) {
-				stop.setUser(InvolvesDatabaseReader.USER_ID.getData(traj, 0));
-			}
-			
-			@Override
-			public void addProperties(SemanticTrajectory traj, Move move) {
-				move.setUser(InvolvesDatabaseReader.USER_ID.getData(traj, 0));
-			}
-		});
 		InvolvesProblem problem = new InvolvesProblem(false, weeklyTrajectories, YEAR_MONTH, tableSuffix);
 		List<SemanticTrajectory> trajs = problem.data();
 
@@ -114,6 +79,14 @@ public class FastCBSMoT_Involves {
 		}
 		housesPS.close();
 
+		List<Auditoria> auds = new ArrayList<>();
+		PreparedStatement audsPS = conn.prepareStatement("select id_colaborador_unidade, id_ponto_de_venda_unidade, id_dimensao_data, dt_entrada_check_in_manual::TIMESTAMP WITH TIME ZONE at time zone 'utc' as dt_entrada_check_in_manual, dt_saida_check_in_manual::TIMESTAMP WITH TIME ZONE at time zone 'utc' as dt_saida_check_in_manual from " + SCHEMA + ".auditoria where dt_entrada_check_in_manual is not null and dt_saida_check_in_manual is not null order by id_colaborador_unidade, id_dimensao_data, dt_entrada_check_in_manual");
+		ResultSet audsR = audsPS.executeQuery();
+		while(audsR.next()) {
+			auds.add(new Auditoria(audsR.getInt("id_colaborador_unidade"), audsR.getInt("id_ponto_de_venda_unidade"), audsR.getInt("id_dimensao_data"), audsR.getTimestamp("dt_entrada_check_in_manual"), audsR.getTimestamp("dt_saida_check_in_manual")));
+		}
+		audsPS.close();
+
 		Multimap<Integer, PDV> pdvsPerUser = MultimapBuilder.hashKeys().arrayListValues().build();
 		PreparedStatement pdvsPerUserPS = conn.prepareStatement("select id_ponto_de_venda_unidade, id_colaborador_unidade from " + SCHEMA + ".auditoria");
 		ResultSet pdvsPerUserRS = pdvsPerUserPS.executeQuery();
@@ -124,7 +97,7 @@ public class FastCBSMoT_Involves {
 		
 		try {
 			conn.setAutoCommit(false);
-			List<StopAndMove> findBestCBSMoT = StopAndMoveExtractor.findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), ratio, timeTolerance, maxDist, mergeTolerance, minTime, sid, mid);
+			List<StopAndMove> findBestCBSMoT = findStopAndMoves(new ArrayList<>(trajs), auds, sid, mid);
 			int stopsCount = 0;
 			for (StopAndMove stopAndMove : findBestCBSMoT) {
 				List<Stop> stops = stopAndMove.getStops();
@@ -201,7 +174,74 @@ public class FastCBSMoT_Involves {
 		System.out.println("Time: " + (end - start));
 	}
 	
-	private void prepareDatabase(DataSource source, int ratio, int stopMinutes, int maxDist, int toleranceMinutes, String baseTable, String tableSuffix) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+	private List<StopAndMove> findStopAndMoves(List<SemanticTrajectory> trajs, List<Auditoria> auds, AtomicInteger sid,
+			AtomicInteger mid) {
+		List<StopAndMove> ret = new ArrayList<>();
+		for (SemanticTrajectory traj : trajs) {
+			List<Auditoria> audsDay = findAudFromTrajDay(auds, traj);
+			if(!audsDay.isEmpty()) {
+				ret.add(findStopAndMoves(traj, new ArrayList<>(audsDay), sid, mid));
+			}
+		}
+		return ret;
+	}
+
+	private StopAndMove findStopAndMoves(SemanticTrajectory traj, List<Auditoria> audsDay, AtomicInteger sid,
+			AtomicInteger mid) {
+		StopAndMove ret = new StopAndMove(traj);
+		int i = 0;
+		while(!audsDay.isEmpty()) {
+			Auditoria aud = audsDay.remove(0);
+			List<TPoint> stopPoints = new ArrayList<>();
+			List<TPoint> movePoints = new ArrayList<>();
+			TPoint start = null, end = null;
+			int beginIndex = -1;
+			for (; i < traj.length(); i++) {
+				TPoint point = Semantic.SPATIAL.getData(traj, i);
+				if(point.getTimestamp().before(aud.start_checkin_manual)) {
+					movePoints.add(point);
+				}
+				if(point.getTimestamp().after(aud.start_checkin_manual) && point.getTimestamp().before(aud.end_checkin_manual)) {
+					if(start == null) {
+						beginIndex = i;
+						start = point;
+					}
+					stopPoints.add(point);
+				}
+				if(point.getTimestamp().after(aud.end_checkin_manual)) {
+					break;
+				}
+			}
+			if(!stopPoints.isEmpty()) {
+				end = Semantic.SPATIAL.getData(traj, i - 1);
+				TPoint centroid = StopAndMoveExtractor.centroid(traj, beginIndex, i - 1);
+				Stop s = new Stop(sid.incrementAndGet(), String.valueOf(aud.pdvId), aud.start_checkin_manual.getTime(), aud.end_checkin_manual.getTime(), start, beginIndex, end, stopPoints.size(), centroid, null);
+				s.setUser(aud.userId);
+				stopPoints.stream().forEach(p -> s.addPoint(p));
+				if(!movePoints.isEmpty()) {
+					Stop previousStop = ret.lastStop();
+					if(previousStop != null) {
+						Move m = new Move(mid.incrementAndGet(), previousStop, s, previousStop.getEndTime(), s.getStartTime(), previousStop.getBegin() + previousStop.getLength() + 1, movePoints.size(), movePoints.toArray(new TPoint[movePoints.size()]), -1, -1);
+						m.setUser(aud.userId);
+						ret.addMove(m, movePoints.stream().map(TPoint::getGid).collect(Collectors.toList()));
+					}
+				}
+				ret.addStop(s, stopPoints.stream().map(TPoint::getGid).collect(Collectors.toList()));
+			}
+		}
+		
+		return ret;
+	}
+
+	private List<Auditoria> findAudFromTrajDay(List<Auditoria> auds, SemanticTrajectory traj) {
+		Integer userId = InvolvesDatabaseReader.USER_ID.getData(traj, 0);
+		Integer dimensaoData = InvolvesDatabaseReader.DIMENSAO_DATA.getData(traj, 0);
+		return auds.stream().filter(aud -> {
+			return aud.userId == userId && aud.idDimensaoData == dimensaoData;
+		}).collect(Collectors.toList());
+	}
+
+	private void prepareDatabase(DataSource source, String baseTable, String tableSuffix) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		Connection conn = source.getRetriever().getConnection();
 
 		Statement st = conn.createStatement();
@@ -390,6 +430,39 @@ public class FastCBSMoT_Involves {
 			}
 		}
 		return minPDV;
+	}
+	
+	private static class Auditoria {
+		private int userId = -1;
+		private int pdvId = -1;
+		private int idDimensaoData = -1;
+		private Timestamp start_checkin_manual;
+		private Timestamp end_checkin_manual;
+		
+		public Auditoria(int userId, int pdvId, int idDimensaoData, Timestamp start_checkin_manual,
+				Timestamp end_checkin_manual) {
+			super();
+			this.userId = userId;
+			this.pdvId = pdvId;
+			this.idDimensaoData = idDimensaoData;
+			this.start_checkin_manual = start_checkin_manual;
+			this.end_checkin_manual = end_checkin_manual;
+		}
+		public int getIdDimensaoData() {
+			return idDimensaoData;
+		}
+		public int getUserId() {
+			return userId;
+		}
+		public int getPdvId() {
+			return pdvId;
+		}
+		public Timestamp getStart_checkin_manual() {
+			return start_checkin_manual;
+		}
+		public Timestamp getEnd_checkin_manual() {
+			return end_checkin_manual;
+		}
 	}
 	
 	private static class PDV {

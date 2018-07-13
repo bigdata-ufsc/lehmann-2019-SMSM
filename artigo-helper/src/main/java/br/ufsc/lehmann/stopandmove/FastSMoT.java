@@ -72,7 +72,7 @@ public class FastSMoT<E, T> {
 					}
 				}
 				Stop s = new Stop(sid.incrementAndGet(), i, p1Milli, neighborhood[i] + 1, p2Milli);
-				s.setCentroid(centroid(T, i, i + neighborhood[i]));
+				s.setCentroid(StopAndMoveExtractor.centroid(T, i, i + neighborhood[i]));
 				s.setStopName(stopName);
 
 				List<Long> points = new ArrayList<>(neighborhood[i]);
@@ -95,24 +95,6 @@ public class FastSMoT<E, T> {
 		}
 	
 		return ret;
-	}
-
-	private TPoint centroid(SemanticTrajectory T, int start, int end) {
-		double x = 0;
-		double y = 0;
-
-		int i = start;
-		int total = 0;
-		while (i >= start && i <= end) {
-			total++;
-			TPoint point = Semantic.SPATIAL.getData(T, i);
-			x += point.getX();
-			y += point.getY();
-			i++;
-		}
-
-		TPoint p = new TPoint(0, x / total, y / total, new Timestamp(0));
-		return p;
 	}
 
 	private int countNeighbors(int i, SemanticTrajectory T) {

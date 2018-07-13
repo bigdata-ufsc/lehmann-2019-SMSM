@@ -19,7 +19,7 @@ public class InvolvesEDA {
 
 	public static void main(String[] args) {
 		Random r = new Random();
-		Problem problem = new InvolvesProblem(true, false, "_com_auditoria", "_com_auditoria_300mts_15_mins");
+		Problem problem = new InvolvesProblem(true, false, "_com_auditoria", "_com_auditoria_checkin_manual");
 		List<SemanticTrajectory> data = problem.data();
 		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
 		AbstractClassifierTest t = new SMSMDTWClassifierTest(EnumProblem.INVOLVES);
