@@ -72,7 +72,7 @@ public class InvolvesDatabaseReader {
 		}
 	};
 	
-	private static final String SCHEMA = "colab1300";
+	private static final String SCHEMA = "involves";
 	
 	private boolean onlyStops;
 	private String baseTable;
