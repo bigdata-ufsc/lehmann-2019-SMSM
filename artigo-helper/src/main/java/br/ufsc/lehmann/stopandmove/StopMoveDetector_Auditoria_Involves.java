@@ -31,7 +31,7 @@ import br.ufsc.utils.Distance;
 public class StopMoveDetector_Auditoria_Involves {
 
 	private static String YEAR_MONTH = "_com_auditoria";
-	private static final String SCHEMA = "colab1300";
+	private static final String SCHEMA = "involves";
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		StopMoveDetector_Auditoria_Involves fastCBSMoT_Involves = new StopMoveDetector_Auditoria_Involves();
