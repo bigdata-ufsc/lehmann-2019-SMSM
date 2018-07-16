@@ -1,6 +1,7 @@
 package br.ufsc.lehmann;
 
 import br.ufsc.lehmann.msm.artigo.Problem;
+import br.ufsc.lehmann.msm.artigo.problems.InvolvesDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.InvolvesProblem;
 import smile.math.Random;
 
@@ -12,7 +13,9 @@ public enum EnumProblem {
 //	GEOLIFE_WITH_POIS_UNIVERSITY(new GeolifeUniversitySubProblem(GeolifeUniversityDatabaseReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, true), 4),
 //	TAXI_SANFRANCISCO_REGIONS_DIRECTIONS_IN_ROADS_DEFINED_REGIONS(new SanFranciscoCab_Regions_Problem(SanFranciscoCabDataReader.STOP_REGION_SEMANTIC, StopMoveStrategy.SMoT, new String[] {"101", "280"}, new String[] {"mall to airport", "airport to mall"}, new String[] {"mall", "intersection_101_280", "bayshore_fwy", "airport"}, false), 12),//
 //	INVOLVES(new InvolvesProblem(InvolvesDatabaseReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.SMoT, true), 89),
-	INVOLVES(new InvolvesProblem(true, false, "_com_auditoria", "_com_auditoria_200mts_30_mins"), 7)
+	INVOLVES_RAW_POINTS(new InvolvesProblem(InvolvesDatabaseReader.STOP_NAME_SEMANTIC, false, false, "_com_auditoria", "_com_auditoria_200mts_30_mins"), 7),
+	INVOLVES(new InvolvesProblem(InvolvesDatabaseReader.STOP_NAME_SEMANTIC, true, false, "_com_auditoria", "_com_auditoria_200mts_30_mins"), 7),
+	INVOLVES_CHECKIN_MANUAL(new InvolvesProblem(InvolvesDatabaseReader.STOP_NAME_SEMANTIC, true, false, "_com_auditoria", "_com_auditoria_checkin_manual"), 7)
 	;
 	private Problem p;
 	private int numClasses;

@@ -39,7 +39,6 @@ import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
-import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
 import br.ufsc.utils.LatLongDistanceFunction;
 
@@ -52,9 +51,11 @@ public class InvolvesDatabaseReader {
 	public static final BasicSemantic<Integer> USER_ID = new BasicSemantic<>(6);
 	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
 	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
+	public static final StopSemantic STOP_NAME_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_NAME, new EqualsDistanceFunction<String>()));
 	
 	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
 	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION)));
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(DISTANCE_FUNCTION)));
 
@@ -72,7 +73,7 @@ public class InvolvesDatabaseReader {
 		}
 	};
 	
-	private static final String SCHEMA = "involves";
+	private static final String SCHEMA = "colab1300";
 	
 	private boolean onlyStops;
 	private String baseTable;

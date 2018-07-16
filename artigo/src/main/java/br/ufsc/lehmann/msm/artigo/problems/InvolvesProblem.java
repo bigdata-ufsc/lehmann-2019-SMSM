@@ -49,6 +49,10 @@ public class InvolvesProblem extends AbstractProblem {
 		this(InvolvesDatabaseReader.STOP_CENTROID_SEMANTIC, StopMoveStrategy.CBSMoT, year_month, stopMove_table, onlyStops, weeklyTrajectories);
 	}
 
+	public InvolvesProblem(StopSemantic stopSemantic, boolean onlyStops, boolean weeklyTrajectories, String year_month, String stopMove_table) {
+		this(stopSemantic, StopMoveStrategy.CBSMoT, year_month, stopMove_table, onlyStops, weeklyTrajectories);
+	}
+
 	@Override
 	public Semantic discriminator() {
 		return weeklyTrajectories ? InvolvesDatabaseReader.WEEKLY_TRAJECTORY_IDENTIFIER : InvolvesDatabaseReader.TRAJECTORY_IDENTIFIER;
