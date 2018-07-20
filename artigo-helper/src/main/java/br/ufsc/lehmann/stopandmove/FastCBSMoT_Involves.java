@@ -178,7 +178,7 @@ public class FastCBSMoT_Involves {
 					}
 					TPoint[] gpsPoints = move.getPoints();
 					int moveId = mid.incrementAndGet();
-					if(gpsPoints != null) {
+					if(gpsPoints != null && gpsPoints.length > 0) {
 						for (TPoint tPoint : gpsPoints) {
 							insertMapping.setLong(1, tPoint.getGid());
 							insertMapping.setBoolean(2, false);
@@ -189,8 +189,8 @@ public class FastCBSMoT_Involves {
 						insertMapping.executeBatch();
 					}
 					insertMove.setInt(1, moveId);
-					insertMove.setTimestamp(2, Timestamp.from(Instant.ofEpochMilli(startStop.getEndTime() + 1)));
-					insertMove.setTimestamp(3, Timestamp.from(Instant.ofEpochMilli(endStop.getStartTime() - 1)));
+					insertMove.setTimestamp(2, Timestamp.from(Instant.ofEpochMilli(startStop.getEndTime())));
+					insertMove.setTimestamp(3, Timestamp.from(Instant.ofEpochMilli(endStop.getStartTime())));
 					insertMove.setInt(4, move.getUser());
 					insertMove.setInt(5, move.getDimensaoData());
 					insertMove.setInt(6, startStop.getStopId());
