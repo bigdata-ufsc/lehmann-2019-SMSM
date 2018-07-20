@@ -129,7 +129,7 @@ public abstract class AbstractClassifierTest {
 			testLabelData[i] = discriminator.getData(testData[i], 0);
 		}
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		Validation validation = new Validation(problem, classifier, random);
+		Validation validation = new Validation(problem.discriminator(), classifier, random);
 
 		ITrainer<Object> trainer = new KNNSmileTrainer<>();
 		IClassifier<Object> train = trainer.train(trainData, discriminator, classifier);
@@ -170,7 +170,7 @@ public abstract class AbstractClassifierTest {
 			testLabelData[i] = discriminator.getData(testData[i], 0);
 		}
 		IMeasureDistance<SemanticTrajectory> classifier = measurer(problem);
-		Validation validation = new Validation(problem, classifier, random);
+		Validation validation = new Validation(problem.discriminator(), classifier, random);
 		ClassificationMeasure[] measures = new ClassificationMeasure[] {//
 				PRECISION,//
 				RECALL,//
@@ -209,7 +209,7 @@ public abstract class AbstractClassifierTest {
 		List<SemanticTrajectory> data = problem.data();
 		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
 		TrajectorySimilarityCalculator<SemanticTrajectory> classifier = (TrajectorySimilarityCalculator<SemanticTrajectory>) measurer(problem);
-		Validation validation = new Validation(problem, (IMeasureDistance<SemanticTrajectory>) classifier, random);
+		Validation validation = new Validation(problem.discriminator(), (IMeasureDistance<SemanticTrajectory>) classifier, random);
 
 		double[] precisionAtRecall = validation.precisionAtRecall(classifier, allData, /*data.size() / problemDescriptor.numClasses()*/10);
 		System.out.printf("Precision@recall(%d): %s\n", /*data.size() / problemDescriptor.numClasses()*/10, ArrayUtils.toString(precisionAtRecall, "0.0"));

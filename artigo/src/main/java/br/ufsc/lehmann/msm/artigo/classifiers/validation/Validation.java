@@ -48,7 +48,6 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.classifier.Binarizer;
-import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;
 import smile.math.Math;
@@ -61,16 +60,16 @@ import smile.math.Random;
  */
 public class Validation {
 	
-	private Problem problem;
+	private Semantic groundTruthSemantic;
 	private IMeasureDistance<SemanticTrajectory> measure;
 	private Random random;
 
-	public Validation(Problem problem, IMeasureDistance<SemanticTrajectory> measure) {
-		this(problem, measure, new Random(System.currentTimeMillis()));
+	public Validation(Semantic groundTruthSemantic, IMeasureDistance<SemanticTrajectory> measure) {
+		this(groundTruthSemantic, measure, new Random(System.currentTimeMillis()));
 	}
 
-	public Validation(Problem problem, IMeasureDistance<SemanticTrajectory> measure, Random random) {
-		this.problem = problem;
+	public Validation(Semantic groundTruthSemantic, IMeasureDistance<SemanticTrajectory> measure, Random random) {
+		this.groundTruthSemantic = groundTruthSemantic;
 		this.measure = measure;
 		this.random = random;
 	}
@@ -82,7 +81,7 @@ public class Validation {
 		SemanticTrajectory[] trajsArray = trajs.toArray(new SemanticTrajectory[trajs.size()]);
 		ArrayTable<SemanticTrajectory, SemanticTrajectory, Double> allDistances = ArrayTable.create(trajs, trajs);
 		Map<Object, LongAdder> occurrences = new HashMap<>();
-		Semantic semantic = problem.discriminator();
+		Semantic semantic = groundTruthSemantic;
 		for (int i = 0; i < trajsArray.length; i++) {
 			Object classData = semantic.getData(trajsArray[i], 0);
 			occurrences.computeIfAbsent(classData, (t) -> new LongAdder()).increment();
@@ -303,7 +302,7 @@ public class Validation {
         for (int i = 0; i < n; i++) {
             SemanticTrajectory[] trainx = Math.slice(x, loocv.train[i]);
             
-            IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
+            IClassifier<Label> classifier = trainer.train(trainx, groundTruthSemantic, this.measure);
 
             if (classifier.classify(x[loocv.test[i]]).equals(y[loocv.test[i]])) {
                 m++;
@@ -331,7 +330,7 @@ public class Validation {
         for (int i = 0; i < n; i++) {
             SemanticTrajectory[] trainx = Math.slice(x, loocv.train[i]);
             
-            IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
+            IClassifier<Label> classifier = trainer.train(trainx, groundTruthSemantic, this.measure);
 
             predictions[loocv.test[i]] = classifier.classify(x[loocv.test[i]]);
         }
@@ -357,7 +356,7 @@ public class Validation {
         for (int i = 0; i < n; i++) {
             SemanticTrajectory[] trainx = Math.slice(x, loocv.train[i]);
             
-            IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
+            IClassifier<Label> classifier = trainer.train(trainx, groundTruthSemantic, this.measure);
 
             predictions[loocv.test[i]] = classifier.classify(x[loocv.test[i]]);
         }
@@ -401,7 +400,7 @@ public class Validation {
 
 					List<Label> labels = new ArrayList<>();
 					for (SemanticTrajectory traj : trainx) {
-						Label data = (Label) problem.discriminator().getData(traj, 0);
+						Label data = (Label) groundTruthSemantic.getData(traj, 0);
 						labels.add(data);
 					}
 					List<Label> uniqueLabels = new ArrayList<>(new LinkedHashSet<>(labels));
@@ -423,7 +422,7 @@ public class Validation {
         	final int finalI = i;
             SemanticTrajectory[] trainx = trains[i];
         	
-        	IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
+        	IClassifier<Label> classifier = trainer.train(trainx, groundTruthSemantic, this.measure);
         	
         	Object[] predictions = new Object[cv.test[i].length];
         	Object[] real = new Object[cv.test[i].length];
@@ -467,7 +466,7 @@ public class Validation {
         	final int finalI = i;
             SemanticTrajectory[] trainx = Math.slice(x, cv.train[i]);
             
-            IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
+            IClassifier<Label> classifier = trainer.train(trainx, groundTruthSemantic, this.measure);
 
             Object[] predictions = new Object[cv.test[i].length];
             Boolean[] real = new Boolean[cv.test[i].length];
@@ -510,7 +509,7 @@ public class Validation {
         for (int i = 0; i < k; i++) {
             SemanticTrajectory[] trainx = Math.slice(x, bootstrap.train[i]);
             
-            IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
+            IClassifier<Label> classifier = trainer.train(trainx, groundTruthSemantic, this.measure);
 
             int nt = bootstrap.test[i].length;
             Object[] truth = new Object[nt];
@@ -551,7 +550,7 @@ public class Validation {
         for (int i = 0; i < k; i++) {
             SemanticTrajectory[] trainx = Math.slice(x, bootstrap.train[i]);
             
-            IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
+            IClassifier<Label> classifier = trainer.train(trainx, groundTruthSemantic, this.measure);
 
             int nt = bootstrap.test[i].length;
             Object[] truth = new Object[nt];
@@ -593,7 +592,7 @@ public class Validation {
         for (int i = 0; i < k; i++) {
             SemanticTrajectory[] trainx = Math.slice(x, bootstrap.train[i]);
             
-            IClassifier<Label> classifier = trainer.train(trainx, problem.discriminator(), this.measure);
+            IClassifier<Label> classifier = trainer.train(trainx, groundTruthSemantic, this.measure);
 
             int nt = bootstrap.test[i].length;
             Object[] truth = new Object[nt];
