@@ -183,6 +183,10 @@ public class Stop {
 		return (int) getAttribute(AttributeType.STOP_USER);
 	}
 
+	public int getDimensaoData() {
+		return (int) getAttribute(AttributeType.STOP_DIMENSAO_DATA);
+	}
+
 	public void setLength(int length) {
 		this.length = length;
 	}
@@ -193,6 +197,10 @@ public class Stop {
 
 	public void setUser(int user) {
 		setAttribute(AttributeType.STOP_USER, user);
+	}
+
+	public void setDimensaoData(int data) {
+		setAttribute(AttributeType.STOP_DIMENSAO_DATA, data);
 	}
 
 	public void setNextMove(Move move) {

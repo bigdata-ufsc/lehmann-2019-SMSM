@@ -223,6 +223,7 @@ public class StopMoveDetector_Auditoria_Involves {
 					if(previousStop != null) {
 						Move m = new Move(mid.incrementAndGet(), previousStop, s, previousStop.getEndTime(), s.getStartTime(), previousStop.getBegin() + previousStop.getLength() + 1, movePoints.size(), movePoints.toArray(new TPoint[movePoints.size()]), -1, -1);
 						m.setUser(aud.userId);
+						m.setDimensaoData(aud.idDimensaoData);
 						ret.addMove(m, movePoints.stream().map(TPoint::getGid).collect(Collectors.toList()));
 					}
 				}

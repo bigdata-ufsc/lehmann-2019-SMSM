@@ -30,6 +30,7 @@ public class AttributeType {
 	}, "MOVE_POINTS");
 	public static final AttributeType MOVE_STREET_NAME = new AttributeType((Move m) -> m.getStreetName(), "MOVE_STREET_NAME");
 	public static final AttributeType MOVE_USER = new AttributeType((Move m) -> m.getUser(), "MOVE_USER");
+	public static final AttributeType MOVE_DIMENSAO_DATA = new AttributeType((Move m) -> m.getDimensaoData(), "MOVE_DIMENSAO_DATA");
 	public static final AttributeType MOVE_TRANSPORTATION_MODE = new AttributeType((Move m) -> m.getTransportationMode(), "MOVE_TRANSPORTATION_MODE");
 	public static final AttributeType MOVE_ACTIVITY = new AttributeType((Move m) -> m.getActivity(), "MOVE_ACTIVITY");
 	public static final AttributeType STOP = new AttributeType((Stop s) -> s, "STOP");
@@ -37,7 +38,8 @@ public class AttributeType {
 	public static final AttributeType STOP_STREET_NAME = new AttributeType((Stop s) -> s.getStreetName(), "STOP_STREET_NAME");
 	public static final AttributeType STOP_REGION = new AttributeType((Stop s) -> s.getRegion(), "STOP_REGION");
 	public static final AttributeType STOP_NAME = new AttributeType((Stop s) -> s.getStopName(), "STOP_NAME");
-	public static final AttributeType STOP_USER = new AttributeType((Stop s) -> s.getStopName(), "STOP_USER");
+	public static final AttributeType STOP_USER = new AttributeType((Stop s) -> s.getUser(), "STOP_USER");
+	public static final AttributeType STOP_DIMENSAO_DATA = new AttributeType((Stop s) -> s.getDimensaoData(), "STOP_DIMENSAO_DATA");
 	public static final AttributeType STOP_STREET_NAME_MOVE_ANGLE = new AttributeType((StopMove s) -> {
 		if(s.getStop() != null) {
 			return s.getStop().getStreetName();
@@ -75,5 +77,10 @@ public class AttributeType {
 	
 	public String name() {
 		return name;
+	}
+
+	@Override
+	public String toString() {
+		return "AttributeType [name=" + name + "]";
 	}
 }

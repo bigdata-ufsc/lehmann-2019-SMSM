@@ -75,6 +75,7 @@ public class StopAndMove {
 			Collection<Long> stopPoints = stops.removeAll(s);
 			Move move = new Move(mid.incrementAndGet(), previousStop, nextStop, s.getStartTime(), s.getEndTime(), s.getBegin(), stopPoints.size(), s.getPoints().toArray(new TPoint[s.getPoints().size()]));
 			move.setUser(s.getUser());
+			move.setDimensaoData(s.getDimensaoData());
 			
 			moves.putAll(move, stopPoints);
 			return stopPoints;
@@ -120,9 +121,9 @@ public class StopAndMove {
 			List<TPoint> newPoints = new ArrayList<>(Arrays.asList(uncompletedMove.getPoints()));
 			newPoints.addAll(Arrays.asList(move.getPoints()));
 			gids = list;
-			Integer user = move.getUser();
 			move = new Move(uncompletedMove.getMoveId(), uncompletedMove.getStart(), move.getEnd(), uncompletedMove.getStartTime(), move.getEndTime(), uncompletedMove.getBegin(), uncompletedMove.getLength() + move.getLength(), newPoints.toArray(new TPoint[newPoints.size()]));
-			move.setUser(user);
+			move.setUser(uncompletedMove.getUser());
+			move.setDimensaoData(uncompletedMove.getDimensaoData());
 		}
 		moves.putAll(move, gids);
 		this.uncompletedMove = move;

@@ -42,7 +42,7 @@ import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.utils.Distance;
 import br.ufsc.utils.LatLongDistanceFunction;
 
-public class InvolvesDatabaseReader {
+public class InvolvesDatabaseReader implements IDataReader {
 	
 	private static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
 	public static final BasicSemantic<Integer> DIMENSAO_DATA = new BasicSemantic<>(3);
@@ -59,21 +59,21 @@ public class InvolvesDatabaseReader {
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION)));
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(DISTANCE_FUNCTION)));
 
-	public static final BasicSemantic<String> TRAJECTORY_IDENTIFIER = new BasicSemantic<String>(8) {
+	public static final BasicSemantic<String> TRAJECTORY_IDENTIFIER = new BasicSemantic<String>(9) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
 			return USER_ID.getData(p, i) + "/" + DAY_OF_WEEK.getData(p, i);
 		}
 	};
 
-	public static final BasicSemantic<String> WEEKLY_TRAJECTORY_IDENTIFIER = new BasicSemantic<String>(8) {
+	public static final BasicSemantic<String> WEEKLY_TRAJECTORY_IDENTIFIER = new BasicSemantic<String>(10) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
 			return USER_ID.getData(p, i) + "/" + WEEK.getData(p, i);
 		}
 	};
 	
-	private static final String SCHEMA = "colab1300";
+	private static final String SCHEMA = "involves";
 	
 	private boolean onlyStops;
 	private String baseTable;
@@ -91,7 +91,16 @@ public class InvolvesDatabaseReader {
 		this.stopMove_table = stopMove_table == null ? "" : stopMove_table;
 	}
 
-	public List<SemanticTrajectory> read(Integer... users) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+	public List<SemanticTrajectory> read() {
+		try {
+			return internalRead();
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private List<SemanticTrajectory> internalRead()
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "public.amsterdan_park_cbsmot", null, null);
 		DataRetriever retriever = source.getRetriever();
 		Map<Integer, Stop> stops = new HashMap<>();
@@ -171,7 +180,7 @@ public class InvolvesDatabaseReader {
 			sql += "inner join " + SCHEMA + ".colaboradores col on col.id_usuario = gps.id_usuario ";
 			sql += "left join " + SCHEMA + ".\"stops_moves_FastCBSMoT" + stopMove_table + "\" map on (gps.id_usuario::text || gps.id_dimensao_data::text || gps.id_dado_gps::text)::bigint = map.gps_point_id ";
 			sql += "where provedor = 'gps' ";//
-//			sql += "and dt.dia_semana = 3 ";//
+			//sql += "and gps.id_dimensao_data= 450 ";//
 			sql += "order by gps.id_usuario, gps.id_dimensao_data, gps.dt_coordenada, gps.id_dado_gps";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
 			ResultSet data = preparedStatement.executeQuery();
@@ -229,7 +238,7 @@ public class InvolvesDatabaseReader {
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 9);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 11);
 			Collection<InvolvesRecord> collection = records.get(trajId);
 			int i = 0;
 			for (InvolvesRecord record : collection) {
@@ -297,6 +306,8 @@ public class InvolvesDatabaseReader {
 				s.addData(i, DIMENSAO_DATA, record.getId_dimensao_data());
 				s.addData(i, WEEK, record.getSemana());
 				s.addData(i, DAY_OF_WEEK, record.getDiaSemana());
+				s.addData(i, TRAJECTORY_IDENTIFIER, TRAJECTORY_IDENTIFIER.getData(s, i));
+				s.addData(i, WEEKLY_TRAJECTORY_IDENTIFIER, WEEKLY_TRAJECTORY_IDENTIFIER.getData(s, i));
 				i++;
 			}
 			if(s.length() > 0) {
@@ -313,7 +324,7 @@ public class InvolvesDatabaseReader {
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 9);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, 11);
 			Collection<InvolvesRecord> collection = records.get(trajId);
 			int i = 0;
 			for (InvolvesRecord record : collection) {
@@ -325,6 +336,8 @@ public class InvolvesDatabaseReader {
 				s.addData(i, WEEK, record.getSemana());
 				s.addData(i, DAY_OF_WEEK, record.getDiaSemana());
 				s.addData(i, DIMENSAO_DATA, record.getId_dimensao_data());
+				s.addData(i, TRAJECTORY_IDENTIFIER, TRAJECTORY_IDENTIFIER.getData(s, i));
+				s.addData(i, WEEKLY_TRAJECTORY_IDENTIFIER, WEEKLY_TRAJECTORY_IDENTIFIER.getData(s, i));
 				if(record.getSemanticStopId() != null) {
 					Stop stop = stops.get(record.getSemanticStopId());
 					s.addData(i, STOP_CENTROID_SEMANTIC, stop);

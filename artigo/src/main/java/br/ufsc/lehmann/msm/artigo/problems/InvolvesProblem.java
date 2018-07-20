@@ -64,11 +64,7 @@ public class InvolvesProblem extends AbstractProblem {
 	}
 
 	protected List<SemanticTrajectory> load() {
-		try {
-			return new ArrayList<>(new InvolvesDatabaseReader(onlyStops, weeklyTrajectories, year_month, stopMove_table).read());
-		} catch (NumberFormatException | InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException  e) {
-			throw new RuntimeException(e);
-		}
+		return new ArrayList<>(new InvolvesDatabaseReader(onlyStops, weeklyTrajectories, year_month, stopMove_table).read());
 //		try {
 //			return new ArrayList<>(new PisaDatabaseReader(onlyStops).read(users));
 //		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {

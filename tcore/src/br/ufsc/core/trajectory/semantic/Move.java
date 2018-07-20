@@ -36,10 +36,10 @@ public class Move {
 	}
 
 	public Move(int moveId, Stop start, Stop end, long startTime, long endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance, String streetName) {
-		this(moveId, start, end, startTime, endTime, begin, length, points, angle, 0.0, null, -1);
+		this(moveId, start, end, startTime, endTime, begin, length, points, angle, 0.0, null, -1, -1);
 	}
 
-	public Move(int moveId, Stop start, Stop end, long startTime, long endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance, String streetName, Integer user) {
+	public Move(int moveId, Stop start, Stop end, long startTime, long endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance, String streetName, Integer user, Integer dimensaoData) {
 		this.moveId = moveId;
 		this.start = start;
 		this.end = end;
@@ -54,7 +54,8 @@ public class Move {
 				, new Attribute(AttributeType.MOVE_TRANSPORTATION_MODE, null)//
 				, new Attribute(AttributeType.MOVE_ACTIVITY, null)//
 				, new Attribute(AttributeType.MOVE_STREET_NAME, streetName)//
-				, new Attribute(AttributeType.MOVE_USER, user));
+				, new Attribute(AttributeType.MOVE_USER, user)//
+				, new Attribute(AttributeType.MOVE_DIMENSAO_DATA, dimensaoData));
 	}
 
 	public int getMoveId() {
@@ -83,10 +84,6 @@ public class Move {
 
 	public void setEnd(Stop end) {
 		this.end = end;
-	}
-
-	public void setMoveId(int moveId) {
-		this.moveId = moveId;
 	}
 
 	public void setStartTime(long startTime) {
@@ -147,6 +144,14 @@ public class Move {
 
 	public Integer getUser() {
 		return (Integer) getAttribute(AttributeType.MOVE_USER);
+	}
+
+	public void setDimensaoData(Integer data) {
+		setAttribute(AttributeType.MOVE_DIMENSAO_DATA, data);
+	}
+
+	public Integer getDimensaoData() {
+		return (Integer) getAttribute(AttributeType.MOVE_DIMENSAO_DATA);
 	}
 	
 	public double getDuration() {

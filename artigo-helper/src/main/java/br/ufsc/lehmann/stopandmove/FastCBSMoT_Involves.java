@@ -74,11 +74,13 @@ public class FastCBSMoT_Involves {
 			@Override
 			public void addProperties(SemanticTrajectory traj, Stop stop) {
 				stop.setUser(InvolvesDatabaseReader.USER_ID.getData(traj, 0));
+				stop.setDimensaoData(InvolvesDatabaseReader.DIMENSAO_DATA.getData(traj, 0));
 			}
 			
 			@Override
 			public void addProperties(SemanticTrajectory traj, Move move) {
 				move.setUser(InvolvesDatabaseReader.USER_ID.getData(traj, 0));
+				move.setDimensaoData(InvolvesDatabaseReader.DIMENSAO_DATA.getData(traj, 0));
 			}
 		});
 		InvolvesProblem problem = new InvolvesProblem(false, weeklyTrajectories, YEAR_MONTH, tableSuffix);
@@ -95,8 +97,8 @@ public class FastCBSMoT_Involves {
 		lastMove.next();
 		AtomicInteger mid = new AtomicInteger(lastMove.getInt(1));
 		
-		PreparedStatement insertStop = conn.prepareStatement("insert into " + SCHEMA + ".\"stops_FastCBSMoT" + tableSuffix + "\"(id, start_timestamp, end_timestamp, start_lat, start_lon, end_lat, end_lon, begin, length, latitude, longitude, \"closest_PDV\", \"PDV_distance\", \"closest_colab_PDV\", \"colab_PDV_distance\", is_home, id_colaborador_unidade) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-		PreparedStatement insertMove = conn.prepareStatement("insert into " + SCHEMA + ".\"moves_FastCBSMoT" + tableSuffix + "\"(id, start_timestamp, end_timestamp, id_colaborador_unidade, start_stop_id, end_stop_id) values (?,?,?,?,?,?)");
+		PreparedStatement insertStop = conn.prepareStatement("insert into " + SCHEMA + ".\"stops_FastCBSMoT" + tableSuffix + "\"(id, start_timestamp, end_timestamp, start_lat, start_lon, end_lat, end_lon, begin, length, latitude, longitude, \"closest_PDV\", \"PDV_distance\", \"closest_colab_PDV\", \"colab_PDV_distance\", is_home, id_colaborador_unidade, id_dimensao_data) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		PreparedStatement insertMove = conn.prepareStatement("insert into " + SCHEMA + ".\"moves_FastCBSMoT" + tableSuffix + "\"(id, start_timestamp, end_timestamp, id_colaborador_unidade, id_dimensao_data, start_stop_id, end_stop_id) values (?,?,?,?,?,?,?)");
 		PreparedStatement insertMapping = conn.prepareStatement("insert into " + SCHEMA + ".\"stops_moves_FastCBSMoT" + tableSuffix + "\"(gps_point_id, is_stop, is_move, semantic_id) values (?,?,?,?)");
 
 		List<PDV> pdvs = new ArrayList<>();
@@ -164,11 +166,14 @@ public class FastCBSMoT_Involves {
 					insertStop.setDouble(15, closestUserPdv.distanceFrom(meanPoint.getX(), meanPoint.getY()));
 					insertStop.setBoolean(16, closestPdv.isHome(stop.getUser()));
 					insertStop.setInt(17, stop.getUser());
+					insertStop.setInt(18, stop.getDimensaoData());
 					insertStop.execute();
 				}
 				List<Move> moves = stopAndMove.getMoves();
 				for (Move move : moves) {
-					if(move.getStart() == null || move.getEnd() == null) {
+					Stop startStop = move.getStart();
+					Stop endStop = move.getEnd();
+					if(startStop == null || endStop == null) {
 						continue;
 					}
 					TPoint[] gpsPoints = move.getPoints();
@@ -184,11 +189,12 @@ public class FastCBSMoT_Involves {
 						insertMapping.executeBatch();
 					}
 					insertMove.setInt(1, moveId);
-					insertMove.setTimestamp(2, Timestamp.from(Instant.ofEpochMilli(move.getStartTime())));
-					insertMove.setTimestamp(3, Timestamp.from(Instant.ofEpochMilli(move.getEndTime())));
+					insertMove.setTimestamp(2, Timestamp.from(Instant.ofEpochMilli(startStop.getEndTime() + 1)));
+					insertMove.setTimestamp(3, Timestamp.from(Instant.ofEpochMilli(endStop.getStartTime() - 1)));
 					insertMove.setInt(4, move.getUser());
-					insertMove.setInt(5, move.getStart().getStopId());
-					insertMove.setInt(6, move.getEnd().getStopId());
+					insertMove.setInt(5, move.getDimensaoData());
+					insertMove.setInt(6, startStop.getStopId());
+					insertMove.setInt(7, endStop.getStopId());
 					insertMove.execute();
 				}
 				conn.commit();
@@ -244,6 +250,7 @@ public class FastCBSMoT_Involves {
 				"    \"PDV_distance\" double precision,\n" + 
 				"    is_home boolean,\n" + 
 				"    id_colaborador_unidade integer,\n" + 
+				"    id_dimensao_data integer,\n" + 
 				"    \"closest_colab_PDV\" integer,\n" + 
 				"    \"colab_PDV_distance\" double precision\n" + 
 				")\n" + 
@@ -265,7 +272,8 @@ public class FastCBSMoT_Involves {
 				"CREATE TABLE " + SCHEMA + ".\"moves_FastCBSMoT" + tableSuffix + "\"\n" + 
 				"(\n" + 
 				"    id bigint,\n" + 
-				"    id_colaborador_unidade bigint,\n" + 
+				"    id_colaborador_unidade bigint,\n" +  
+				"    id_dimensao_data integer,\n" +
 				"    start_timestamp timestamp without time zone,\n" + 
 				"    end_timestamp timestamp without time zone,\n" +
 				"    start_stop_id bigint,\n" + 
