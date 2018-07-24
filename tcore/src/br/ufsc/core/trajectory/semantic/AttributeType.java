@@ -60,6 +60,7 @@ public class AttributeType {
 	public static final AttributeType STOP_TRAFFIC_LIGHT_DISTANCE = new AttributeType((Stop s) -> s.getTrafficLightDistance(), "STOP_TRAFFIC_LIGHT_DISTANCE");
 	public static final AttributeType STOP_SPATIAL = new AttributeType((Stop s) -> s.getCentroid(), "STOP_GEOGRAPHIC");
 	public static final AttributeType STOP_TEMPORAL = new AttributeType((Stop s) -> new TemporalDuration(Instant.ofEpochMilli(s.getStartTime()), Instant.ofEpochMilli(s.getEndTime())), "STOP_TEMPORAL");
+	public static final AttributeType STOP_DURATION = new AttributeType((Stop s) -> (s.getEndTime() - s.getStartTime()), "STOP_TEMPORAL");
 	public static final AttributeType NEXT_MOVE = new AttributeType((Stop s) -> s.getNextMove(), "NEXT_MOVE");
 	public static final AttributeType PREVIOUS_MOVE = new AttributeType((Stop s) -> s.getPreviousMove(), "PREVIOUS_MOVE");
 	

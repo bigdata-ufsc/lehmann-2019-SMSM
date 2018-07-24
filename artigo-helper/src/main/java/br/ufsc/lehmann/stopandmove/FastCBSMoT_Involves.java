@@ -130,6 +130,17 @@ public class FastCBSMoT_Involves {
 			int stopsCount = 0;
 			for (StopAndMove stopAndMove : findBestCBSMoT) {
 				List<Stop> stops = stopAndMove.getStops();
+				for (int i = 0; i < stops.size(); i++) {
+					Stop stop = stops.get(i);
+					TPoint meanPoint = stop.medianPoint();
+					PDV closestUserPdv = closestPDV(pdvs, houses, pdvsPerUser, meanPoint.getX(), meanPoint.getY(), stop.getUser());
+					if(closestUserPdv.isHome(stop.getUser())) {
+						stopAndMove.remove(stop, i == 0 ? null : stops.get(i - 1), i + 1 == stops.size() ? null : stops.get(i + 1), mid);
+					}
+				}
+			}
+			for (StopAndMove stopAndMove : findBestCBSMoT) {
+				List<Stop> stops = stopAndMove.getStops();
 				stopsCount += stops.size();
 				for (Stop stop : stops) {
 					int stopId = stop.getStopId();

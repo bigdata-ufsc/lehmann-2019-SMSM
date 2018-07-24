@@ -21,11 +21,10 @@ import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
+import br.ufsc.lehmann.ProportionDistance;
 import br.ufsc.lehmann.SMSM;
-import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.SMSM.H_MSM_DimensionParameters;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMClassifier;
-import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDataReader;
 import br.ufsc.utils.EuclideanDistanceFunction;
 import br.ufsc.utils.LatLongDistanceFunction;
 
@@ -46,11 +45,12 @@ public class Measures {
 					List<Param> stopParams = param.getParams();
 					for (Param stopParam : stopParams) {
 						AttributeType attr = null;
-						IDistanceFunction distance = null;
-						Semantic s = null;
 						boolean isSpatial = false;
-						String d = param.getDistance();
+						String d = stopParam.getDistance();
+						double threshold = Double.parseDouble(Strings.isNullOrEmpty(stopParam.getThreshold()) ? "0.0" : stopParam.getThreshold());
+						double weight = stopParam.getWeight().doubleValue();
 						
+						IDistanceFunction distance = null;
 						if(!Strings.isNullOrEmpty(d)) {
 							String paramDistance = d.toUpperCase();
 							switch(paramDistance) {
@@ -71,7 +71,7 @@ public class Measures {
 									break;
 								case "DTW":
 								case "UMS":
-									List<Param> dtwParams = param.getParams();
+									List<Param> dtwParams = stopParam.getParams();
 									Param dtwParam = dtwParams.get(0);
 									String dtwDistance = dtwParam.getDistance().toUpperCase();
 									SpatialDistanceFunction spatialDistance = null;
@@ -131,55 +131,60 @@ public class Measures {
 									case "CENTROID":
 										attr = AttributeType.STOP_CENTROID;
 										break;
+									case "DURATION":
+										attr = AttributeType.STOP_DURATION;
+										break;
 									default:
 										attr = AttributeType.STOP;
 								}
 								String semDistance = semParam.getDistance().toUpperCase();
 								switch(semDistance) {
-								case "LATLON":
-									distance = new LatLongDistanceFunction();
-									break;
-								case "EUCLIDEAN":
-									distance = new EuclideanDistanceFunction();
-									break;
-								case "EQUAL":
-									distance = new EqualsDistanceFunction<>();
-									break;
-								case "ANGLE":
-									distance = new AngleDistance();
-									break;
-								case "NUMBER":
-									distance = new NumberDistance();
-									break;
-								case "DTW":
-								case "UMS":
-									List<Param> dtwParams = semParam.getParams();
-									Param dtwParam = dtwParams.get(0);
-									String dtwDistance = dtwParam.getDistance().toUpperCase();
-									SpatialDistanceFunction spatialDistance = null;
-									switch(dtwDistance) {
-										case "LATLON":
-											spatialDistance = new LatLongDistanceFunction();
-											break;
-										case "EUCLIDEAN":
-											spatialDistance = new EuclideanDistanceFunction();
-											break;
-									}
-									if(semDistance.equals("UMS")) {
-										distance = new EllipsesDistance(spatialDistance);
-									} else {
-										distance = new DTWDistance(spatialDistance);
-									}
-									break;
-								default:
-									distance = new EqualsDistanceFunction<>();
+									case "LATLON":
+										distance = new LatLongDistanceFunction();
+										break;
+									case "EUCLIDEAN":
+										distance = new EuclideanDistanceFunction();
+										break;
+									case "EQUAL":
+										distance = new EqualsDistanceFunction<>();
+										break;
+									case "ANGLE":
+										distance = new AngleDistance();
+										break;
+									case "NUMBER":
+										distance = new NumberDistance();
+										break;
+									case "PROPORTION":
+										distance = new ProportionDistance();
+										break;
+									case "DTW":
+									case "UMS":
+										List<Param> dtwParams = semParam.getParams();
+										Param dtwParam = dtwParams.get(0);
+										String dtwDistance = dtwParam.getDistance().toUpperCase();
+										SpatialDistanceFunction spatialDistance = null;
+										switch(dtwDistance) {
+											case "LATLON":
+												spatialDistance = new LatLongDistanceFunction();
+												break;
+											case "EUCLIDEAN":
+												spatialDistance = new EuclideanDistanceFunction();
+												break;
+										}
+										if(semDistance.equals("UMS")) {
+											distance = new EllipsesDistance(spatialDistance);
+										} else {
+											distance = new DTWDistance(spatialDistance);
+										}
+										break;
+									default:
+										distance = new EqualsDistanceFunction<>();
+								}
+								AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
+								semantic = new StopSemantic(index.intValue(), desc);
+								threshold = Double.parseDouble(Strings.isNullOrEmpty(semParam.getThreshold()) ? "0.0" : semParam.getThreshold());
+								break;
 							}
-							AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
-							semantic = new StopSemantic(index.intValue(), desc);
-							break;
-						}
-						double threshold = Double.parseDouble(Strings.isNullOrEmpty(stopParam.getThreshold()) ? "0.0" : stopParam.getThreshold());
-						double weight = stopParam.getWeight().doubleValue();
 						H_MSM_DimensionParameters dimension = new SMSM.H_MSM_DimensionParameters(semantic, mainAttribute, threshold, weight, isSpatial);
 						stopDimensions.add(dimension);
 					}
@@ -189,10 +194,11 @@ public class Measures {
 					List<Param> moveParams = param.getParams();
 					for (Param moveParam : moveParams) {
 						AttributeType attr = null;
-						IDistanceFunction distance = null;
-						Semantic s = null;
 						boolean isSpatial = false;
-						String d = param.getDistance();
+						String d = moveParam.getDistance();
+						double threshold = Double.parseDouble(Strings.isNullOrEmpty(moveParam.getThreshold()) ? "0.0" : moveParam.getThreshold());
+						double weight = moveParam.getWeight().doubleValue();
+						IDistanceFunction distance = null;
 						if(!Strings.isNullOrEmpty(d)) {
 							String paramDistance = d.toUpperCase();
 							switch(paramDistance) {
@@ -211,9 +217,12 @@ public class Measures {
 								case "NUMBER":
 									distance = new NumberDistance();
 									break;
+								case "PROPORTION":
+									distance = new ProportionDistance();
+									break;
 								case "DTW":
 								case "UMS":
-									List<Param> dtwParams = param.getParams();
+									List<Param> dtwParams = moveParam.getParams();
 									Param dtwParam = dtwParams.get(0);
 									String dtwDistance = dtwParam.getDistance().toUpperCase();
 									SpatialDistanceFunction spatialDistance = null;
@@ -240,7 +249,6 @@ public class Measures {
 						switch(type) {
 							case "POINTS":
 								attr = AttributeType.MOVE_POINTS;
-								String pointsDistance = moveParam.getDistance().toUpperCase();
 								List<Param> pointsParams = moveParam.getParams();
 								Param pointsParam = pointsParams.get(0);
 								String pointsDistance1 = pointsParam.getDistance().toUpperCase();
@@ -326,12 +334,11 @@ public class Measures {
 								default:
 									distance = new EqualsDistanceFunction<>();
 							}
+							threshold = Double.parseDouble(Strings.isNullOrEmpty(semParam.getThreshold()) ? "0.0" : semParam.getThreshold());
 							break;
 						}
 						AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
 						MoveSemantic moveSemantic = new MoveSemantic(index.intValue(), desc);
-						double threshold = Double.parseDouble(Strings.isNullOrEmpty(moveParam.getThreshold()) ? "0.0" : moveParam.getThreshold());
-						double weight = moveParam.getWeight().doubleValue();
 						H_MSM_DimensionParameters<Move> dimension = new SMSM.H_MSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, threshold, weight, isSpatial);
 						moveDimensions.add(dimension);
 					}
