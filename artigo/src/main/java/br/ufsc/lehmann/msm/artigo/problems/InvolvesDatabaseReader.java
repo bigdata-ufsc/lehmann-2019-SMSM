@@ -39,6 +39,7 @@ import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
+import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
 import br.ufsc.utils.LatLongDistanceFunction;
 
@@ -180,7 +181,7 @@ public class InvolvesDatabaseReader implements IDataReader {
 			sql += "inner join " + SCHEMA + ".colaboradores col on col.id_usuario = gps.id_usuario ";
 			sql += "left join " + SCHEMA + ".\"stops_moves_FastCBSMoT" + stopMove_table + "\" map on (gps.id_usuario::text || gps.id_dimensao_data::text || gps.id_dado_gps::text)::bigint = map.gps_point_id ";
 			sql += "where provedor = 'gps' ";//
-			//sql += "and gps.id_dimensao_data= 450 ";//
+			//sql += "and gps.id_dimensao_data= 405 ";//
 			sql += "order by gps.id_usuario, gps.id_dimensao_data, gps.dt_coordenada, gps.id_dado_gps";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
 			ResultSet data = preparedStatement.executeQuery();
@@ -222,18 +223,18 @@ public class InvolvesDatabaseReader implements IDataReader {
 		System.out.printf("Loaded %d GPS points from database\n", records.size());
 		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
 
-		List<Move> allMoves = new ArrayList<>(moves.values());
 		List<SemanticTrajectory> ret = null;
+		List<Move> usedMoves = new ArrayList<Move>();
 		if(onlyStops) {
-			ret = readStopsTrajectories(stops, moves, records);
+			ret = readStopsTrajectories(stops, moves, records, usedMoves);
 		} else {
 			ret = readRawPoints(stops, moves, records);
 		}
-		compute(CollectionUtils.removeAll(allMoves, moves.values()));
+		compute(usedMoves);
 		return ret;
 	}
 
-	private List<SemanticTrajectory> readStopsTrajectories(Map<Integer, Stop> stops, Map<Integer, Move> moves, Multimap<String, InvolvesRecord> records) {
+	private List<SemanticTrajectory> readStopsTrajectories(Map<Integer, Stop> stops, Map<Integer, Move> moves, Multimap<String, InvolvesRecord> records, List<Move> usedMoves) {
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
@@ -251,64 +252,51 @@ public class InvolvesDatabaseReader implements IDataReader {
 					if(stop == null) {
 						continue;
 					}
+					stop.addPoint(point);
 					if(i > 0) {
+						if(STOP_CENTROID_SEMANTIC.getData(s, i - 1) == stop) {
+							continue;
+						}
 						Stop previousStop = STOP_CENTROID_SEMANTIC.getData(s, i - 1);
-						if(previousStop != null) {
+						if(previousStop != null && previousStop.getNextMove() == null) {
 							Move move = new Move(-1, previousStop, stop, previousStop.getEndTime(), stop.getStartTime(), stop.getBegin() - 1, 0, new TPoint[0], 
-									-1,
-									Distance.getDistance(new TPoint[] {previousStop.getCentroid(), stop.getCentroid()}, DISTANCE_FUNCTION));
-							s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+									Angle.getAngle(previousStop.getEndPoint(), stop.getStartPoint()), 
+									Distance.getDistance(new TPoint[] {previousStop.getEndPoint(), stop.getStartPoint()}, DISTANCE_FUNCTION));
 							previousStop.setNextMove(move);
 							stop.setPreviousMove(move);
-							//injecting a move between two consecutives stops
-							stops.put(record.getSemanticStopId(), stop);
-						} else {
-							s.addData(i, STOP_CENTROID_SEMANTIC, stop);
 						}
-					} else {
-						s.addData(i, STOP_CENTROID_SEMANTIC, stop);
 					}
+					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
+					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
+					s.addData(i, Semantic.GID, record.getId());
+					s.addData(i, Semantic.SPATIAL_LATLON, stop.getCentroid());
+					s.addData(i, USER_ID, record.getId_usuario());
+					s.addData(i, DIMENSAO_DATA, record.getId_dimensao_data());
+					s.addData(i, WEEK, record.getSemana());
+					s.addData(i, DAY_OF_WEEK, record.getDiaSemana());
+					s.addData(i, TRAJECTORY_IDENTIFIER, TRAJECTORY_IDENTIFIER.getData(s, i));
+					s.addData(i, WEEKLY_TRAJECTORY_IDENTIFIER, WEEKLY_TRAJECTORY_IDENTIFIER.getData(s, i));
+					i++;
 				} else if(record.getSemanticMoveId() != null) {
-					Move move = moves.remove(record.getSemanticMoveId());
+					Move move = moves.get(record.getSemanticMoveId());
 					if(move == null) {
-						for (int j = i - 1; j > -1; j--) {
-							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
-							if(move != null) {
-								break;
-							}
-						}
-						if(move != null) {
-							TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
-							List<TPoint> a = new ArrayList<TPoint>(Arrays.asList(points));
-							a.add(point);
-							if(move.getStart() != null) {
-								move.getStart().setNextMove(move);
-							}
-							if(move.getEnd() != null) {
-								move.getEnd().setPreviousMove(move);
-							}
-							move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
-							continue;
-						} else {
-							throw new RuntimeException("Move does not found");
-						}
+						throw new RuntimeException("Move does not found");
+					}
+					if(!usedMoves.contains(move)) {
+						usedMoves.add(move);
+					}
+					if(move.getStart() != null) {
+						move.getStart().setNextMove(move);
+					}
+					if(move.getEnd() != null) {
+						move.getEnd().setPreviousMove(move);
 					}
 					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
 					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
 					a.add(point);
 					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
-					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+					move.setAttribute(AttributeType.TRAJECTORY, s);
 				}
-				s.addData(i, Semantic.GID, record.getId());
-				s.addData(i, Semantic.SPATIAL, point);
-				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getDt_coordenada().getTime()), Instant.ofEpochMilli(record.getDt_coordenada().getTime())));
-				s.addData(i, USER_ID, record.getId_usuario());
-				s.addData(i, DIMENSAO_DATA, record.getId_dimensao_data());
-				s.addData(i, WEEK, record.getSemana());
-				s.addData(i, DAY_OF_WEEK, record.getDiaSemana());
-				s.addData(i, TRAJECTORY_IDENTIFIER, TRAJECTORY_IDENTIFIER.getData(s, i));
-				s.addData(i, WEEKLY_TRAJECTORY_IDENTIFIER, WEEKLY_TRAJECTORY_IDENTIFIER.getData(s, i));
-				i++;
 			}
 			if(s.length() > 0) {
 				stats.addValue(s.length());
