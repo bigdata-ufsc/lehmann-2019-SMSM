@@ -47,7 +47,7 @@ public class InvolvesPrecision10 {
 //		TrajectorySimilarityCalculator<SemanticTrajectory> classifier = (TrajectorySimilarityCalculator<SemanticTrajectory>) t.measurer(problem);
 		Random r = new Random();
 		
-		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/MSM_precision@10.test"), ExecutionPOJO.class);
+		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/SMSM_precision@10.test"), ExecutionPOJO.class);
 		Dataset dataset = execution.getDataset();
 		Measure measure = execution.getMeasure();
 		Groundtruth groundtruth = execution.getGroundtruth();
@@ -119,16 +119,16 @@ public class InvolvesPrecision10 {
 	}
 
 	private static List<SemanticTrajectory> find10MostSimilar(SemanticTrajectory traj, SemanticTrajectory[] allData, TrajectorySimilarityCalculator<SemanticTrajectory> similarityCalculator) {
-		Map<Double, SemanticTrajectory> ret = new HashMap<>();
+		Map<SemanticTrajectory, Double> ret = new HashMap<>();
 		for (SemanticTrajectory trajectory : allData) {
 			double similarity = similarityCalculator.getSimilarity(traj, trajectory);
-			ret.put(1 - similarity, trajectory);
+			ret.put(trajectory, 1 - similarity);
 		}
 		return ret.entrySet()//
 				.stream()//
-				.sorted(Comparator.comparing(Map.Entry::getKey))//
+				.sorted(Comparator.comparing(Map.Entry::getValue))//
 				.limit(10)//
-				.map((entry) -> entry.getValue())//
+				.map((entry) -> entry.getKey())//
 				.collect(Collectors.toList());
 	}
 }
