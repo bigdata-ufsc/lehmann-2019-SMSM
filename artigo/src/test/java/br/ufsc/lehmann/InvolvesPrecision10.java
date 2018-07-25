@@ -47,7 +47,7 @@ public class InvolvesPrecision10 {
 //		TrajectorySimilarityCalculator<SemanticTrajectory> classifier = (TrajectorySimilarityCalculator<SemanticTrajectory>) t.measurer(problem);
 		Random r = new Random();
 		
-		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/MSM_precision@10.test"), ExecutionPOJO.class);
+		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/SMSM_precision@10.test"), ExecutionPOJO.class);
 		Dataset dataset = execution.getDataset();
 		Measure measure = execution.getMeasure();
 		Groundtruth groundtruth = execution.getGroundtruth();
@@ -97,16 +97,24 @@ public class InvolvesPrecision10 {
 					.map((traj) -> new Object[] {traj, find10MostSimilar(traj, allData, similarityCalculator)})//
 					.collect(Collectors.toMap((value) -> (SemanticTrajectory) value[0], value -> (List<SemanticTrajectory>) value[1]));
 		
-		for (Map.Entry<SemanticTrajectory, List<SemanticTrajectory>> entry : mostSimilarTrajs.entrySet()) {
+		List<SemanticTrajectory> keys = mostSimilarTrajs.keySet().stream().sorted(new Comparator<Object>() {
+
+			@Override
+			public int compare(Object o1, Object o2) {
+				return Double.compare((double) o1, (double) o2);
+			}
+		}).collect(Collectors.toList());
+		for (SemanticTrajectory key : keys) {
+			List<SemanticTrajectory> entries = mostSimilarTrajs.get(key);
 			String msg = String.format("colab = %d, dimensao_data = %d: ", 
-					InvolvesDatabaseReader.USER_ID.getData(entry.getKey(), 0), 
-					InvolvesDatabaseReader.DIMENSAO_DATA.getData(entry.getKey(), 0));
+					InvolvesDatabaseReader.USER_ID.getData(key, 0), 
+					InvolvesDatabaseReader.DIMENSAO_DATA.getData(key, 0));
 			System.out.println(msg);
-			for (SemanticTrajectory t : entry.getValue()) {
+			for (SemanticTrajectory t : entries) {
 				System.out.printf("\tcolab = %d, dimensao_data = %d, distancia = %.4f\n",
 						InvolvesDatabaseReader.USER_ID.getData(t, 0), 
 						InvolvesDatabaseReader.DIMENSAO_DATA.getData(t, 0),
-						1 - similarityCalculator.getSimilarity(entry.getKey(), t));
+						1 - similarityCalculator.getSimilarity(key, t));
 			}
 		}
 		
@@ -119,16 +127,16 @@ public class InvolvesPrecision10 {
 	}
 
 	private static List<SemanticTrajectory> find10MostSimilar(SemanticTrajectory traj, SemanticTrajectory[] allData, TrajectorySimilarityCalculator<SemanticTrajectory> similarityCalculator) {
-		Map<Double, SemanticTrajectory> ret = new HashMap<>();
+		Map<SemanticTrajectory, Double> ret = new HashMap<>();
 		for (SemanticTrajectory trajectory : allData) {
 			double similarity = similarityCalculator.getSimilarity(traj, trajectory);
-			ret.put(1 - similarity, trajectory);
+			ret.put(trajectory, 1 - similarity);
 		}
 		return ret.entrySet()//
 				.stream()//
-				.sorted(Comparator.comparing(Map.Entry::getKey))//
+				.sorted(Comparator.comparing(Map.Entry::getValue))//
 				.limit(10)//
-				.map((entry) -> entry.getValue())//
+				.map((entry) -> entry.getKey())//
 				.collect(Collectors.toList());
 	}
 }
