@@ -5,7 +5,7 @@
 		"params": {
 			"weekly": 'false',
 			"pointsTableSuffix" : "_com_auditoria", 
-			"stopMoveTableSuffix" : "_com_auditoria_200mts_30_mins"
+			"stopMoveTableSuffix" : "_com_auditoria_100mts_30_mins"
 		}
 	},
 	"groundtruth": {
