@@ -47,7 +47,7 @@ public class InvolvesPrecision10 {
 //		TrajectorySimilarityCalculator<SemanticTrajectory> classifier = (TrajectorySimilarityCalculator<SemanticTrajectory>) t.measurer(problem);
 		Random r = new Random();
 		
-		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/SMSM_precision@10.test"), ExecutionPOJO.class);
+		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/MSM_precision@10.test"), ExecutionPOJO.class);
 		Dataset dataset = execution.getDataset();
 		Measure measure = execution.getMeasure();
 		Groundtruth groundtruth = execution.getGroundtruth();
