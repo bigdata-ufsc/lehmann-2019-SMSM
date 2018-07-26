@@ -2,6 +2,7 @@ package br.ufsc.lehmann;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -72,11 +73,20 @@ public class InvolvesPrecision10 {
 
 			private double movesDuration(SemanticTrajectory o1) {
 				double ret = 0.0;
+				List<Move> allMoves = new ArrayList<>();
 				for (int i = 0; i < o1.length(); i++) {
-					Move move = InvolvesDatabaseReader.MOVE_TEMPORAL_DURATION_SEMANTIC.getData(o1, i);
-					if(move != null) {
-						ret += move.getEndTime() - move.getStartTime();
+					Stop stop = InvolvesDatabaseReader.STOP_NAME_SEMANTIC.getData(o1, i);
+					if(stop != null) {
+						if(stop.getPreviousMove() != null && !allMoves.contains(stop.getPreviousMove())) {
+							allMoves.add(stop.getPreviousMove());
+						}
+						if(stop.getNextMove() != null && !allMoves.contains(stop.getNextMove())) {
+							allMoves.add(stop.getNextMove());
+						}
 					}
+				}
+				for (Move move : allMoves) {
+					ret += move.getEndTime() - move.getStartTime();
 				}
 				return ret;
 			}
@@ -94,39 +104,39 @@ public class InvolvesPrecision10 {
 		}).get()).collect(Collectors.toList());
 		Map<SemanticTrajectory, List<SemanticTrajectory>> mostSimilarTrajs = 
 				bestTrajectories.stream()//
-					.map((traj) -> new Object[] {traj, find10MostSimilar(traj, allData, similarityCalculator)})//
+					.map((traj) -> new Object[] {traj, findMostSimilar(traj, allData, similarityCalculator, 5 + 1)})//
 					.collect(Collectors.toMap((value) -> (SemanticTrajectory) value[0], value -> (List<SemanticTrajectory>) value[1]));
 		
 		List<SemanticTrajectory> keys = mostSimilarTrajs.keySet().stream().sorted(new Comparator<Object>() {
 
 			@Override
 			public int compare(Object o1, Object o2) {
-				return Double.compare((double) o1, (double) o2);
+				return Double.compare(InvolvesDatabaseReader.USER_ID.getData((SemanticTrajectory) o1, 0), InvolvesDatabaseReader.USER_ID.getData((SemanticTrajectory) o2, 0));
 			}
 		}).collect(Collectors.toList());
+		int errorsCount = 0;
 		for (SemanticTrajectory key : keys) {
 			List<SemanticTrajectory> entries = mostSimilarTrajs.get(key);
+			Integer keyUserId = InvolvesDatabaseReader.USER_ID.getData(key, 0);
 			String msg = String.format("colab = %d, dimensao_data = %d: ", 
-					InvolvesDatabaseReader.USER_ID.getData(key, 0), 
+					keyUserId, 
 					InvolvesDatabaseReader.DIMENSAO_DATA.getData(key, 0));
 			System.out.println(msg);
 			for (SemanticTrajectory t : entries) {
+				Integer tUserId = InvolvesDatabaseReader.USER_ID.getData(t, 0);
 				System.out.printf("\tcolab = %d, dimensao_data = %d, distancia = %.4f\n",
-						InvolvesDatabaseReader.USER_ID.getData(t, 0), 
+						tUserId, 
 						InvolvesDatabaseReader.DIMENSAO_DATA.getData(t, 0),
 						1 - similarityCalculator.getSimilarity(key, t));
+				if(!keyUserId.equals(tUserId)) {
+					errorsCount++;
+				}
 			}
 		}
-		
-//		Validation validation = new Validation(groundtruthSemantic, (IMeasureDistance<SemanticTrajectory>) similarityCalculator, r);
-//
-//		double[] precisionAtRecall = validation.precisionAtRecall(similarityCalculator, allData, 10);
-//		System.out.printf("Precision@recall(%d): %s\n", 10, ArrayUtils.toString(precisionAtRecall, "0.0"));
-//		double auc = AUC.precisionAtRecall(precisionAtRecall);
-//		System.out.printf("AUC: %.4f\n", auc);
+		System.out.println("Mislabeled trajectories: " + errorsCount);
 	}
 
-	private static List<SemanticTrajectory> find10MostSimilar(SemanticTrajectory traj, SemanticTrajectory[] allData, TrajectorySimilarityCalculator<SemanticTrajectory> similarityCalculator) {
+	private static List<SemanticTrajectory> findMostSimilar(SemanticTrajectory traj, SemanticTrajectory[] allData, TrajectorySimilarityCalculator<SemanticTrajectory> similarityCalculator, int n) {
 		Map<SemanticTrajectory, Double> ret = new HashMap<>();
 		for (SemanticTrajectory trajectory : allData) {
 			double similarity = similarityCalculator.getSimilarity(traj, trajectory);
@@ -135,7 +145,7 @@ public class InvolvesPrecision10 {
 		return ret.entrySet()//
 				.stream()//
 				.sorted(Comparator.comparing(Map.Entry::getValue))//
-				.limit(10)//
+				.limit(n)//
 				.map((entry) -> entry.getKey())//
 				.collect(Collectors.toList());
 	}
