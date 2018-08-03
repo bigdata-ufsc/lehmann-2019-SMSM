@@ -74,7 +74,7 @@ public class InvolvesDatabaseReader implements IDataReader {
 		}
 	};
 	
-	private static final String SCHEMA = "involves";
+	public static final String SCHEMA = "colab1300";
 	
 	private boolean onlyStops;
 	private String baseTable;
@@ -181,7 +181,7 @@ public class InvolvesDatabaseReader implements IDataReader {
 			sql += "inner join " + SCHEMA + ".colaboradores col on col.id_usuario = gps.id_usuario ";
 			sql += "left join " + SCHEMA + ".\"stops_moves_FastCBSMoT" + stopMove_table + "\" map on (gps.id_usuario::text || gps.id_dimensao_data::text || gps.id_dado_gps::text)::bigint = map.gps_point_id ";
 			sql += "where provedor = 'gps' ";//
-			//sql += "and gps.id_dimensao_data= 405 ";//
+//			sql += "and gps.id_usuario= 1300 ";//
 			sql += "order by gps.id_usuario, gps.id_dimensao_data, gps.dt_coordenada, gps.id_dado_gps";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
 			ResultSet data = preparedStatement.executeQuery();

@@ -192,6 +192,16 @@ public class Move {
 		if (getClass() != obj.getClass())
 			return false;
 		Move other = (Move) obj;
+		if (moveId == -1 && other.moveId == -1) {
+			if (begin != other.begin)
+				return false;
+			if (endTime != other.endTime)
+				return false;
+			if (length != other.length)
+				return false;
+			if (startTime != other.startTime)
+			return true;
+		}
 		if (moveId != other.moveId)
 			return false;
 		return true;

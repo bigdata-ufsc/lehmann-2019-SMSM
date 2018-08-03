@@ -22,6 +22,7 @@ import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
+import br.ufsc.lehmann.ProportionDistance;
 import br.ufsc.lehmann.SMSM;
 import br.ufsc.lehmann.SMSM.H_MSM_DimensionParameters;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
@@ -293,6 +294,9 @@ public class Measures {
 				break;
 			case "NUMBER":
 				distance = new NumberDistance();
+				break;
+			case "PROPORTION":
+				distance = new ProportionDistance();
 				break;
 			case "DTW":
 			case "UMS":
