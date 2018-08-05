@@ -24,9 +24,11 @@ import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.ProportionDistance;
 import br.ufsc.lehmann.SMSM;
-import br.ufsc.lehmann.SMSM.H_MSM_DimensionParameters;
+import br.ufsc.lehmann.SMSM.SMSM_DimensionParameters;
+import br.ufsc.lehmann.SMSMExtended;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.SMSMExtendedClassifier;
 import br.ufsc.utils.EuclideanDistanceFunction;
 import br.ufsc.utils.LatLongDistanceFunction;
 
@@ -36,6 +38,9 @@ public class Measures {
 		if(measure.getName().equalsIgnoreCase("SMSM")) {
 			return createSMSM(measure);
 		}
+		if(measure.getName().equalsIgnoreCase("SMSMExtended")) {
+			return createSMSM(measure, true);
+		}
 		if(measure.getName().equalsIgnoreCase("MSM")) {
 			return createMSM(measure);
 		}
@@ -43,12 +48,16 @@ public class Measures {
 	}
 
 	private static TrajectorySimilarityCalculator<SemanticTrajectory> createSMSM(Measure measure) {
+		return createSMSM(measure, false);
+	}
+
+	private static TrajectorySimilarityCalculator<SemanticTrajectory> createSMSM(Measure measure, boolean extended) {
 		List<Param> params = measure.getParams();
 		Double stopWeight = 0.0, moveWeight = 0.0;
 		StopSemantic stop = null;
 		MoveSemantic move = null;
-		List<SMSM.H_MSM_DimensionParameters<Stop>> stopDimensions = new ArrayList<>();
-		List<SMSM.H_MSM_DimensionParameters<Move>> moveDimensions = new ArrayList<>();
+		List<SMSM.SMSM_DimensionParameters<Stop>> stopDimensions = new ArrayList<>();
+		List<SMSM.SMSM_DimensionParameters<Move>> moveDimensions = new ArrayList<>();
 		for (Param param : params) {
 			if(param.getType().equalsIgnoreCase("stop")) {
 				stopWeight = param.getWeight();
@@ -116,7 +125,7 @@ public class Measures {
 							threshold = Double.parseDouble(Strings.isNullOrEmpty(semParam.getThreshold()) ? "0.0" : semParam.getThreshold());
 							break;
 						}
-					H_MSM_DimensionParameters dimension = new SMSM.H_MSM_DimensionParameters(semantic, mainAttribute, threshold, weight, isSpatial);
+					SMSM_DimensionParameters dimension = new SMSM.SMSM_DimensionParameters(semantic, mainAttribute, threshold, weight, isSpatial);
 					stopDimensions.add(dimension);
 				}
 			} else if(param.getType().equalsIgnoreCase("move")) {
@@ -190,14 +199,20 @@ public class Measures {
 					}
 					AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
 					MoveSemantic moveSemantic = new MoveSemantic(index.intValue(), desc);
-					H_MSM_DimensionParameters<Move> dimension = new SMSM.H_MSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, threshold, weight, isSpatial);
+					SMSM_DimensionParameters<Move> dimension = new SMSM.SMSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, threshold, weight, isSpatial);
 					moveDimensions.add(dimension);
 				}
 			}
 		}
+		if(extended) {
+			return new SMSMExtendedClassifier(//
+					new SMSM.SMSM_MoveSemanticParameters(move, moveDimensions.toArray(new SMSM.SMSM_DimensionParameters[moveDimensions.size()]), moveWeight),
+					new SMSM.SMSM_StopSemanticParameters(stop, stopDimensions.toArray(new SMSM.SMSM_DimensionParameters[stopDimensions.size()]), stopWeight)
+					);
+		}
 		return new SMSMClassifier(//
-				new SMSM.H_MSM_MoveSemanticParameters(move, moveDimensions.toArray(new SMSM.H_MSM_DimensionParameters[moveDimensions.size()]), moveWeight),
-				new SMSM.H_MSM_StopSemanticParameters(stop, stopDimensions.toArray(new SMSM.H_MSM_DimensionParameters[stopDimensions.size()]), stopWeight)
+				new SMSM.SMSM_MoveSemanticParameters(move, moveDimensions.toArray(new SMSM.SMSM_DimensionParameters[moveDimensions.size()]), moveWeight),
+				new SMSM.SMSM_StopSemanticParameters(stop, stopDimensions.toArray(new SMSM.SMSM_DimensionParameters[stopDimensions.size()]), stopWeight)
 				);
 	}
 

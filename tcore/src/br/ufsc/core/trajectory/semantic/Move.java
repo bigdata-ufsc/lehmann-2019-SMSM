@@ -1,6 +1,7 @@
 package br.ufsc.core.trajectory.semantic;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import br.ufsc.core.trajectory.SemanticTrajectory;
@@ -23,6 +24,10 @@ public class Move {
 	
 	private List<Attribute> attributes;
 	
+	protected Move() {
+		
+	}
+	
 	public Move(int moveId, Stop start, Stop end, long startTime, long endTime, int begin, int length, TPoint[] points) {
 		this(moveId, start, end, startTime, endTime, begin, length, points, 0.0);
 	}
@@ -36,10 +41,14 @@ public class Move {
 	}
 
 	public Move(int moveId, Stop start, Stop end, long startTime, long endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance, String streetName) {
-		this(moveId, start, end, startTime, endTime, begin, length, points, angle, 0.0, null, -1, -1);
+		this(moveId, start, end, startTime, endTime, begin, length, points, angle, 0.0, (String) null, -1, -1);
+	}
+	
+	public Move(int moveId, Stop start, Stop end, long startTime, long endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance, String streetName, Integer user, Integer dimensaoData) {
+		this(moveId, start, end, startTime, endTime, begin, length, points, angle, traveledDistance, streetName != null ? Arrays.asList(streetName) : Collections.emptyList(), user, dimensaoData);
 	}
 
-	public Move(int moveId, Stop start, Stop end, long startTime, long endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance, String streetName, Integer user, Integer dimensaoData) {
+	public Move(int moveId, Stop start, Stop end, long startTime, long endTime, int begin, int length, TPoint[] points, double angle, double traveledDistance, List<String> streetsName, Integer user, Integer dimensaoData) {
 		this.moveId = moveId;
 		this.start = start;
 		this.end = end;
@@ -53,7 +62,7 @@ public class Move {
 				, new Attribute(AttributeType.MOVE_TRAVELLED_DISTANCE, traveledDistance)//
 				, new Attribute(AttributeType.MOVE_TRANSPORTATION_MODE, null)//
 				, new Attribute(AttributeType.MOVE_ACTIVITY, null)//
-				, new Attribute(AttributeType.MOVE_STREET_NAME, streetName)//
+				, new Attribute(AttributeType.MOVE_STREETS_NAME, streetsName)//
 				, new Attribute(AttributeType.MOVE_USER, user)//
 				, new Attribute(AttributeType.MOVE_DIMENSAO_DATA, dimensaoData));
 	}
@@ -123,7 +132,11 @@ public class Move {
 	}
 
 	public String getStreetName() {
-		return (String) getAttribute(AttributeType.MOVE_STREET_NAME);
+		return getStreetsName().stream().findFirst().orElse(null);
+	}
+
+	public List<String> getStreetsName() {
+		return (List<String>) getAttribute(AttributeType.MOVE_STREETS_NAME);
 	}
 
 	public String getActivity() {

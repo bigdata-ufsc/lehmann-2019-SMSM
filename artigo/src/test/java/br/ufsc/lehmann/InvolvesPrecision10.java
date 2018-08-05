@@ -30,7 +30,7 @@ import br.ufsc.lehmann.testexecution.Measures;
 public class InvolvesPrecision10 {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, FileNotFoundException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/MSM_precision@10.test"), ExecutionPOJO.class);
+		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/SMSMExtended_precision.test"), ExecutionPOJO.class);
 		Dataset dataset = execution.getDataset();
 		Measure measure = execution.getMeasure();
 		Groundtruth groundtruth = execution.getGroundtruth();

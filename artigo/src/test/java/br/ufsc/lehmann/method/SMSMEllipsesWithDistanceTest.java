@@ -48,12 +48,12 @@ public interface SMSMEllipsesWithDistanceTest {
 		MutableInt geoThreshold = Thresholds.SPATIAL_LATLON;
 		if(problem instanceof NElementProblem) {
 			return new SMSMClassifier(//
-						new SMSM.H_MSM_MoveSemanticParameters(NElementProblem.move_ellipses, new SMSM.H_MSM_DimensionParameters[] {
-								new SMSM.H_MSM_DimensionParameters<>(NElementProblem.move_ellipses, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
+						new SMSM.SMSM_MoveSemanticParameters(NElementProblem.move_ellipses, new SMSM.SMSM_DimensionParameters[] {
+								new SMSM.SMSM_DimensionParameters<>(NElementProblem.move_ellipses, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
 							}),
-						new SMSM.H_MSM_StopSemanticParameters(NElementProblem.stop, new SMSM.H_MSM_DimensionParameters[] {
-								new SMSM.H_MSM_DimensionParameters<>(Semantic.SPATIAL, AttributeType.STOP_SPATIAL, 0.5, 1.0/2.0),
-								new SMSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/2.0)
+						new SMSM.SMSM_StopSemanticParameters(NElementProblem.stop, new SMSM.SMSM_DimensionParameters[] {
+								new SMSM.SMSM_DimensionParameters<>(Semantic.SPATIAL, AttributeType.STOP_SPATIAL, 0.5, 1.0/2.0),
+								new SMSM.SMSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/2.0)
 							})
 						);
 		} else if(problem instanceof NewYorkBusProblem) {
@@ -107,14 +107,14 @@ public interface SMSMEllipsesWithDistanceTest {
 			ellipseMoveSemantic = HermoupolisDataReader.MOVE_ELLIPSES_SEMANTIC;
 		}
 		return new SMSMClassifier(//
-				new SMSM.H_MSM_MoveSemanticParameters(ellipseMoveSemantic, new SMSM.H_MSM_DimensionParameters[] {
-						new SMSM.H_MSM_DimensionParameters<>(ellipseMoveSemantic, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1.0/2.0),
-						new SMSM.H_MSM_DimensionParameters<>(distanceMoveSemantic, AttributeType.MOVE, Thresholds.MOVE_DISTANCE, 1.0/2.0)
+				new SMSM.SMSM_MoveSemanticParameters(ellipseMoveSemantic, new SMSM.SMSM_DimensionParameters[] {
+						new SMSM.SMSM_DimensionParameters<>(ellipseMoveSemantic, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1.0/2.0),
+						new SMSM.SMSM_DimensionParameters<>(distanceMoveSemantic, AttributeType.MOVE, Thresholds.MOVE_DISTANCE, 1.0/2.0)
 					}),
-				new SMSM.H_MSM_StopSemanticParameters(stopSemantic, new SMSM.H_MSM_DimensionParameters[] {
-						new SMSM.H_MSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_SPATIAL, geoThreshold.intValue(), 1.0/3.0),
-						new SMSM.H_MSM_DimensionParameters<>(SlackTemporalSemantic.SLACK_TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
-						new SMSM.H_MSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 1.0/3.0)
+				new SMSM.SMSM_StopSemanticParameters(stopSemantic, new SMSM.SMSM_DimensionParameters[] {
+						new SMSM.SMSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_SPATIAL, geoThreshold.intValue(), 1.0/3.0),
+						new SMSM.SMSM_DimensionParameters<>(SlackTemporalSemantic.SLACK_TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
+						new SMSM.SMSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 1.0/3.0)
 					})
 				);
 	}

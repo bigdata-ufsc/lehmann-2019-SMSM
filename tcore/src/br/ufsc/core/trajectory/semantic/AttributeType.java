@@ -28,6 +28,7 @@ public class AttributeType {
 		points.toArray(ret);
 		return ret;
 	}, "MOVE_POINTS");
+	public static final AttributeType MOVE_STREETS_NAME = new AttributeType((Move m) -> m.getStreetsName(), "MOVE_STREETS_NAME");
 	public static final AttributeType MOVE_STREET_NAME = new AttributeType((Move m) -> m.getStreetName(), "MOVE_STREET_NAME");
 	public static final AttributeType MOVE_USER = new AttributeType((Move m) -> m.getUser(), "MOVE_USER");
 	public static final AttributeType MOVE_DIMENSAO_DATA = new AttributeType((Move m) -> m.getDimensaoData(), "MOVE_DIMENSAO_DATA");

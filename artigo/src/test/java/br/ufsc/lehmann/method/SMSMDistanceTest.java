@@ -31,12 +31,12 @@ public interface SMSMDistanceTest {
 		MutableInt geoThreshold = Thresholds.STOP_CENTROID_LATLON;
 		if(problem instanceof NElementProblem) {
 			return new SMSMClassifier(//
-					new SMSM.H_MSM_MoveSemanticParameters(NElementProblem.move, new SMSM.H_MSM_DimensionParameters[] {
-							new SMSM.H_MSM_DimensionParameters<>(NElementProblem.move, AttributeType.MOVE, Thresholds.MOVE_DISTANCE, 1)
+					new SMSM.SMSM_MoveSemanticParameters(NElementProblem.move, new SMSM.SMSM_DimensionParameters[] {
+							new SMSM.SMSM_DimensionParameters<>(NElementProblem.move, AttributeType.MOVE, Thresholds.MOVE_DISTANCE, 1)
 						}),
-					new SMSM.H_MSM_StopSemanticParameters(NElementProblem.stop, new SMSM.H_MSM_DimensionParameters[] {
-							new SMSM.H_MSM_DimensionParameters<>(Semantic.SPATIAL, AttributeType.STOP_SPATIAL, 0.5, 1.0/2.0),
-							new SMSM.H_MSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/2.0)
+					new SMSM.SMSM_StopSemanticParameters(NElementProblem.stop, new SMSM.SMSM_DimensionParameters[] {
+							new SMSM.SMSM_DimensionParameters<>(Semantic.SPATIAL, AttributeType.STOP_SPATIAL, 0.5, 1.0/2.0),
+							new SMSM.SMSM_DimensionParameters<>(Semantic.TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/2.0)
 						})
 					);
 //		} else if(problem instanceof NewYorkBusProblem) {
@@ -83,13 +83,13 @@ public interface SMSMDistanceTest {
 //			moveSemantic = PisaDataReader.MOVE_DISTANCE_SEMANTIC;
 		}
 		return new SMSMClassifier(//
-				new SMSM.H_MSM_MoveSemanticParameters(moveSemantic, new SMSM.H_MSM_DimensionParameters[] {
-						new SMSM.H_MSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, Thresholds.MOVE_DISTANCE, 1)
+				new SMSM.SMSM_MoveSemanticParameters(moveSemantic, new SMSM.SMSM_DimensionParameters[] {
+						new SMSM.SMSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, Thresholds.MOVE_DISTANCE, 1)
 					}),
-				new SMSM.H_MSM_StopSemanticParameters(stopSemantic, new SMSM.H_MSM_DimensionParameters[] {
-						new SMSM.H_MSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_SPATIAL, geoThreshold.intValue(), 1.0/2.0),
+				new SMSM.SMSM_StopSemanticParameters(stopSemantic, new SMSM.SMSM_DimensionParameters[] {
+						new SMSM.SMSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_SPATIAL, geoThreshold.intValue(), 1.0/2.0),
 						//new SMSM.H_MSM_DimensionParameters<>(SlackTemporalSemantic.SLACK_TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
-						new SMSM.H_MSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 1.0/2.0)
+						new SMSM.SMSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 1.0/2.0)
 					})
 				);
 	}

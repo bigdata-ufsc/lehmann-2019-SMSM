@@ -42,13 +42,13 @@ public interface SMSMDTWTest {
 			moveSemantic = InvolvesDatabaseReader.MOVE_POINTS_SEMANTIC;
 		}
 		return new SMSMClassifier(//
-				new SMSM.H_MSM_MoveSemanticParameters(moveSemantic, new SMSM.H_MSM_DimensionParameters[] {
-						new SMSM.H_MSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, Thresholds.MOVE_INNERPOINTS_DTW_DISTANCE, 1)
+				new SMSM.SMSM_MoveSemanticParameters(moveSemantic, new SMSM.SMSM_DimensionParameters[] {
+						new SMSM.SMSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, Thresholds.MOVE_INNERPOINTS_DTW_DISTANCE, 1)
 					}, 5.0/10.0),
-				new SMSM.H_MSM_StopSemanticParameters(stopSemantic, new SMSM.H_MSM_DimensionParameters[] {
-						new SMSM.H_MSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_SPATIAL, geoThreshold.intValue(), 5.0/10.0, true),
+				new SMSM.SMSM_StopSemanticParameters(stopSemantic, new SMSM.SMSM_DimensionParameters[] {
+						new SMSM.SMSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_SPATIAL, geoThreshold.intValue(), 5.0/10.0, true),
 //						new SMSM.H_MSM_DimensionParameters<>(SlackTemporalSemantic.SLACK_TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
-						new SMSM.H_MSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 5.0/10.0)
+						new SMSM.SMSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 5.0/10.0)
 					}, 5.0/10.0)
 				);
 	}
