@@ -16,7 +16,7 @@
 		"name": "MSM",
 		"params": [{
 			"type": "Stop",
-			"weight": 0.5,
+			"weight": 1,
 			"index" : 7,
 			"params": [{
 				"type": "spatial",
