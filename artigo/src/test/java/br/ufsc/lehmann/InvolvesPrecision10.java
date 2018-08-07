@@ -3,14 +3,14 @@ package br.ufsc.lehmann;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.gson.Gson;
@@ -76,17 +76,24 @@ public class InvolvesPrecision10 {
 			int rankingSize = maxRanking.getStartPosition() + maxRanking.getTrajs().size();
 			List<String> rankedPreviously = keyRanking.getRankedTrajectories().stream().map(t -> t.getUserId() + "/" + t.getDimensaoData()).collect(Collectors.toList());
 			List<String> rankingByMeasure = entries.stream().map(t -> (String) t.getTrajectoryId()).collect(Collectors.toList());
-			Collection<String> trajsToIgonre = CollectionUtils.removeAll(rankingByMeasure, rankedPreviously);
 			List<Boolean> isPreviouslyRanked = rankingByMeasure.stream().map(traj -> rankedPreviously.contains(traj)).collect(Collectors.toList());
+			
+			double[] naturalOrder = IntStream.range(0, rankedPreviously.size()).mapToDouble(i -> (double) i).toArray();
+			double[] measureOrder = IntStream.range(0, rankedPreviously.size()).mapToDouble(i -> (double) rankingByMeasure.indexOf(rankedPreviously.get(i))).toArray();
+			double spearmanCorrelation = new SpearmansCorrelation().correlation(naturalOrder, measureOrder);
+
 			double bprefs = bprefs(isPreviouslyRanked.toArray(new Boolean[isPreviouslyRanked.size()]), rankedPreviously.size(), rankingByMeasure.size() - rankedPreviously.size());
+
 			double ndcg = NDCG.compute(rankingByMeasure, rankedPreviously, null);
 			stats.computeIfAbsent("Bprefs", (t) -> new DescriptiveStatistics()).addValue(bprefs);
 			stats.computeIfAbsent("NDCG", (t) -> new DescriptiveStatistics()).addValue(ndcg);
-			System.out.printf("\tcolab = %d, dimensao_data = %d, NDCG = %.4f, bprefs = %.4f\n",
+			stats.computeIfAbsent("Spearman", (t) -> new DescriptiveStatistics()).addValue(spearmanCorrelation);
+			System.out.printf("\tcolab = %d, dimensao_data = %d, NDCG = %.4f, bprefs = %.4f, Spearman = %.4f\n",
 					keyUserId, 
 					keyDimensaoData,
 					ndcg,
-					bprefs);
+					bprefs,
+					spearmanCorrelation);
 			for (int i = 0; i < entries.size(); i++) {
 				SemanticTrajectory t = entries.get(i);
 				Integer tUserId = InvolvesDatabaseReader.USER_ID.getData(t, 0);
