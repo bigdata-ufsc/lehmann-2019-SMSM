@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -61,6 +62,7 @@ public class InvolvesPrecision10 {
 		}).collect(Collectors.toList());
 		int errorsCount = 0;
 		double meanRankingError = 0.0;
+		Map<String, DescriptiveStatistics> stats = new HashMap<>();
 		for (SemanticTrajectory key : keys) {
 			List<SemanticTrajectory> entries = mostSimilarTrajs.get(key);
 			Integer keyUserId = InvolvesDatabaseReader.USER_ID.getData(key, 0);
@@ -78,6 +80,8 @@ public class InvolvesPrecision10 {
 			List<Boolean> isPreviouslyRanked = rankingByMeasure.stream().map(traj -> rankedPreviously.contains(traj)).collect(Collectors.toList());
 			double bprefs = bprefs(isPreviouslyRanked.toArray(new Boolean[isPreviouslyRanked.size()]), rankedPreviously.size(), rankingByMeasure.size() - rankedPreviously.size());
 			double ndcg = NDCG.compute(rankingByMeasure, rankedPreviously, null);
+			stats.computeIfAbsent("Bprefs", (t) -> new DescriptiveStatistics()).addValue(bprefs);
+			stats.computeIfAbsent("NDCG", (t) -> new DescriptiveStatistics()).addValue(ndcg);
 			System.out.printf("\tcolab = %d, dimensao_data = %d, NDCG = %.4f, bprefs = %.4f\n",
 					keyUserId, 
 					keyDimensaoData,
@@ -120,6 +124,9 @@ public class InvolvesPrecision10 {
 					}
 				}
 			}
+		}
+		for (Map.Entry<String, DescriptiveStatistics> entry : stats.entrySet()) {
+			System.out.printf("'%s' - %s\n", entry.getKey(), entry.getValue().toString());
 		}
 		System.out.printf("Mislabeled trajectories: %d\n", errorsCount);
 		System.out.printf("Mean ranking error: %.4f\n", meanRankingError);
