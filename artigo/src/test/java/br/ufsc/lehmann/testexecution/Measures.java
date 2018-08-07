@@ -218,11 +218,9 @@ public class Measures {
 
 	private static TrajectorySimilarityCalculator<SemanticTrajectory> createMSM(Measure measure) {
 		List<Param> params = measure.getParams();
-		Double stopWeight = 0.0, moveWeight = 0.0;
 		List<MSMSemanticParameter> stopDimensions = new ArrayList<>();
 		for (Param param : params) {
 			if(param.getType().equalsIgnoreCase("stop")) {
-				stopWeight = param.getWeight();
 				List<Param> stopParams = param.getParams();
 				for (Param stopParam : stopParams) {
 					AttributeType attr = null;
