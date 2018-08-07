@@ -175,6 +175,16 @@ public class InvolvesRecoverTrajectoryStats {
 		public RankingPosition maxRanking() {
 			return positions.get(positions.keySet().stream().sorted(Collections.reverseOrder()).findFirst().get());
 		}
+
+		public List<TrajectoryStats> getRankedTrajectories() {
+			List<Integer> keyPositions = positions.keySet().stream().sorted().collect(Collectors.toList());
+			List<TrajectoryStats> ret = new ArrayList<>();
+			for (Integer pos : keyPositions) {
+				RankingPosition rankingPosition = positions.get(pos);
+				ret.addAll(rankingPosition.trajs);
+			}
+			return ret;
+		}
 		
 	}
 

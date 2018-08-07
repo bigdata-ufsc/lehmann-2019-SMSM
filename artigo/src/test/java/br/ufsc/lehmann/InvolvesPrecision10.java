@@ -3,11 +3,14 @@ package br.ufsc.lehmann;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.apache.commons.collections4.CollectionUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -17,6 +20,7 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.InvolvesRecoverTrajectoryStats.GroundtruthRanking;
 import br.ufsc.lehmann.InvolvesRecoverTrajectoryStats.RankingPosition;
+import br.ufsc.lehmann.metric.NDCG;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.InvolvesDatabaseReader;
@@ -68,6 +72,17 @@ public class InvolvesPrecision10 {
 			GroundtruthRanking keyRanking = ranking.get(keyUserId);
 			RankingPosition maxRanking = keyRanking.maxRanking();
 			int rankingSize = maxRanking.getStartPosition() + maxRanking.getTrajs().size();
+			List<String> rankedPreviously = keyRanking.getRankedTrajectories().stream().map(t -> t.getUserId() + "/" + t.getDimensaoData()).collect(Collectors.toList());
+			List<String> rankingByMeasure = entries.stream().map(t -> (String) t.getTrajectoryId()).collect(Collectors.toList());
+			Collection<String> trajsToIgonre = CollectionUtils.removeAll(rankingByMeasure, rankedPreviously);
+			List<Boolean> isPreviouslyRanked = rankingByMeasure.stream().map(traj -> rankedPreviously.contains(traj)).collect(Collectors.toList());
+			double bprefs = bprefs(isPreviouslyRanked.toArray(new Boolean[isPreviouslyRanked.size()]), rankedPreviously.size(), rankingByMeasure.size() - rankedPreviously.size());
+			double ndcg = NDCG.compute(rankingByMeasure, rankedPreviously, null);
+			System.out.printf("\tcolab = %d, dimensao_data = %d, NDCG = %.4f, bprefs = %.4f\n",
+					keyUserId, 
+					keyDimensaoData,
+					ndcg,
+					bprefs);
 			for (int i = 0; i < entries.size(); i++) {
 				SemanticTrajectory t = entries.get(i);
 				Integer tUserId = InvolvesDatabaseReader.USER_ID.getData(t, 0);
@@ -108,6 +123,22 @@ public class InvolvesPrecision10 {
 		}
 		System.out.printf("Mislabeled trajectories: %d\n", errorsCount);
 		System.out.printf("Mean ranking error: %.4f\n", meanRankingError);
+	}
+	
+	private static double bprefs(Boolean[] elements, int total_relevant, int total_non_relevant) {
+		double nonRelevantCounts = 0;
+		double ret = 0;
+		for (int i = 0; i < elements.length; i++) {
+			if(elements[i]) {
+	            ret += (1.0 - (1.0 * Math.min(nonRelevantCounts,total_relevant) / Math.min(total_relevant,total_non_relevant)));
+			} else {
+				nonRelevantCounts++;
+			}
+		}
+		if(total_relevant > 0) {
+			ret /= total_relevant;
+		}
+		return ret;
 	}
 
 	private static List<SemanticTrajectory> findMostSimilar(SemanticTrajectory traj, SemanticTrajectory[] allData, TrajectorySimilarityCalculator<SemanticTrajectory> similarityCalculator) {
