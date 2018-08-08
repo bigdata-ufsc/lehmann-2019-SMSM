@@ -25,10 +25,11 @@ import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.ProportionDistance;
 import br.ufsc.lehmann.SMSM;
 import br.ufsc.lehmann.SMSM.SMSM_DimensionParameters;
-import br.ufsc.lehmann.SMSMExtended;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMExtendedClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.SMSMExtendedPartialClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.SMSMPartialClassifier;
 import br.ufsc.utils.EuclideanDistanceFunction;
 import br.ufsc.utils.LatLongDistanceFunction;
 
@@ -43,6 +44,9 @@ public class Measures {
 		}
 		if(measure.getName().equalsIgnoreCase("SMSMPartial")) {
 			return createSMSM(measure, false, true);
+		}
+		if(measure.getName().equalsIgnoreCase("SMSMExtendedPartial")) {
+			return createSMSM(measure, true, true);
 		}
 		if(measure.getName().equalsIgnoreCase("MSM")) {
 			return createMSM(measure);
@@ -212,10 +216,13 @@ public class Measures {
 			}
 		}
 		if(extended && partial) {
-			throw new RuntimeException("Not implemented yet");
+			return new SMSMExtendedPartialClassifier(//
+					new SMSM.SMSM_MoveSemanticParameters(move, moveDimensions.toArray(new SMSM.SMSM_DimensionParameters[moveDimensions.size()]), moveWeight),
+					new SMSM.SMSM_StopSemanticParameters(stop, stopDimensions.toArray(new SMSM.SMSM_DimensionParameters[stopDimensions.size()]), stopWeight)
+					);
 		}
 		if(partial) {
-			return new SMSMExtendedClassifier(//
+			return new SMSMPartialClassifier(//
 					new SMSM.SMSM_MoveSemanticParameters(move, moveDimensions.toArray(new SMSM.SMSM_DimensionParameters[moveDimensions.size()]), moveWeight),
 					new SMSM.SMSM_StopSemanticParameters(stop, stopDimensions.toArray(new SMSM.SMSM_DimensionParameters[stopDimensions.size()]), stopWeight)
 					);
