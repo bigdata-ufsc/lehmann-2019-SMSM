@@ -242,16 +242,23 @@ public class InvolvesDatabaseReader implements IDataReader {
 			SemanticTrajectory s = new SemanticTrajectory(trajId, 11);
 			Collection<InvolvesRecord> collection = records.get(trajId);
 			int i = 0;
+			Move currentMove = null;
 			for (InvolvesRecord record : collection) {
 				if(record.getSemanticStopId() == null && record.getSemanticMoveId() == null) {
 					continue;
 				}
 				TPoint point = new TPoint(record.getLat(), record.getLon());
 				if(record.getSemanticStopId() != null) {
-					Stop stop = stops.remove(record.getSemanticStopId());
-					if(stop == null) {
-						continue;
+					if(currentMove != null) {
+						if(currentMove.getEnd() != null) {
+							TPoint[] points = (TPoint[]) currentMove.getAttribute(AttributeType.MOVE_POINTS);
+							List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
+							a.add(currentMove.getEnd().getStartPoint());
+							currentMove.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+						}
+						currentMove = null;
 					}
+					Stop stop = stops.get(record.getSemanticStopId());
 					stop.addPoint(point);
 					if(i > 0) {
 						if(STOP_CENTROID_SEMANTIC.getData(s, i - 1) == stop) {
@@ -284,6 +291,7 @@ public class InvolvesDatabaseReader implements IDataReader {
 					}
 					if(!usedMoves.contains(move)) {
 						usedMoves.add(move);
+						currentMove = move;
 					}
 					if(move.getStart() != null) {
 						move.getStart().setNextMove(move);
@@ -292,7 +300,9 @@ public class InvolvesDatabaseReader implements IDataReader {
 						move.getEnd().setPreviousMove(move);
 					}
 					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
-					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
+					List<TPoint> a = new ArrayList<TPoint>(points == null ? 
+								(move.getStart() == null ? Collections.emptyList(): Arrays.asList(move.getStart().getEndPoint())) : 
+								Arrays.asList(points));
 					a.add(point);
 					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
 					move.setAttribute(AttributeType.TRAJECTORY, s);
