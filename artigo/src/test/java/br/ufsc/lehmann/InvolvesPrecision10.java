@@ -35,7 +35,7 @@ import br.ufsc.lehmann.testexecution.Measures;
 public class InvolvesPrecision10 {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, FileNotFoundException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/SMSMPartial_precision.test"), ExecutionPOJO.class);
+		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/SMSMPartial_precision_onlystops.test"), ExecutionPOJO.class);
 		Dataset dataset = execution.getDataset();
 		Measure measure = execution.getMeasure();
 		Groundtruth groundtruth = execution.getGroundtruth();
@@ -49,7 +49,8 @@ public class InvolvesPrecision10 {
 		List<SemanticTrajectory> bestTrajectories = recoveryStats.recoverBestTrajectories(allData);
 		Map<Integer, GroundtruthRanking> ranking = recoveryStats.getRanking();
 		Map<SemanticTrajectory, List<SemanticTrajectory>> mostSimilarTrajs = 
-				bestTrajectories.stream()//
+				bestTrajectories.stream()
+					.parallel()//
 					.map((traj) -> new Object[] {traj, findMostSimilar(traj, allData, similarityCalculator)})//
 					.collect(Collectors.toMap((value) -> (SemanticTrajectory) value[0], value -> (List<SemanticTrajectory>) value[1]));
 		
@@ -78,6 +79,9 @@ public class InvolvesPrecision10 {
 			List<String> rankingByMeasure = entries.stream().map(t -> (String) t.getTrajectoryId()).collect(Collectors.toList());
 			List<Boolean> isPreviouslyRanked = rankingByMeasure.stream().map(traj -> rankedPreviously.contains(traj)).collect(Collectors.toList());
 			
+			if(rankedPreviously.size() <= 1) {
+				continue;
+			}
 			double[] naturalOrder = IntStream.range(0, rankedPreviously.size()).mapToDouble(i -> (double) i).toArray();
 			double[] measureOrder = IntStream.range(0, rankedPreviously.size()).mapToDouble(i -> (double) rankingByMeasure.indexOf(rankedPreviously.get(i))).toArray();
 			double spearmanCorrelation = new SpearmansCorrelation().correlation(naturalOrder, measureOrder);
@@ -98,10 +102,10 @@ public class InvolvesPrecision10 {
 				SemanticTrajectory t = entries.get(i);
 				Integer tUserId = InvolvesDatabaseReader.USER_ID.getData(t, 0);
 				Integer tDimensaoData = InvolvesDatabaseReader.DIMENSAO_DATA.getData(t, 0);
-				System.out.printf("\tcolab = %d, dimensao_data = %d, distancia = %.4f\n",
-						tUserId, 
-						tDimensaoData,
-						1 - similarityCalculator.getSimilarity(key, t));
+//				System.out.printf("\tcolab = %d, dimensao_data = %d, distancia = %.4f\n",
+//						tUserId, 
+//						tDimensaoData,
+//						1 - similarityCalculator.getSimilarity(key, t));
 				
 				if(keyRanking.hasTrajectorynRanking(tUserId, tDimensaoData)) {
 					RankingPosition trajectorynRanking = keyRanking.getTrajectorynRanking(tUserId, tDimensaoData);
@@ -136,7 +140,7 @@ public class InvolvesPrecision10 {
 			System.out.printf("'%s' - %s\n", entry.getKey(), entry.getValue().toString());
 		}
 		System.out.printf("Mislabeled trajectories: %d\n", errorsCount);
-		System.out.printf("Mean ranking error: %.4f\n", meanRankingError);
+		System.out.printf("Mean ranking error: %.4f\n", meanRankingError / errorsCount);
 	}
 	
 	private static double bprefs(Boolean[] elements, int total_relevant, int total_non_relevant) {
