@@ -41,6 +41,9 @@ public class Measures {
 		if(measure.getName().equalsIgnoreCase("SMSMExtended")) {
 			return createSMSM(measure, true);
 		}
+		if(measure.getName().equalsIgnoreCase("SMSMPartial")) {
+			return createSMSM(measure, false, true);
+		}
 		if(measure.getName().equalsIgnoreCase("MSM")) {
 			return createMSM(measure);
 		}
@@ -52,6 +55,10 @@ public class Measures {
 	}
 
 	private static TrajectorySimilarityCalculator<SemanticTrajectory> createSMSM(Measure measure, boolean extended) {
+		return createSMSM(measure, extended, false);
+	}
+
+	private static TrajectorySimilarityCalculator<SemanticTrajectory> createSMSM(Measure measure, boolean extended, boolean partial) {
 		List<Param> params = measure.getParams();
 		Double stopWeight = 0.0, moveWeight = 0.0;
 		StopSemantic stop = null;
@@ -203,6 +210,15 @@ public class Measures {
 					moveDimensions.add(dimension);
 				}
 			}
+		}
+		if(extended && partial) {
+			throw new RuntimeException("Not implemented yet");
+		}
+		if(partial) {
+			return new SMSMExtendedClassifier(//
+					new SMSM.SMSM_MoveSemanticParameters(move, moveDimensions.toArray(new SMSM.SMSM_DimensionParameters[moveDimensions.size()]), moveWeight),
+					new SMSM.SMSM_StopSemanticParameters(stop, stopDimensions.toArray(new SMSM.SMSM_DimensionParameters[stopDimensions.size()]), stopWeight)
+					);
 		}
 		if(extended) {
 			return new SMSMExtendedClassifier(//
