@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -35,7 +36,7 @@ import br.ufsc.lehmann.testexecution.Measures;
 public class InvolvesPrecision10 {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, FileNotFoundException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/SMSMPartial_precision_onlystops.test"), ExecutionPOJO.class);
+		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/SMSMart_precision.test"), ExecutionPOJO.class);
 		Dataset dataset = execution.getDataset();
 		Measure measure = execution.getMeasure();
 		Groundtruth groundtruth = execution.getGroundtruth();
@@ -165,9 +166,11 @@ public class InvolvesPrecision10 {
 			double similarity = similarityCalculator.getSimilarity(traj, trajectory);
 			ret.put(trajectory, 1 - similarity);
 		}
+		Comparator<Entry<SemanticTrajectory, Double>> comparing = Comparator.comparing(Map.Entry::getValue);
+		comparing = comparing.thenComparing(Map.Entry::getKey);
 		return ret.entrySet()//
 				.stream()//
-				.sorted(Comparator.comparing(Map.Entry::getValue))//
+				.sorted(comparing)//
 				.map((entry) -> entry.getKey())//
 				.collect(Collectors.toList());
 	}
