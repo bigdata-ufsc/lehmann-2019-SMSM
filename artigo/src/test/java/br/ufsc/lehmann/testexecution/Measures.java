@@ -30,6 +30,7 @@ import br.ufsc.lehmann.msm.artigo.classifiers.SMSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMExtendedClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMExtendedPartialClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMPartialClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.SMSMartClassifier;
 import br.ufsc.utils.EuclideanDistanceFunction;
 import br.ufsc.utils.LatLongDistanceFunction;
 
@@ -41,6 +42,9 @@ public class Measures {
 		}
 		if(measure.getName().equalsIgnoreCase("SMSMExtended")) {
 			return createSMSM(measure, true);
+		}
+		if(measure.getName().equalsIgnoreCase("SMSMart")) {
+			return createSMSM(measure, true, false, true);
 		}
 		if(measure.getName().equalsIgnoreCase("SMSMPartial")) {
 			return createSMSM(measure, false, true);
@@ -61,8 +65,13 @@ public class Measures {
 	private static TrajectorySimilarityCalculator<SemanticTrajectory> createSMSM(Measure measure, boolean extended) {
 		return createSMSM(measure, extended, false);
 	}
-
+	
 	private static TrajectorySimilarityCalculator<SemanticTrajectory> createSMSM(Measure measure, boolean extended, boolean partial) {
+		return createSMSM(measure, extended, partial, false);
+		
+	}
+
+	private static TrajectorySimilarityCalculator<SemanticTrajectory> createSMSM(Measure measure, boolean extended, boolean partial, boolean smart) {
 		List<Param> params = measure.getParams();
 		Double stopWeight = 0.0, moveWeight = 0.0;
 		StopSemantic stop = null;
@@ -214,6 +223,13 @@ public class Measures {
 					moveDimensions.add(dimension);
 				}
 			}
+		}
+
+		if(extended && smart) {
+			return new SMSMartClassifier(//
+					new SMSM.SMSM_MoveSemanticParameters(move, moveDimensions.toArray(new SMSM.SMSM_DimensionParameters[moveDimensions.size()]), moveWeight),
+					new SMSM.SMSM_StopSemanticParameters(stop, stopDimensions.toArray(new SMSM.SMSM_DimensionParameters[stopDimensions.size()]), stopWeight)
+					);
 		}
 		if(extended && partial) {
 			return new SMSMExtendedPartialClassifier(//

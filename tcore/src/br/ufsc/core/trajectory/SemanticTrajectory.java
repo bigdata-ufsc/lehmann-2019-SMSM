@@ -3,7 +3,7 @@ package br.ufsc.core.trajectory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SemanticTrajectory {
+public class SemanticTrajectory implements Comparable<SemanticTrajectory> {
 
 	private List<SemanticElement> elements = new ArrayList<>();
 	private Object trajectoryId;
@@ -94,5 +94,10 @@ public class SemanticTrajectory {
 		} else if (!trajectoryId.equals(other.trajectoryId))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(SemanticTrajectory o) {
+		return String.valueOf(getTrajectoryId()).compareTo(String.valueOf(o.getTrajectoryId()));
 	}
 }
