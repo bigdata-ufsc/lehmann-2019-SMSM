@@ -1,0 +1,34 @@
+{
+	"dataset": {
+		"name" : "involves",
+		"raw": 'false',
+		"params": {
+			"weekly": 'false',
+			"pointsTableSuffix" : "_com_auditoria", 
+			"stopMoveTableSuffix" : "_com_auditoria_100mts_30_mins"
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 9
+	},
+	"measure": {
+		"name": "LCSS",
+		"params": [{
+			"type": "spatial",
+			"distance": "euclidean",
+			"threshold": "200",
+			"index" : 0,
+			"weight": 0.5
+		}, {
+			"type": "Semantic",
+			"index" : 7,
+			"weight": 0.5,
+			"params" : [{
+				"distance": "Proportion",
+				"threshold": "0.5",
+				"type" : "duration"
+			}]
+		}]
+	}
+}

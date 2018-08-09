@@ -16,6 +16,7 @@ import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
+import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 import br.ufsc.lehmann.AngleDistance;
 import br.ufsc.lehmann.DTWDistance;
@@ -25,6 +26,7 @@ import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.ProportionDistance;
 import br.ufsc.lehmann.SMSM;
 import br.ufsc.lehmann.SMSM.SMSM_DimensionParameters;
+import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMExtendedClassifier;
@@ -52,6 +54,9 @@ public class Measures {
 		if(measure.getName().equalsIgnoreCase("SMSMExtendedPartial")) {
 			return createSMSM(measure, true, true);
 		}
+		if(measure.getName().equalsIgnoreCase("LCSS")) {
+			return createLCSS(measure);
+		}
 		if(measure.getName().equalsIgnoreCase("MSM")) {
 			return createMSM(measure);
 		}
@@ -68,7 +73,6 @@ public class Measures {
 	
 	private static TrajectorySimilarityCalculator<SemanticTrajectory> createSMSM(Measure measure, boolean extended, boolean partial) {
 		return createSMSM(measure, extended, partial, false);
-		
 	}
 
 	private static TrajectorySimilarityCalculator<SemanticTrajectory> createSMSM(Measure measure, boolean extended, boolean partial, boolean smart) {
@@ -317,6 +321,74 @@ public class Measures {
 		}
 		return new MSMClassifier(//
 				stopDimensions.toArray(new MSMSemanticParameter[stopDimensions.size()])
+				);
+	}
+
+	private static TrajectorySimilarityCalculator<SemanticTrajectory> createLCSS(Measure measure) {
+		List<Param> params = measure.getParams();
+		List<LCSSSemanticParameter> stopDimensions = new ArrayList<>();
+		for (Param param : params) {
+				AttributeType attr = null;
+				String d = param.getDistance();
+				double threshold = Double.parseDouble(Strings.isNullOrEmpty(param.getThreshold()) ? "0.0" : param.getThreshold());
+				double weight = param.getWeight().doubleValue();
+				
+				IDistanceFunction distance = null;
+				if(!Strings.isNullOrEmpty(d)) {
+					distance = createDistance(param, d);
+				}
+					
+				String type = param.getType().toUpperCase();
+				Long index = param.getIndex();
+				Semantic semantic = null;
+				switch(type) {
+					case "SPATIAL":
+						attr = AttributeType.STOP_SPATIAL;
+						switch(param.getDistance().toUpperCase()) {
+						case "LATLON":
+							semantic = Semantic.SPATIAL_LATLON;
+							break;
+						case "EUCLIDEAN":
+							semantic = Semantic.SPATIAL_EUCLIDEAN;
+							break;
+						}
+						break;
+					case "TEMPORAL":
+						attr = AttributeType.STOP_TEMPORAL;
+						semantic = Semantic.TEMPORAL;
+						break;
+					case "SEMANTIC":
+						List<Param> semanticParams = param.getParams();
+						Param semParam = semanticParams.get(0);
+						String semType = semParam.getType().toUpperCase();
+						switch(semType) {
+							case "NAME":
+								attr = AttributeType.STOP_NAME;
+								break;
+							case "REGION":
+								attr = AttributeType.STOP_REGION;
+								break;
+							case "CENTROID":
+								attr = AttributeType.STOP_CENTROID;
+								break;
+							case "DURATION":
+								attr = AttributeType.STOP_DURATION;
+								break;
+							default:
+								attr = AttributeType.STOP;
+						}
+						String semDistance = semParam.getDistance().toUpperCase();
+						distance = createDistance(semParam, semDistance);
+						AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
+						semantic = new StopSemantic(index.intValue(), desc);
+						threshold = Double.parseDouble(Strings.isNullOrEmpty(semParam.getThreshold()) ? "0.0" : semParam.getThreshold());
+						break;
+					}
+				LCSSSemanticParameter dimension = new LCSSSemanticParameter(semantic, threshold);
+				stopDimensions.add(dimension);
+		}
+		return new LCSSClassifier(//
+				stopDimensions.toArray(new LCSSSemanticParameter[stopDimensions.size()])
 				);
 	}
 
