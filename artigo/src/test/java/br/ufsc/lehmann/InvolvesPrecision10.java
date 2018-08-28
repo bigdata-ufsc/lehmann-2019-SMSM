@@ -1,8 +1,11 @@
 package br.ufsc.lehmann;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -14,8 +17,6 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import javax.management.RuntimeErrorException;
 
 import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -44,15 +45,19 @@ public class InvolvesPrecision10 {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
 		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/involves"));
+		final PrintStream bkp = System.out;
 		files.filter(path -> path.toFile().isFile()).forEach(path -> {
 			try {
 				String fileName = path.toString();
 				ExecutionPOJO execution = new Gson().fromJson(new FileReader(fileName), ExecutionPOJO.class);
 				System.out.printf("Executing file %s\n", fileName);
 			
+				System.setOut(new PrintStream(new FileOutputStream(new File(path.toFile().getParentFile(), path.getFileName().toString() + ".out"))));
 				computeRankingSimilarity(execution);
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException | JsonSyntaxException | JsonIOException | FileNotFoundException e) {
 				throw new RuntimeException(e);
+			} finally {
+				System.setOut(bkp);
 			}
 		});
 		files.close();
