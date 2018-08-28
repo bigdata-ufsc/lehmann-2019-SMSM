@@ -2,7 +2,10 @@ package br.ufsc.lehmann;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +13,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import javax.management.RuntimeErrorException;
 
 import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -18,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
+import br.ufsc.core.ITrainable;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.InvolvesRecoverTrajectoryStats.GroundtruthRanking;
@@ -35,8 +42,23 @@ import br.ufsc.lehmann.testexecution.Measures;
 
 public class InvolvesPrecision10 {
 
-	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, FileNotFoundException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		ExecutionPOJO execution = new Gson().fromJson(new FileReader("./src/test/resources/executions/SMSMart_precision.test"), ExecutionPOJO.class);
+	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/involves"));
+		files.filter(path -> path.toFile().isFile()).forEach(path -> {
+			try {
+				String fileName = path.toString();
+				ExecutionPOJO execution = new Gson().fromJson(new FileReader(fileName), ExecutionPOJO.class);
+				System.out.printf("Executing file %s\n", fileName);
+			
+				computeRankingSimilarity(execution);
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException | JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+		});
+		files.close();
+	}
+
+	private static void computeRankingSimilarity(ExecutionPOJO execution) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		Dataset dataset = execution.getDataset();
 		Measure measure = execution.getMeasure();
 		Groundtruth groundtruth = execution.getGroundtruth();
@@ -45,6 +67,10 @@ public class InvolvesPrecision10 {
 		List<SemanticTrajectory> data = dataReader.read();
 		BasicSemantic<Object> groundtruthSemantic = new BasicSemantic<>(groundtruth.getIndex().intValue());
 		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
+		
+		if(similarityCalculator instanceof ITrainable) {
+			((ITrainable) similarityCalculator).train(Arrays.asList(allData));
+		}
 		
 		InvolvesRecoverTrajectoryStats recoveryStats = new InvolvesRecoverTrajectoryStats();
 		List<SemanticTrajectory> bestTrajectories = recoveryStats.recoverBestTrajectories(allData);
@@ -72,7 +98,7 @@ public class InvolvesPrecision10 {
 			String msg = String.format("colab = %d, dimensao_data = %d: ", 
 					keyUserId, 
 					keyDimensaoData);
-			System.out.println(msg);
+//			System.out.println(msg);
 			GroundtruthRanking keyRanking = ranking.get(keyUserId);
 			RankingPosition maxRanking = keyRanking.maxRanking();
 			int rankingSize = maxRanking.getStartPosition() + maxRanking.getTrajs().size();
@@ -93,12 +119,12 @@ public class InvolvesPrecision10 {
 			stats.computeIfAbsent("Bprefs", (t) -> new DescriptiveStatistics()).addValue(bprefs);
 			stats.computeIfAbsent("NDCG", (t) -> new DescriptiveStatistics()).addValue(ndcg);
 			stats.computeIfAbsent("Spearman", (t) -> new DescriptiveStatistics()).addValue(spearmanCorrelation);
-			System.out.printf("\tcolab = %d, dimensao_data = %d, NDCG = %.4f, bprefs = %.4f, Spearman = %.4f\n",
-					keyUserId, 
-					keyDimensaoData,
-					ndcg,
-					bprefs,
-					spearmanCorrelation);
+//			System.out.printf("\tcolab = %d, dimensao_data = %d, NDCG = %.4f, bprefs = %.4f, Spearman = %.4f\n",
+//					keyUserId, 
+//					keyDimensaoData,
+//					ndcg,
+//					bprefs,
+//					spearmanCorrelation);
 			for (int i = 0; i < entries.size(); i++) {
 				SemanticTrajectory t = entries.get(i);
 				Integer tUserId = InvolvesDatabaseReader.USER_ID.getData(t, 0);
@@ -118,10 +144,10 @@ public class InvolvesPrecision10 {
 						endPosition = (endPosition == null ? startPosition + trajectorynRanking.getTrajs().size() : endPosition);
 						meanRankingError += Math.abs((startPosition + (endPosition.doubleValue() - startPosition) / 2) - (i + 1));
 						
-						System.out.printf("\tcolab = %d, dimensao_data = %d, distancia = %.4f - Out of ranking\n",
-								tUserId, 
-								tDimensaoData,
-								1 - similarityCalculator.getSimilarity(key, t));
+//						System.out.printf("\tcolab = %d, dimensao_data = %d, distancia = %.4f - Out of ranking\n",
+//								tUserId, 
+//								tDimensaoData,
+//								1 - similarityCalculator.getSimilarity(key, t));
 					}
 				} else {
 					if(rankingSize > i + 1) {
@@ -129,10 +155,10 @@ public class InvolvesPrecision10 {
 						
 						meanRankingError += Math.abs((rankingSize + Math.abs(rankingSize - entries.size()) / 2) - (i + 1));
 						
-						System.out.printf("\tcolab = %d, dimensao_data = %d, distancia = %.4f - Beyond ranking\n",
-								tUserId, 
-								tDimensaoData,
-								1 - similarityCalculator.getSimilarity(key, t));
+//						System.out.printf("\tcolab = %d, dimensao_data = %d, distancia = %.4f - Beyond ranking\n",
+//								tUserId, 
+//								tDimensaoData,
+//								1 - similarityCalculator.getSimilarity(key, t));
 					}
 				}
 			}

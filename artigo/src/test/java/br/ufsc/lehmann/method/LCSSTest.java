@@ -42,10 +42,10 @@ public interface LCSSTest {
 					new LCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL, 0.5),
 					new LCSSSemanticParameter<Number, Number>(NElementProblem.dataSemantic, null)
 					);
-		} else if(problem instanceof NewYorkBusProblem) {
-			stopSemantic = ((NewYorkBusProblem) problem).stopSemantic();
-		} else if(problem instanceof DublinBusProblem) {
-			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
+//		} else if(problem instanceof NewYorkBusProblem) {
+//			stopSemantic = ((NewYorkBusProblem) problem).stopSemantic();
+//		} else if(problem instanceof DublinBusProblem) {
+//			stopSemantic = ((DublinBusProblem) problem).stopSemantic();
 		} else if(problem instanceof GeolifeProblem) {
 			GeolifeProblem geolifeProblem = (GeolifeProblem) problem;
 			if(geolifeProblem.isRawTrajectory()) {
@@ -59,14 +59,14 @@ public interface LCSSTest {
 			}
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
-		} else if(problem instanceof PatelProblem) {
-			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
-			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
-			stopSemantic = ((PatelProblem) problem).stopSemantic();
-		} else if(problem instanceof VehicleProblem) {
-			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
-			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
-			stopSemantic = ((VehicleProblem) problem).stopSemantic();
+//		} else if(problem instanceof PatelProblem) {
+//			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
+//			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+//			stopSemantic = ((PatelProblem) problem).stopSemantic();
+//		} else if(problem instanceof VehicleProblem) {
+//			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
+//			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+//			stopSemantic = ((VehicleProblem) problem).stopSemantic();
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			SanFranciscoCabProblem sanFranciscoCabProblem = (SanFranciscoCabProblem) problem;
 			if(sanFranciscoCabProblem.isRawTrajectory()) {
@@ -77,18 +77,18 @@ public interface LCSSTest {
 				timeThreshold = Thresholds.SLACK_TEMPORAL;
 			}
 			stopSemantic = sanFranciscoCabProblem.stopSemantic();
-		} else if(problem instanceof SergipeTracksProblem) {
-			stopSemantic = SergipeTracksDataReader.STOP_CENTROID_SEMANTIC;
-		} else if(problem instanceof PrototypeProblem) {
-			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
-			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
-			stopSemantic = PrototypeDataReader.STOP_SEMANTIC;
-		} else if(problem instanceof PisaProblem) {
-			stopSemantic = ((PisaProblem) problem).stopSemantic();
-		} else if(problem instanceof HermoupolisProblem) {
-			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
-			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
-			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
+//		} else if(problem instanceof SergipeTracksProblem) {
+//			stopSemantic = SergipeTracksDataReader.STOP_CENTROID_SEMANTIC;
+//		} else if(problem instanceof PrototypeProblem) {
+//			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
+//			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+//			stopSemantic = PrototypeDataReader.STOP_SEMANTIC;
+//		} else if(problem instanceof PisaProblem) {
+//			stopSemantic = ((PisaProblem) problem).stopSemantic();
+//		} else if(problem instanceof HermoupolisProblem) {
+//			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
+//			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
+//			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
 		}
 		return new LCSSClassifier(//
 				new LCSSSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//

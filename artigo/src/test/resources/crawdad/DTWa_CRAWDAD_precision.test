@@ -1,0 +1,37 @@
+{
+	"dataset": {
+		"name" : "CRAWDAD",
+		"raw": 'false',
+		"params": {
+			"roads" : '["101", "280"]',
+			"directions" : '["mall to airport", "airport to mall"]',
+			"regions" : '["mall", "intersection_101_280", "bayshore_fwy", "airport"]'
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 12
+	},
+	"measure": {
+		"name": "DTWa",
+		"params": [{
+			"type": "discriminator",
+			"index" : 12
+		}, {
+			"type": "Semantic",
+			"index" : 7,
+			"params" : [{
+				"distance": "equal",
+				"type" : "Region"
+			}]
+		}, {
+			"type": "temporal",
+			"distance": "proportion",
+			"index" : 2
+		}, {
+			"type": "spatial",
+			"distance": "euclidean",
+			"index" : 1
+		}]
+	}
+}

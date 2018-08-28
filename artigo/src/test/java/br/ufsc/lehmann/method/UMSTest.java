@@ -18,5 +18,6 @@ public interface UMSTest {
 		} else if(problem instanceof InvolvesProblem) {
 			return new UMS();
 		}
-		return null;}
+		return null;
+	}
 }

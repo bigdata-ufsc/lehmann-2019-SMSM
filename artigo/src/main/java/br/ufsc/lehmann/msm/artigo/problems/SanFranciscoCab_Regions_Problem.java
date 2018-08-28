@@ -75,11 +75,7 @@ public class SanFranciscoCab_Regions_Problem extends SanFranciscoCabProblem {
 //						).contains(t.getTrajectoryId()))//
 //				.sorted((o1, o2) -> ((Comparable) o1.getTrajectoryId()).compareTo(o2.getTrajectoryId()))//
 //				.collect(Collectors.toList());
-		try {
-			return new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop, roads, directions, regions).read());
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-			throw new RuntimeException(e);
-		}
+		return new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop, roads, directions, regions).read());
 	}
 
 }

@@ -6,16 +6,17 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
+import br.ufsc.lehmann.ComputableDouble;
 /**
  * 
  * @author Andre Salvaro Furtado
  *
  */
 public class wDF extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
-    private int w;
+    private Number w;
 	private SpatialDistanceFunction distanceFunction;
     
-    public wDF(int w, SpatialDistanceFunction distanceFunction) {
+    public wDF(Number w, SpatialDistanceFunction distanceFunction) {
 		this.w = w;
 		this.distanceFunction = distanceFunction;
     }
@@ -32,10 +33,14 @@ public class wDF extends TrajectorySimilarityCalculator<SemanticTrajectory> impl
                 DF[i][j]=-1.0;
             }
         }
-        return computeWDF(R, S, DF, n-1, m-1);
+        int window = w.intValue();
+        if(w instanceof ComputableDouble) {
+        	window = ((ComputableDouble) w).compute(R, S).intValue();
+        }
+        return computeWDF(R, S, DF, n-1, m-1, window);
     }
 
-    private double computeWDF(SemanticTrajectory R, SemanticTrajectory S, double DF[][], int i, int j) {
+    private double computeWDF(SemanticTrajectory R, SemanticTrajectory S, double DF[][], int i, int j, int w) {
         if (DF[i][j] > -1.0) {
             return DF[i][j];
         } else if (Math.abs(i - j) > w) {
@@ -44,16 +49,16 @@ public class wDF extends TrajectorySimilarityCalculator<SemanticTrajectory> impl
         	TPoint p1 = Semantic.SPATIAL.getData(R, i);
         	TPoint p2 = Semantic.SPATIAL.getData(S, j);
         	DF[i][j] = Math.max(
-        			Math.min(computeWDF(R, S, DF, i - 1, j), Math.min(computeWDF(R, S, DF, i - 1, j - 1), computeWDF(R, S, DF, i, j - 1))),
+        			Math.min(computeWDF(R, S, DF, i - 1, j, w), Math.min(computeWDF(R, S, DF, i - 1, j - 1, w), computeWDF(R, S, DF, i, j - 1, w))),
         			distanceFunction.distance(p1, p2));
         } else if (i > 0 && j == 0) {
         	TPoint p1 = Semantic.SPATIAL.getData(R, i);
         	TPoint p2 = Semantic.SPATIAL.getData(S, 0);
-            DF[i][j] = Math.max(computeWDF(R, S, DF, i - 1, 0), distanceFunction.distance(p1, p2));
+            DF[i][j] = Math.max(computeWDF(R, S, DF, i - 1, 0, w), distanceFunction.distance(p1, p2));
         } else if (i == 0 && j > 0) {
         	TPoint p1 = Semantic.SPATIAL.getData(R, 0);
         	TPoint p2 = Semantic.SPATIAL.getData(S, j);
-            DF[i][j] = Math.max(computeWDF(R, S, DF, 0, j - 1), distanceFunction.distance(p1, p2));
+            DF[i][j] = Math.max(computeWDF(R, S, DF, 0, j - 1, w), distanceFunction.distance(p1, p2));
         } else if (i == 0 && j == 0) {
         	TPoint p1 = Semantic.SPATIAL.getData(R, 0);
         	TPoint p2 = Semantic.SPATIAL.getData(S, 0);

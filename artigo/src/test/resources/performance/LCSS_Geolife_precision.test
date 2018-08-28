@@ -1,0 +1,44 @@
+{
+	"dataset": {
+		"name" : "geolife_university",
+		"raw": 'false',
+		"params": {
+			"pointsTable" : "geolife.geolife_inside_university_5_pois",
+			"stopTable" : "stops_moves.geolife_inside_university_stop_5_pois",
+			"moveTable" : "stops_moves.geolife_inside_university_move_5_pois"
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 10
+	},
+	"measure": {
+		"name": "LCSS",
+		"params": [
+		{
+			"type": "Semantic",
+			"index" : 8,
+			"params" : [{
+				"distance": "equal",
+				"type" : "Region"
+			}]
+		}
+		, 
+		/*{
+			"type": "temporal",
+			"distance": "slack-proportion",
+			"threshold": "0.1",
+			"params" : [{
+				"threshold": 2
+			}],
+			"index" : 2
+		},*/
+		{
+			"type": "spatial",
+			"distance": "euclidean",
+			"threshold": "200",
+			"index" : 1
+		}
+		]
+	}
+}

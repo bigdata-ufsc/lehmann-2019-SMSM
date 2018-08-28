@@ -46,7 +46,7 @@ import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
 import br.ufsc.utils.EuclideanDistanceFunction;
 
-public class GeolifeUniversityDatabaseReader {
+public class GeolifeUniversityDatabaseReader implements IDataReader {
 	
 	private static final int SAMPLING_RATE = 1;
 	
@@ -72,8 +72,18 @@ public class GeolifeUniversityDatabaseReader {
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 
+	public static final BasicSemantic<String> PATH_WITH_DIRECTION = new BasicSemantic<String>(SEMANTICS_COUNTER++) {
+		@Override
+		public String getData(SemanticTrajectory p, int i) {
+			return DIRECTION.getData(p, i) + "/" + PATH.getData(p, i);
+		}
+	};
+	
 	private boolean onlyStops;
-	private boolean withTransportation;
+
+	private String pointsTable;
+	private String moveTable;
+	private String stopTable;
 
 	public GeolifeUniversityDatabaseReader(boolean onlyStops) {
 		this(onlyStops, false);
@@ -81,101 +91,102 @@ public class GeolifeUniversityDatabaseReader {
 
 	public GeolifeUniversityDatabaseReader(boolean onlyStops, boolean withTransportation) {
 		this.onlyStops = onlyStops;
-		this.withTransportation = withTransportation;
+		stopTable = "stops_moves.geolife_inside_university_stop_5_pois";
+		moveTable = "stops_moves.geolife_inside_university_move_5_pois";
+		pointsTable = "geolife.geolife_inside_university_5_pois";
 	}
 
-	public List<SemanticTrajectory> read() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.geolife_with_pois_university_stop", null, null);
-		DataRetriever retriever = source.getRetriever();
-		System.out.println("Executing SQL...");
-		Connection conn = retriever.getConnection();
-		List<SemanticTrajectory> ret = null;
-		try {
-			conn.setAutoCommit(false);
-			Statement st = conn.createStatement();
-			st.setFetchSize(1000);
+	public GeolifeUniversityDatabaseReader(boolean onlyStops, String stopTable, String moveTable, String pointsTable) {
+		this.onlyStops = onlyStops;
+		this.stopTable = stopTable;
+		this.moveTable = moveTable;
+		this.pointsTable = pointsTable;
+	}
 
-			String stopTable = this.withTransportation ? "stops_moves.geolife_enriched_stop"
-					: "stops_moves.geolife2_limited_stop";
-			String moveTable = this.withTransportation ? "stops_moves.geolife_enriched_move"
-					: "stops_moves.geolife2_limited_move";
-			//
-			stopTable = "stops_moves.geolife_inside_university_stop_5_pois";
-			moveTable = "stops_moves.geolife_inside_university_move_5_pois";
-			//
-			ResultSet stopsData = st.executeQuery(
-					"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
-							"centroid_lon, start_time, end_time, street, \"POI\" " + //
-							"FROM " + stopTable);
-			Map<Integer, Stop> stops = new HashMap<>();
-			while (stopsData.next()) {
-				int stopId = stopsData.getInt("stop_id");
-				Stop stop = stops.get(stopId);
-				if (stop == null) {
-					stop = new Stop(stopId, stopsData.getString("POI"), //
-							stopsData.getTimestamp("start_time").getTime(), //
-							stopsData.getTimestamp("end_time").getTime(), //
-							new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
-							stopsData.getInt("begin"), //
-							new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
-							stopsData.getInt("length"), //
-							new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")), //
-							stopsData.getString("POI"), //
-							stopsData.getString("street")//
-					);
-					stops.put(stopId, stop);
-				}
-			}
-			Map<Integer, Move> moves = new HashMap<>();
-			ResultSet movesData = st
-					.executeQuery("SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length " + //
-							"FROM " + moveTable);
-			while (movesData.next()) {
-				int moveId = movesData.getInt("move_id");
-				Move move = moves.get(moveId);
-				if (move == null) {
-					int startStopId = movesData.getInt("start_stop_id");
-					if (movesData.wasNull()) {
-						startStopId = -1;
+	public List<SemanticTrajectory> read() {
+		try {
+			DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.geolife_with_pois_university_stop", null, null);
+			DataRetriever retriever = source.getRetriever();
+			System.out.println("Executing SQL...");
+			Connection conn = retriever.getConnection();
+			List<SemanticTrajectory> ret = null;
+			try {
+				conn.setAutoCommit(false);
+				Statement st = conn.createStatement();
+				st.setFetchSize(1000);
+
+				//
+				ResultSet stopsData = st.executeQuery(
+						"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
+								"centroid_lon, start_time, end_time, street, \"POI\" " + //
+								"FROM " + stopTable);
+				Map<Integer, Stop> stops = new HashMap<>();
+				while (stopsData.next()) {
+					int stopId = stopsData.getInt("stop_id");
+					Stop stop = stops.get(stopId);
+					if (stop == null) {
+						stop = new Stop(stopId, stopsData.getString("POI"), //
+								stopsData.getTimestamp("start_time").getTime(), //
+								stopsData.getTimestamp("end_time").getTime(), //
+								new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
+								stopsData.getInt("begin"), //
+								new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
+								stopsData.getInt("length"), //
+								new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")), //
+								stopsData.getString("POI"), //
+								stopsData.getString("street")//
+						);
+						stops.put(stopId, stop);
 					}
-					int endStopId = movesData.getInt("end_stop_id");
-					if (movesData.wasNull()) {
-						endStopId = -1;
-					}
-					move = new Move(moveId, //
-							stops.get(startStopId), //
-							stops.get(endStopId), //
-							movesData.getTimestamp("start_time").getTime(), //
-							movesData.getTimestamp("end_time").getTime(), //
-							movesData.getInt("begin"), //
-							movesData.getInt("length"), //
-							null);
-					moves.put(moveId, move);
 				}
+				Map<Integer, Move> moves = new HashMap<>();
+				ResultSet movesData = st
+						.executeQuery("SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length " + //
+								"FROM " + moveTable);
+				while (movesData.next()) {
+					int moveId = movesData.getInt("move_id");
+					Move move = moves.get(moveId);
+					if (move == null) {
+						int startStopId = movesData.getInt("start_stop_id");
+						if (movesData.wasNull()) {
+							startStopId = -1;
+						}
+						int endStopId = movesData.getInt("end_stop_id");
+						if (movesData.wasNull()) {
+							endStopId = -1;
+						}
+						move = new Move(moveId, //
+								stops.get(startStopId), //
+								stops.get(endStopId), //
+								movesData.getTimestamp("start_time").getTime(), //
+								movesData.getTimestamp("end_time").getTime(), //
+								movesData.getInt("begin"), //
+								movesData.getInt("length"), //
+								null);
+						moves.put(moveId, move);
+					}
+				}
+				st.close();
+				List<Move> usedMoves = new ArrayList<Move>();
+				if (onlyStops) {
+					ret = readStopsTrajectories(null, conn, stops, moves, usedMoves);
+				} else {
+					ret = readRawPoints(null, conn, stops, moves);
+				}
+				compute(usedMoves);
+			} finally {
+				conn.close();
 			}
-			st.close();
-			List<Move> usedMoves = new ArrayList<Move>();
-			if (onlyStops) {
-				ret = readStopsTrajectories(null, conn, stops, moves, usedMoves);
-			} else {
-				ret = readRawPoints(null, conn, stops, moves);
-			}
-			compute(usedMoves);
-		} finally {
-			conn.close();
+			return ret;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
-		return ret;
 	}
 
 	public List<Stop> exportStops(String... zones) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "lehmann", DataSourceType.PGSQL, "stops_moves.geolife_with_pois_university_stop", null, null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
-		String stopTable = this.withTransportation ? "stops_moves.geolife_enriched_stop" : "stops_moves.geolife2_limited_stop";
-		String pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
-		//
-		stopTable = "stops_moves.geolife_with_pois_university_stop";
-		pointsTable = "geolife.geolife_with_pois_university";
 		//
 		Connection conn = retriever.getConnection();
 		conn.setAutoCommit(false);
@@ -215,20 +226,16 @@ public class GeolifeUniversityDatabaseReader {
 	}
 
 	private List<SemanticTrajectory> readStopsTrajectories(String[] zones, Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws SQLException {
-		String transportationColumn = this.withTransportation ? "mode" : "transportation_mean";
-		String pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
+		String transportationColumn = "'NONE'";
 		//
-		transportationColumn = "'NONE'";
-		pointsTable = "geolife.geolife_inside_university_5_pois";
-		//
-		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, " + transportationColumn + " as transporationMode, \"POI\", semantic_stop_id, semantic_move_id, path, direction "
+		String sql = "select tid, gid, time, lat," + 
+				"	lon, folder_id as user_id, " + transportationColumn + " as transporationMode, \"POI\", semantic_stop_id, semantic_move_id, path, direction "
 		+ "from " + pointsTable//
 		+ " where 1=1 ";//
 		if(zones != null && zones.length > 0) {
 			sql += "and POI in (SELECT * FROM unnest(?)) ";
-		}
+		} 
 		//
-//		sql += "and tid in (32951,18767,20833) ";
 		sql += "and (direction, path) in (select direction, path from "+ pointsTable + " group by direction, path having count(distinct tid) > 3) ";
 		//
 		sql += "order by tid, time, gid";
@@ -303,6 +310,7 @@ public class GeolifeUniversityDatabaseReader {
 					s.addData(i, REGION_INTEREST, record.getPOI());
 					s.addData(i, PATH, record.getPath());
 					s.addData(i, DIRECTION, record.getDirection());
+					s.addData(i, PATH_WITH_DIRECTION, PATH_WITH_DIRECTION.getData(s, i));
 					stop.setRegion(record.getPOI());
 					i++;
 				} else if(record.getSemanticMoveId() != null) {
@@ -338,11 +346,7 @@ public class GeolifeUniversityDatabaseReader {
 
 	private List<SemanticTrajectory> readRawPoints(String[] zones, Connection conn, Map<Integer, Stop> stops,
 			Map<Integer, Move> moves) throws SQLException {
-		String pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
-		String transportationColumn = this.withTransportation ? "mode" : "transportation_mean";
-		//
-		transportationColumn = "'NONE'";
-		pointsTable = "geolife.geolife_inside_university_5_pois_raw";
+		String transportationColumn = "'NONE'";
 		//
 		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, " + transportationColumn  + " as transportationMode, \"POI\", semantic_stop_id, semantic_move_id, path, direction "
 				+ "from " + pointsTable//
@@ -351,7 +355,6 @@ public class GeolifeUniversityDatabaseReader {
 			sql += "and POI in (SELECT * FROM unnest(?)) ";
 		}
 		//
-//		sql += "and tid in (14255,17936,23500) ";
 		sql += "and (direction, path) in (select direction, path from "+ pointsTable + " group by direction, path having count(distinct tid) > 3) ";
 		//
 		sql += "order by tid, time, gid";
@@ -414,6 +417,7 @@ public class GeolifeUniversityDatabaseReader {
 				s.addData(i, REGION_INTEREST, record.getPOI());
 				s.addData(i, DIRECTION, record.getDirection());
 				s.addData(i, PATH, record.getPath());
+				s.addData(i, PATH_WITH_DIRECTION, PATH_WITH_DIRECTION.getData(s, i));
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
 					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
@@ -450,7 +454,6 @@ public class GeolifeUniversityDatabaseReader {
 			}
 			move.setAttribute(AttributeType.MOVE_ANGLE, Angle.getAngle(points.get(0), points.get(points.size() - 1)));
 			double distance = Distance.getDistance(points.toArray(new TPoint[points.size()]), DISTANCE_FUNCTION);
-//			System.out.println(move.toString() + " = " + distance);
 			move.setAttribute(AttributeType.MOVE_TRAVELLED_DISTANCE, distance);
 		}
 	}

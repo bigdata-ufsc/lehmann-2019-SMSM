@@ -73,7 +73,7 @@ public class GeolifeUniversityDataReader {
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION)));
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(SEMANTICS_COUNTER++, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
 	
-	public static final BasicSemantic<String> PATH_WITH_DIRECTION = new BasicSemantic<String>(6) {
+	public static final BasicSemantic<String> PATH_WITH_DIRECTION = new BasicSemantic<String>(SEMANTICS_COUNTER++) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
 			return DIRECTION.getData(p, i) + "/" + PATH.getData(p, i);

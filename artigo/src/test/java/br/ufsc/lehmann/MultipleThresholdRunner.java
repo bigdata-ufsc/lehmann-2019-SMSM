@@ -16,7 +16,7 @@ public class MultipleThresholdRunner {
 
 	public static void main(String[] args) {
 		JUnitCore junit = new JUnitCore();
-		String folderPath = "../artigo-helper/src/main/resources/only-stops-dataset/Semantics_20180524";
+		String folderPath = "../artigo-helper/src/main/resources/only-stops-dataset/Semantics_20180823";
 		File folder = new File(folderPath);
 		folder.mkdirs();
 		
@@ -35,7 +35,7 @@ public class MultipleThresholdRunner {
 						file.createNewFile();
 						out = new FileOutputStream(file);
 						stream = new PrintStream(new BufferedOutputStream(out), true);
-						System.setOut(stream);
+//						System.setOut(stream);
 //						Thresholds.MOVE_INNER_POINTS_PERC.setValue(proportionalTimeThreshold);
 						Thresholds.STOP_CENTROID_EUCLIDEAN.setValue(spatialThreshold);
 						Thresholds.STOP_CENTROID_LATLON.setValue(spatialThreshold);
@@ -46,7 +46,7 @@ public class MultipleThresholdRunner {
 						junit.run(  
 //								wDFClassifierTest.class
 //								EDRClassifierTest.class
-								MSMClassifierTest.class, 
+//								MSMClassifierTest.class, 
 								LCSSClassifierTest.class
 //								CVTIClassifierTest.class,
 //								MSTPClassifierTest.class

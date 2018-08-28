@@ -55,11 +55,7 @@ public class GeolifeProblem extends AbstractProblem {
 //		} catch (NumberFormatException | ParseException | IOException e) {
 //			throw new RuntimeException(e);
 //		}
-		try {
-			return new ArrayList<>(new GeolifeUniversityDatabaseReader(onlyStops).read());
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-			throw new RuntimeException(e);
-		}
+		return new ArrayList<>(new GeolifeUniversityDatabaseReader(onlyStops).read());
 	}
 
 }

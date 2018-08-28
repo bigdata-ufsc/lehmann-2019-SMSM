@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.management.RuntimeErrorException;
+
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.Multimap;
@@ -46,7 +48,7 @@ import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
 import br.ufsc.utils.EuclideanDistanceFunction;
 
-public class GeolifeDatabaseReader {
+public class GeolifeDatabaseReader implements IDataReader {
 	
 	private static final SpatialDistanceFunction GEO_DISTANCE_FUNCTION = new EuclideanDistanceFunction();
 
@@ -69,6 +71,10 @@ public class GeolifeDatabaseReader {
 	private boolean onlyStops;
 	private boolean withTransportation;
 
+	private String pointsTable;
+	private String moveTable;
+	private String stopTable;
+
 	public GeolifeDatabaseReader(boolean onlyStops) {
 		this(onlyStops, false);
 	}
@@ -76,6 +82,26 @@ public class GeolifeDatabaseReader {
 	public GeolifeDatabaseReader(boolean onlyStops, boolean withTransportation) {
 		this.onlyStops = onlyStops;
 		this.withTransportation = withTransportation;
+		stopTable = this.withTransportation ? "stops_moves.geolife_enriched_stop" : "stops_moves.geolife2_limited_stop";
+		moveTable = this.withTransportation ? "stops_moves.geolife_enriched_move" : "stops_moves.geolife2_limited_move";
+		pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
+	}
+
+	public GeolifeDatabaseReader(boolean onlyStops, boolean withTransportation, String stopTable, String moveTable, String pointsTable) {
+		this.onlyStops = onlyStops;
+		this.withTransportation = withTransportation;
+		this.stopTable = stopTable;
+		this.moveTable = moveTable;
+		this.pointsTable = pointsTable;
+	}
+
+	@Override
+	public List<SemanticTrajectory> read() {
+		try {
+			return read(null);
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public List<SemanticTrajectory> read(String[] zones) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
@@ -87,8 +113,6 @@ public class GeolifeDatabaseReader {
 		Statement st = conn.createStatement();
 		st.setFetchSize(1000);
 
-		String stopTable = this.withTransportation ? "stops_moves.geolife_enriched_stop" : "stops_moves.geolife2_limited_stop";
-		String moveTable = this.withTransportation ? "stops_moves.geolife_enriched_move" : "stops_moves.geolife2_limited_move";
 		//
 		//stopTable = "stops_moves.geolife_with_pois_university_stop";
 		//moveTable = "stops_moves.geolife_with_pois_university_move";
@@ -161,12 +185,6 @@ public class GeolifeDatabaseReader {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "public.geolife2_limited", null, null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
-		String stopTable = this.withTransportation ? "stops_moves.geolife_enriched_stop" : "stops_moves.geolife2_limited_stop";
-		String pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
-		//
-		//stopTable = "stops_moves.geolife_with_pois_university_stop";
-		//pointsTable = "geolife.geolife_with_pois_university";
-		//
 		Connection conn = retriever.getConnection();
 		conn.setAutoCommit(false);
 
@@ -206,10 +224,6 @@ public class GeolifeDatabaseReader {
 
 	private List<SemanticTrajectory> readStopsTrajectories(String[] zones, Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws SQLException {
 		String transportationColumn = this.withTransportation ? "mode" : "transportation_mean";
-		String pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
-		//
-		//transportationColumn = "'NONE'";
-		//pointsTable = "geolife.geolife_with_pois_university";
 		//
 		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, " + transportationColumn + " as transporationMode, \"POI\", semantic_stop_id, semantic_move_id "
 		+ "from " + pointsTable//
@@ -329,11 +343,7 @@ public class GeolifeDatabaseReader {
 
 	private List<SemanticTrajectory> readRawPoints(String[] zones, Connection conn, Map<Integer, Stop> stops,
 			Map<Integer, Move> moves) throws SQLException {
-		String pointsTable = this.withTransportation ? "geolife.geolife_enriched_transportation_means" : "public.geolife2_limited";
 		String transportationColumn = this.withTransportation ? "mode" : "transportation_mean";
-		//
-		//transportationColumn = "'NONE'";
-		//pointsTable = "geolife.geolife_with_pois_university";
 		//
 		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, " + transportationColumn  + " as transportationMode, \"POI\", semantic_stop_id, semantic_move_id "
 				+ "from " + pointsTable//

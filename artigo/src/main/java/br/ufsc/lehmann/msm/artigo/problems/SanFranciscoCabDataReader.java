@@ -57,45 +57,47 @@ public class SanFranciscoCabDataReader {
 	
 	public static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
 	
-	public static final BasicSemantic<Integer> TID = new BasicSemantic<>(3);
-	public static final BasicSemantic<Integer> OCUPATION = new BasicSemantic<>(4);
-	public static final BasicSemantic<Integer> ROAD = new BasicSemantic<>(5);
-	public static final BasicSemantic<String> DIRECTION = new BasicSemantic<>(6);
-	public static final StopSemantic STOP_REGION_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_REGION, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
-	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_TRAFFIC_LIGHT_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, String>(AttributeType.STOP_TRAFFIC_LIGHT, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_TRAFFIC_LIGHT_DISTANCE_SEMANTIC = new StopSemantic(7, new AttributeDescriptor<Stop, Double>(AttributeType.STOP_TRAFFIC_LIGHT_DISTANCE, new NumberDistance()));
+	private static int SEMANTIC_COUNTER = 3;
 	
-	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
-	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
-	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
-	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(8, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
+	public static final BasicSemantic<Integer> TID = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final BasicSemantic<Integer> OCUPATION = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final BasicSemantic<Integer> ROAD = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final BasicSemantic<String> DIRECTION = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final StopSemantic STOP_REGION_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Stop, String>(AttributeType.STOP_REGION, new EqualsDistanceFunction<String>()));
+	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
+	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
+	public static final StopSemantic STOP_TRAFFIC_LIGHT_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Stop, String>(AttributeType.STOP_TRAFFIC_LIGHT, new EqualsDistanceFunction<String>()));
+	public static final StopSemantic STOP_TRAFFIC_LIGHT_DISTANCE_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER++, new AttributeDescriptor<Stop, Double>(AttributeType.STOP_TRAFFIC_LIGHT_DISTANCE, new NumberDistance()));
+	
+	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER++, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 
-	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(9);
-	public static final BasicSemantic<String> ROUTE = new BasicSemantic<>(10);
-	public static final BasicSemantic<String> ROUTE_WITH_DIRECTION = new BasicSemantic<String>(6) {
+	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final BasicSemantic<String> ROUTE = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final BasicSemantic<String> ROUTE_WITH_DIRECTION = new BasicSemantic<String>(SEMANTIC_COUNTER++) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
 			return DIRECTION.getData(p, i) + "/" + ROUTE.getData(p, i);
 		}
 	};
-	public static final BasicSemantic<String> ROUTE_IN_ROADS_WITH_DIRECTION = new BasicSemantic<String>(6) {
+	public static final BasicSemantic<String> ROUTE_IN_ROADS_WITH_DIRECTION = new BasicSemantic<String>(SEMANTIC_COUNTER++) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
 			return DIRECTION.getData(p, i) + "/" + ROAD.getData(p, i) + "/" + ROUTE.getData(p, i);
 		}
 	};
-	public static final BasicSemantic<String> ROUTE_WITH_ROADS = new BasicSemantic<String>(6) {
+	public static final BasicSemantic<String> ROUTE_WITH_ROADS = new BasicSemantic<String>(SEMANTIC_COUNTER++) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
 			return ROAD.getData(p, i) + "/" + ROUTE.getData(p, i);
 		}
 	};
-	public static final BasicSemantic<String> ROADS_WITH_DIRECTION = new BasicSemantic<String>(6) {
+	public static final BasicSemantic<String> ROADS_WITH_DIRECTION = new BasicSemantic<String>(SEMANTIC_COUNTER++) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
 			return DIRECTION.getData(p, i) + "/" + ROAD.getData(p, i);

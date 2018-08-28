@@ -38,10 +38,6 @@ public class SanFranciscoCabProblem extends AbstractProblem {
 //		} catch (IOException | ParseException e) {
 //			throw new RuntimeException(e);
 //		}
-		try {
-			return new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop).read());
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-			throw new RuntimeException(e);
-		}
+		return new ArrayList<>(new SanFranciscoCabDatabaseReader(onlyStop).read());
 	}
 }

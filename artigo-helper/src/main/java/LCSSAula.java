@@ -1,8 +1,8 @@
 public class LCSSAula {
 
 	public static void main(String[] args) {
-		String A = "CCCATAGCGTATCACT";
-		String B = "TCCCATAGCGAATCACA";
+		String A = "What tensions you";
+		String B = "O a tem som de u";
 		double distance = distance(A.toCharArray(), B.toCharArray());
 		System.out.println("Distance: " + distance);
 		System.out.println("Similarity: " + (1 - (distance / (Math.min(A.length(), B.length())))));
@@ -30,6 +30,16 @@ public class LCSSAula {
 		}
 
 		double similarity = sequenceTable[r.length][s.length];
+
+		for(int i = 0; i<r.length + 1; i++) {
+			
+		}
+		for(int i = 0; i<r.length + 1; i++) {
+		    for(int j = 0; j<s.length + 1; j++) {
+		        System.out.print(sequenceTable[i][j]+ ", ");
+		    }
+		    System.out.println();
+		}
 		return similarity;
 	}
 

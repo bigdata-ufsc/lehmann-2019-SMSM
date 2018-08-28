@@ -208,8 +208,9 @@ public abstract class AbstractClassifierTest {
 //		List<SemanticTrajectory> data = problem.balancedData();
 		List<SemanticTrajectory> data = problem.data();
 		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
+		Semantic discriminator = problem.discriminator();
 		TrajectorySimilarityCalculator<SemanticTrajectory> classifier = (TrajectorySimilarityCalculator<SemanticTrajectory>) measurer(problem);
-		Validation validation = new Validation(problem.discriminator(), (IMeasureDistance<SemanticTrajectory>) classifier, random);
+		Validation validation = new Validation(discriminator, (IMeasureDistance<SemanticTrajectory>) classifier, random);
 
 		double[] precisionAtRecall = validation.precisionAtRecall(classifier, allData, /*data.size() / problemDescriptor.numClasses()*/10);
 		System.out.printf("Precision@recall(%d): %s\n", /*data.size() / problemDescriptor.numClasses()*/10, ArrayUtils.toString(precisionAtRecall, "0.0"));

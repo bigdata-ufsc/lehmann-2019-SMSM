@@ -131,9 +131,9 @@ public abstract class AbstractProblem implements Problem {
 
 		data = this.load();
 		Collections.shuffle(data, random);
-//		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
-//		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));
-		//this.validatingData = data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1);
+		this.trainingData = data.subList(0, (int) (data.size() * (1.0 / 3)));
+		this.testingData = data.subList((int) (data.size() * (1.0 / 3) + 1), (int) (data.size() * (2.0 / 3)));
+		this.validatingData = data.subList((int) (data.size() * (2.0 / 3) + 1), data.size() - 1);
 		this.loaded = true;
 		return data;
 	}

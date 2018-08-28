@@ -37,11 +37,14 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.ArrayTable;
+import com.google.common.collect.Streams;
 
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
@@ -103,7 +106,7 @@ public class Validation {
 						return distance;
 					}
 				});
-				queueProcess.add(new DelayedDistanceMeasure(trajsArray[i], trajsArray[j], future, 0));
+				queueProcess.add(new DelayedDistanceMeasure(trajsArray[i], i, trajsArray[j], j, future, 0));
 			}
 		}
 		while (!queueProcess.isEmpty()) {
@@ -118,7 +121,7 @@ public class Validation {
 			}
 			Future<Double> fut = toProcess.distance;
 			if (!fut.isDone()) {
-				queueProcess.add(new DelayedDistanceMeasure(toProcess.a, toProcess.b, toProcess.distance, 50/* ms */));
+				queueProcess.add(new DelayedDistanceMeasure(toProcess.a, toProcess.aIndex, toProcess.b, toProcess.bIndex, toProcess.distance, 50/* ms */));
 			} else {
 				try {
 					double distance = fut.get();
@@ -180,10 +183,14 @@ public class Validation {
 		private SemanticTrajectory b;
 		private Future<Double> distance;
 		private long delay;
+		private int aIndex;
+		private int bIndex;
 
-		DelayedDistanceMeasure(SemanticTrajectory a, SemanticTrajectory b, Future<Double> distance, int delay) {
+		DelayedDistanceMeasure(SemanticTrajectory a, int aIndex, SemanticTrajectory b, int bIndex, Future<Double> distance, int delay) {
 			this.a = a;
+			this.aIndex = aIndex;
 			this.b = b;
+			this.bIndex = bIndex;
 			this.distance = distance;
 			this.delay = TimeUnit.MILLISECONDS.toNanos(delay);
 		}
@@ -610,4 +617,65 @@ public class Validation {
         
         return results;
     }
+
+	public SemanticTrajectory[][] topK(TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance,
+			SemanticTrajectory[] trajectories, int k) {
+		SemanticTrajectory[] trajsArray = trajectories;
+		
+		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 1.5),
+				(int) (Runtime.getRuntime().availableProcessors() / 1.5), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+		DelayQueue<DelayedDistanceMeasure> queueProcess = new DelayQueue<>();
+		for (int i = 0; i < trajsArray.length; i++) {
+			int finalI = i;
+			for (int j = i; j < trajsArray.length; j++) {
+				int finalJ = j;
+				Future<Double> future = executorService.submit(new Callable<Double>() {
+					
+					@Override
+					public Double call() throws Exception {
+						double distance = 1 - measureDistance.getSimilarity(trajsArray[finalI], trajsArray[finalJ]);
+						return distance;
+					}
+				});
+				queueProcess.add(new DelayedDistanceMeasure(trajsArray[i], i, trajsArray[j], j, future, 50));
+			}
+		}
+		double[][] allDistances = new double[trajectories.length][trajectories.length];
+		while (!queueProcess.isEmpty()) {
+			DelayedDistanceMeasure toProcess = queueProcess.poll();
+			if (toProcess == null) {
+				try {
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				continue;
+			}
+			Future<Double> fut = toProcess.distance;
+			if (!fut.isDone()) {
+				queueProcess.add(toProcess);
+			} else {
+				try {
+					double distance = fut.get();
+					allDistances[toProcess.aIndex][toProcess.bIndex] = distance;
+					allDistances[toProcess.bIndex][toProcess.aIndex] = distance;
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		executorService.shutdown();
+		SemanticTrajectory[][] ret = new SemanticTrajectory[trajectories.length][k];
+		for (int i = 0; i < trajsArray.length; i++) {
+			double[] distances = allDistances[i];
+			DoubleStream stream = Arrays.stream(distances);
+			List<Double> biggerValues = stream.boxed().sorted(Comparator.reverseOrder()).limit(k).collect(Collectors.toList());
+			for (int j = 0, l = 0; j < distances.length && l < k; j++) {
+				if(biggerValues.contains(distances[j])) {
+					ret[i][l++] = trajectories[j];
+				}
+			}
+		}
+		return ret;
+	}
 }

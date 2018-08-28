@@ -18,6 +18,7 @@ import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
+import br.ufsc.ftsm.related.UMS;
 import br.ufsc.lehmann.AngleDistance;
 import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
@@ -26,13 +27,25 @@ import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.ProportionDistance;
 import br.ufsc.lehmann.SMSM;
 import br.ufsc.lehmann.SMSM.SMSM_DimensionParameters;
+import br.ufsc.lehmann.SlackTemporalSemantic;
+import br.ufsc.lehmann.Thresholds;
+import br.ufsc.lehmann.TimestampDistance;
+import br.ufsc.lehmann.method.CVTI;
+import br.ufsc.lehmann.method.CVTI.CVTISemanticParameter;
+import br.ufsc.lehmann.method.EDR.EDRSemanticParameter;
+import br.ufsc.lehmann.method.wDF;
+import br.ufsc.lehmann.msm.artigo.ComparableStopSemantic;
+import br.ufsc.lehmann.msm.artigo.classifiers.DTWaClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.EDRClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.MSTPClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMExtendedClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMExtendedPartialClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMPartialClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMartClassifier;
+import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 import br.ufsc.utils.EuclideanDistanceFunction;
 import br.ufsc.utils.LatLongDistanceFunction;
 
@@ -57,10 +70,124 @@ public class Measures {
 		if(measure.getName().equalsIgnoreCase("LCSS")) {
 			return createLCSS(measure);
 		}
+		if(measure.getName().equalsIgnoreCase("EDR")) {
+			return createEDR(measure);
+		}
+		if(measure.getName().equalsIgnoreCase("MSTP")) {
+			return createMSTP(measure);
+		}
+		if(measure.getName().equalsIgnoreCase("CVTI")) {
+			return createCVTI(measure);
+		}
 		if(measure.getName().equalsIgnoreCase("MSM")) {
 			return createMSM(measure);
 		}
+		if(measure.getName().equalsIgnoreCase("UMS")) {
+			return createUMS(measure);
+		}
+		if(measure.getName().equalsIgnoreCase("DTWa")) {
+			return createDTWa(measure);
+		}
+		if(measure.getName().equalsIgnoreCase("wDF")) {
+			return createWDF(measure);
+		}
 		return null;
+	}
+
+	private static TrajectorySimilarityCalculator<SemanticTrajectory> createWDF(Measure measure) {
+		IDistanceFunction distance = null;
+		String d = measure.getConfig().get("distance");
+		
+		if(!Strings.isNullOrEmpty(d)) {
+			distance = createDistance(null, d);
+		}
+		String w = measure.getConfig().get("w");
+		Double window = -1d;
+		if(w != null) {
+			window = Double.parseDouble(w);
+		}
+		return new wDF(window, (SpatialDistanceFunction) distance);
+	}
+
+	private static TrajectorySimilarityCalculator<SemanticTrajectory> createDTWa(Measure measure) {
+		List<Param> params = measure.getParams();
+		List<Semantic> stopDimensions = new ArrayList<>();
+		Semantic discriminatorSemantic = null;
+		for (Param param : params) {
+			AttributeType attr = null;
+			String d = param.getDistance();
+			
+			IDistanceFunction distance = null;
+			if(!Strings.isNullOrEmpty(d)) {
+				distance = createDistance(param, d);
+			}
+			String type = param.getType().toUpperCase();
+			Long index = param.getIndex();
+			Semantic semantic = null;
+			switch(type) {
+				case "DISCRIMINATOR":
+					discriminatorSemantic = new BasicSemantic<>(index.intValue());
+					continue;
+				case "SPATIAL":
+					attr = AttributeType.STOP_SPATIAL;
+					switch(param.getDistance().toUpperCase()) {
+					case "LATLON":
+						semantic = Semantic.SPATIAL_LATLON;
+						break;
+					case "EUCLIDEAN":
+						semantic = Semantic.SPATIAL_EUCLIDEAN;
+						break;
+					}
+					break;
+				case "TEMPORAL":
+					attr = AttributeType.STOP_TEMPORAL;
+
+					switch(param.getDistance().toUpperCase()) {
+						case "TIMESTAMP":
+						case "PROPORTION":
+							semantic = Semantic.TEMPORAL;
+							break;
+						case "SLACK-PROPORTION":
+							Param slackParams = param.getParams().get(0);
+							Double slack = Double.parseDouble(slackParams.getThreshold());
+							semantic = new SlackTemporalSemantic(index.intValue(), slack);
+							break;
+					}
+					break;
+				case "SEMANTIC":
+					List<Param> semanticParams = param.getParams();
+					Param semParam = semanticParams.get(0);
+					String semType = semParam.getType().toUpperCase();
+					switch(semType) {
+						case "NAME":
+							attr = AttributeType.STOP_NAME;
+							break;
+						case "REGION":
+							attr = AttributeType.STOP_REGION;
+							break;
+						case "CENTROID":
+							attr = AttributeType.STOP_CENTROID;
+							break;
+						case "DURATION":
+							attr = AttributeType.STOP_DURATION;
+							break;
+						default:
+							attr = AttributeType.STOP;
+					}
+					String semDistance = semParam.getDistance().toUpperCase();
+					distance = createDistance(semParam, semDistance);
+					AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
+					semantic = new ComparableStopSemantic(new StopSemantic(index.intValue(), desc));
+					break;
+			}
+			
+			stopDimensions.add(semantic);
+		}
+		return new DTWaClassifier<>(discriminatorSemantic, stopDimensions.toArray(new Semantic[stopDimensions.size()]));
+	}
+
+	private static TrajectorySimilarityCalculator<SemanticTrajectory> createUMS(Measure measure) {
+		return new UMS();
 	}
 
 	private static TrajectorySimilarityCalculator<SemanticTrajectory> createSMSM(Measure measure) {
@@ -91,7 +218,7 @@ public class Measures {
 					AttributeType attr = null;
 					boolean isSpatial = false;
 					String d = stopParam.getDistance();
-					double threshold = Double.parseDouble(Strings.isNullOrEmpty(stopParam.getThreshold()) ? "0.0" : stopParam.getThreshold());
+					Number threshold = Double.parseDouble(Strings.isNullOrEmpty(stopParam.getThreshold()) ? "0.0" : stopParam.getThreshold());
 					double weight = stopParam.getWeight().doubleValue();
 					
 					IDistanceFunction distance = null;
@@ -146,7 +273,17 @@ public class Measures {
 							distance = createDistance(semParam, semDistance);
 							AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
 							semantic = new StopSemantic(index.intValue(), desc);
-							threshold = Double.parseDouble(Strings.isNullOrEmpty(semParam.getThreshold()) ? "0.0" : semParam.getThreshold());
+							try {
+								threshold = Strings.isNullOrEmpty(semParam.getThreshold()) ? null : Double.parseDouble(semParam.getThreshold());
+							} catch (NumberFormatException e) {
+								switch (semParam.getThreshold().toUpperCase()) {
+									case "SUMMED-DISTANCES":
+										threshold = Thresholds.MOVE_INNERPOINTS_DTW_DISTANCE;
+										break;
+									default:
+										throw e;
+								}
+							}
 							break;
 						}
 					SMSM_DimensionParameters dimension = new SMSM.SMSM_DimensionParameters(semantic, mainAttribute, threshold, weight, isSpatial);
@@ -160,26 +297,29 @@ public class Measures {
 					AttributeType attr = null;
 					boolean isSpatial = false;
 					String d = moveParam.getDistance();
-					double threshold = Double.parseDouble(Strings.isNullOrEmpty(moveParam.getThreshold()) ? "0.0" : moveParam.getThreshold());
+					Number threshold = null;
+
+					String t = moveParam.getThreshold();
+					try {
+						threshold = Strings.isNullOrEmpty(t) ? null : Double.parseDouble(t);
+					} catch (NumberFormatException e) {
+						switch (t.toUpperCase()) {
+							case "SUMMED-DISTANCES":
+								threshold = Thresholds.MOVE_INNERPOINTS_DTW_DISTANCE;
+								break;
+							default:
+								throw e;
+						}
+					}
 					double weight = moveParam.getWeight().doubleValue();
 					IDistanceFunction distance = null;
 					if(!Strings.isNullOrEmpty(d)) {
 						distance = createDistance(moveParam, d);
 					}
 					String type = moveParam.getType().toUpperCase();
-					Long index = moveParam.getIndex();
 					switch(type) {
 						case "POINTS":
 							attr = AttributeType.MOVE_POINTS;
-							List<Param> pointsParams = moveParam.getParams();
-							Param pointsParam = pointsParams.get(0);
-							String pointsDistance1 = pointsParam.getDistance().toUpperCase();
-							SpatialDistanceFunction spatialDistance = (SpatialDistanceFunction) distance;
-							if(pointsDistance1.equals("UMS")) {
-								distance = new EllipsesDistance(spatialDistance);
-							} else {
-								distance = new DTWDistance(spatialDistance);
-							}
 							isSpatial = true;
 							break;
 						case "DURATION":
@@ -213,6 +353,7 @@ public class Measures {
 						threshold = Double.parseDouble(Strings.isNullOrEmpty(semParam.getThreshold()) ? "0.0" : semParam.getThreshold());
 						break;
 					}
+					Long index = param.getIndex();
 					AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
 					MoveSemantic moveSemantic = new MoveSemantic(index.intValue(), desc);
 					SMSM_DimensionParameters<Move> dimension = new SMSM.SMSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, threshold, weight, isSpatial);
@@ -324,71 +465,298 @@ public class Measures {
 				);
 	}
 
+	private static TrajectorySimilarityCalculator<SemanticTrajectory> createMSTP(Measure measure) {
+		List<Param> params = measure.getParams();
+		List<Semantic> stopDimensions = new ArrayList<>();
+		for (Param param : params) {
+			AttributeType attr = null;
+			String d = param.getDistance();
+			
+			IDistanceFunction distance = null;
+			if(!Strings.isNullOrEmpty(d)) {
+				distance = createDistance(param, d);
+			}
+				
+			String type = param.getType().toUpperCase();
+			Long index = param.getIndex();
+			Semantic semantic = null;
+			switch(type) {
+				case "SPATIAL":
+					attr = AttributeType.STOP_SPATIAL;
+					switch(param.getDistance().toUpperCase()) {
+					case "LATLON":
+						semantic = Semantic.SPATIAL_LATLON;
+						break;
+					case "EUCLIDEAN":
+						semantic = Semantic.SPATIAL_EUCLIDEAN;
+						break;
+					}
+					break;
+				case "TEMPORAL":
+					attr = AttributeType.STOP_TEMPORAL;
+
+					switch(param.getDistance().toUpperCase()) {
+						case "PROPORTION":
+							semantic = Semantic.TEMPORAL;
+							break;
+						case "SLACK-PROPORTION":
+							Param slackParams = param.getParams().get(0);
+							Double slack = Double.parseDouble(slackParams.getThreshold());
+							semantic = new SlackTemporalSemantic(index.intValue(), slack);
+							break;
+					}
+					break;
+				case "SEMANTIC":
+					List<Param> semanticParams = param.getParams();
+					Param semParam = semanticParams.get(0);
+					String semType = semParam.getType().toUpperCase();
+					switch(semType) {
+						case "NAME":
+							attr = AttributeType.STOP_NAME;
+							break;
+						case "REGION":
+							attr = AttributeType.STOP_REGION;
+							break;
+						case "CENTROID":
+							attr = AttributeType.STOP_CENTROID;
+							break;
+						case "DURATION":
+							attr = AttributeType.STOP_DURATION;
+							break;
+						default:
+							attr = AttributeType.STOP;
+					}
+					String semDistance = semParam.getDistance().toUpperCase();
+					distance = createDistance(semParam, semDistance);
+					AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
+					semantic = new ComparableStopSemantic(new StopSemantic(index.intValue(), desc));
+					break;
+				}
+			stopDimensions.add(semantic);
+		}
+		return new MSTPClassifier(//
+				stopDimensions.toArray(new Semantic[stopDimensions.size()])
+				);
+	}
+
 	private static TrajectorySimilarityCalculator<SemanticTrajectory> createLCSS(Measure measure) {
 		List<Param> params = measure.getParams();
 		List<LCSSSemanticParameter> stopDimensions = new ArrayList<>();
 		for (Param param : params) {
-				AttributeType attr = null;
-				String d = param.getDistance();
-				double threshold = Double.parseDouble(Strings.isNullOrEmpty(param.getThreshold()) ? "0.0" : param.getThreshold());
-				double weight = param.getWeight().doubleValue();
+			AttributeType attr = null;
+			String d = param.getDistance();
+			Double threshold = Strings.isNullOrEmpty(param.getThreshold()) ? null : Double.parseDouble(param.getThreshold());
+			
+			IDistanceFunction distance = null;
+			if(!Strings.isNullOrEmpty(d)) {
+				distance = createDistance(param, d);
+			}
 				
-				IDistanceFunction distance = null;
-				if(!Strings.isNullOrEmpty(d)) {
-					distance = createDistance(param, d);
-				}
-					
-				String type = param.getType().toUpperCase();
-				Long index = param.getIndex();
-				Semantic semantic = null;
-				switch(type) {
-					case "SPATIAL":
-						attr = AttributeType.STOP_SPATIAL;
-						switch(param.getDistance().toUpperCase()) {
-						case "LATLON":
-							semantic = Semantic.SPATIAL_LATLON;
-							break;
-						case "EUCLIDEAN":
-							semantic = Semantic.SPATIAL_EUCLIDEAN;
-							break;
-						}
+			String type = param.getType().toUpperCase();
+			Long index = param.getIndex();
+			Semantic semantic = null;
+			switch(type) {
+				case "SPATIAL":
+					attr = AttributeType.STOP_SPATIAL;
+					switch(param.getDistance().toUpperCase()) {
+					case "LATLON":
+						semantic = Semantic.SPATIAL_LATLON;
 						break;
-					case "TEMPORAL":
-						attr = AttributeType.STOP_TEMPORAL;
-						semantic = Semantic.TEMPORAL;
-						break;
-					case "SEMANTIC":
-						List<Param> semanticParams = param.getParams();
-						Param semParam = semanticParams.get(0);
-						String semType = semParam.getType().toUpperCase();
-						switch(semType) {
-							case "NAME":
-								attr = AttributeType.STOP_NAME;
-								break;
-							case "REGION":
-								attr = AttributeType.STOP_REGION;
-								break;
-							case "CENTROID":
-								attr = AttributeType.STOP_CENTROID;
-								break;
-							case "DURATION":
-								attr = AttributeType.STOP_DURATION;
-								break;
-							default:
-								attr = AttributeType.STOP;
-						}
-						String semDistance = semParam.getDistance().toUpperCase();
-						distance = createDistance(semParam, semDistance);
-						AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
-						semantic = new StopSemantic(index.intValue(), desc);
-						threshold = Double.parseDouble(Strings.isNullOrEmpty(semParam.getThreshold()) ? "0.0" : semParam.getThreshold());
+					case "EUCLIDEAN":
+						semantic = Semantic.SPATIAL_EUCLIDEAN;
 						break;
 					}
-				LCSSSemanticParameter dimension = new LCSSSemanticParameter(semantic, threshold);
-				stopDimensions.add(dimension);
+					break;
+				case "TEMPORAL":
+					attr = AttributeType.STOP_TEMPORAL;
+
+					switch(param.getDistance().toUpperCase()) {
+						case "PROPORTION":
+							semantic = Semantic.TEMPORAL;
+							break;
+						case "SLACK-PROPORTION":
+							Param slackParams = param.getParams().get(0);
+							Double slack = Double.parseDouble(slackParams.getThreshold());
+							semantic = new SlackTemporalSemantic(index.intValue(), slack);
+							break;
+					}
+					break;
+				case "SEMANTIC":
+					List<Param> semanticParams = param.getParams();
+					Param semParam = semanticParams.get(0);
+					String semType = semParam.getType().toUpperCase();
+					switch(semType) {
+						case "NAME":
+							attr = AttributeType.STOP_NAME;
+							break;
+						case "REGION":
+							attr = AttributeType.STOP_REGION;
+							break;
+						case "CENTROID":
+							attr = AttributeType.STOP_CENTROID;
+							break;
+						case "DURATION":
+							attr = AttributeType.STOP_DURATION;
+							break;
+						default:
+							attr = AttributeType.STOP;
+					}
+					String semDistance = semParam.getDistance().toUpperCase();
+					distance = createDistance(semParam, semDistance);
+					AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
+					semantic = new StopSemantic(index.intValue(), desc);
+					threshold = Strings.isNullOrEmpty(semParam.getThreshold()) ? null : Double.parseDouble(semParam.getThreshold());
+					break;
+				}
+			LCSSSemanticParameter dimension = new LCSSSemanticParameter(semantic, threshold);
+			stopDimensions.add(dimension);
 		}
 		return new LCSSClassifier(//
 				stopDimensions.toArray(new LCSSSemanticParameter[stopDimensions.size()])
+				);
+	}
+
+	private static TrajectorySimilarityCalculator<SemanticTrajectory> createCVTI(Measure measure) {
+		List<Param> params = measure.getParams();
+		CVTISemanticParameter stopDimension = null;
+		Semantic temporalSemantic = Semantic.TEMPORAL;
+		for (Param param : params) {
+			AttributeType attr = null;
+			String d = param.getDistance();
+			Double threshold = Strings.isNullOrEmpty(param.getThreshold()) ? null : Double.parseDouble(param.getThreshold());
+			
+			IDistanceFunction distance = null;
+			if(!Strings.isNullOrEmpty(d)) {
+				distance = createDistance(param, d);
+			}
+				
+			String type = param.getType().toUpperCase();
+			Long index = param.getIndex();
+			Semantic semantic = null;
+			switch(type) {
+				case "TEMPORAL":
+					attr = AttributeType.STOP_TEMPORAL;
+
+					switch(param.getDistance().toUpperCase()) {
+						case "PROPORTION":
+							temporalSemantic = Semantic.TEMPORAL;
+							break;
+						case "SLACK-PROPORTION":
+							Param slackParams = param.getParams().get(0);
+							Double slack = Double.parseDouble(slackParams.getThreshold());
+							temporalSemantic = new SlackTemporalSemantic(index.intValue(), slack);
+							break;
+					}
+					break;
+				case "SEMANTIC":
+					List<Param> semanticParams = param.getParams();
+					Param semParam = semanticParams.get(0);
+					String semType = semParam.getType().toUpperCase();
+					switch(semType) {
+						case "NAME":
+							attr = AttributeType.STOP_NAME;
+							break;
+						case "REGION":
+							attr = AttributeType.STOP_REGION;
+							break;
+						case "CENTROID":
+							attr = AttributeType.STOP_CENTROID;
+							break;
+						case "DURATION":
+							attr = AttributeType.STOP_DURATION;
+							break;
+						default:
+							attr = AttributeType.STOP;
+					}
+					String semDistance = semParam.getDistance().toUpperCase();
+					distance = createDistance(semParam, semDistance);
+					AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
+					semantic = new StopSemantic(index.intValue(), desc);
+					threshold = Strings.isNullOrEmpty(semParam.getThreshold()) ? null : Double.parseDouble(semParam.getThreshold());
+					CVTISemanticParameter dimension = new CVTISemanticParameter(semantic, threshold);
+					stopDimension = (dimension);
+					break;
+				}
+		}
+		return new CVTI(//
+				stopDimension, temporalSemantic
+				);
+	}
+
+	private static TrajectorySimilarityCalculator<SemanticTrajectory> createEDR(Measure measure) {
+		List<Param> params = measure.getParams();
+		List<EDRSemanticParameter> stopDimensions = new ArrayList<>();
+		for (Param param : params) {
+			AttributeType attr = null;
+			String d = param.getDistance();
+			Double threshold = Strings.isNullOrEmpty(param.getThreshold()) ? null : Double.parseDouble(param.getThreshold());
+			
+			IDistanceFunction distance = null;
+			if(!Strings.isNullOrEmpty(d)) {
+				distance = createDistance(param, d);
+			}
+				
+			String type = param.getType().toUpperCase();
+			Long index = param.getIndex();
+			Semantic semantic = null;
+			switch(type) {
+				case "SPATIAL":
+					attr = AttributeType.STOP_SPATIAL;
+					switch(param.getDistance().toUpperCase()) {
+					case "LATLON":
+						semantic = Semantic.SPATIAL_LATLON;
+						break;
+					case "EUCLIDEAN":
+						semantic = Semantic.SPATIAL_EUCLIDEAN;
+						break;
+					}
+					break;
+				case "TEMPORAL":
+					attr = AttributeType.STOP_TEMPORAL;
+
+					switch(param.getDistance().toUpperCase()) {
+						case "PROPORTION":
+							semantic = Semantic.TEMPORAL;
+							break;
+						case "SLACK-PROPORTION":
+							Param slackParams = param.getParams().get(0);
+							Double slack = Double.parseDouble(slackParams.getThreshold());
+							semantic = new SlackTemporalSemantic(index.intValue(), slack);
+							break;
+					}
+					break;
+				case "SEMANTIC":
+					List<Param> semanticParams = param.getParams();
+					Param semParam = semanticParams.get(0);
+					String semType = semParam.getType().toUpperCase();
+					switch(semType) {
+						case "NAME":
+							attr = AttributeType.STOP_NAME;
+							break;
+						case "REGION":
+							attr = AttributeType.STOP_REGION;
+							break;
+						case "CENTROID":
+							attr = AttributeType.STOP_CENTROID;
+							break;
+						case "DURATION":
+							attr = AttributeType.STOP_DURATION;
+							break;
+						default:
+							attr = AttributeType.STOP;
+					}
+					String semDistance = semParam.getDistance().toUpperCase();
+					distance = createDistance(semParam, semDistance);
+					AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
+					semantic = new StopSemantic(index.intValue(), desc);
+					threshold = Strings.isNullOrEmpty(semParam.getThreshold()) ? null : Double.parseDouble(semParam.getThreshold());
+					break;
+				}
+			EDRSemanticParameter dimension = new EDRSemanticParameter(semantic, threshold);
+			stopDimensions.add(dimension);
+		}
+		return new EDRClassifier(//
+				stopDimensions.toArray(new EDRSemanticParameter[stopDimensions.size()])
 				);
 	}
 
@@ -410,6 +778,9 @@ public class Measures {
 				break;
 			case "NUMBER":
 				distance = new NumberDistance();
+				break;
+			case "TIMESTAMP":
+				distance = new TimestampDistance();
 				break;
 			case "PROPORTION":
 				distance = new ProportionDistance();

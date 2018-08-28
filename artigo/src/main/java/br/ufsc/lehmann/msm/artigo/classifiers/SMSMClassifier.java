@@ -7,10 +7,10 @@ import br.ufsc.lehmann.SMSM;
 
 public class SMSMClassifier extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 
-	private SMSM msm;
+	private SMSM smsm;
 	
 	public SMSMClassifier(SMSM.SMSM_MoveSemanticParameters moveSemantic, SMSM.SMSM_StopSemanticParameters stopSemantic) {
-		msm = new SMSM(moveSemantic, stopSemantic);
+		smsm = new SMSM(moveSemantic, stopSemantic);
 	}
 
 	@Override
@@ -20,7 +20,7 @@ public class SMSMClassifier extends TrajectorySimilarityCalculator<SemanticTraje
 	
 	@Override
 	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
-		return msm.getSimilarity(t1, t2);
+		return smsm.getSimilarity(t1, t2);
 	}
 
 	@Override
