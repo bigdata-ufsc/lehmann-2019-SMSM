@@ -1,0 +1,37 @@
+Executing SQL...
+Fetching...
+Loaded 6592407 GPS points from database
+Loaded 8939 trajectories from database
+Semantic Trajectories statistics: mean - 2,31, min - 1,00, max - 7,00, sd - 1,21
+'Spearman' - DescriptiveStatistics:
+n: 106
+min: -0.25087719298245653
+max: 1.0
+mean: 0.44048365673782347
+std dev: 0.3653947761924157
+median: 0.45975935828876996
+skewness: -0.0027385348761718976
+kurtosis: -0.9220448278109541
+
+'Bprefs' - DescriptiveStatistics:
+n: 106
+min: 0.0265282583621684
+max: 0.5
+mean: 0.17470724491969583
+std dev: 0.1449447377300685
+median: 0.12109375
+skewness: 1.1819313462011467
+kurtosis: 0.3247943179277777
+
+'NDCG' - DescriptiveStatistics:
+n: 106
+min: 0.3717759667687064
+max: 0.7346974083626961
+mean: 0.48507793572405317
+std dev: 0.0869750005496375
+median: 0.4514632447690458
+skewness: 1.1082065146271916
+kurtosis: 0.2238202728611034
+
+Mislabeled trajectories: 2303
+Mean ranking error: 2984,4286
