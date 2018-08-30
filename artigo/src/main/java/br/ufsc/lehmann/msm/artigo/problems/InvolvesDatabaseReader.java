@@ -285,33 +285,36 @@ public class InvolvesDatabaseReader implements IDataReader {
 					s.addData(i, WEEKLY_TRAJECTORY_IDENTIFIER, WEEKLY_TRAJECTORY_IDENTIFIER.getData(s, i));
 					i++;
 				} else if(record.getSemanticMoveId() != null) {
-					Move move = moves.get(record.getSemanticMoveId());
+					Move move = moves.remove(record.getSemanticMoveId());
 					if(move == null) {
-						throw new RuntimeException("Move does not found");
-					}
-					if(!usedMoves.contains(move)) {
+						for (int j = i - 1; j > -1; j--) {
+							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
+							if(move != null) {
+								break;
+							}
+						}
+						if(move != null) {
+							TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
+							List<TPoint> a = new ArrayList<TPoint>(Arrays.asList(points));
+							a.add(point);
+							move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
+							continue;
+						}
+					} else {
 						usedMoves.add(move);
-						currentMove = move;
-					}
-					if(move.getStart() != null) {
-						move.getStart().setNextMove(move);
-					}
-					if(move.getEnd() != null) {
-						move.getEnd().setPreviousMove(move);
 					}
 					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
-					List<TPoint> a = new ArrayList<TPoint>(points == null ? 
-								(move.getStart() == null ? Collections.emptyList(): Arrays.asList(move.getStart().getEndPoint())) : 
-								Arrays.asList(points));
+					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
 					a.add(point);
 					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
-					move.setAttribute(AttributeType.TRAJECTORY, s);
+					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
+					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
+					s.addData(i, Semantic.SPATIAL, point);
 				}
+				i++;
 			}
-			if(s.length() > 0) {
-				stats.addValue(s.length());
-				ret.add(s);
-			}
+			stats.addValue(s.length());
+			ret.add(s);
 		}
 		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
 		return ret;

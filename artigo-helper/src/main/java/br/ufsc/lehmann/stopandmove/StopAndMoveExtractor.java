@@ -25,30 +25,6 @@ public class StopAndMoveExtractor {
 			int mergeTolerance, int minTime, Connection conn, AtomicInteger sid, AtomicInteger mid, PreparedStatement update, PreparedStatement insertStop, PreparedStatement insertMove)
 			throws SQLException {
 		List<StopAndMove> findBestCBSMoT = findCBSMoT(fastCBSMoT, new ArrayList<>(trajs), ratio, timeTolerance, maxDist, mergeTolerance, minTime, sid, mid);
-//		for (StopAndMove stopAndMove : findBestCBSMoT) {
-//			int moveAndStopPoints = 0;
-//			List<Stop> stops = stopAndMove.getStops();
-//			for (Stop stop : stops) {
-//				List<Integer> gids = stopAndMove.getGids(stop);
-//				moveAndStopPoints += gids.size();
-//			}
-//			List<Move> moves = stopAndMove.getMoves();
-//			for (Move move : moves) {
-//				if(move.getBegin() > stopAndMove.getTrajectory().length()) {
-//					System.err.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId());
-//				}
-//				List<Integer> gids = stopAndMove.getGids(move);
-//				moveAndStopPoints += gids.size();
-//			}
-//			if(stopAndMove.getTrajectory().length() != moveAndStopPoints) {
-//				System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", length: " + stopAndMove.getTrajectory().length() + ", stops and moves: " + moveAndStopPoints);
-//			}
-//			System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", stops: " + stops.size());
-//			System.out.println("Traj.: " + stopAndMove.getTrajectory().getTrajectoryId() + ", moves: " + moves.size());
-//		}
-//		if(true) {
-//			throw new RuntimeException();
-//		}
 		persistStopAndMove(conn, update, insertStop, insertMove, findBestCBSMoT);
 	}
 

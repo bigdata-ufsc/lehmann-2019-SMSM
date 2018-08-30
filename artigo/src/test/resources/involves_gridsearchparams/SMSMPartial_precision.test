@@ -1,47 +1,48 @@
 {
 	"dataset": {
-		"name" : "geolife2",
+		"name" : "involves",
 		"raw": 'false',
 		"params": {
-			"pointsTable" : "public.geolife2_cleared",
-			"stopTable" : "public.geolife2_stop",
-			"moveTable" : "public.geolife2_move",
-			"mappingTable" : "public.geolife2_stops_moves"
+			"weekly": 'false',
+			"pointsTableSuffix" : "_com_auditoria", 
+			"stopMoveTableSuffix" : "_com_auditoria_100mts_30_mins"
 		}
 	},
 	"groundtruth": {
 		"type": "String",
-		"index": 10
+		"index": 9
 	},
 	"measure": {
-		"name": "SMSM",
+		"name": "SMSMPartial",
 		"params": [{
 			"type": "Stop",
 			"weight": 0.5,
-			"index" : 6,
+			"index" : 7,
 			"params": [{
 				"type": "spatial",
 				"distance": "euclidean",
-				"threshold": "200",
+				"threshold": "[10, 20, 50, 100, 200]",
 				"index" : 1,
 				"weight": 0.5
 			}, {
 				"type": "Semantic",
-				"index" : 8,
+				"index" : 7,
 				"weight": 0.5,
 				"params" : [{
-					"distance": "Equal",
-					"type" : "REGION"
+					"distance": "Proportion",
+					"threshold": "[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]",
+					"type" : "duration"
 				}]
 			}]
 		}, {
 			"type": "Move",
 			"weight": 0.5,
-			"index" : 7,
+			"index" : 8,
 			"params": [{
+				"index" : 1,
 				"type": "DURATION",
 				"distance": "Proportion",
-				"threshold": "0.5",
+				"threshold": "[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]",
 				"weight": 1
 			}]
 		}]

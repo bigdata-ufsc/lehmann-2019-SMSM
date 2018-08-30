@@ -81,5 +81,9 @@ public class DistanceMatrix<T> {
 				return false;
 			return true;
 		}
+		
+		public Tuple<F, L> copy() {
+			return new Tuple<>(first, last);
+		}
 	}
 }

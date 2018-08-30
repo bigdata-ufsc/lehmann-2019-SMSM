@@ -76,8 +76,8 @@ public class StopAndMove {
 		if(movesToMerge.isEmpty()) {
 			Collection<Long> stopPoints = stops.removeAll(s);
 			Move move = new Move(mid.incrementAndGet(), previousStop, nextStop, s.getStartTime(), s.getEndTime(), s.getBegin(), stopPoints.size(), s.getPoints().toArray(new TPoint[s.getPoints().size()]));
-			move.setUser(s.getUser());
-			move.setDimensaoData(s.getDimensaoData());
+//			move.setUser(s.getUser());
+//			move.setDimensaoData(s.getDimensaoData());
 
 			moves.computeIfAbsent(move, (l -> new ArrayList<>())).addAll(stopPoints);
 			return stopPoints;
@@ -110,8 +110,8 @@ public class StopAndMove {
 		long startTime = initial == null ? (previousStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getEnd().toEpochMilli() : previousStop.getEndTime()) : initial.getStartTime();
 		long endTime = end == null ? (nextStop == null ? Semantic.TEMPORAL.getData(trajectory, trajectory.length() - 1).getStart().toEpochMilli() : nextStop.getStartTime()) : end.getEndTime();
 		Move move = new Move(moveId, previousStop, nextStop, startTime, endTime, initialIndex, endIndex - initialIndex, mergedPoints.toArray(new TPoint[mergedPoints.size()]));
-		move.setUser((initial == null ? end : initial).getUser());
-		move.setDimensaoData((initial == null ? end : initial).getDimensaoData());
+//		move.setUser((initial == null ? end : initial).getUser());
+//		move.setDimensaoData((initial == null ? end : initial).getDimensaoData());
 		moves.computeIfAbsent(move, (l -> new ArrayList<>())).addAll(mergedGids);
 		stops.removeAll(s);
 		return stopPoints;
@@ -136,8 +136,8 @@ public class StopAndMove {
 		if(!stops.isEmpty() && uncompletedMove == null) {
 			Stop lastStop = lastStop();
 			Move ghostMove = new Move(-1, lastStop, s, lastStop.getEndTime(), s.getStartTime(), s.getBegin(), 0, new TPoint[0], 0.0, 0.0);
-			ghostMove.setUser(s.getUser());
-			ghostMove.setDimensaoData(s.getDimensaoData());
+//			ghostMove.setUser(s.getUser());
+//			ghostMove.setDimensaoData(s.getDimensaoData());
 			addMove(ghostMove, Collections.emptyList());
 		}
 		if(uncompletedMove != null) {

@@ -17,7 +17,6 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
-import br.ufsc.lehmann.InvolvesRecoverTrajectoryStats.RankingPosition;
 import br.ufsc.lehmann.msm.artigo.problems.InvolvesDatabaseReader;
 
 public class InvolvesRecoverTrajectoryStats {
@@ -29,32 +28,36 @@ public class InvolvesRecoverTrajectoryStats {
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "public.amsterdan_park_cbsmot", null, null);
 		DataRetriever retriever = source.getRetriever();
 		Connection conn = retriever.getConnection();
-		Statement st = conn.createStatement();
-		st.setFetchSize(1000);
-		
-		StringBuffer sb = new StringBuffer();
-
-		sb.append("    SELECT rank_filter.* FROM ( "); 
-		sb.append("        SELECT \"id_colaborador_unidade\",\"id_dimensao_data\",\"is_better_trajectory\", lcss_to_better, ed_from_better,stops, "); 
-		sb.append("        rank() OVER ( "); 
-		sb.append("            PARTITION BY id_colaborador_unidade "); 
-		sb.append("            ORDER BY lcss_to_better DESC, ed_from_better, length(stops) "); 
-		sb.append("        ) "); 
-		sb.append("        FROM " + SCHEMA + ".\"trajectory_stats_FastCBSMoT_com_auditoria_100mts_30_mins\" "); 
-		sb.append("        where lcss_to_better > 1 "); 
-		sb.append("    ) rank_filter "); 
-		sb.append("            ORDER BY id_colaborador_unidade, is_better_trajectory, lcss_to_better DESC, ed_from_better, length(stops), rank_filter.rank ");
-
-		ResultSet rs = st.executeQuery(sb.toString());
-		List<TrajectoryStats> stats = new ArrayList<>();
-		while(rs.next()) {
-			String[] r = new String[7];
-			for (int i = 0; i < 7; i++) {
-				r[i] = rs.getString(i + 1);
+		try {
+			Statement st = conn.createStatement();
+			st.setFetchSize(1000);
+			
+			StringBuffer sb = new StringBuffer();
+			
+			sb.append("    SELECT rank_filter.* FROM ( "); 
+			sb.append("        SELECT \"id_colaborador_unidade\",\"id_dimensao_data\",\"is_better_trajectory\", lcss_to_better, ed_from_better,stops, "); 
+			sb.append("        rank() OVER ( "); 
+			sb.append("            PARTITION BY id_colaborador_unidade "); 
+			sb.append("            ORDER BY lcss_to_better DESC, ed_from_better, length(stops) "); 
+			sb.append("        ) "); 
+			sb.append("        FROM " + SCHEMA + ".\"trajectory_stats_FastCBSMoT_com_auditoria_100mts_30_mins\" "); 
+			sb.append("        where lcss_to_better > 1 "); 
+			sb.append("    ) rank_filter "); 
+			sb.append("            ORDER BY id_colaborador_unidade, is_better_trajectory, lcss_to_better DESC, ed_from_better, length(stops), rank_filter.rank ");
+			
+			ResultSet rs = st.executeQuery(sb.toString());
+			List<TrajectoryStats> stats = new ArrayList<>();
+			while(rs.next()) {
+				String[] r = new String[7];
+				for (int i = 0; i < 7; i++) {
+					r[i] = rs.getString(i + 1);
+				}
+				stats.add(new TrajectoryStats(r));
 			}
-			stats.add(new TrajectoryStats(r));
+			return stats;
+		} finally {
+			conn.close();
 		}
-		return stats;
 	}
 	
 	public List<SemanticTrajectory> recoverBestTrajectories(SemanticTrajectory[] allData) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {

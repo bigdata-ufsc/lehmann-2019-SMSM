@@ -1,10 +1,8 @@
 package br.ufsc.lehmann.testexecution;
 
-import java.util.List;
-
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
+import br.ufsc.lehmann.msm.artigo.problems.Geolife2DatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
@@ -32,6 +30,13 @@ public class Datasets {
 			String moveTable = dataset.getParams().get("moveTable");
 			String stopTable = dataset.getParams().get("stopTable");
 			return new GeolifeUniversityDatabaseReader(!dataset.getRaw(), stopTable, moveTable, pointsTable);
+		}
+		if(dataset.getName().equalsIgnoreCase("geolife2")) {
+			String pointsTable = dataset.getParams().get("pointsTable");
+			String moveTable = dataset.getParams().get("moveTable");
+			String stopTable = dataset.getParams().get("stopTable");
+			String mappingTable = dataset.getParams().get("mappingTable");
+			return new Geolife2DatabaseReader(!dataset.getRaw(), stopTable, moveTable, mappingTable, pointsTable);
 		}
 		if(dataset.getName().equalsIgnoreCase("crawdad")) {
 			Gson gson = new Gson();

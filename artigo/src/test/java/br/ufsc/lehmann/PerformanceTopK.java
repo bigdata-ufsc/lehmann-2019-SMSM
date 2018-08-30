@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -33,7 +34,8 @@ public class PerformanceTopK {
 
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/performance"));
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/performance_raw/EDR_Geolife_precision.test"));
+		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "6");
 		files.filter(path -> path.toFile().isFile()).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
@@ -44,7 +46,6 @@ public class PerformanceTopK {
 	}
 
 	private static void executeDescriptor(String fileName, int base) {
-		Random random = new Random(5);
 		ExecutionPOJO execution;
 		try {
 			execution = new Gson().fromJson(new FileReader(fileName), ExecutionPOJO.class);
@@ -53,16 +54,16 @@ public class PerformanceTopK {
 		}
 		Dataset dataset = execution.getDataset();
 		Measure measure = execution.getMeasure();
-		Groundtruth groundtruth = execution.getGroundtruth();
 		IDataReader dataReader = Datasets.createDataset(dataset);
 		List<SemanticTrajectory> data = new ArrayList<>(base);
-		List<SemanticTrajectory> d = dataReader.read();
+		List<SemanticTrajectory> d = dataReader.read().stream().limit(base).collect(Collectors.toList());
 		float nextUp = Math.nextUp(base / d.size()) + 1;
 		IntStream.range(0, (int) nextUp).forEach(i -> data.addAll(d));
+		List<SemanticTrajectory> finalData = data.stream().limit(base).collect(Collectors.toList());
 		
 		TrajectorySimilarityCalculator<SemanticTrajectory> similarityCalculator = Measures.createMeasure(measure);
 
-		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
+		SemanticTrajectory[] allData = finalData.toArray(new SemanticTrajectory[finalData.size()]);
 		
 		Stopwatch w = Stopwatch.createStarted();
 		if(similarityCalculator instanceof ITrainable) {

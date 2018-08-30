@@ -14,24 +14,37 @@
 		"index": 10
 	},
 	"measure": {
-		"name": "MSM",
+		"name": "SMSM",
 		"params": [{
 			"type": "Stop",
-			"weight": 1,
+			"weight": 0.5,
 			"index" : 6,
 			"params": [{
 				"type": "spatial",
 				"distance": "euclidean",
 				"threshold": "200",
+				"index" : 1,
 				"weight": 0.5
 			}, {
 				"type": "Semantic",
 				"index" : 6,
 				"weight": 0.5,
 				"params" : [{
-					"distance": "Proportion",
-					"threshold": "0.5",
-					"type" : "duration"
+					"distance": "Equal",
+					"type" : "REGION"
+				}]
+			}]
+		}, {
+			"type": "Move",
+			"weight": 0.5,
+			"index" : 7,
+			"params": [{
+				"type": "POINTS",
+				"distance": "UMS",
+				"threshold": "0.05",
+				"weight": 1,
+				"params" : [{
+					"distance" : "euclidean"
 				}]
 			}]
 		}]

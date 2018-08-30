@@ -1,25 +1,26 @@
 {
 	"dataset": {
-		"name" : "geolife_university",
+		"name" : "geolife2",
 		"raw": 'false',
 		"params": {
-			"pointsTable" : "geolife.geolife_inside_university_5_pois",
-			"stopTable" : "stops_moves.geolife_inside_university_stop_5_pois",
-			"moveTable" : "stops_moves.geolife_inside_university_move_5_pois"
+			"pointsTable" : "public.geolife2_cleared",
+			"stopTable" : "public.geolife2_stop",
+			"moveTable" : "public.geolife2_move",
+			"mappingTable" : "public.geolife2_stops_moves"
 		}
 	},
 	"groundtruth": {
 		"type": "String",
-		"index": 10
+		"index": 3
 	},
 	"measure": {
 		"name": "DTWa",
 		"params": [{
 			"type": "discriminator",
-			"index" : 10
+			"index" : 3
 		}, {
 			"type": "Semantic",
-			"index" : 8,
+			"index" : 6,
 			"params" : [{
 				"distance": "equal",
 				"type" : "Region"
