@@ -31,25 +31,25 @@ import br.ufsc.utils.EuclideanDistanceFunction;
 public class FastCBSMoT_Involves {
 
 	private static String YEAR_MONTH = "_com_auditoria";
-	private static final String SCHEMA = "involves";
+	private static final String SCHEMA = "colab1300";
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		// FIND STOPS
-//		int ratio = 200; // distance in meters to find neighbors
-//		int stopMinutes = 30;
-		//double maxDist = 200; // distance in meters to merge stops
+		int ratio = 100; // distance in meters to find neighbors
+		int stopMinutes = 30;
+//		double maxDist = 200; // distance in meters to merge stops
 		int toleranceMinutes = 2;
 		FastCBSMoT_Involves fastCBSMoT_Involves = new FastCBSMoT_Involves();
 
-//		int maxDist = ratio;
-//		fastCBSMoT_Involves.fastCBSMoT((int) ratio, stopMinutes, (int) maxDist, toleranceMinutes, false);
+		int maxDist = ratio;
+		fastCBSMoT_Involves.fastCBSMoT((int) ratio, stopMinutes, (int) maxDist, toleranceMinutes, false);
 		
-		for (int ratio = 100; ratio <= 300; ratio+=100) {
-			for (int stopMinutes = 15; stopMinutes <= 60; stopMinutes+=15) {
-				int maxDist = ratio;
-				fastCBSMoT_Involves.fastCBSMoT((int) ratio, stopMinutes, (int) maxDist, toleranceMinutes, false);
-			}
-		}
+//		for (int ratio = 100; ratio <= 300; ratio+=100) {
+//			for (int stopMinutes = 15; stopMinutes <= 60; stopMinutes+=15) {
+//				int maxDist = ratio;
+//				fastCBSMoT_Involves.fastCBSMoT((int) ratio, stopMinutes, (int) maxDist, toleranceMinutes, false);
+//			}
+//		}
 	}
 
 	private void fastCBSMoT(int ratio, int stopMinutes, int maxDist, int toleranceMinutes, boolean weeklyTrajectories)
@@ -102,14 +102,14 @@ public class FastCBSMoT_Involves {
 		PreparedStatement insertMapping = conn.prepareStatement("insert into " + SCHEMA + ".\"stops_moves_FastCBSMoT" + tableSuffix + "\"(gps_point_id, is_stop, is_move, semantic_id) values (?,?,?,?)");
 
 		List<PDV> pdvs = new ArrayList<>();
-		PreparedStatement pdvsPS = conn.prepareStatement("select id_ponto_de_venda_unidade, nome, bairro, endereco, numero, complemento, st_x(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lat, st_y(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lon from " + SCHEMA + ".pontos_venda");
+		PreparedStatement pdvsPS = conn.prepareStatement("select id_ponto_de_venda_unidade, nome, bairro, endereco, numero, complemento, st_x(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lon, st_y(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lat from " + SCHEMA + ".pontos_venda");
 		ResultSet pdvsR = pdvsPS.executeQuery();
 		while(pdvsR.next()) {
 			pdvs.add(new PDV(pdvsR.getInt("id_ponto_de_venda_unidade"), pdvsR.getDouble("lon"), pdvsR.getDouble("lat")));
 		}
 		pdvsPS.close();
 		List<PDV> houses = new ArrayList<>();
-		PreparedStatement housesPS = conn.prepareStatement("SELECT id_colaborador_unidade, st_x(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lat, st_y(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lon	FROM " + SCHEMA + ".colaboradores;");
+		PreparedStatement housesPS = conn.prepareStatement("SELECT id_colaborador_unidade, st_x(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lon, st_y(st_transform(st_setsrid(st_makepoint(longitude, latitude), 4326), 900913)) as lat	FROM " + SCHEMA + ".colaboradores;");
 		ResultSet pdvsH = housesPS.executeQuery();
 		while(pdvsH.next()) {
 			houses.add(new PDV(true, pdvsH.getInt("id_colaborador_unidade"), pdvsH.getDouble("lon"), pdvsH.getDouble("lat")));
@@ -135,7 +135,18 @@ public class FastCBSMoT_Involves {
 					TPoint meanPoint = stop.medianPoint();
 					PDV closestUserPdv = closestPDV(pdvs, houses, pdvsPerUser, meanPoint.getX(), meanPoint.getY(), stop.getUser());
 					if(closestUserPdv.isHome(stop.getUser())) {
+						Move previousMove = stop.getPreviousMove();
+						Move nextMove = stop.getNextMove();
+						boolean isLastStop = previousMove != null && nextMove == null;
+						boolean isFirstStop = nextMove != null && previousMove == null;
 						stopAndMove.remove(stop, i == 0 ? null : stops.get(i - 1), i + 1 == stops.size() ? null : stops.get(i + 1), mid);
+						if(isFirstStop) {
+							stopAndMove.remove(nextMove);
+						}
+						if(isLastStop) {
+							stopAndMove.remove(previousMove);
+							
+						}
 					}
 				}
 			}
@@ -160,15 +171,15 @@ public class FastCBSMoT_Involves {
 					insertStop.setTimestamp(3, Timestamp.from(Instant.ofEpochMilli(stop.getEndTime())));
 
 					List<TPoint> points = new ArrayList<>(stop.getPoints());
-					insertStop.setDouble(4, points.get(0).getX());
-					insertStop.setDouble(5, points.get(0).getY());
-					insertStop.setDouble(6, points.get(points.size() - 1).getX());
-					insertStop.setDouble(7, points.get(points.size() - 1).getY());
+					insertStop.setDouble(4, points.get(0).getY());
+					insertStop.setDouble(5, points.get(0).getX());
+					insertStop.setDouble(6, points.get(points.size() - 1).getY());
+					insertStop.setDouble(7, points.get(points.size() - 1).getX());
 					insertStop.setInt(8, stop.getBegin());
 					insertStop.setInt(9, stop.getLength());
 					
-					insertStop.setDouble(10, meanPoint.getX());
-					insertStop.setDouble(11, meanPoint.getY());
+					insertStop.setDouble(10, meanPoint.getY());
+					insertStop.setDouble(11, meanPoint.getX());
 					PDV closestPdv = closestPDV(pdvs, houses, null, meanPoint.getX(), meanPoint.getY(), stop.getUser());
 					PDV closestUserPdv = closestPDV(pdvs, houses, pdvsPerUser, meanPoint.getX(), meanPoint.getY(), stop.getUser());
 					insertStop.setInt(12, closestPdv.getId());
@@ -393,7 +404,7 @@ public class FastCBSMoT_Involves {
 			}).collect(Collectors.toList());
 		}
 		for (PDV pdv : allPDVs) {
-			double dist = Distance.euclidean(new Point(pdv.latitude, pdv.longitude), p2);
+			double dist = Distance.euclidean(new Point(pdv.longitude, pdv.latitude), p2);
 			if(minDist > dist) {
 				minPDV = pdv;
 				minDist = dist;
@@ -401,7 +412,7 @@ public class FastCBSMoT_Involves {
 		}
 		for (PDV pdv : houses) {
 			if(pdv.userId == userId) {
-				double dist = Distance.euclidean(new Point(pdv.latitude, pdv.longitude), p2);
+				double dist = Distance.euclidean(new Point(pdv.longitude, pdv.latitude), p2);
 				if(minDist > dist) {
 					minPDV = pdv;
 					minDist = dist;
@@ -463,7 +474,7 @@ public class FastCBSMoT_Involves {
 		}
 
 		public double distanceFrom(double x, double y) {
-			return Distance.euclidean(new Point(this.latitude, this.longitude), new Point(x, y));
+			return Distance.euclidean(new Point(this.longitude, this.latitude), new Point(x, y));
 		}
 		
 	}

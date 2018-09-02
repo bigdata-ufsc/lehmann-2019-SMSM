@@ -7,11 +7,14 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
@@ -25,10 +28,8 @@ import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import br.ufsc.lehmann.testexecution.Dataset;
 import br.ufsc.lehmann.testexecution.Datasets;
 import br.ufsc.lehmann.testexecution.ExecutionPOJO;
-import br.ufsc.lehmann.testexecution.Groundtruth;
 import br.ufsc.lehmann.testexecution.Measure;
 import br.ufsc.lehmann.testexecution.Measures;
-import smile.math.Random;
 
 public class PerformanceTopK {
 
@@ -39,24 +40,39 @@ public class PerformanceTopK {
 		files.filter(path -> path.toFile().isFile()).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
+			ExecutionPOJO execution;
+			try {
+				execution = new Gson().fromJson(new FileReader(fileName), ExecutionPOJO.class);
+			} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+			Dataset dataset = execution.getDataset();
+			Measure measure = execution.getMeasure();
+			IDataReader dataReader = Datasets.createDataset(dataset);
+			List<SemanticTrajectory> originalData = dataReader.read();
 			
-			IntStream.of(1_000, 2_000, 3_160, 5_000, 7_070, 10_000, 14_142, 20_000).forEach(base -> executeDescriptor(fileName, base));
+			DescriptiveStatistics sizeStats = new DescriptiveStatistics();
+			originalData.stream().forEach(t -> sizeStats.addValue(t.length()));
+			List<SemanticTrajectory> data = originalData
+					.stream()
+					.filter(t -> (t.length() > (sizeStats.getMean() - (3 * sizeStats.getStandardDeviation()))) && 
+							(t.length() < (sizeStats.getMean() + (3 * sizeStats.getStandardDeviation()))))
+					.collect(Collectors.toList());
+			
+			System.out.println("New dataset size: " + data.size());
+			
+			DescriptiveStatistics stats = new DescriptiveStatistics();
+			data.stream().forEach(t -> stats.addValue(t.length()));
+			System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
+			
+			IntStream.of(1_000, 2_000, 3_160, 5_000, 7_070, 10_000, 14_142, 20_000).forEach(base -> executeDescriptor(measure, data, base));
 		});
 		files.close();
 	}
 
-	private static void executeDescriptor(String fileName, int base) {
-		ExecutionPOJO execution;
-		try {
-			execution = new Gson().fromJson(new FileReader(fileName), ExecutionPOJO.class);
-		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
-			throw new RuntimeException(e);
-		}
-		Dataset dataset = execution.getDataset();
-		Measure measure = execution.getMeasure();
-		IDataReader dataReader = Datasets.createDataset(dataset);
+	private static void executeDescriptor(Measure measure, Collection<SemanticTrajectory> originalData, int base) {
 		List<SemanticTrajectory> data = new ArrayList<>(base);
-		List<SemanticTrajectory> d = dataReader.read().stream().limit(base).collect(Collectors.toList());
+		List<SemanticTrajectory> d = originalData.stream().limit(base).collect(Collectors.toList());
 		float nextUp = Math.nextUp(base / d.size()) + 1;
 		IntStream.range(0, (int) nextUp).forEach(i -> data.addAll(d));
 		List<SemanticTrajectory> finalData = data.stream().limit(base).collect(Collectors.toList());

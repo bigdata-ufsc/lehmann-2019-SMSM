@@ -125,11 +125,11 @@ public class InvolvesDatabaseReader implements IDataReader {
 							stopsData.getString("closest_colab_pdv"), //
 							stopsData.getTimestamp("start_timestamp").getTime(), //
 							stopsData.getTimestamp("end_timestamp").getTime(), //
-							new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
+							new TPoint(stopsData.getDouble("start_lon"), stopsData.getDouble("start_lat")), //
 							stopsData.getInt("begin"), //
-							new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
+							new TPoint(stopsData.getDouble("end_lon"), stopsData.getDouble("end_lat")), //
 							stopsData.getInt("length"), //
-							new TPoint(stopsData.getDouble("latitude"), stopsData.getDouble("longitude")), //
+							new TPoint(stopsData.getDouble("longitude"), stopsData.getDouble("latitude")), //
 							null, //
 							null//
 					);
@@ -172,8 +172,8 @@ public class InvolvesDatabaseReader implements IDataReader {
 	
 			String sql = "select (gps.id_usuario::text || gps.id_dimensao_data::text || gps.id_dado_gps::text) as id_dado_gps, "//
 					+ "gps.id_usuario, col.id_colaborador_unidade, gps.id_dimensao_data, dt.dia_semana, dt.semana, dt_coordenada, "//
-					+ "st_x(st_transform(st_setsrid(st_makepoint(gps.longitude, gps.latitude), 4326), 900913)) as lat, "//
-					+ "st_y(st_transform(st_setsrid(st_makepoint(gps.longitude, gps.latitude), 4326), 900913)) as lon, "
+					+ "st_x(st_transform(st_setsrid(st_makepoint(gps.longitude, gps.latitude), 4326), 900913)) as lon, "//
+					+ "st_y(st_transform(st_setsrid(st_makepoint(gps.longitude, gps.latitude), 4326), 900913)) as lat, "
 					+ "case when map.is_stop = true then map.semantic_id else null end as semantic_stop_id, "//
 					+ "case when map.is_move = true then map.semantic_id else null end as semantic_move_id "//
 					+ "from " + SCHEMA + ".\"dadoGps" + baseTable + "\" gps ";//
@@ -203,10 +203,10 @@ public class InvolvesDatabaseReader implements IDataReader {
 						data.getInt("semana"),
 						data.getInt("dia_semana"),
 						data.getTimestamp("dt_coordenada"),
-					data.getDouble("lat"),
-					data.getDouble("lon"),
-					stopId,
-					moveId
+						data.getDouble("lat"),
+						data.getDouble("lon"),
+						stopId,
+						moveId
 				);
 				if(weekly) {
 					records.put(record.getId_usuario() + "/" + record.getSemana(), record);
@@ -247,7 +247,7 @@ public class InvolvesDatabaseReader implements IDataReader {
 				if(record.getSemanticStopId() == null && record.getSemanticMoveId() == null) {
 					continue;
 				}
-				TPoint point = new TPoint(record.getLat(), record.getLon());
+				TPoint point = new TPoint(record.getId(), record.getLon(), record.getLat(), record.getDt_coordenada());
 				if(record.getSemanticStopId() != null) {
 					if(currentMove != null) {
 						if(currentMove.getEnd() != null) {
@@ -330,7 +330,7 @@ public class InvolvesDatabaseReader implements IDataReader {
 			int i = 0;
 			for (InvolvesRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getId());
-				TPoint point = new TPoint(record.getId(), record.getLat(), record.getLon(), record.getDt_coordenada());
+				TPoint point = new TPoint(record.getId(), record.getLon(), record.getLat(), record.getDt_coordenada());
 				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getDt_coordenada().getTime()), Instant.ofEpochMilli(record.getDt_coordenada().getTime())));
 				s.addData(i, USER_ID, record.getId_usuario());
