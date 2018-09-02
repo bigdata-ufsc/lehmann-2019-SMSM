@@ -117,6 +117,10 @@ public class StopAndMove {
 		return stopPoints;
 	}
 
+	public void remove(Move move) {
+		moves.remove(move);
+	}
+
 	public void addMove(Move move, Collection<Long> gids) {
 		if(uncompletedMove != null) {
 			ArrayList<Long> list = new ArrayList<>(gids);
