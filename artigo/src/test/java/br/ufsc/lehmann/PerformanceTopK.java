@@ -35,7 +35,7 @@ public class PerformanceTopK {
 
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/performance_raw/EDR_Geolife_precision.test"));
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/performance_raw/"));
 		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "6");
 		files.filter(path -> path.toFile().isFile()).forEach(path -> {
 			String fileName = path.toString();
