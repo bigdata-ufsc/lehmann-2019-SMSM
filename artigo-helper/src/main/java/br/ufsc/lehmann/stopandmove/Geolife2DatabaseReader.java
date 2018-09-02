@@ -60,7 +60,7 @@ class Geolife2DatabaseReader implements IDataReader {
 		//
 		String sql = "select tid, gid, time, lon, lat, folder_id as user_id  "
 				+ "from " + pointsTable//
-				+ " where tid between 15001 and 20000 ";//
+				+ "  ";//
 		sql += "order by tid, time, gid";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		preparedStatement.setFetchSize(1000);

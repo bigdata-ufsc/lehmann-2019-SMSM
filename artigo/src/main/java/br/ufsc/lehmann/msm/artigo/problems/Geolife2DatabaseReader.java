@@ -169,7 +169,7 @@ public class Geolife2DatabaseReader implements IDataReader {
 				"case when map.is_move = true then map.semantic_id else null end as semantic_move_id " + //
 		"from " + pointsTable + " gps " + //
 		" left join " + mappingTable + " map on gps.gid = map.gps_point_id " + //
-		" where gps.tid < 100 ";//
+		" ";//
 		sql += "order by gps.tid, gps.time, gps.gid";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		ResultSet data = preparedStatement.executeQuery();
@@ -289,7 +289,7 @@ public class Geolife2DatabaseReader implements IDataReader {
 				"case when map.is_move = true then map.semantic_id else null end as semantic_move_id " + //
 		"from " + pointsTable + " gps " + //
 		" left join " + mappingTable + " map on gps.gid = map.gps_point_id " + //
-		" where gps.tid < 100  ";//
+		"  ";//
 		sql += "order by gps.tid, gps.time, gps.gid";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		ResultSet data = preparedStatement.executeQuery();
