@@ -134,7 +134,8 @@ public class Measures {
 						AttributeType attr = null;
 						boolean isSpatial = false;
 						String d = stopParam.getDistance();
-						Number threshold = Double.parseDouble(grid.getThreshold(stopParam));
+						String stopThreshold = grid.getThreshold(stopParam);
+						Number threshold = Strings.isNullOrEmpty(stopThreshold) ?  null : Double.parseDouble(stopThreshold);
 						double weight = stopParam.getWeight().doubleValue();
 						
 						IDistanceFunction distance = null;
