@@ -1,0 +1,24 @@
+{
+	"dataset": {
+		"name" : "CRAWDAD",
+		"raw": 'true',
+		"params": {
+			"roads" : '["101", "280"]',
+			"directions" : '["mall to airport", "airport to mall"]',
+			"regions" : '["mall", "intersection_101_280", "bayshore_fwy", "airport"]'
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 12
+	},
+	"measure": {
+		"name": "EDR",
+		"params": [{
+			"type": "spatial",
+			"distance": "euclidean",
+			"threshold": "100",
+			"index" : 1
+		}]
+	}
+}

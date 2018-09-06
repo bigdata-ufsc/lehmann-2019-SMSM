@@ -1,0 +1,39 @@
+{
+	"dataset": {
+		"name" : "CRAWDAD",
+		"raw": 'false',
+		"params": {
+			"roads" : '["101", "280"]',
+			"directions" : '["mall to airport", "airport to mall"]',
+			"regions" : '["mall", "intersection_101_280", "bayshore_fwy", "airport"]'
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 12
+	},
+	"measure": {
+		"name": "EDR",
+		"params": [{
+			"type": "spatial",
+			"distance": "euclidean",
+			"threshold": "100",
+			"index" : 1,
+			"weight": 0.3334
+		}, {
+			"type": "temporal",
+			"distance": "proportion",
+			"threshold": "0.3",
+			"index" : 2,
+			"weight": 0.3333
+		}, {
+			"type": "Semantic",
+			"index" : 7,
+			"weight": 0.3333,
+			"params" : [{
+				"distance": "Equal",
+				"type" : "REGION"
+			}]
+		}]
+	}
+}

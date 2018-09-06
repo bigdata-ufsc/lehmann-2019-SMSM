@@ -1,0 +1,31 @@
+{
+	"dataset": {
+		"name" : "CRAWDAD",
+		"raw": 'false',
+		"params": {
+			"roads" : '["101", "280"]',
+			"directions" : '["mall to airport", "airport to mall"]',
+			"regions" : '["mall", "intersection_101_280", "bayshore_fwy", "airport"]'
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 12
+	},
+	"measure": {
+		"name": "CVTI",
+		"params": [{
+			"type": "temporal",
+			"distance": "proportion",
+			"threshold": "0.8",
+			"index" : 2
+		}, {
+			"type": "Semantic",
+			"index" : 7,
+			"params" : [{
+				"distance": "Equal",
+				"type" : "REGION"
+			}]
+		}]
+	}
+}
