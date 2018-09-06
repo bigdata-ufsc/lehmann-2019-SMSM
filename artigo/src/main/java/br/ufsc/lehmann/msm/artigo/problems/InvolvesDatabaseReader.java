@@ -74,7 +74,7 @@ public class InvolvesDatabaseReader implements IDataReader {
 		}
 	};
 	
-	public static final String SCHEMA = "colab1300";
+	public static final String SCHEMA = "involves";
 	
 	private boolean onlyStops;
 	private String baseTable;
@@ -181,7 +181,7 @@ public class InvolvesDatabaseReader implements IDataReader {
 			sql += "inner join " + SCHEMA + ".colaboradores col on col.id_usuario = gps.id_usuario ";
 			sql += "left join " + SCHEMA + ".\"stops_moves_FastCBSMoT" + stopMove_table + "\" map on (gps.id_usuario::text || gps.id_dimensao_data::text || gps.id_dado_gps::text)::bigint = map.gps_point_id ";
 			sql += "where provedor = 'gps' ";//
-//			sql += "and gps.id_usuario= 1300 ";//
+//			sql += "and gps.id_usuario= 1300 and gps.id_dimensao_data = 341 ";//
 			sql += "order by gps.id_usuario, gps.id_dimensao_data, gps.dt_coordenada, gps.id_dado_gps";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
 			ResultSet data = preparedStatement.executeQuery();
@@ -285,36 +285,26 @@ public class InvolvesDatabaseReader implements IDataReader {
 					s.addData(i, WEEKLY_TRAJECTORY_IDENTIFIER, WEEKLY_TRAJECTORY_IDENTIFIER.getData(s, i));
 					i++;
 				} else if(record.getSemanticMoveId() != null) {
-					Move move = moves.remove(record.getSemanticMoveId());
+					Move move = moves.get(record.getSemanticMoveId());
 					if(move == null) {
-						for (int j = i - 1; j > -1; j--) {
-							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
-							if(move != null) {
-								break;
-							}
-						}
-						if(move != null) {
-							TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
-							List<TPoint> a = new ArrayList<TPoint>(Arrays.asList(points));
-							a.add(point);
-							move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
-							continue;
-						}
-					} else {
+						throw new RuntimeException("Move does not found");
+					}
+					if(!usedMoves.contains(move)) {
 						usedMoves.add(move);
 					}
+					move.getStart().setNextMove(move);
+					move.getEnd().setPreviousMove(move);
 					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
 					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
 					a.add(point);
-					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
-					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
-					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
-					s.addData(i, Semantic.SPATIAL, point);
+					points = a.toArray(new TPoint[a.size()]);
+					move.setAttribute(AttributeType.MOVE_POINTS, points);
 				}
-				i++;
 			}
-			stats.addValue(s.length());
-			ret.add(s);
+			if(s.length() > 0) {
+				stats.addValue(s.length());
+				ret.add(s);
+			}
 		}
 		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
 		return ret;

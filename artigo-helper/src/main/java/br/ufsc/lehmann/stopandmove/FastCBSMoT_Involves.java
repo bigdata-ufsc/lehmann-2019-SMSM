@@ -145,7 +145,6 @@ public class FastCBSMoT_Involves {
 						}
 						if(isLastStop) {
 							stopAndMove.remove(previousMove);
-							
 						}
 					}
 				}

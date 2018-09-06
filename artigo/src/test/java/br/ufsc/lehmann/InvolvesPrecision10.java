@@ -28,16 +28,30 @@ import com.google.gson.JsonSyntaxException;
 import br.ufsc.core.ITrainable;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
+import br.ufsc.ftsm.related.DTW;
+import br.ufsc.ftsm.related.LCSS;
+import br.ufsc.ftsm.related.MSM;
+import br.ufsc.ftsm.related.UMS;
 import br.ufsc.lehmann.InvolvesRecoverTrajectoryStats.GroundtruthRanking;
 import br.ufsc.lehmann.InvolvesRecoverTrajectoryStats.RankingPosition;
+import br.ufsc.lehmann.method.CVTI;
+import br.ufsc.lehmann.method.DTWa;
+import br.ufsc.lehmann.method.EDR;
+import br.ufsc.lehmann.method.MSTP;
+import br.ufsc.lehmann.method.wDF;
 import br.ufsc.lehmann.metric.NDCG;
-import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
+import br.ufsc.lehmann.msm.artigo.classifiers.DTWClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.DTWaClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.EDRClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.MSTPClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.SMSMClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.InvolvesDatabaseReader;
 import br.ufsc.lehmann.testexecution.Dataset;
 import br.ufsc.lehmann.testexecution.Datasets;
 import br.ufsc.lehmann.testexecution.ExecutionPOJO;
-import br.ufsc.lehmann.testexecution.Groundtruth;
 import br.ufsc.lehmann.testexecution.Measure;
 import br.ufsc.lehmann.testexecution.Measures;
 
@@ -66,13 +80,14 @@ public class InvolvesPrecision10 {
 	private static void computeRankingSimilarity(ExecutionPOJO execution) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		Dataset dataset = execution.getDataset();
 		Measure measure = execution.getMeasure();
-		Groundtruth groundtruth = execution.getGroundtruth();
 		IDataReader dataReader = Datasets.createDataset(dataset);
 		List<SemanticTrajectory> data = dataReader.read();
-		BasicSemantic<Object> groundtruthSemantic = new BasicSemantic<>(groundtruth.getIndex().intValue());
 		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
 		List<TrajectorySimilarityCalculator<SemanticTrajectory>> similarityCalculator = Measures.createMeasures(measure);
 		for (TrajectorySimilarityCalculator<SemanticTrajectory> calculator : similarityCalculator) {
+			
+			String params = paramToString(calculator);
+			System.out.println("Similarity measure parameters: " + params);
 
 			if (calculator instanceof ITrainable) {
 				((ITrainable) calculator).train(Arrays.asList(allData));
@@ -184,6 +199,31 @@ public class InvolvesPrecision10 {
 		}
 	}
 	
+	private static String paramToString(TrajectorySimilarityCalculator<SemanticTrajectory> calculator) {
+		if(calculator instanceof CVTI) {
+			return ((CVTI)calculator).paramsToString();
+		} else if(calculator instanceof DTWClassifier) {
+			return ((DTWClassifier)calculator).paramsToString();
+		} else if(calculator instanceof DTWaClassifier) {
+			return ((DTWaClassifier)calculator).paramsToString();
+		} else if(calculator instanceof EDRClassifier) {
+			return ((EDRClassifier)calculator).paramsToString();
+		} else if(calculator instanceof LCSSClassifier) {
+			return ((LCSSClassifier)calculator).paramsToString();
+		} else if(calculator instanceof MSMClassifier) {
+			return ((MSMClassifier)calculator).paramsToString();
+		} else if(calculator instanceof SMSMClassifier) {
+			return ((SMSMClassifier)calculator).paramsToString();
+		} else if(calculator instanceof MSTPClassifier) {
+			return ((MSTPClassifier)calculator).paramsToString();
+		} else if(calculator instanceof UMS) {
+			return ((UMS)calculator).paramsToString();
+		} else if(calculator instanceof wDF) {
+			return ((wDF)calculator).paramsToString();
+		}
+		return null;
+	}
+
 	private static double bprefs(Boolean[] elements, int total_relevant, int total_non_relevant) {
 		double nonRelevantCounts = 0;
 		double ret = 0;
