@@ -27,4 +27,8 @@ public class SMSMClassifier extends TrajectorySimilarityCalculator<SemanticTraje
 	public String name() {
 		return "SMSM";
 	}
+
+	public String paramsToString() {
+		return this.smsm.paramsToString();
+	}
 }

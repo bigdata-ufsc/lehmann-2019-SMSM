@@ -265,4 +265,8 @@ public class UMS extends TrajectorySimilarityCalculator<SemanticTrajectory> impl
 	public String name() {
 		return "UMS";
 	}
+
+	public String paramsToString() {
+		return "Distance function: " + distanceFunc.getClass().getSimpleName();
+	}
 }

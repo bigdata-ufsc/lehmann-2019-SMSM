@@ -72,4 +72,12 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 			this.threshold = threshlod;
 		}
 	}
+
+	public String paramsToString() {
+		String semanticsString = "Params: ";
+		for (EDRSemanticParameter<?, ?> d : this.parameters) {
+			semanticsString += "(attr=" + d.semantic.description() + ", threshold=" + d.threshold + ")";
+		}
+		return semanticsString;
+	}
 }

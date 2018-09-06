@@ -81,4 +81,11 @@ public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		}
 	}
 
+	public String paramsToString() {
+		String semanticsString = "Params: ";
+		for (MSMSemanticParameter<?, ?> d : this.semantics) {
+			semanticsString += "(attr=" + d.semantic.description() + ", threshold=" + d.threshlod + ", weight=" + d.weight + ")";
+		}
+		return semanticsString;
+	}
 }

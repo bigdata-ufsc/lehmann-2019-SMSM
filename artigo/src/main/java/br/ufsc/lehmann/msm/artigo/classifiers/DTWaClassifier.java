@@ -54,4 +54,7 @@ public class DTWaClassifier<Label> extends TrajectorySimilarityCalculator<Semant
 		}
 		kernel.training(entries);
 	}
+	public String paramsToString() {
+		return this.kernel.paramsToString();
+	}
 }

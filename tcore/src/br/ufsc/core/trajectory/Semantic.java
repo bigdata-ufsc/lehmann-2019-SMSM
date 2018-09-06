@@ -58,4 +58,8 @@ public abstract class Semantic<Element, Threshold> {
 	public abstract double distance(Element d1, Element d2);
 
 	public abstract boolean match(Element d1, Element d2, Threshold threshold);
+
+	public String description() {
+		return String.valueOf(index);
+	}
 }

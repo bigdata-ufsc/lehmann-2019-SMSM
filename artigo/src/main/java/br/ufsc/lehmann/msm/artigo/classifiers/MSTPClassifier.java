@@ -53,4 +53,8 @@ public class MSTPClassifier extends TrajectorySimilarityCalculator<SemanticTraje
 		Object classified = nn.classify(new DataEntry<>(trajectories.get(0), "descubra"));
 		System.out.println(classified);
 	}
+
+	public String paramsToString() {
+		return this.mstp.paramsToString();
+	}
 }

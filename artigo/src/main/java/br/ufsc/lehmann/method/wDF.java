@@ -81,4 +81,11 @@ public class wDF extends TrajectorySimilarityCalculator<SemanticTrajectory> impl
 		return 1 - (distance / Math.max(distanceFunction.length(t1), distanceFunction.length(t2)));
 	}
 
+	public String paramsToString() {
+        if(w instanceof ComputableDouble) {
+    		return "Distance function: " + distanceFunction.getClass().getSimpleName() + "w: ComputableDouble";
+        }
+		return "Distance function: " + distanceFunction.getClass().getSimpleName() + "w: " + w;
+	}
+
 }
