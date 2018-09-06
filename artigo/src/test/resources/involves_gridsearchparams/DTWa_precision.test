@@ -1,0 +1,33 @@
+{
+	"dataset": {
+		"name" : "involves",
+		"raw": 'false',
+		"params": {
+			"weekly": 'false',
+			"pointsTableSuffix" : "_com_auditoria", 
+			"stopMoveTableSuffix" : "_com_auditoria_100mts_30_mins"
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 9
+	},
+	"measure": {
+		"name": "DTWa",
+		"params": [{
+			"type": "discriminator",
+			"index" : 9
+		}, {
+			"type": "temporal",
+			"distance": "proportion",
+			"index" : 2
+		}, {
+			"type": "Semantic",
+			"index" : 7,
+			"params" : [{
+				"distance": "Proportion",
+				"type" : "duration"
+			}]
+		}]
+	}
+}

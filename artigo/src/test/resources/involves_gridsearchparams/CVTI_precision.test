@@ -1,0 +1,32 @@
+{
+	"dataset": {
+		"name" : "involves",
+		"raw": 'false',
+		"params": {
+			"weekly": 'false',
+			"pointsTableSuffix" : "_com_auditoria", 
+			"stopMoveTableSuffix" : "_com_auditoria_100mts_30_mins"
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 9
+	},
+	"measure": {
+		"name": "CVTI",
+		"params": [{
+			"type": "temporal",
+			"distance": "proportion",
+			"threshold": "[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]",
+			"index" : 2
+		}, {
+			"type": "Semantic",
+			"index" : 7,
+			"params" : [{
+				"distance": "Proportion",
+				"threshold": "[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]",
+				"type" : "duration"
+			}]
+		}]
+	}
+}
