@@ -1,8 +1,11 @@
 package br.ufsc.lehmann;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,37 +38,44 @@ public class PerformanceTopK {
 
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/performance_raw/"));
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/performance/"));
 		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "6");
-		files.filter(path -> path.toFile().isFile()).forEach(path -> {
+		files.filter(path -> path.toFile().isFile() && path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
-			ExecutionPOJO execution;
+			
+			PrintStream  bkp = System.out;
 			try {
-				execution = new Gson().fromJson(new FileReader(fileName), ExecutionPOJO.class);
-			} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
-				throw new RuntimeException(e);
+				ExecutionPOJO execution;
+				try {
+					System.setOut(new PrintStream(new FileOutputStream(new File(path.toFile().getParentFile(), path.getFileName().toString() + ".out"))));
+					execution = new Gson().fromJson(new FileReader(fileName), ExecutionPOJO.class);
+				} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+					throw new RuntimeException(e);
+				}
+				Dataset dataset = execution.getDataset();
+				Measure measure = execution.getMeasure();
+				IDataReader dataReader = Datasets.createDataset(dataset);
+				List<SemanticTrajectory> originalData = dataReader.read();
+				
+				DescriptiveStatistics sizeStats = new DescriptiveStatistics();
+				originalData.stream().forEach(t -> sizeStats.addValue(t.length()));
+				List<SemanticTrajectory> data = originalData
+						.stream()
+						.filter(t -> (t.length() >= (sizeStats.getMean() - (3 * sizeStats.getStandardDeviation()))) && 
+								(t.length() <= (sizeStats.getMean() + (3 * sizeStats.getStandardDeviation()))))
+						.collect(Collectors.toList());
+				
+				System.out.println("New dataset size: " + data.size());
+				
+				DescriptiveStatistics stats = new DescriptiveStatistics();
+				data.stream().forEach(t -> stats.addValue(t.length()));
+				System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
+				
+				IntStream.of(1_000, 2_000, 3_160, 5_000, 7_070, 10_000  ).forEach(base -> executeDescriptor(measure, data, base));
+			} finally {
+				System.setOut(bkp);
 			}
-			Dataset dataset = execution.getDataset();
-			Measure measure = execution.getMeasure();
-			IDataReader dataReader = Datasets.createDataset(dataset);
-			List<SemanticTrajectory> originalData = dataReader.read();
-			
-			DescriptiveStatistics sizeStats = new DescriptiveStatistics();
-			originalData.stream().forEach(t -> sizeStats.addValue(t.length()));
-			List<SemanticTrajectory> data = originalData
-					.stream()
-					.filter(t -> (t.length() > (sizeStats.getMean() - (3 * sizeStats.getStandardDeviation()))) && 
-							(t.length() < (sizeStats.getMean() + (3 * sizeStats.getStandardDeviation()))))
-					.collect(Collectors.toList());
-			
-			System.out.println("New dataset size: " + data.size());
-			
-			DescriptiveStatistics stats = new DescriptiveStatistics();
-			data.stream().forEach(t -> stats.addValue(t.length()));
-			System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
-			
-			IntStream.of(1_000, 2_000, 3_160, 5_000, 7_070, 10_000, 14_142, 20_000).forEach(base -> executeDescriptor(measure, data, base));
 		});
 		files.close();
 	}
