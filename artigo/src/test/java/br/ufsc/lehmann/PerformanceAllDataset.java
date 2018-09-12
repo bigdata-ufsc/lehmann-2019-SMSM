@@ -34,24 +34,23 @@ import br.ufsc.lehmann.testexecution.ExecutionPOJO;
 import br.ufsc.lehmann.testexecution.Measure;
 import br.ufsc.lehmann.testexecution.Measures;
 
-public class PerformanceTopK {
+public class PerformanceAllDataset {
 
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
 		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/performance/"));
 		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "6");
 		files.filter(path -> path.toFile().isFile() && 
-				!path.toFile().getParentFile().getName().equalsIgnoreCase("raw") && 
+				path.toFile().getParentFile().getName().equalsIgnoreCase("raw") && 
 				path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
-			
 			PrintStream  bkp = System.out;
 			try {
 				ExecutionPOJO execution;
 				try {
-					System.setOut(new PrintStream(new FileOutputStream(new File(path.toFile().getParentFile(), path.getFileName().toString() + ".out"))));
 					execution = new Gson().fromJson(new FileReader(fileName), ExecutionPOJO.class);
+					System.setOut(new PrintStream(new FileOutputStream(new File(path.toFile().getParentFile(), path.getFileName().toString() + ".out"))));
 				} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
 					throw new RuntimeException(e);
 				}
@@ -74,10 +73,10 @@ public class PerformanceTopK {
 				data.stream().forEach(t -> stats.addValue(t.length()));
 				System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
 				
-				IntStream.of(1_000, 2_000, 3_160, 5_000, 7_070, 10_000).forEach(base -> executeDescriptor(measure, data, base));
-			} finally {
-				System.setOut(bkp);
-			}
+				IntStream.of(data.size()).forEach(base -> executeDescriptor(measure, data, base));
+				} finally {
+					System.setOut(bkp);
+				}
 		});
 		files.close();
 	}
