@@ -41,7 +41,7 @@ public class PerformanceTopK {
 		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/performance/"));
 		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "6");
 		files.filter(path -> path.toFile().isFile() && 
-				!path.toFile().getParentFile().getName().equalsIgnoreCase("raw") && 
+				!(path.toString().contains("crawdad") || path.toString().contains("geolife")) && 
 				path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
