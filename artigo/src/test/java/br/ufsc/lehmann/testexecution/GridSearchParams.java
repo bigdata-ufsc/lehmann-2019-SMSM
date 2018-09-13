@@ -1,7 +1,6 @@
 package br.ufsc.lehmann.testexecution;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +8,8 @@ import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 
+import br.ufsc.core.trajectory.semantic.Move;
+import br.ufsc.lehmann.ComputableDouble;
 import br.ufsc.lehmann.msm.artigo.clusterers.util.DistanceMatrix.Tuple;
 
 public class GridSearchParams {
@@ -34,15 +35,21 @@ public class GridSearchParams {
 		return hasConfig.isPresent();
 	}
 
-	public String getThreshold(Param param) {
+	public Number getThreshold(Param param) {
 		String threshold = param.getThreshold();
 		if(threshold == null) {
 			return null;
 		}
 		try {
-			return String.valueOf(Double.parseDouble(threshold));
+			return Double.parseDouble(threshold);
 		} catch (NumberFormatException e) {
-			//
+			if(threshold.equals("summed-distances")) {
+				return new ComputableDouble<Move>() {
+					public Number compute(Move a, Move b) {
+						return (a.getTravelledDistance() + b.getTravelledDistance());
+					}
+				};
+			}
 		}
 		
 		Value ret = null;
@@ -61,7 +68,7 @@ public class GridSearchParams {
 					for (Config config2 : configurations) {
 						Config cp = config2.copy();
 						cp.params.stream().forEach(tu -> tu.getLast().used = false);
-						cp.params.add(new Tuple<Param, Value>(param, new Value(String.valueOf(t), false)));
+						cp.params.add(new Tuple<Param, Value>(param, new Value(t, false)));
 						newConfigurations.add(cp);
 					}
 				}
@@ -69,7 +76,7 @@ public class GridSearchParams {
 				Config config = configurations.getFirst();
 				config.params.stream().forEach(t -> t.getLast().used = true);
 				
-				return String.valueOf(multipleThresholds[0]);
+				return multipleThresholds[0];
 			}
 		} else {
 			register.add(param);
@@ -89,7 +96,7 @@ public class GridSearchParams {
 			ret = tuple.getLast();
 			ret.used = true;
 		}
-		return ret.value;
+		return (Number) ret.value;
 	}
 
 	private static class Config {
@@ -108,9 +115,9 @@ public class GridSearchParams {
 	}
 	
 	private static class Value {
-		String value;
+		Object value;
 		boolean used;
-		public Value(String value, boolean used) {
+		public Value(Object value, boolean used) {
 			this.value = value;
 			this.used = used;
 		}
