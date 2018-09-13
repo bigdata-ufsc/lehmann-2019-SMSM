@@ -134,8 +134,7 @@ public class Measures {
 						AttributeType attr = null;
 						boolean isSpatial = false;
 						String d = stopParam.getDistance();
-						String stopThreshold = grid.getThreshold(stopParam);
-						Number threshold = Strings.isNullOrEmpty(stopThreshold) ?  null : Double.parseDouble(stopThreshold);
+						Number threshold = grid.getThreshold(stopParam);
 						double weight = stopParam.getWeight().doubleValue();
 						
 						IDistanceFunction distance = null;
@@ -190,18 +189,7 @@ public class Measures {
 								distance = createDistance(semParam, semDistance);
 								AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
 								semantic = new StopSemantic(index.intValue(), desc);
-								try {
-									String t = grid.getThreshold(semParam);
-									threshold = Strings.isNullOrEmpty(t) ? null : Double.parseDouble(t);
-								} catch (NumberFormatException e) {
-									switch (semParam.getThreshold().toUpperCase()) {
-										case "SUMMED-DISTANCES":
-											threshold = Thresholds.MOVE_INNERPOINTS_DTW_DISTANCE;
-											break;
-										default:
-											throw e;
-									}
-								}
+								threshold = grid.getThreshold(semParam);
 								break;
 							}
 						SMSM_DimensionParameters dimension = new SMSM.SMSM_DimensionParameters(semantic, mainAttribute, threshold, weight, isSpatial);
@@ -215,20 +203,8 @@ public class Measures {
 						AttributeType attr = null;
 						boolean isSpatial = false;
 						String d = moveParam.getDistance();
-						Number threshold = null;
+						Number threshold = grid.getThreshold(moveParam);
 
-						String t = grid.getThreshold(moveParam);
-						try {
-							threshold = Strings.isNullOrEmpty(t) ? null : Double.parseDouble(t);
-						} catch (NumberFormatException e) {
-							switch (t.toUpperCase()) {
-								case "SUMMED-DISTANCES":
-									threshold = Thresholds.MOVE_INNERPOINTS_DTW_DISTANCE;
-									break;
-								default:
-									throw e;
-							}
-						}
 						double weight = moveParam.getWeight().doubleValue();
 						IDistanceFunction distance = null;
 						if(!Strings.isNullOrEmpty(d)) {
@@ -268,9 +244,8 @@ public class Measures {
 								}
 								String semDistance = semParam.getDistance().toUpperCase();
 								distance = createDistance(semParam, semDistance);
-								t = semParam.getThreshold();
-							threshold = Strings.isNullOrEmpty(t) ? null : Double.parseDouble(t);
-							break;
+								threshold = grid.getThreshold(semParam);
+								break;
 						}
 						Long index = param.getIndex();
 						AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
@@ -325,8 +300,7 @@ public class Measures {
 					for (Param stopParam : stopParams) {
 						AttributeType attr = null;
 						String d = stopParam.getDistance();
-						String t = grid.getThreshold(stopParam);
-						Double threshold = Strings.isNullOrEmpty(t) ? null : Double.parseDouble(t);
+						Number threshold = grid.getThreshold(stopParam);
 						double weight = stopParam.getWeight().doubleValue();
 
 						IDistanceFunction distance = null;
@@ -377,8 +351,7 @@ public class Measures {
 							distance = createDistance(semParam, semDistance);
 							AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
 							semantic = new StopSemantic(index.intValue(), desc);
-							t = grid.getThreshold(semParam);
-							threshold = Strings.isNullOrEmpty(t) ? null : Double.parseDouble(t);
+							threshold = grid.getThreshold(semParam);
 							break;
 						}
 						MSMSemanticParameter dimension = new MSMSemanticParameter(semantic, threshold, weight);
@@ -432,8 +405,8 @@ public class Measures {
 						break;
 					case "SLACK-PROPORTION":
 						Param slackParams = param.getParams().get(0);
-						Double slack = Double.parseDouble(grid.getThreshold(slackParams));
-						semantic = new SlackTemporalSemantic(index.intValue(), slack);
+						Number threshold = grid.getThreshold(slackParams);
+						semantic = new SlackTemporalSemantic(index.intValue(), threshold);
 						break;
 					}
 					break;
@@ -480,8 +453,7 @@ public class Measures {
 			for (Param param : params) {
 				AttributeType attr = null;
 				String d = param.getDistance();
-				String t = grid.getThreshold(param);
-				Double threshold = Strings.isNullOrEmpty(t) ? null : Double.parseDouble(t);
+				Number threshold = grid.getThreshold(param);
 				
 				IDistanceFunction distance = null;
 				if(!Strings.isNullOrEmpty(d)) {
@@ -512,8 +484,8 @@ public class Measures {
 								break;
 							case "SLACK-PROPORTION":
 								Param slackParams = param.getParams().get(0);
-								Double slack = Double.parseDouble(grid.getThreshold(slackParams));
-								semantic = new SlackTemporalSemantic(index.intValue(), slack);
+								Number threshold2 = grid.getThreshold(slackParams);
+								semantic = new SlackTemporalSemantic(index.intValue(), threshold2);
 								break;
 						}
 						break;
@@ -541,8 +513,7 @@ public class Measures {
 						distance = createDistance(semParam, semDistance);
 						AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
 						semantic = new StopSemantic(index.intValue(), desc);
-						t = grid.getThreshold(semParam);
-						threshold = Strings.isNullOrEmpty(t) ? null : Double.parseDouble(t);
+						threshold = grid.getThreshold(semParam);
 						break;
 					}
 				LCSSSemanticParameter dimension = new LCSSSemanticParameter(semantic, threshold);
@@ -565,8 +536,7 @@ public class Measures {
 			for (Param param : params) {
 				AttributeType attr = null;
 				String d = param.getDistance();
-				String t = grid.getThreshold(param);
-				Double threshold = Strings.isNullOrEmpty(t) ? null : Double.parseDouble(t);
+				Number threshold = grid.getThreshold(param);
 				
 				IDistanceFunction distance = null;
 				if(!Strings.isNullOrEmpty(d)) {
@@ -586,7 +556,7 @@ public class Measures {
 								break;
 							case "SLACK-PROPORTION":
 								Param slackParams = param.getParams().get(0);
-								Double slack = Double.parseDouble(grid.getThreshold(slackParams));
+								Number slack = grid.getThreshold(slackParams);
 								temporalSemantic = new SlackTemporalSemantic(index.intValue(), slack);
 								break;
 						}
@@ -615,8 +585,7 @@ public class Measures {
 						distance = createDistance(semParam, semDistance);
 						AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
 						semantic = new StopSemantic(index.intValue(), desc);
-						t = grid.getThreshold(semParam);
-						threshold = Strings.isNullOrEmpty(t) ? null : Double.parseDouble(t);
+						threshold = grid.getThreshold(semParam);
 						CVTISemanticParameter dimension = new CVTISemanticParameter(semantic, threshold);
 						stopDimension = (dimension);
 						break;
@@ -639,8 +608,7 @@ public class Measures {
 			for (Param param : params) {
 				AttributeType attr = null;
 				String d = param.getDistance();
-				String t = grid.getThreshold(param);
-				Double threshold = Strings.isNullOrEmpty(t) ? null : Double.parseDouble(t);
+				Number threshold = grid.getThreshold(param);
 				
 				IDistanceFunction distance = null;
 				if(!Strings.isNullOrEmpty(d)) {
@@ -671,8 +639,8 @@ public class Measures {
 								break;
 							case "SLACK-PROPORTION":
 								Param slackParams = param.getParams().get(0);
-								Double slack = Double.parseDouble(grid.getThreshold(slackParams));
-								semantic = new SlackTemporalSemantic(index.intValue(), slack);
+								Number threshold2 = grid.getThreshold(slackParams);
+								semantic = new SlackTemporalSemantic(index.intValue(), threshold2);
 								break;
 						}
 						break;
@@ -700,8 +668,7 @@ public class Measures {
 						distance = createDistance(semParam, semDistance);
 						AttributeDescriptor desc = new AttributeDescriptor<>(attr, distance);
 						semantic = new StopSemantic(index.intValue(), desc);
-						t = grid.getThreshold(semParam);
-						threshold = Strings.isNullOrEmpty(t) ? null : Double.parseDouble(t);
+						threshold = grid.getThreshold(semParam);
 						break;
 					}
 				EDRSemanticParameter dimension = new EDRSemanticParameter(semantic, threshold);
@@ -777,8 +744,8 @@ public class Measures {
 								break;
 							case "SLACK-PROPORTION":
 								Param slackParams = param.getParams().get(0);
-								Double slack = Double.parseDouble(grid.getThreshold(slackParams));
-								semantic = new SlackTemporalSemantic(index.intValue(), slack);
+								Number threshold = grid.getThreshold(slackParams);
+								semantic = new SlackTemporalSemantic(index.intValue(), threshold);
 								break;
 						}
 						break;

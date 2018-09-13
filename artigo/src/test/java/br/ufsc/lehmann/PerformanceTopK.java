@@ -38,10 +38,9 @@ public class PerformanceTopK {
 
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/performance/"));
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/performance/geolife_complete"));
 		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "6");
 		files.filter(path -> path.toFile().isFile() && 
-				!path.toFile().getParentFile().getName().equalsIgnoreCase("raw") && 
 				path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
@@ -50,7 +49,7 @@ public class PerformanceTopK {
 			try {
 				ExecutionPOJO execution;
 				try {
-					System.setOut(new PrintStream(new FileOutputStream(new File(path.toFile().getParentFile(), path.getFileName().toString() + ".out"))));
+					System.setOut(new PrintStream(new FileOutputStream(new File(path.toFile().getParentFile(), path.getFileName().toString() + "_topK.out"))));
 					execution = new Gson().fromJson(new FileReader(fileName), ExecutionPOJO.class);
 				} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
 					throw new RuntimeException(e);
