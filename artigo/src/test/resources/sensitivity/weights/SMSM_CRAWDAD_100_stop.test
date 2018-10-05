@@ -1,0 +1,57 @@
+{
+	"dataset": {
+		"name" : "CRAWDAD",
+		"raw": 'false',
+		"params": {
+			"roads" : '["101", "280"]',
+			"directions" : '["mall to airport", "airport to mall"]',
+			"regions" : '["mall", "intersection_101_280", "bayshore_fwy", "airport"]'
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 12
+	},
+	"measure": {
+		"name": "SMSM",
+		"params": [{
+			"type": "Stop",
+			"weight": 1,
+			"index" : 7,
+			"params": [{
+				"type": "spatial",
+				"distance": "euclidean",
+				"threshold": "100",
+				"index" : 1,
+				"weight": 0.3333
+			}, {
+				"type": "temporal",
+				"distance": "proportion",
+				"threshold": "0.3",
+				"index" : 2,
+				"weight": 0.3333
+			}, {
+				"type": "Semantic",
+				"index" : 7,
+				"weight": 0.3334,
+				"params" : [{
+					"distance": "Equal",
+					"type" : "REGION"
+				}]
+			}]
+		}, {
+			"type": "Move",
+			"weight": 0,
+			"index" : 8,
+			"params": [{
+				"type": "POINTS",
+				"distance": "UMS",
+				"threshold": "0.0045",
+				"weight": 1,
+				"params" : [{
+					"distance" : "euclidean"
+				}]
+			}]
+		}]
+	}
+}

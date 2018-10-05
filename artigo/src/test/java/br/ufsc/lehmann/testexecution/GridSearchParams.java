@@ -44,14 +44,22 @@ public class GridSearchParams {
 			return Double.parseDouble(threshold);
 		} catch (NumberFormatException e) {
 			if(threshold.equals("summed-distances")) {
+				List<Param> params = param.getParams();
+				Number weight = 1L;
+				Number DTWmultiplier = weight;
 				return new ComputableDouble<Move>() {
 					public Number compute(Move a, Move b) {
-						return (a.getTravelledDistance() + b.getTravelledDistance());
+						return (a.getTravelledDistance() + b.getTravelledDistance()) * DTWmultiplier.doubleValue();
 					}
 				};
 			}
 		}
 		
+		Value ret = registerThresholdValues(param, threshold);
+		return (Number) ret.value;
+	}
+
+	private Value registerThresholdValues(Param param, String threshold) {
 		Value ret = null;
 		if(!configurations.isEmpty()) {
 			if(register.contains(param)) {
@@ -62,13 +70,14 @@ public class GridSearchParams {
 			} else {
 				register.add(param);
 				Gson gson = new Gson();
-				Double[] multipleThresholds = gson.fromJson(threshold, Double[].class);
+				String[] multipleThresholds = gson.fromJson(threshold, String[].class);
 				LinkedList<Config> newConfigurations = new LinkedList<>();
-				for (Double t : multipleThresholds) {
+				for (String t : multipleThresholds) {
+					Number value = toNumber(t);
 					for (Config config2 : configurations) {
 						Config cp = config2.copy();
 						cp.params.stream().forEach(tu -> tu.getLast().used = false);
-						cp.params.add(new Tuple<Param, Value>(param, new Value(t, false)));
+						cp.params.add(new Tuple<Param, Value>(param, new Value(value, false)));
 						newConfigurations.add(cp);
 					}
 				}
@@ -76,16 +85,17 @@ public class GridSearchParams {
 				Config config = configurations.getFirst();
 				config.params.stream().forEach(t -> t.getLast().used = true);
 				
-				return multipleThresholds[0];
+				ret = new Value(toNumber(multipleThresholds[0]), true);
 			}
 		} else {
 			register.add(param);
 			Gson gson = new Gson();
-			Double[] multipleThresholds = gson.fromJson(threshold, Double[].class);
+			String[] multipleThresholds = gson.fromJson(threshold, String[].class);
 			LinkedList<Config> newConfigurations = new LinkedList<>();
-			for (Double t : multipleThresholds) {
+			for (String t : multipleThresholds) {
+				Number value = toNumber(t);
 				Config cp = new Config();
-				cp.params.add(new Tuple<Param, Value>(param, new Value(String.valueOf(t), false)));
+				cp.params.add(new Tuple<Param, Value>(param, new Value(value, false)));
 				newConfigurations.add(cp);
 			}
 			this.configurations = newConfigurations;
@@ -96,7 +106,27 @@ public class GridSearchParams {
 			ret = tuple.getLast();
 			ret.used = true;
 		}
-		return (Number) ret.value;
+		return ret;
+	}
+
+	private Number toNumber(String t) {
+		Number value = 0;
+		try {
+			value = Double.parseDouble(t);
+		} catch (NumberFormatException e) {
+			if(t.startsWith("summed-distances")) {
+				String[] expression = t.split("\\*");
+				Number DTWmultiplier = expression.length > 1 ? Double.parseDouble(expression[1]) : 1L;
+				value = new ComputableDouble<Move>() {
+					public Number compute(Move a, Move b) {
+						return (a.getTravelledDistance() + b.getTravelledDistance()) * DTWmultiplier.doubleValue();
+					}
+				};
+			} else {
+				throw new IllegalArgumentException("Unexpected threshold value: " + t, e);
+			}
+		}
+		return value;
 	}
 
 	private static class Config {
