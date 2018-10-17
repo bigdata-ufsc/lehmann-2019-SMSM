@@ -7,10 +7,14 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.math3.stat.descriptive.AggregateSummaryStatistics;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
@@ -43,6 +47,25 @@ public class HASLDatabaseReader implements IDataReader {
 	public static final BasicSemantic<Hand> RIGHT_HAND = new BasicSemantic<>(semantic_count++);
 	public static final BasicSemantic<Hands> BOTH_HANDS = new BasicSemantic<>(semantic_count++);
 	public static final BasicSemantic<String> WORD = new BasicSemantic<>(semantic_count++);
+	
+	private static final Semantic[] ALL_SEMANTICS = new Semantic[] {
+			Semantic.GID,
+			Semantic.SPATIAL,
+			Semantic.TEMPORAL,
+			WORD,
+			LEFT_SPATIAL,
+			LEFT_X,
+			LEFT_Y,
+			LEFT_Z,
+			RIGHT_X,
+			RIGHT_Y,
+			RIGHT_Z,
+			RIGHT_SPATIAL,
+			BOTH_SPATIAL,
+			LEFT_HAND,
+			RIGHT_HAND,
+			BOTH_HANDS,
+	};
 
 	private boolean raw;
 
@@ -97,6 +120,10 @@ public class HASLDatabaseReader implements IDataReader {
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
+		Map<Semantic, AggregateSummaryStatistics> semanticStats = new HashMap<>();
+		for (int k = 0; k < ALL_SEMANTICS.length; k++) {
+			semanticStats.put(ALL_SEMANTICS[k], new AggregateSummaryStatistics());
+		}
 		for (Integer trajId : keys) {
 			SemanticTrajectory s = new SemanticTrajectory(trajId, semantic_count);
 			Collection<HASLRecord> collection = records.get(trajId);
@@ -132,8 +159,27 @@ public class HASLDatabaseReader implements IDataReader {
 				s.addData(i, BOTH_HANDS, new Hands(left, right));
 				i++;
 			}
+			for (int k = 0; k < ALL_SEMANTICS.length; k++) {
+				SummaryStatistics trajStats = semanticStats.get(ALL_SEMANTICS[k]).createContributingStatistics();
+				for (int j = 0; j < s.length() - 1; j++) {
+					Object p1 = ALL_SEMANTICS[k].getData(s, j);
+					Object p2 = ALL_SEMANTICS[k].getData(s, j + 1);
+					Object distance = ALL_SEMANTICS[k].distance(p1, p2);
+					if(distance instanceof Number) {
+						trajStats.addValue(((Number) distance).doubleValue());
+					}
+				}
+				if(trajStats.getN() > 1) {
+					s.setLocalStats(ALL_SEMANTICS[k], trajStats);
+				}
+			}
 			stats.addValue(s.length());
 			ret.add(s);
+		}
+		for (SemanticTrajectory traj : ret) {
+			for (int k = 0; k < ALL_SEMANTICS.length; k++) {
+				traj.setGlobalStats(ALL_SEMANTICS[k], semanticStats.get(ALL_SEMANTICS[k]).getSummary());
+			}
 		}
 		return ret;
 	}

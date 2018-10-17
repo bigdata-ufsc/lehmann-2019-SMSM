@@ -1,0 +1,30 @@
+{
+	"dataset": {
+		"name" : "hasl",
+		"raw": 'true',
+		"params": {
+			"normalized" : false
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 15
+	},
+	"measure": {
+		"name": "CATS",
+		"params": [{
+			"type": "spatial",
+			"index" : 1,
+			"distance": "euclidean",
+			"threshold": "[0.1, 0.2,0.3,0.4,0.5]"
+		}, {
+			"type": "time-units",
+			"index" : 2,
+			"distance": "time-unit",
+			"threshold": "[0,5,10,15,25]",
+			"params": [{
+				"type": "millis"
+			}]
+		}]
+	}
+}

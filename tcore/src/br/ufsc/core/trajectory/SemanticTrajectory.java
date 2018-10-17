@@ -1,13 +1,20 @@
 package br.ufsc.core.trajectory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.math3.stat.descriptive.StatisticalSummary;
 
 public class SemanticTrajectory implements Comparable<SemanticTrajectory> {
 
 	private List<SemanticElement> elements = new ArrayList<>();
 	private Object trajectoryId;
 	private int semantics;
+	
+	private Map<Semantic, StatisticalSummary> local = new HashMap<>();
+	private Map<Semantic, StatisticalSummary> global = new HashMap<>();
 
 	public SemanticTrajectory(Trajectory q) {
 		this.trajectoryId = q.getTid();
@@ -99,5 +106,22 @@ public class SemanticTrajectory implements Comparable<SemanticTrajectory> {
 	@Override
 	public int compareTo(SemanticTrajectory o) {
 		return String.valueOf(getTrajectoryId()).compareTo(String.valueOf(o.getTrajectoryId()));
+	}
+
+	public StatisticalSummary getLocalStats(Semantic<Object, Number> semantic) {
+		return local.get(local.keySet().stream().filter(s -> s.index == semantic.index).findFirst().get());
+	}
+
+	public StatisticalSummary getGlobalStats(Semantic<Object, Number> semantic) {
+		return global.get(global.keySet().stream().filter(s -> s.index == semantic.index).findFirst().get());
+	}
+
+	public void setLocalStats(Semantic semantic, StatisticalSummary trajStats) {
+		local.put(semantic, trajStats);
+	}
+
+	public void setGlobalStats(Semantic semantic, StatisticalSummary summary) {
+		global.put(semantic, summary);
+		
 	}
 }

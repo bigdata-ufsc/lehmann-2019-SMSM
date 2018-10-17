@@ -14,14 +14,14 @@
 			"index" : 3,
 			"params": [{
 				"distance": "euclidean",
-				"threshold": "[0.05, 0.1, 0.2, 0.3, 0.5]"
+				"threshold": "['std-lcss(1/4)', 'std-lcss(1/2)', 'std-lcss(1)', 0.05, 0.1, 0.2, 0.3, 0.5]"
 			}]
 		}, {
 			"type": "Generic",
 			"index" : 4,
 			"params": [{
 				"distance": "euclidean",
-				"threshold": "[0.05, 0.1, 0.2, 0.3, 0.5]"
+				"threshold": "['std-lcss(1/4)', 'std-lcss(1/2)', 'std-lcss(1)', 0.05, 0.1, 0.2, 0.3, 0.5]"
 			}]
 		}]
 	}

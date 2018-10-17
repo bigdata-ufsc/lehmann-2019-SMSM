@@ -4,12 +4,12 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
 
+import br.ufsc.core.ComputableThreshold;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.ComputableDouble;
-import br.ufsc.lehmann.ComputableThreshold;
 
 public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 
@@ -82,7 +82,10 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 		private T threshold;
 		@Override
 		public String toString() {
-			return "EDRSemanticParameter [semantic=" + semantic.description() + ", threshold=" + threshold + "]";
+			if(!(threshold instanceof ComputableThreshold)) {
+				return "EDRSemanticParameter [semantic=" + semantic.description() + ", threshold=" + threshold + "]";
+			}
+			return "EDRSemanticParameter [semantic=" + semantic.description() + ", threshold=" + ((ComputableThreshold) threshold).description() + "]";
 		}
 		public T computeThreshold(V rElement, V sElement, SemanticTrajectory r, SemanticTrajectory s) {
 			if(!(threshold instanceof ComputableThreshold)) {

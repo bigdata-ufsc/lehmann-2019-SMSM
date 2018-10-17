@@ -17,11 +17,11 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.gson.Gson;
 
+import br.ufsc.core.ComputableThreshold;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.lehmann.ComputableDouble;
-import br.ufsc.lehmann.ComputableThreshold;
 import br.ufsc.lehmann.msm.artigo.clusterers.util.DistanceMatrix.Tuple;
 
 public class GridSearchParams {
@@ -148,12 +148,12 @@ public class GridSearchParams {
 						return (a.getTravelledDistance() + b.getTravelledDistance()) * DTWmultiplier.doubleValue();
 					}
 				};
-			} else if(t.startsWith("std")) {
-				Matcher m = Pattern.compile("std\\((.+)+\\)").matcher(t);
+			} else if(t.startsWith("std-lcss")) {
+				Matcher m = Pattern.compile("std-lcss\\((.+)+\\)").matcher(t);
 				if(m.matches()) {
 					String stdParam = m.group(1);
 					Number stdValue = computeMath(stdParam);
-					value = new ComputableThreshold<Number, Object>() {
+					value = new ComputableThreshold<Number, Object>(t) {
 
 						@Override
 						public Number compute(Object a, Object b, SemanticTrajectory trajA, SemanticTrajectory trajB,
@@ -165,15 +165,26 @@ public class GridSearchParams {
 
 						private double getStandardDeviation(SemanticTrajectory traj,
 								Semantic<Object, Number> semantic) {
-							DescriptiveStatistics stats = new DescriptiveStatistics();
-							for (int i = 0; i < traj.length() - 1; i++) {
-								Object p1 = semantic.getData(traj, i);
-								Object p2 = semantic.getData(traj, i + 1);
-								double distance = semantic.distance(p1, p2);
-								stats.addValue(distance);
-							}
-							double stdA = stats.getStandardDeviation();
-							return stdA;
+							return traj.getLocalStats(semantic).getStandardDeviation();
+						}
+					};
+				}
+			} else if(t.startsWith("std-edr")) {
+				Matcher m = Pattern.compile("std-edr\\((.+)+\\)").matcher(t);
+				if(m.matches()) {
+					String stdParam = m.group(1);
+					Number stdValue = computeMath(stdParam);
+					value = new ComputableThreshold<Number, Object>(t) {
+
+						@Override
+						public Number compute(Object a, Object b, SemanticTrajectory trajA, SemanticTrajectory trajB,
+								Semantic<Object, Number> semantic) {
+							return getStandardDeviation(trajA, semantic) * stdValue.doubleValue();
+						}
+
+						private double getStandardDeviation(SemanticTrajectory traj,
+								Semantic<Object, Number> semantic) {
+							return traj.getGlobalStats(semantic).getStandardDeviation();
 						}
 					};
 				}
