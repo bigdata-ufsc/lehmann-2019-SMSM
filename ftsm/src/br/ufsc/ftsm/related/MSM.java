@@ -1,5 +1,7 @@
 package br.ufsc.ftsm.related;
 
+import java.util.Arrays;
+
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.Trajectory;
@@ -80,8 +82,9 @@ public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 			return threshlod;
 		}
 	}
-
-	public String paramsToString() {
+	
+	@Override
+	public String parametrization() {
 		String semanticsString = "Params: ";
 		for (MSMSemanticParameter<?, ?> d : this.semantics) {
 			semanticsString += "(attr=" + d.semantic.description() + ", threshold=" + d.threshlod + ", weight=" + d.weight + ")";

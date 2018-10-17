@@ -90,7 +90,8 @@ public class DTWa<Label> extends TrajectorySimilarityCalculator<SemanticTrajecto
 		}
 	}
 
-	public String paramsToString() {
+	@Override
+	public String parametrization() {
 		String semanticsString = "";
 		for (Semantic<?, Number> d : this.semantics) {
 			semanticsString += "(attr=" + d.description() + ")";

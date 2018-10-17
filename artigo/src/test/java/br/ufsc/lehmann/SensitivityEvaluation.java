@@ -26,6 +26,7 @@ import br.ufsc.core.ITrainable;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.AUC;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.MAP;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Validation;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
@@ -41,8 +42,8 @@ public class SensitivityEvaluation {
 
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/sensitivity"));
-		files.filter(path -> path.toFile().isFile() && path.toString().contains("SMSM_spatial.test") && path.toString().endsWith(".test")).forEach(path -> {
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/sensitivity/weights"));
+		files.filter(path -> path.toFile().isFile() && path.toString().contains(".test") && path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
 			PrintStream bkp = System.out;
@@ -107,6 +108,8 @@ public class SensitivityEvaluation {
 			System.out.printf("Precision@recall(%d): %s\n", /*data.size() / problemDescriptor.numClasses()*/10, ArrayUtils.toString(precisionAtRecall, "0.0"));
 			double auc = AUC.precisionAtRecall(precisionAtRecall);
 			System.out.printf("AUC: %.2f\n", auc);
+			double map = MAP.precisionAtRecall(precisionAtRecall);
+			System.out.printf("MAP: %.2f\n", map);
 		}
 	}
 }

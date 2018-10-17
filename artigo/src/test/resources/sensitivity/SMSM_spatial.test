@@ -21,7 +21,7 @@
 			"params": [{
 				"type": "spatial",
 				"distance": "euclidean",
-				"threshold": "[100,500,1000,1500]",
+				"threshold": "[50,100,300,500,1000,2000]",
 				"index" : 1,
 				"weight": 0.5
 			}, {

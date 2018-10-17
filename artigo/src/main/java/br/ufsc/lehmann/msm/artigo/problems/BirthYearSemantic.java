@@ -1,9 +1,9 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.TemporalSemantic;
 
-public class BirthYearSemantic extends Semantic<String, Number>{
+public class BirthYearSemantic extends TemporalSemantic<String, Number>{
 
 	public BirthYearSemantic(int index) {
 		super(index);

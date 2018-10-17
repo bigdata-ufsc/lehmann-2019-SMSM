@@ -89,7 +89,7 @@ public class Validation {
 			Object classData = semantic.getData(trajsArray[i], 0);
 			occurrences.computeIfAbsent(classData, (t) -> new LongAdder()).increment();
 		}
-		occurrences.forEach((key, qntd) -> System.out.println(key + ": " + qntd.intValue()));
+//		occurrences.forEach((key, qntd) -> System.out.println(key + ": " + qntd.intValue()));
 		
 		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 1.5),
 				(int) (Runtime.getRuntime().availableProcessors() / 1.5), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
@@ -168,10 +168,10 @@ public class Validation {
 			}
 		}
 		DescriptiveStatistics total = new DescriptiveStatistics();
-		for (Map.Entry<Object, DescriptiveStatistics> entry : stats.entrySet()) {
-			System.out.printf("%s = %.2f +/- %.2f\n", entry.getKey(), entry.getValue().getMean(), entry.getValue().getStandardDeviation());
-			total.addValue(entry.getValue().getMean());
-		}
+//		for (Map.Entry<Object, DescriptiveStatistics> entry : stats.entrySet()) {
+//			System.out.printf("%s = %.2f +/- %.2f\n", entry.getKey(), entry.getValue().getMean(), entry.getValue().getStandardDeviation());
+//			total.addValue(entry.getValue().getMean());
+//		}
 		System.out.printf("Mean intraclass similarity = %.2f\n", total.getMean());
 		for (int i = 0; i < recallLevel; i++) {
 			final int finalI = i;

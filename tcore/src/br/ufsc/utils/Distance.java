@@ -3,6 +3,7 @@ package br.ufsc.utils;
 import br.ufsc.core.base.Point;
 import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
+import br.ufsc.core.trajectory.ThreeDimensionalPoint;
 
 public class Distance {
 	
@@ -34,6 +35,19 @@ public class Distance {
 		double distYSquare = distY*distY;
 		
 		return Math.sqrt(distXSquare+distYSquare);
+	}
+
+	public static double euclidean3D(ThreeDimensionalPoint p1, ThreeDimensionalPoint p2) {
+		double distX = Math.abs(p1.getX()-p2.getX());
+		double distXSquare = distX*distX;
+		
+		double distY = Math.abs(p1.getY()-p2.getY());
+		double distYSquare = distY*distY;
+		
+		double distZ = Math.abs(p1.getZ()-p2.getZ());
+		double distZSquare = distZ*distZ;
+		
+		return Math.sqrt(distXSquare+distYSquare+distZSquare);
 	}
 	
 	public static float distFrom(Point p1,Point p2) {
@@ -176,6 +190,4 @@ public class Distance {
 
         return cross;
     }
-	
-	
 }

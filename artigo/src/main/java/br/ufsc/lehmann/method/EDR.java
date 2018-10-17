@@ -1,8 +1,15 @@
 package br.ufsc.lehmann.method;
 
+import java.util.Arrays;
+
+import org.apache.commons.lang3.StringUtils;
+
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
+import br.ufsc.lehmann.ComputableDouble;
+import br.ufsc.lehmann.ComputableThreshold;
 
 public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 
@@ -35,7 +42,9 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 				int subcost = 0;
 				for (int k = 0; k < parameters.length; k++) {
 					EDRSemanticParameter param = parameters[k];
-					if(!param.semantic.match(r, i - 1, s, j - 1, param.threshold)) {
+					Object rPoint = param.semantic.getData(r, i - 1);
+					Object sPoint = param.semantic.getData(s, j - 1);
+					if(!param.semantic.match(rPoint, sPoint, param.computeThreshold(rPoint, sPoint, r, s))) {
 						subcost += 1;
 					}
 				}
@@ -63,21 +72,28 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 		return "EDR";
 	}
 	
+	@Override
+	public String parametrization() {
+		return StringUtils.join(parameters, "\n");
+	}
+	
 	public static class EDRSemanticParameter<V, T> {
 		private Semantic<V, T> semantic;
 		private T threshold;
+		@Override
+		public String toString() {
+			return "EDRSemanticParameter [semantic=" + semantic.description() + ", threshold=" + threshold + "]";
+		}
+		public T computeThreshold(V rElement, V sElement, SemanticTrajectory r, SemanticTrajectory s) {
+			if(!(threshold instanceof ComputableThreshold)) {
+				return threshold;
+			}
+			return (T) ((ComputableThreshold) threshold).compute(rElement, sElement, r, s, this.semantic);
+		}
 		public EDRSemanticParameter(Semantic<V, T> semantic, T threshlod) {
 			super();
 			this.semantic = semantic;
 			this.threshold = threshlod;
 		}
-	}
-
-	public String paramsToString() {
-		String semanticsString = "Params: ";
-		for (EDRSemanticParameter<?, ?> d : this.parameters) {
-			semanticsString += "(attr=" + d.semantic.description() + ", threshold=" + d.threshold + ")";
-		}
-		return semanticsString;
 	}
 }

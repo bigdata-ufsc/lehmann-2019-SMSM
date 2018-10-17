@@ -65,6 +65,11 @@ public class LCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		private Semantic<V, T> semantic;
 		private T threshold;
 
+		@Override
+		public String toString() {
+			return "LCSSSemanticParameter [semantic=" + semantic.description() + ", threshold=" + threshold + "]";
+		}
+
 		public LCSSSemanticParameter(Semantic<V, T> semantic, T threshlod) {
 			super();
 			this.semantic = semantic;
@@ -72,7 +77,8 @@ public class LCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		}
 	}
 
-	public String paramsToString() {
+	@Override
+	public String parametrization() {
 		String semanticsString = "Param: ";
 		for (LCSSSemanticParameter d : this.parameters) {
 			semanticsString += "(attr=" + d.semantic.description() + ", threshold=" + d.threshold + ")";

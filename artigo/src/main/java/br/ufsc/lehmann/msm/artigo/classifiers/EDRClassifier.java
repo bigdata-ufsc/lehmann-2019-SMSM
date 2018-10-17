@@ -54,7 +54,8 @@ public class EDRClassifier extends TrajectorySimilarityCalculator<SemanticTrajec
 		System.out.println(classified);
 	}
 
-	public String paramsToString() {
-		return this.edr.paramsToString();
+	@Override
+	public String parametrization() {
+		return this.edr.parametrization();
 	}
 }

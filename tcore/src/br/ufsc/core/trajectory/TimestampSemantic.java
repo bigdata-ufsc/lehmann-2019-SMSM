@@ -3,7 +3,7 @@ package br.ufsc.core.trajectory;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-public class TimestampSemantic extends Semantic<Instant, Number> {
+public class TimestampSemantic extends TemporalSemantic<Instant, Number> {
 	public static final TimestampSemantic TIMESTAMP_TEMPORAL = new TimestampSemantic(2);
 
 	public TimestampSemantic(int index) {

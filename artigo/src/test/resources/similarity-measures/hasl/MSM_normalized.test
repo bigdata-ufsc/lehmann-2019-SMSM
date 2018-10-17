@@ -1,0 +1,33 @@
+{
+	"dataset": {
+		"name" : "hasl",
+		"raw": 'true',
+		"params": {
+			"normalized" : true
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 15
+	},
+	"measure": {
+		"name": "MSM",
+		"params": [{
+			"type": "Generic",
+			"index" : 3,
+			"weight": 0.5,
+			"params": [{
+				"distance": "euclidean",
+				"threshold": "[0.05, 0.1, 0.2, 0.3, 0.5]"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 4,
+			"weight": 0.5,
+			"params": [{
+				"distance": "euclidean",
+				"threshold": "[0.05, 0.1, 0.2, 0.3, 0.5]"
+			}]
+		}]
+	}
+}

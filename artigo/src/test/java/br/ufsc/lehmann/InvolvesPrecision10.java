@@ -28,25 +28,9 @@ import com.google.gson.JsonSyntaxException;
 import br.ufsc.core.ITrainable;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
-import br.ufsc.ftsm.related.DTW;
-import br.ufsc.ftsm.related.LCSS;
-import br.ufsc.ftsm.related.MSM;
-import br.ufsc.ftsm.related.UMS;
 import br.ufsc.lehmann.InvolvesRecoverTrajectoryStats.GroundtruthRanking;
 import br.ufsc.lehmann.InvolvesRecoverTrajectoryStats.RankingPosition;
-import br.ufsc.lehmann.method.CVTI;
-import br.ufsc.lehmann.method.DTWa;
-import br.ufsc.lehmann.method.EDR;
-import br.ufsc.lehmann.method.MSTP;
-import br.ufsc.lehmann.method.wDF;
 import br.ufsc.lehmann.metric.NDCG;
-import br.ufsc.lehmann.msm.artigo.classifiers.DTWClassifier;
-import br.ufsc.lehmann.msm.artigo.classifiers.DTWaClassifier;
-import br.ufsc.lehmann.msm.artigo.classifiers.EDRClassifier;
-import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
-import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
-import br.ufsc.lehmann.msm.artigo.classifiers.MSTPClassifier;
-import br.ufsc.lehmann.msm.artigo.classifiers.SMSMClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.InvolvesDatabaseReader;
 import br.ufsc.lehmann.testexecution.Dataset;
@@ -117,7 +101,7 @@ public class InvolvesPrecision10 {
 				Integer keyUserId = InvolvesDatabaseReader.USER_ID.getData(key, 0);
 				Integer keyDimensaoData = InvolvesDatabaseReader.DIMENSAO_DATA.getData(key, 0);
 				String msg = String.format("colab = %d, dimensao_data = %d: ", keyUserId, keyDimensaoData);
-//			System.out.println(msg);
+//				System.out.println(msg);
 				GroundtruthRanking keyRanking = ranking.get(keyUserId);
 				RankingPosition maxRanking = keyRanking.maxRanking();
 				int rankingSize = maxRanking.getStartPosition() + maxRanking.getTrajs().size();
@@ -200,28 +184,7 @@ public class InvolvesPrecision10 {
 	}
 	
 	private static String paramToString(TrajectorySimilarityCalculator<SemanticTrajectory> calculator) {
-		if(calculator instanceof CVTI) {
-			return ((CVTI)calculator).paramsToString();
-		} else if(calculator instanceof DTWClassifier) {
-			return ((DTWClassifier)calculator).paramsToString();
-		} else if(calculator instanceof DTWaClassifier) {
-			return ((DTWaClassifier)calculator).paramsToString();
-		} else if(calculator instanceof EDRClassifier) {
-			return ((EDRClassifier)calculator).paramsToString();
-		} else if(calculator instanceof LCSSClassifier) {
-			return ((LCSSClassifier)calculator).paramsToString();
-		} else if(calculator instanceof MSMClassifier) {
-			return ((MSMClassifier)calculator).paramsToString();
-		} else if(calculator instanceof SMSMClassifier) {
-			return ((SMSMClassifier)calculator).paramsToString();
-		} else if(calculator instanceof MSTPClassifier) {
-			return ((MSTPClassifier)calculator).paramsToString();
-		} else if(calculator instanceof UMS) {
-			return ((UMS)calculator).paramsToString();
-		} else if(calculator instanceof wDF) {
-			return ((wDF)calculator).paramsToString();
-		}
-		return null;
+		return calculator.parametrization();
 	}
 
 	private static double bprefs(Boolean[] elements, int total_relevant, int total_non_relevant) {

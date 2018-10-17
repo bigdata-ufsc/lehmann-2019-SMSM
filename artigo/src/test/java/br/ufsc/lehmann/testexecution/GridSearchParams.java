@@ -3,20 +3,32 @@ package br.ufsc.lehmann.testexecution;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.gson.Gson;
 
+import br.ufsc.core.trajectory.Semantic;
+import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.lehmann.ComputableDouble;
+import br.ufsc.lehmann.ComputableThreshold;
 import br.ufsc.lehmann.msm.artigo.clusterers.util.DistanceMatrix.Tuple;
 
 public class GridSearchParams {
 	
 	private boolean firstExecution;
 	private LinkedList<Config> configurations = new LinkedList<>();
-	private List<Param> register = new ArrayList<>();
+	private List<Object> register = new ArrayList<>();
 
 	public GridSearchParams() {
 		this.firstExecution = true;
@@ -55,16 +67,30 @@ public class GridSearchParams {
 			}
 		}
 		
-		Value ret = registerThresholdValues(param, threshold);
+		Value ret = registerValues(param, threshold);
 		return (Number) ret.value;
 	}
 
-	private Value registerThresholdValues(Param param, String threshold) {
+	public Number getConfig(Map<String, String> cfg, String propoerty) {
+		String threshold = cfg.get(propoerty);
+		if(threshold == null) {
+			return null;
+		}
+		try {
+			return Double.parseDouble(threshold);
+		} catch (NumberFormatException e) {
+		}
+		
+		Value ret = registerValues(cfg, threshold);
+		return (Number) ret.value;
+	}
+
+	private Value registerValues(Object param, String threshold) {
 		Value ret = null;
 		if(!configurations.isEmpty()) {
 			if(register.contains(param)) {
 				Optional<Config> hasConfig = configurations.stream().filter(c -> c.params.stream().filter(t -> t.getFirst() == param && !t.getLast().used).findFirst().isPresent()).findFirst();
-				Tuple<Param, Value> tuple = hasConfig.get().params.stream().filter(t -> t.getFirst() == param).findFirst().get();
+				Tuple<Object, Value> tuple = hasConfig.get().params.stream().filter(t -> t.getFirst() == param).findFirst().get();
 				ret = tuple.getLast();
 				ret.used = true;
 			} else {
@@ -77,7 +103,7 @@ public class GridSearchParams {
 					for (Config config2 : configurations) {
 						Config cp = config2.copy();
 						cp.params.stream().forEach(tu -> tu.getLast().used = false);
-						cp.params.add(new Tuple<Param, Value>(param, new Value(value, false)));
+						cp.params.add(new Tuple<Object, Value>(param, new Value(value, false)));
 						newConfigurations.add(cp);
 					}
 				}
@@ -95,14 +121,14 @@ public class GridSearchParams {
 			for (String t : multipleThresholds) {
 				Number value = toNumber(t);
 				Config cp = new Config();
-				cp.params.add(new Tuple<Param, Value>(param, new Value(value, false)));
+				cp.params.add(new Tuple<Object, Value>(param, new Value(value, false)));
 				newConfigurations.add(cp);
 			}
 			this.configurations = newConfigurations;
 			Config config = configurations.getFirst();
-			Optional<Tuple<Param, Value>> hasConfig = config.params.stream().filter(t -> t.getFirst() == param).findFirst();
+			Optional<Tuple<Object, Value>> hasConfig = config.params.stream().filter(t -> t.getFirst() == param).findFirst();
 
-			Tuple<Param, Value> tuple = hasConfig.get();
+			Tuple<Object, Value> tuple = hasConfig.get();
 			ret = tuple.getLast();
 			ret.used = true;
 		}
@@ -122,6 +148,35 @@ public class GridSearchParams {
 						return (a.getTravelledDistance() + b.getTravelledDistance()) * DTWmultiplier.doubleValue();
 					}
 				};
+			} else if(t.startsWith("std")) {
+				Matcher m = Pattern.compile("std\\((.+)+\\)").matcher(t);
+				if(m.matches()) {
+					String stdParam = m.group(1);
+					Number stdValue = computeMath(stdParam);
+					value = new ComputableThreshold<Number, Object>() {
+
+						@Override
+						public Number compute(Object a, Object b, SemanticTrajectory trajA, SemanticTrajectory trajB,
+								Semantic<Object, Number> semantic) {
+							double stdA = getStandardDeviation(trajA, semantic);
+							double stdB = getStandardDeviation(trajB, semantic);
+							return Math.min(stdA, stdB) * stdValue.doubleValue();
+						}
+
+						private double getStandardDeviation(SemanticTrajectory traj,
+								Semantic<Object, Number> semantic) {
+							DescriptiveStatistics stats = new DescriptiveStatistics();
+							for (int i = 0; i < traj.length() - 1; i++) {
+								Object p1 = semantic.getData(traj, i);
+								Object p2 = semantic.getData(traj, i + 1);
+								double distance = semantic.distance(p1, p2);
+								stats.addValue(distance);
+							}
+							double stdA = stats.getStandardDeviation();
+							return stdA;
+						}
+					};
+				}
 			} else {
 				throw new IllegalArgumentException("Unexpected threshold value: " + t, e);
 			}
@@ -129,13 +184,24 @@ public class GridSearchParams {
 		return value;
 	}
 
+	private static Number computeMath(String stdParam) {
+		try {
+			ScriptEngineManager mgr = new ScriptEngineManager();
+			ScriptEngine engine = mgr.getEngineByName("JavaScript");
+			Number stdValue = (Number) engine.eval(stdParam);
+			return stdValue;
+		} catch (ScriptException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	private static class Config {
-		List<Tuple<Param, Value>> params = new LinkedList<>();
+		List<Tuple<Object, Value>> params = new LinkedList<>();
 		
 		Config() {
 		}
 		
-		public Config(List<Tuple<Param, Value>> collect) {
+		public Config(List<Tuple<Object, Value>> collect) {
 			params = collect;
 		}
 

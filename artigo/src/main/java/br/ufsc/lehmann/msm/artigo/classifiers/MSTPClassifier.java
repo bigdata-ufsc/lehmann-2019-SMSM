@@ -54,7 +54,8 @@ public class MSTPClassifier extends TrajectorySimilarityCalculator<SemanticTraje
 		System.out.println(classified);
 	}
 
-	public String paramsToString() {
-		return this.mstp.paramsToString();
+	@Override
+	public String parametrization() {
+		return this.mstp.parametrization();
 	}
 }

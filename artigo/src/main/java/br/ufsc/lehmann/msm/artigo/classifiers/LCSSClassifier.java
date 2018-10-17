@@ -56,7 +56,8 @@ public class LCSSClassifier extends TrajectorySimilarityCalculator<SemanticTraje
 		System.out.println(classified);
 	}
 
-	public String paramsToString() {
-		return this.lcss.paramsToString();
+	@Override
+	public String parametrization() {
+		return this.lcss.parametrization();
 	}
 }

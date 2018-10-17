@@ -1,12 +1,21 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
+import br.ufsc.core.trajectory.EqualsDistanceFunction;
+import br.ufsc.core.trajectory.IDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 
 public class BasicSemantic<V> extends Semantic<V, Number> {
+	
+	private IDistanceFunction<V> distance = new EqualsDistanceFunction<>();
 
 	public BasicSemantic(int index) {
+		this(index, new EqualsDistanceFunction<>());
+	}
+
+	public BasicSemantic(int index, IDistanceFunction<V> distance) {
 		super(index);
+		this.distance = distance;
 	}
 
 	@Override
@@ -18,12 +27,12 @@ public class BasicSemantic<V> extends Semantic<V, Number> {
 	
 	@Override
 	public double distance(V d1, V d2) {
-		return d1.equals(d2) ? 0 : 1;
+		return distance.distance(d1, d2);
 	}
 
 	@Override
 	public boolean match(SemanticTrajectory a, int i, SemanticTrajectory b, int j, Number threshold) {
-		return distance(a, i, b, j).longValue() <= (threshold == null ? 0 : threshold.longValue());
+		return distance(a, i, b, j).doubleValue() <= (threshold == null ? 0 : threshold.doubleValue());
 	}
 
 	@Override

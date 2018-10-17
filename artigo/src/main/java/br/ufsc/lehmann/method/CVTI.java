@@ -88,7 +88,8 @@ public class CVTI extends TrajectorySimilarityCalculator<SemanticTrajectory> imp
 		}
 	}
 
-	public String paramsToString() {
+	@Override
+	public String parametrization() {
 		return "Semantic: " + parameter.semantic.description() + ", threshold: " + parameter.threshlod;
 	}
 }

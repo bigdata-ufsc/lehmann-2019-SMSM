@@ -29,7 +29,9 @@ public class MSMClassifier extends TrajectorySimilarityCalculator<SemanticTrajec
 		return "MSM";
 	}
 
-	public String paramsToString() {
-		return this.msm.paramsToString();
+	
+	@Override
+	public String parametrization() {
+		return this.msm.parametrization();
 	}
 }

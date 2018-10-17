@@ -70,7 +70,8 @@ public class DTW<T, V> extends TrajectorySimilarityCalculator<SemanticTrajectory
 		return dtwMatrix[q.length()%2][p.length()];
 	}
 
-	public String paramsToString() {
+	@Override
+	public String parametrization() {
 		return "Semantic: " + this.semantic.description();
 	}
 }

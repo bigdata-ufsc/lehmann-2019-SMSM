@@ -28,7 +28,8 @@ public class SMSMClassifier extends TrajectorySimilarityCalculator<SemanticTraje
 		return "SMSM";
 	}
 
-	public String paramsToString() {
-		return this.smsm.paramsToString();
+	@Override
+	public String parametrization() {
+		return this.smsm.parametrization();
 	}
 }

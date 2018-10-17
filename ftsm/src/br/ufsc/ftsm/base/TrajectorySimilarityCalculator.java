@@ -12,4 +12,8 @@ public abstract class TrajectorySimilarityCalculator<Traj> {
 	public void destroy() {
 		
 	}
+
+	public String parametrization() {
+		return "Undefined parameters";
+	}
 }

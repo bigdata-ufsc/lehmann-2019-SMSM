@@ -344,7 +344,8 @@ public class MSTP extends TrajectorySimilarityCalculator<SemanticTrajectory> imp
 		}
 	}
 
-	public String paramsToString() {
+	@Override
+	public String parametrization() {
 		String ret = "Semantics: ";
 		for (Semantic<Comparable<? extends Object>, ?> semantic : semantics) {
 			ret += semantic.description() + ",";

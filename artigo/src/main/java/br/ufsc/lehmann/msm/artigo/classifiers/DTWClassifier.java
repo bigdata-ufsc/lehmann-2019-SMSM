@@ -48,7 +48,8 @@ public class DTWClassifier<T, V> extends TrajectorySimilarityCalculator<Semantic
 		System.out.println(classified);
 	}
 
-	public String paramsToString() {
-		return this.dtw.paramsToString();
+	@Override
+	public String parametrization() {
+		return this.dtw.parametrization();
 	}
 }

@@ -1,0 +1,24 @@
+{
+	"dataset": {
+		"name" : "geolife_university",
+		"raw": 'false',
+		"params": {
+			"pointsTable" : "geolife.geolife_inside_university_5_pois",
+			"stopTable" : "stops_moves.geolife_inside_university_stop_5_pois",
+			"moveTable" : "stops_moves.geolife_inside_university_move_5_pois"
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 10
+	},
+	"measure": {
+		"name": "EDR",
+		"params": [{
+			"type": "spatial",
+			"distance": "euclidean",
+			"threshold": "[50,100,300,500,1000,2000]",
+			"index" : 1
+		}]
+	}
+}

@@ -1,0 +1,56 @@
+{
+	"dataset": {
+		"name" : "hasl",
+		"raw": 'true',
+		"params": {
+			"normalized" : true
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 15
+	},
+	"measure": {
+		"name": "DTWa",
+		"params": [{
+			"type": "discriminator",
+			"index" : 15
+		}, {
+			"type": "Generic",
+			"index" : 5,
+			"params": [{
+				"distance": "number"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 6,
+			"params": [{
+				"distance": "number"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 7,
+			"params": [{
+				"distance": "number"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 8,
+			"params": [{
+				"distance": "number"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 9,
+			"params": [{
+				"distance": "number"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 10,
+			"params": [{
+				"distance": "number"
+			}]
+		}]
+	}
+}

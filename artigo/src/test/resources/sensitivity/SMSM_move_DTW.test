@@ -40,7 +40,7 @@
 			"params": [{
 				"type": "POINTS",
 				"distance": "DTW",
-				"threshold": "[summed-distances*0.25, summed-distances*0.50, summed-distances*0.75, summed-distances, summed-distances*1.5, summed-distances*2, summed-distances*3, summed-distances*5, summed-distances*7.5, summed-distances*10]",
+				"threshold": "[summed-distances*0.50, summed-distances, summed-distances*2.5, summed-distances*5, summed-distances*7.5, summed-distances*10]",
 				"weight": 1,
 				"params" : [{
 					"distance" : "euclidean"

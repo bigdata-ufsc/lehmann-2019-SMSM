@@ -4,11 +4,15 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.TPoint;
+import br.ufsc.core.trajectory.ThreeDimensionalPoint;
 
 public class EuclideanDistanceFunction implements SpatialDistanceFunction {
 
 	@Override
 	public double distance(TPoint p, TPoint d) {
+		if(p instanceof ThreeDimensionalPoint && d instanceof ThreeDimensionalPoint) {
+			return Distance.euclidean3D((ThreeDimensionalPoint) p, (ThreeDimensionalPoint) d);
+		}
 		return Distance.euclidean(p, d);
 	}
 	
