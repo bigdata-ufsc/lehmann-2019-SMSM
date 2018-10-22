@@ -46,7 +46,7 @@
 			"params": [{
 				"type": "POINTS",
 				"distance": "UMS",
-				"threshold": "0.0045",
+				"threshold": "0.9",
 				"weight": 1,
 				"params" : [{
 					"distance" : "euclidean"
