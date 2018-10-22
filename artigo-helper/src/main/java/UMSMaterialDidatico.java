@@ -9,6 +9,7 @@ public class UMSMaterialDidatico {
 		UMS ums = new UMS();
 		computePQ(ums);
 		computeRQ(ums);
+		computeT1T2(ums);
 	}
 
 	private static void computeT1T2(UMS ums) {
@@ -31,7 +32,7 @@ public class UMSMaterialDidatico {
 		T2.addData(6, Semantic.SPATIAL_EUCLIDEAN, new TPoint(111,6));
 		
 		double similarity = ums.getSimilarity(T1, T2);
-		System.out.println(similarity);
+		System.out.println("UMS(T1, T2) = " + similarity);
 	}
 
 	private static void computePQ(UMS ums) {

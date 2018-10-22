@@ -61,11 +61,11 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, DISTANCE_FUNCTION));
 	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
 	public static final StopSemantic STOP_TRAFFIC_LIGHT_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Stop, String>(AttributeType.STOP_TRAFFIC_LIGHT, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_TRAFFIC_LIGHT_DISTANCE_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER++, new AttributeDescriptor<Stop, Double>(AttributeType.STOP_TRAFFIC_LIGHT_DISTANCE, new NumberDistance()));
+	public static final StopSemantic STOP_TRAFFIC_LIGHT_DISTANCE_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER++, new AttributeDescriptor<Stop, Number>(AttributeType.STOP_TRAFFIC_LIGHT_DISTANCE, new NumberDistance()));
 	
 	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
-	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
-	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_DURATION, new NumberDistance()));
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, Number>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, Number>(AttributeType.MOVE_DURATION, new NumberDistance()));
 	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(DISTANCE_FUNCTION)));
 	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER++, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance()));
 	
@@ -132,8 +132,11 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 				st.setFetchSize(1000);
 
 				ResultSet stopsData = st.executeQuery(
-						"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
-								"centroid_lon, start_time, end_time, street, \"POI\" " + //
+						"SELECT stop_id, "
+						+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(start_lon, start_lat), 4326), 900913)) as start_lat, st_y(st_transform(ST_SetSRID(ST_MakePoint(start_lon, start_lat), 4326), 900913)) as start_lon, "
+						+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(end_lon, end_lat), 4326), 900913)) as end_lat, st_y(st_transform(ST_SetSRID(ST_MakePoint(end_lon, end_lat), 4326), 900913)) as end_lon, "
+						+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(centroid_lat, centroid_lon), 4326), 900913)) as centroid_lat, st_y(st_transform(ST_SetSRID(ST_MakePoint(centroid_lat, centroid_lon), 4326), 900913)) as centroid_lon, "
+						+ " begin, length, start_time, end_time, street, \"POI\" " + //
 								"FROM stops_moves.taxi_sanfrancisco_stop");
 				Map<Integer, Stop> stops = new HashMap<>();
 				while (stopsData.next()) {
@@ -201,8 +204,10 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 	}
 
 	private List<SemanticTrajectory> readStopsTrajectories(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws SQLException {
-		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, direction, stop, semantic_stop_id, semantic_move_id, stop, route" + //
-				" FROM taxi.sanfrancisco_taxicab where 1=1";
+		String sql = "SELECT gid, tid, taxi_id, st_x(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lat, "
+				+ "st_y(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lon, "
+				+ "\"timestamp\", ocupation, airport, mall, road, direction, stop, semantic_stop_id, semantic_move_id, stop, route" + //
+				" FROM taxi.sanfrancisco_taxicab where 1=1 ";
 		if(!ArrayUtils.isEmpty(roads)) {
 			sql += " and road in (SELECT * FROM unnest(?))";
 		} else if(roads != null) {

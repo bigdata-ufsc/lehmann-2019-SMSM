@@ -1,0 +1,53 @@
+{
+	"dataset": {
+		"name" : "foursquare",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 4
+	},
+	"measure": {
+		"name": "EDR",
+		"params": [{
+			"type": "Generic",
+			"index" : 3,
+			"params": [{
+				"distance" : "Number",
+				"threshold" : "[0,15,30,45,60]"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 5,
+			"params": [{
+				"distance" : "Equal"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 6,
+			"params": [{
+				"distance" : "Equal"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 7,
+			"params": [{
+				"distance" : "Equal"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 8,
+			"params": [{
+				"distance" : "Number",
+				"threshold" : "[0,1,2]"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 9,
+			"params": [{
+				"distance" : "Number",
+				"threshold" : "[0,0.5,1,1.5]"
+			}]
+		}]
+	}
+}

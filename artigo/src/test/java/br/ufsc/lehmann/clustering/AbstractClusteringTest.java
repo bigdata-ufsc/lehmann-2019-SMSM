@@ -26,6 +26,7 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.lehmann.EnumProblem;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.Trajectories;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.HierarchicalClusteringDistanceBetweenTrajectoriesExecutor;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Silhouette;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Silhouettes;
 import br.ufsc.lehmann.msm.artigo.clusterers.ClusteringResult;
@@ -99,7 +100,7 @@ public abstract class AbstractClusteringTest {
 		}
 		ClusteringResult result = null;
 		try {
-			result = executor.cluster(distances, training, measurer);
+			result = executor.cluster(data, measurer, problem.discriminator());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

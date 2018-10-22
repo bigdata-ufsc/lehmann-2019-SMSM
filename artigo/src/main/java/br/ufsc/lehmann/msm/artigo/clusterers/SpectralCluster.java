@@ -2,6 +2,7 @@ package br.ufsc.lehmann.msm.artigo.clusterers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class SpectralCluster implements IClusteringExecutor {
 	}
 
 	@Override
-	public ClusteringResult cluster(List<SemanticTrajectory> data, IMeasureDistance<SemanticTrajectory> measureDistance) {
+	public <E, T> ClusteringResult cluster(List<SemanticTrajectory> data, IMeasureDistance<SemanticTrajectory> measureDistance, Semantic<E, T> discriminator) {
 		List<SemanticTrajectory> training = new ArrayList<>(data);
 		double[][] distances = new double[training.size()][training.size()];
 		for (int i = 0; i < training.size(); i++) {
@@ -56,20 +57,15 @@ public class SpectralCluster implements IClusteringExecutor {
 		for (int i = 0; i < clusterLabel.length; i++) {
 			clusteres.put(i, training.get(i));
 		}
-		return new ClusteringResult((List) clusteres.asMap().values(), clusterLabel);
+		return new ClusteringResult(data, (List) clusteres.asMap().values(), clusterLabel, new Comparator<SemanticTrajectory>() {
+
+			@Override
+			public int compare(SemanticTrajectory o1, SemanticTrajectory o2) {
+				return discriminator.similarity(discriminator.getData(o1, 0), discriminator.getData(o2, 0)) == 1.0 ? 0 : 1;
+			}
+		});
 	}
 	
-	@Override
-	public ClusteringResult cluster(double[][] distances, SemanticTrajectory[] training, IMeasureDistance<SemanticTrajectory> measureDistance) {
-		SpectralClustering clustering = new SpectralClustering(distances, numOfClasses);
-		int[] clusterLabel = clustering.getClusterLabel();
-		Multimap<Integer, SemanticTrajectory> clusteres = MultimapBuilder.hashKeys().arrayListValues().build();
-		for (int i = 0; i < clusterLabel.length; i++) {
-			clusteres.put(i, training[i]);
-		}
-		return new ClusteringResult((List) clusteres.asMap().values(), clusterLabel);
-	}
-
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		NewYorkBusProblem problem = new NewYorkBusProblem();
 		List<SemanticTrajectory> data = problem.data();
@@ -78,7 +74,7 @@ public class SpectralCluster implements IClusteringExecutor {
 		LCSS lcss = new LCSS(new LCSSSemanticParameter(Semantic.SPATIAL_LATLON, 50),
 				new LCSSSemanticParameter(NewYorkBusDataReader.STOP_CENTROID_SEMANTIC, 100));
 		SpectralCluster spectralCluster = new SpectralCluster(2);
-		ClusteringResult clusteringResult = spectralCluster.cluster(problem.data(), lcssClassifier);
+		ClusteringResult clusteringResult = spectralCluster.cluster(problem.data(), lcssClassifier, NewYorkBusDataReader.ROUTE);
 		List<List<SemanticTrajectory>> clusteres = clusteringResult.getClusteres();
 		Map<String, MutableLong> counters = new HashMap<>();
 		for (int i = 0; i < clusteres.size(); i++) {

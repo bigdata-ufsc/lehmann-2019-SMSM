@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.gson.Gson;
 
+import br.ufsc.lehmann.msm.artigo.problems.FoursquareDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.Geolife2DatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDatabaseReader;
@@ -51,10 +52,13 @@ public class Datasets {
 			String[] regions = gson.fromJson(p.get("regions"), String[].class);
 			return new SanFranciscoCabDatabaseReader(!dataset.getRaw(), roads, directions, regions);
 		}
+		if(dataset.getName().equalsIgnoreCase("foursquare")) {
+			return new FoursquareDataReader();
+		}
 		if(dataset.getName().equalsIgnoreCase("hasl")) {
 			Boolean normalized = Boolean.FALSE;
-			Boolean rightHand = Boolean.TRUE;
-			Boolean leftHand = Boolean.TRUE;
+			Boolean rightHand = Boolean.FALSE;
+			Boolean leftHand = Boolean.FALSE;
 			if(p != null) {
 				Gson gson = new Gson();
 				String json = p.get("normalized");

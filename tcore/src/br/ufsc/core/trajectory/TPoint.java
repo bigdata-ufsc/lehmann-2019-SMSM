@@ -111,11 +111,6 @@ public class TPoint extends Point {
 		}
 		return t.compareTo(((TPoint) p).t);
 	}
-	
-//	@Override
-//	public int hashCode() {
-//		return Double.valueOf(x).hashCode() ^ Double.valueOf(y).hashCode() ^ Double.valueOf(t.getTime()).hashCode();
-//	}
 
 	public long getGid() {
 		return gid;
@@ -124,8 +119,8 @@ public class TPoint extends Point {
 	public void setGid(long gid) {
 		this.gid = gid;
 	}
-	
-//	public double getSpeed() {
-//		return speed;
-//	}
+
+	public void setTime(double d) {
+		this.t.setTime((long) d);
+	}
 }

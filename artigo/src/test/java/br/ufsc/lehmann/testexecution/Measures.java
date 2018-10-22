@@ -39,6 +39,7 @@ import br.ufsc.lehmann.method.CATS.CATSSemanticParameter;
 import br.ufsc.lehmann.method.CVTI;
 import br.ufsc.lehmann.method.CVTI.CVTISemanticParameter;
 import br.ufsc.lehmann.method.EDR.EDRSemanticParameter;
+import br.ufsc.lehmann.method.EDwP;
 import br.ufsc.lehmann.method.SWALE;
 import br.ufsc.lehmann.method.SWALE.SWALEParameters;
 import br.ufsc.lehmann.method.wDF;
@@ -105,6 +106,9 @@ public class Measures {
 		if(measure.getName().equalsIgnoreCase("UMS")) {
 			return createUMS(measure);
 		}
+		if(measure.getName().equalsIgnoreCase("EDwP")) {
+			return createUMS(measure);
+		}
 		if(measure.getName().equalsIgnoreCase("DTWa")) {
 			return createDTWa(measure);
 		}
@@ -116,6 +120,10 @@ public class Measures {
 
 	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createUMS(Measure measure) {
 		return Arrays.asList(new UMS());
+	}
+
+	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createEDwP(Measure measure) {
+		return Arrays.asList(new EDwP());
 	}
 
 	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createSMSM(Measure measure) {
@@ -731,6 +739,10 @@ public class Measures {
 					switch(timeParam.getType().toUpperCase()) {
 					case "MILLIS":
 						unit = ChronoUnit.MILLIS;
+					case "HOURS":
+						unit = ChronoUnit.HOURS;
+					case "MINUTES":
+						unit = ChronoUnit.MINUTES;
 					}
 				}
 				distance = new TimeunitDistance(unit);

@@ -42,8 +42,8 @@ public class SensitivityEvaluation {
 
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/sensitivity/weights"));
-		files.filter(path -> path.toFile().isFile() && path.toString().contains(".test") && path.toString().endsWith(".test")).forEach(path -> {
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/sensitivity"));
+		files.filter(path -> path.toFile().isFile() && path.toString().contains("SMSM_CRAWDAD_spatial") && path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
 			PrintStream bkp = System.out;

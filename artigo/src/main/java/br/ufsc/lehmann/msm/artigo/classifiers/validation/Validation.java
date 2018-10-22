@@ -53,6 +53,7 @@ import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.classifier.Binarizer;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;
+import br.ufsc.lehmann.msm.artigo.clusterers.ClusteringResult;
 import smile.math.Math;
 import smile.math.Random;
 
@@ -75,6 +76,11 @@ public class Validation {
 		this.groundTruthSemantic = groundTruthSemantic;
 		this.measure = measure;
 		this.random = random;
+	}
+
+	public ClusteringResult cluster(TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance, SemanticTrajectory[] testData, int numberOfClusters) {
+		HierarchicalClusteringDistanceBetweenTrajectoriesExecutor clustering = new HierarchicalClusteringDistanceBetweenTrajectoriesExecutor(numberOfClusters);
+		return clustering.cluster(Arrays.asList(testData), measure, groundTruthSemantic);
 	}
 
 	public double[] precisionAtRecall(TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance, SemanticTrajectory[] testData, int recallLevel) {
