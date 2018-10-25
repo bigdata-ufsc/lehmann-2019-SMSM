@@ -1,0 +1,59 @@
+{
+	"dataset": {
+		"name" : "foursquare",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 4
+	},
+	"measure": {
+		"name": "MSM",
+		"params": [{
+			"type": "Generic",
+			"index" : 3,
+			"weight" : 0.16667,
+			"params": [{
+				"distance" : "Number",
+				"threshold" : "[0,15,30,45,60]"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 5,
+			"weight" : 0.16667,
+			"params": [{
+				"distance" : "Equal"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 6,
+			"weight" : 0.16667,
+			"params": [{
+				"distance" : "Equal"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 7,
+			"weight" : 0.16667,
+			"params": [{
+				"distance" : "Equal"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 8,
+			"weight" : 0.16667,
+			"params": [{
+				"distance" : "Number",
+				"threshold" : "[0,1,2]"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 9,
+			"weight" : 0.16667,
+			"params": [{
+				"distance" : "Number",
+				"threshold" : "[0,0.5,1,1.5]"
+			}]
+		}]
+	}
+}

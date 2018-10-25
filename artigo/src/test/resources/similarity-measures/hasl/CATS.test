@@ -1,10 +1,7 @@
 {
 	"dataset": {
-		"name" : "hasl",
-		"raw": 'true',
-		"params": {
-			"normalized" : false
-		}
+		"name" : "foursquare",
+		"raw": 'true'
 	},
 	"groundtruth": {
 		"type": "String",
@@ -23,7 +20,7 @@
 			"distance": "time-unit",
 			"threshold": "[0,5,10,15,25]",
 			"params": [{
-				"type": "millis"
+				"type": "minutes"
 			}]
 		}]
 	}

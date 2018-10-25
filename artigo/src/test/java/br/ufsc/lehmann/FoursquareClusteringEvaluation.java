@@ -36,12 +36,12 @@ import br.ufsc.lehmann.testexecution.Measure;
 import br.ufsc.lehmann.testexecution.Measures;
 import smile.math.Random;
 
-public class FoursquareEvaluation {
+public class FoursquareClusteringEvaluation {
 
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
 		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/foursquare"));
-		files.filter(path -> path.toFile().isFile() && path.toString().contains("EDR") && path.toString().endsWith(".test")).forEach(path -> {
+		files.filter(path -> path.toFile().isFile() && path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
 			PrintStream bkp = System.out;

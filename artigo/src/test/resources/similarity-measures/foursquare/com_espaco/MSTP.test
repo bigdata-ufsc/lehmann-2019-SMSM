@@ -8,51 +8,36 @@
 		"index": 4
 	},
 	"measure": {
-		"name": "MSM",
+		"name": "MSTP",
 		"params": [{
 			"type": "Generic",
-			"index" : 3,
-			"weigth" : 0.16667,
-			"params": [{
-				"distance" : "Number",
-				"threshold" : "[0,15,30,45,60]"
-			}]
-		}, {
-			"type": "Generic",
 			"index" : 5,
-			"weigth" : 0.16667,
 			"params": [{
 				"distance" : "Equal"
 			}]
 		}, {
 			"type": "Generic",
 			"index" : 6,
-			"weigth" : 0.16667,
 			"params": [{
 				"distance" : "Equal"
 			}]
 		}, {
 			"type": "Generic",
 			"index" : 7,
-			"weigth" : 0.16667,
 			"params": [{
 				"distance" : "Equal"
 			}]
 		}, {
 			"type": "Generic",
 			"index" : 8,
-			"weigth" : 0.16667,
 			"params": [{
-				"distance" : "Number",
-				"threshold" : "[0,1,2]"
+				"distance" : "Number"
 			}]
 		}, {
 			"type": "Generic",
 			"index" : 9,
-			"weigth" : 0.16667,
 			"params": [{
-				"distance" : "Number",
-				"threshold" : "[0,0.5,1,1.5]"
+				"distance" : "Number"
 			}]
 		}]
 	}

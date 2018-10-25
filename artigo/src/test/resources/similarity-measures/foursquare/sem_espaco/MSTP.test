@@ -1,0 +1,44 @@
+{
+	"dataset": {
+		"name" : "foursquare",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 4
+	},
+	"measure": {
+		"name": "MSTP",
+		"params": [{
+			"type": "Generic",
+			"index" : 5,
+			"params": [{
+				"distance" : "Equal"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 6,
+			"params": [{
+				"distance" : "Equal"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 7,
+			"params": [{
+				"distance" : "Equal"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 8,
+			"params": [{
+				"distance" : "Number"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 9,
+			"params": [{
+				"distance" : "Number"
+			}]
+		}]
+	}
+}

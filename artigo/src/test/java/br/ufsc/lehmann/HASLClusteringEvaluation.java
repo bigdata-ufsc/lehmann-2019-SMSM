@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -28,6 +29,7 @@ import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.AUC;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.MAP;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Validation;
+import br.ufsc.lehmann.msm.artigo.clusterers.ClusteringResult;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import br.ufsc.lehmann.testexecution.Dataset;
@@ -38,12 +40,12 @@ import br.ufsc.lehmann.testexecution.Measure;
 import br.ufsc.lehmann.testexecution.Measures;
 import smile.math.Random;
 
-public class HASLEvaluation {
+public class HASLClusteringEvaluation {
 
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/hasl"));
-		files.filter(path -> path.toFile().isFile() && path.toString().contains("EDwP") && path.toString().endsWith(".test")).forEach(path -> {
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/hasl/"));
+		files.filter(path -> path.toFile().isFile() && path.toString().contains("test") && path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
 			PrintStream bkp = System.out;
@@ -97,20 +99,18 @@ public class HASLEvaluation {
 		for (TrajectorySimilarityCalculator<SemanticTrajectory> calculator : similarityCalculator) {
 			Validation validation = new Validation(groundtruthSemantic, (IMeasureDistance<SemanticTrajectory>) calculator);
 			
-			Stopwatch w = Stopwatch.createStarted();
-			if(calculator instanceof ITrainable) {
-				((ITrainable) calculator).train(Arrays.asList(allData));
-			}
-			
-			double[] precisionAtRecall = validation.precisionAtRecall(calculator, allData, /*data.size() / problemDescriptor.numClasses()*/10);
-			w = w.stop();
-			System.out.printf("Parameters: '%s'\n", calculator.parametrization());
-			System.out.printf("Elapsed time %d miliseconds\n", w.elapsed(TimeUnit.MILLISECONDS));
-			System.out.printf("Precision@recall(%d): %s\n", /*data.size() / problemDescriptor.numClasses()*/10, ArrayUtils.toString(precisionAtRecall, "0.0"));
-			double auc = AUC.precisionAtRecall(precisionAtRecall);
-			System.out.printf("AUC: %.2f\n", auc);
-			double map = MAP.precisionAtRecall(precisionAtRecall);
-			System.out.printf("MAP: %.2f\n", map);
+			IntStream.of(50,100,200,500,750,1000,1250,1500).forEach(numberOfClusters -> {
+				Stopwatch w = Stopwatch.createStarted();
+				if(calculator instanceof ITrainable) {
+					((ITrainable) calculator).train(Arrays.asList(allData));
+				}
+				ClusteringResult result = validation.cluster(calculator, allData, numberOfClusters);
+				w = w.stop();
+				System.out.printf("Number of clusters: %d\n", numberOfClusters);
+				System.out.printf("Parameters: '%s'\n", calculator.parametrization());
+				System.out.printf("Elapsed time %d miliseconds\n", w.elapsed(TimeUnit.MILLISECONDS));
+				System.out.printf("F-Measure: %.8f\n", result.fMeasure());
+			});;
 		}
 	}
 }

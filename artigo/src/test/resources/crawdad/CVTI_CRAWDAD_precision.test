@@ -15,11 +15,6 @@
 	"measure": {
 		"name": "CVTI",
 		"params": [{
-			"type": "temporal",
-			"distance": "proportion",
-			"threshold": "0.8",
-			"index" : 2
-		}, {
 			"type": "Semantic",
 			"index" : 7,
 			"params" : [{

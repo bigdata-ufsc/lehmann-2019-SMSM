@@ -384,6 +384,13 @@ public class Measures {
 						break;
 					}
 					break;
+				case "GENERIC":
+					List<Param> genericParams = param.getParams();
+					Param genParam = genericParams.get(0);
+					String genDistance = genParam.getDistance().toUpperCase();
+					distance = createDistance(genParam, genDistance);
+					semantic = new BasicSemantic<>(index.intValue(), distance);
+					break;
 				case "SEMANTIC":
 					List<Param> semanticParams = param.getParams();
 					Param semParam = semanticParams.get(0);
