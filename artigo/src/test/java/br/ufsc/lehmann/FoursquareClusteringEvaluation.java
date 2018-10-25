@@ -41,15 +41,15 @@ public class FoursquareClusteringEvaluation {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
 		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/foursquare"));
-		files.filter(path -> path.toFile().isFile() && path.toString().endsWith(".test")).forEach(path -> {
+		files.filter(path -> path.toFile().isFile() && path.toString().contains("MS") && path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
 			PrintStream bkp = System.out;
 			try {
 				int i = 1;
-				File out = new File(path.toFile().getParentFile(), path.getFileName().toString() + ".out");
+				File out = new File(path.toFile().getParentFile(), path.getFileName().toString() + ".clustering.out");
 				while(out.exists()) {
-					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".out");
+					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".clustering.out");
 				}
 				System.setOut(new PrintStream(new FileOutputStream(out)));
 				executeDescriptor(fileName);
