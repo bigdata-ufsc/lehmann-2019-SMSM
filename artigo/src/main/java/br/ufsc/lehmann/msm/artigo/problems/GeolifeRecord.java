@@ -16,6 +16,11 @@ public class GeolifeRecord {
 	private Integer semanticMoveId;
 	private String path;
 	private String direction;
+	
+	public GeolifeRecord(int tid, int gid, Timestamp time, double longitude, double latitude, int userId, String transportationMode) {
+		this(tid, gid, time, longitude, latitude, userId, transportationMode, null, null, null, null, null);
+	}
+	
 	public GeolifeRecord(int tid, int gid, Timestamp time, double longitude, double latitude, int userId, String transportationMode, String pOI,
 			Integer semanticStop, Integer semanticMoveId) {
 		this(tid, gid, time, longitude, latitude, userId, transportationMode, pOI, null, null, semanticStop, semanticMoveId);
