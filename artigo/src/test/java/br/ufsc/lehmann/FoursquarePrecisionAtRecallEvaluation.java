@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -29,7 +28,6 @@ import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.AUC;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.MAP;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Validation;
-import br.ufsc.lehmann.msm.artigo.clusterers.ClusteringResult;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import br.ufsc.lehmann.testexecution.Dataset;
@@ -51,9 +49,9 @@ public class FoursquarePrecisionAtRecallEvaluation {
 			PrintStream bkp = System.out;
 			try {
 				int i = 1;
-				File out = new File(path.toFile().getParentFile(), path.getFileName().toString() + ".out");
+				File out = new File(path.toFile().getParentFile(), path.getFileName().toString() + ".p@r.out");
 				while(out.exists()) {
-					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".out");
+					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".p@r.out");
 				}
 				System.setOut(new PrintStream(new FileOutputStream(out)));
 				executeDescriptor(fileName);

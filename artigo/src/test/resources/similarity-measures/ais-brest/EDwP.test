@@ -1,0 +1,13 @@
+{
+	"dataset": {
+		"name" : "ais-brest",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "Number",
+		"index": 3
+	},
+	"measure": {
+		"name": "EDwP"
+	}
+}

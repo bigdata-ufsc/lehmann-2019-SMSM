@@ -734,6 +734,10 @@ public class Measures {
 					switch(timeParam.getType().toUpperCase()) {
 					case "MILLIS":
 						stamp = ChronoUnit.MILLIS;
+					case "HOURS":
+						stamp = ChronoUnit.HOURS;
+					case "MINUTES":
+						stamp = ChronoUnit.MINUTES;
 					}
 				}
 				distance = new TimestampDistance(stamp);

@@ -1,0 +1,31 @@
+{
+	"dataset": {
+		"name" : "ais-brest",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "Number",
+		"index": 3
+	},
+	"measure": {
+		"name": "Swale",
+		"config": {
+			"penalty": "[0,1,2,3,4,5]",
+			"reward" : "[0,1,2,3,4,5]"
+		},
+		"params": [{
+			"type": "spatial",
+			"index" : 1,
+			"distance": "euclidean",
+			"threshold": "[0, 50, 100, 200, 500]"
+		}, {
+			"type": "temporal",
+			"index" : 2,
+			"distance": "timestamp",
+			"threshold": "[0,5,10,15,25]",
+			"params": [{
+				"type": "minutes"
+			}]
+		}]
+	}
+}

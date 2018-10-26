@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.gson.Gson;
 
+import br.ufsc.lehmann.msm.artigo.problems.AISBrestDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.FoursquareDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.Geolife2DatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeDatabaseReader;
@@ -75,6 +76,9 @@ public class Datasets {
 				}
 			}
 			return new HASLDatabaseReader(dataset.getRaw(), normalized, leftHand, rightHand);
+		}
+		if(dataset.getName().equalsIgnoreCase("ais-brest")) {
+			return new AISBrestDataReader();
 		}
 		return null;
 	}

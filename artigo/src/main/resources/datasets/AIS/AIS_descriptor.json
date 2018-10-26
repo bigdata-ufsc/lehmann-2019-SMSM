@@ -1,0 +1,5 @@
+{
+	"name": "AIS Brest",
+	"header" : ["gid", "date", "lat", "lon", "time", "geom", "tid", "heading", "speed", "cog", "rot", "shipcode"],
+	"data_files": ["ais_2009_chunk1.zip", "ais_2009_chunk2.zip", "ais_2009_chunk3.zip", "ais_2009_chunk4.zip", "ais_2009_chunk5.zip", "ais_2009_chunk6.zip", "ais_2009_chunk7.zip", "ais_2009_chunk8.zip", "ais_2009_chunk9.zip", "ais_2009_chunk10.zip"]
+}
