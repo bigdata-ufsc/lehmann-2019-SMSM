@@ -13,7 +13,7 @@
 			"type": "spatial",
 			"index" : 1,
 			"distance" : "euclidean",
-			"threshold": "[0,100,200,500,1000]"
+			"threshold": 0
 		}, {
 			"type": "Generic",
 			"index" : 3,

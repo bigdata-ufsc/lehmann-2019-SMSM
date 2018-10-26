@@ -14,7 +14,7 @@
 			"index" : 1,
 			"weight" : 0.1429,
 			"distance" : "euclidean",
-			"threshold": "[0,100,200,500,1000]"
+			"threshold": 0
 		}, {
 			"type": "Generic",
 			"index" : 3,
