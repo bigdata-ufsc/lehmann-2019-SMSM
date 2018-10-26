@@ -1,0 +1,28 @@
+{
+	"dataset": {
+		"name" : "ais-brest",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "Number",
+		"index": 3
+	},
+	"measure": {
+		"name": "DTWa",
+		"params": [{
+			"type": "discriminator",
+			"index" : 3
+		}, {
+			"type": "spatial",
+			"index" : 1,
+			"distance": "euclidean"
+		}, {
+			"type": "temporal",
+			"index" : 2,
+			"distance": "timestamp"
+			"params": [{
+				"type": "minutes"
+			}]
+		}]
+	}
+}
