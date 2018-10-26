@@ -49,9 +49,9 @@ public class HASLPrecisionAtRecallEvaluation {
 			PrintStream bkp = System.out;
 			try {
 				int i = 1;
-				File out = new File(path.toFile().getParentFile(), path.getFileName().toString() + ".out");
+				File out = new File(path.toFile().getParentFile(), path.getFileName().toString() + ".p@r.out");
 				while(out.exists()) {
-					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".out");
+					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".p@r.out");
 				}
 				System.setOut(new PrintStream(new FileOutputStream(out)));
 				executeDescriptor(fileName);

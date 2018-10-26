@@ -51,9 +51,9 @@ public class HASLClusteringEvaluation {
 			PrintStream bkp = System.out;
 			try {
 				int i = 1;
-				File out = new File(path.toFile().getParentFile(), path.getFileName().toString() + ".out");
+				File out = new File(path.toFile().getParentFile(), path.getFileName().toString() + ".clustering.out");
 				while(out.exists()) {
-					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".out");
+					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".clustering.out");
 				}
 				System.setOut(new PrintStream(new FileOutputStream(out)));
 				executeDescriptor(fileName);
