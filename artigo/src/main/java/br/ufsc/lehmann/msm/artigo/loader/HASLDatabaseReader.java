@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo.problems;
+package br.ufsc.lehmann.msm.artigo.loader;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,8 +27,10 @@ import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
 import br.ufsc.lehmann.msm.artigo.clusterers.util.DistanceMatrix.Tuple;
-import br.ufsc.lehmann.msm.artigo.problems.HASLRecord.Hand;
-import br.ufsc.lehmann.msm.artigo.problems.HASLRecord.Hands;
+import br.ufsc.lehmann.msm.artigo.loader.HASLRecord.Hand;
+import br.ufsc.lehmann.msm.artigo.loader.HASLRecord.Hands;
+import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 
 public class HASLDatabaseReader implements IDataReader {
 	

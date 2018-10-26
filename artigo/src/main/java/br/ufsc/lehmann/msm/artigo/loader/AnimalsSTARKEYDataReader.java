@@ -1,7 +1,5 @@
-package br.ufsc.lehmann.msm.artigo.problems;
+package br.ufsc.lehmann.msm.artigo.loader;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -21,17 +19,17 @@ import java.util.zip.ZipFile;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import com.google.gson.Gson;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import cc.mallet.util.IoUtils;
 
 public class AnimalsSTARKEYDataReader implements IDataReader {

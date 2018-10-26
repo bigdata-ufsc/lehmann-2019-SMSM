@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo.problems;
+package br.ufsc.lehmann.msm.artigo.loader;
 
 import br.ufsc.core.trajectory.TPoint;
 
