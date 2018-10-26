@@ -12,8 +12,8 @@
 		"params": [{
 			"type": "spatial",
 			"index" : 1,
-			"distance" : "latlon",
-			"threshold": "[0,100,200,500,1000]"
+			"distance" : "euclidean",
+			"threshold": 0
 		}, {
 			"type": "Generic",
 			"index" : 3,
