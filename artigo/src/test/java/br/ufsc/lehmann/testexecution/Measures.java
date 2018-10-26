@@ -731,14 +731,7 @@ public class Measures {
 				if(stopParam != null) {
 					List<Param> dtwParams = stopParam.getParams();
 					Param timeParam = dtwParams.get(0);
-					switch(timeParam.getType().toUpperCase()) {
-					case "MILLIS":
-						stamp = ChronoUnit.MILLIS;
-					case "HOURS":
-						stamp = ChronoUnit.HOURS;
-					case "MINUTES":
-						stamp = ChronoUnit.MINUTES;
-					}
+					stamp = ChronoUnit.valueOf(timeParam.getType().toUpperCase());
 				}
 				distance = new TimestampDistance(stamp);
 				break;
@@ -747,14 +740,7 @@ public class Measures {
 				if(stopParam != null) {
 					List<Param> dtwParams = stopParam.getParams();
 					Param timeParam = dtwParams.get(0);
-					switch(timeParam.getType().toUpperCase()) {
-					case "MILLIS":
-						unit = ChronoUnit.MILLIS;
-					case "HOURS":
-						unit = ChronoUnit.HOURS;
-					case "MINUTES":
-						unit = ChronoUnit.MINUTES;
-					}
+					unit = ChronoUnit.valueOf(timeParam.getType().toUpperCase());
 				}
 				distance = new TimeunitDistance(unit);
 				break;

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.gson.Gson;
 
 import br.ufsc.lehmann.msm.artigo.problems.AISBrestDataReader;
+import br.ufsc.lehmann.msm.artigo.problems.AnimalsSTARKEYDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.FoursquareDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.Geolife2DatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeDatabaseReader;
@@ -79,6 +80,9 @@ public class Datasets {
 		}
 		if(dataset.getName().equalsIgnoreCase("ais-brest")) {
 			return new AISBrestDataReader();
+		}
+		if(dataset.getName().equalsIgnoreCase("animals")) {
+			return new AnimalsSTARKEYDataReader();
 		}
 		return null;
 	}
