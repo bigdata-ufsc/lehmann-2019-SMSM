@@ -1,7 +1,5 @@
-package br.ufsc.lehmann.msm.artigo.problems;
+package br.ufsc.lehmann.msm.artigo.loader;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -21,30 +19,28 @@ import java.util.zip.ZipFile;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import com.google.gson.Gson;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeRecord;
+import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import cc.mallet.util.IoUtils;
 
-public class AnimalsSTARKEYDataReader implements IDataReader {
+public class GeolifeTransportationModeDataReader implements IDataReader {
 	
 	private static int semantics_count = 3;
 	
-	public static final BasicSemantic<String> SPECIES = new BasicSemantic<>(semantics_count++);
-	public static final BasicSemantic<Date> GRENSUNR = new BasicSemantic<>(semantics_count++);
-	public static final BasicSemantic<Date> GRENSUNS = new BasicSemantic<>(semantics_count++);
-	public static final BasicSemantic<Double> OBSWT = new BasicSemantic<>(semantics_count++);
+	public static final BasicSemantic<Integer> USER_ID = new BasicSemantic<>(semantics_count++);
+	public static final BasicSemantic<String> MODE = new BasicSemantic<>(semantics_count++);
 
-	private static final DateFormat DF = new SimpleDateFormat("YYYYMMDD HH:mm:SS");
-	private static final DateFormat TF = new SimpleDateFormat("HH:mm:SS");
+	private static final DateFormat DF = new SimpleDateFormat("YYYY-MM-DD HH:mm:SS");
 
 	@Override
 	public List<SemanticTrajectory> read() {
@@ -57,14 +53,14 @@ public class AnimalsSTARKEYDataReader implements IDataReader {
 
 	private List<SemanticTrajectory> readRawFile() throws IOException, UnsupportedEncodingException {
 		System.out.println("Reading file...");
-		Multimap<String, AnimalRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
-		String file = "./datasets/animal.starkey.zip";
+		Multimap<Integer, GeolifeRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
+		String file = "./datasets/geolife_transportation_mode.zip";
 		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource(file).getFile(), "UTF-8"));
-		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("animal.starkey.csv")));
+		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("geolife_transportation_mode.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
-				CSVFormat.EXCEL.withHeader("UTMGrid", "UTMGridEast", "UTMGridNorth", "Id", "StarkeyTime", "GMDate", "GMTime", "LocDate", "LocTime", "RadNum", "Species", "UTME", "UTMN", "Year", "Grensunr", "Grensuns", "Obswt").withDelimiter(';'));
+				
+				CSVFormat.EXCEL.withHeader("gid", "tid", "lat", "lon", "timestamp", "altitude", "user_id", "mode").withDelimiter(';'));
 		Iterator<CSVRecord> pointsData = pointsParser.iterator();
-		int gid = 0;
 		System.out.println("Fetching...");
 		while(pointsData.hasNext()) {
 			CSVRecord data = pointsData.next();
@@ -72,27 +68,23 @@ public class AnimalsSTARKEYDataReader implements IDataReader {
 				//skip header
 				continue;
 			}
-			String tid = data.get("Id");
+			int tid = Integer.parseInt(data.get("tid"));
+			int gid = Integer.parseInt(data.get("gid"));
 			Timestamp date = null;
-			Date grensunr = null;
-			Date grensuns = null;
 			try {
-				date = new Timestamp(DF.parse(data.get("LocDate") + " " + data.get("LocTime")).getTime());
-				grensunr = TF.parse(data.get("Grensunr"));
-				grensuns = TF.parse(data.get("Grensuns"));
+				date = new Timestamp(DF.parse(data.get("timestamp")).getTime());
 			} catch (ParseException e) {
 				System.err.println(e.getMessage());
 			}
-			TPoint latlon = new TPoint(Double.parseDouble(data.get("UTMGridEast")), Double.parseDouble(data.get("UTMGridNorth")), date);
-			AnimalRecord record = new AnimalRecord(
-					gid++,
+			TPoint latlon = new TPoint(Double.parseDouble(data.get("lon")), Double.parseDouble(data.get("lat")), date);
+			GeolifeRecord record = new GeolifeRecord(
 					tid,
-					latlon,
+					gid,
 					date,
-					data.get("Species"),
-					grensunr,
-					grensuns,
-					Double.parseDouble(data.get("Obswt"))
+					latlon.getX(),
+					latlon.getY(),
+					Integer.parseInt(data.get("user_id")),
+					data.get("mode")
 					);
 			records.put(record.getTid(), record);
 		}
@@ -100,20 +92,18 @@ public class AnimalsSTARKEYDataReader implements IDataReader {
 		System.out.printf("Loaded %d points from dataset\n", records.size());
 		System.out.printf("Loaded %d trajectories from dataset\n", records.keySet().size());
 		List<SemanticTrajectory> ret = new ArrayList<>();
-		Set<String> keys = records.keySet();
+		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
-		for (String trajId : keys) {
+		for (Integer trajId : keys) {
 			SemanticTrajectory s = new SemanticTrajectory(trajId, semantics_count);
-			Collection<AnimalRecord> collection = records.get(trajId);
+			Collection<GeolifeRecord> collection = records.get(trajId);
 			int i = 0;
-			for (AnimalRecord record : collection) {
+			for (GeolifeRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.SPATIAL_LATLON, record.getLatlon());
-				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTimestamp().getTime()), Instant.ofEpochMilli(record.getTimestamp().getTime())));
-				s.addData(i, SPECIES, record.getSpecie());
-				s.addData(i, GRENSUNR, record.getGrensunr());
-				s.addData(i, GRENSUNS, record.getGrensuns());
-				s.addData(i, OBSWT, record.getObswt());
+				s.addData(i, Semantic.SPATIAL_LATLON, new TPoint(record.getLongitude(), record.getLatitude(), record.getTime()));
+				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
+				s.addData(i, USER_ID, record.getUserId());
+				s.addData(i, MODE, record.getTransportationMode());
 				i++;
 			}
 			stats.addValue(s.length());
@@ -124,16 +114,16 @@ public class AnimalsSTARKEYDataReader implements IDataReader {
 	}
 
 	public static void main(String[] args) {
-		List<SemanticTrajectory> read = new AnimalsSTARKEYDataReader().read();
+		List<SemanticTrajectory> read = new GeolifeTransportationModeDataReader().read();
 		Multimap<String, SemanticTrajectory> classes = MultimapBuilder.hashKeys().arrayListValues().build();
 		for (SemanticTrajectory t : read) {
-			classes.put(SPECIES.getData(t, 0), t);
+			classes.put(MODE.getData(t, 0), t);
 		}
 		read = null;
 		Set<String> keys = classes.keySet();
 		for (String k : keys) {
 			Collection<SemanticTrajectory> trajs = classes.get(k);
-			System.out.printf("\tSPECIES '%s' - %d trajectories\n", k, trajs.size());
+			System.out.printf("\tMODE '%s' - %d trajectories\n", k, trajs.size());
 		}
 	}
 }

@@ -6,13 +6,14 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.gson.Gson;
 
-import br.ufsc.lehmann.msm.artigo.problems.AISBrestDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.AnimalsSTARKEYDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.FoursquareDataReader;
+import br.ufsc.lehmann.msm.artigo.loader.AISBrestDataReader;
+import br.ufsc.lehmann.msm.artigo.loader.AnimalsSTARKEYDataReader;
+import br.ufsc.lehmann.msm.artigo.loader.FoursquareDataReader;
+import br.ufsc.lehmann.msm.artigo.loader.GeolifeTransportationModeDataReader;
+import br.ufsc.lehmann.msm.artigo.loader.HASLDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.Geolife2DatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDatabaseReader;
-import br.ufsc.lehmann.msm.artigo.problems.HASLDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.InvolvesDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDatabaseReader;
@@ -46,6 +47,9 @@ public class Datasets {
 			String stopTable = p.get("stopTable");
 			String mappingTable = p.get("mappingTable");
 			return new Geolife2DatabaseReader(!dataset.getRaw(), stopTable, moveTable, mappingTable, pointsTable);
+		}
+		if(dataset.getName().equalsIgnoreCase("geolife_transportation_mode")) {
+			return new GeolifeTransportationModeDataReader();
 		}
 		if(dataset.getName().equalsIgnoreCase("crawdad")) {
 			Gson gson = new Gson();

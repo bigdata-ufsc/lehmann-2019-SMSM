@@ -1,4 +1,4 @@
-package br.ufsc.lehmann.msm.artigo.problems;
+package br.ufsc.lehmann.msm.artigo.loader;
 
 import java.io.File;
 import java.io.FileReader;
@@ -31,6 +31,9 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
+import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
+import br.ufsc.lehmann.msm.artigo.problems.DatasetDescriptor;
+import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import cc.mallet.util.IoUtils;
 
 public class AISBrestDataReader implements IDataReader {
