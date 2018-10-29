@@ -9,7 +9,6 @@ import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
@@ -41,7 +40,7 @@ public class FoursquareClusteringEvaluation {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
 		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/foursquare"));
-		files.filter(path -> path.toFile().isFile() && path.toString().contains("MS") && path.toString().endsWith(".test")).forEach(path -> {
+		files.filter(path -> path.toFile().isFile() && path.toString().contains("EDR_EDA") && path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
 			PrintStream bkp = System.out;
@@ -78,28 +77,15 @@ public class FoursquareClusteringEvaluation {
 		IDataReader dataReader = Datasets.createDataset(dataset);
 		List<SemanticTrajectory> data = dataReader.read();
 		
-		Collections.shuffle(data, new java.util.Random() {
-			smile.math.Random rnd = new smile.math.Random();
-			@Override
-			public int nextInt(int bound) {
-				return random.nextInt(bound);
-			}
-			
-			@Override
-			public int nextInt() {
-				return random.nextInt();
-			}
-		});
-
 		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
 		for (TrajectorySimilarityCalculator<SemanticTrajectory> calculator : similarityCalculator) {
 			Validation validation = new Validation(groundtruthSemantic, (IMeasureDistance<SemanticTrajectory>) calculator);
 			
+			if(calculator instanceof ITrainable) {
+				((ITrainable) calculator).train(Arrays.asList(allData));
+			}
 			IntStream.of(50,100,200,500,750,1000,1250,1500).forEach(numberOfClusters -> {
 				Stopwatch w = Stopwatch.createStarted();
-				if(calculator instanceof ITrainable) {
-					((ITrainable) calculator).train(Arrays.asList(allData));
-				}
 				ClusteringResult result = validation.cluster(calculator, allData, numberOfClusters);
 				w = w.stop();
 				System.out.printf("Number of clusters: %d\n", numberOfClusters);
