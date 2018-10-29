@@ -63,11 +63,16 @@ public class Datasets {
 		}
 		if(dataset.getName().equalsIgnoreCase("hasl")) {
 			Boolean normalized = Boolean.FALSE;
+			Boolean shifted = Boolean.FALSE;
 			Boolean rightHand = Boolean.FALSE;
 			Boolean leftHand = Boolean.FALSE;
 			if(p != null) {
 				Gson gson = new Gson();
-				String json = p.get("normalized");
+				String json = p.get("shift-origin");
+				if(!StringUtils.isEmpty(json)) {
+					shifted = gson.fromJson(json, Boolean.class);
+				}
+				json = p.get("normalized");
 				if(!StringUtils.isEmpty(json)) {
 					normalized = gson.fromJson(json, Boolean.class);
 				}
@@ -80,7 +85,7 @@ public class Datasets {
 					rightHand = gson.fromJson(json, Boolean.class);
 				}
 			}
-			return new HASLDatabaseReader(dataset.getRaw(), normalized, leftHand, rightHand);
+			return new HASLDatabaseReader(dataset.getRaw(), shifted, normalized, leftHand, rightHand);
 		}
 		if(dataset.getName().equalsIgnoreCase("ais-brest")) {
 			return new AISBrestDataReader();

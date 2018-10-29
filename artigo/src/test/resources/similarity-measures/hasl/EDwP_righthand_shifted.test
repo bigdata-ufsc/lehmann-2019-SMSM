@@ -1,0 +1,17 @@
+{
+	"dataset": {
+		"name" : "hasl",
+		"raw": 'true',
+		"params": {
+			"shift-origin" : true,
+			"right_hand": true
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 15
+	},
+	"measure": {
+		"name": "EDwP"
+	}
+}

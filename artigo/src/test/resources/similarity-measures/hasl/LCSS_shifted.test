@@ -1,0 +1,31 @@
+{
+	"dataset": {
+		"name" : "hasl",
+		"raw": 'true',
+		"params": {
+			"shift-origin" : true
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 15
+	},
+	"measure": {
+		"name": "LCSS",
+		"params": [{
+			"type": "Generic",
+			"index" : 3,
+			"params": [{
+				"distance": "euclidean",
+				"threshold": "['std-lcss(1/4)', 'std-lcss(1/2)', 'std-lcss(1)', 0.05, 0.1, 0.2, 0.3, 0.5]"
+			}]
+		}, {
+			"type": "Generic",
+			"index" : 4,
+			"params": [{
+				"distance": "euclidean",
+				"threshold": "['std-lcss(1/4)', 'std-lcss(1/2)', 'std-lcss(1)', 0.05, 0.1, 0.2, 0.3, 0.5]"
+			}]
+		}]
+	}
+}
