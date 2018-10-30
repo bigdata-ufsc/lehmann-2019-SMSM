@@ -1,0 +1,19 @@
+{
+	"dataset": {
+		"name" : "geolife_transportation_mode",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 3
+	},
+	"measure": {
+		"name": "CATS",
+		"params": [{
+			"type": "spatial",
+			"index" : 1,
+			"distance": "euclidean",
+			"threshold": "[0, 1000, 2000, 5000]"
+		}]
+	}
+}

@@ -1,0 +1,21 @@
+{
+	"dataset": {
+		"name" : "geolife_transportation_mode",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "Number",
+		"index": 3
+	},
+	"measure": {
+		"name": "DTWa",
+		"params": [{
+			"type": "discriminator",
+			"index" : 3
+		}, {
+			"type": "spatial",
+			"index" : 1,
+			"distance": "euclidean"
+		}]
+	}
+}
