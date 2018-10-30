@@ -14,6 +14,10 @@ import com.google.gson.JsonSyntaxException;
 
 public class FoursquareClusteringEvaluation extends AbstractClusteringEvaluation {
 
+	public FoursquareClusteringEvaluation(int...clusterSizes) {
+		super(clusterSizes);
+	}
+
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
 		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/foursquare/sem_espaco"));
 		files.filter(path -> path.toFile().isFile() && path.toString().contains("MSM") && path.toString().endsWith(".test")).forEach(path -> {
@@ -27,7 +31,7 @@ public class FoursquareClusteringEvaluation extends AbstractClusteringEvaluation
 					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".clustering.out");
 				}
 				System.setOut(new PrintStream(new FileOutputStream(out)));
-				executeDescriptor(fileName);
+				new FoursquareClusteringEvaluation(50,100,200,500,750,1000,1250,1500).executeDescriptor(fileName);
 			} catch (FileNotFoundException e) {
 				throw new RuntimeException(e);
 			} finally {

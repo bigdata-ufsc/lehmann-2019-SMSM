@@ -29,7 +29,7 @@ public class LCSSFTSMClassifier extends TrajectorySimilarityCalculator<SemanticT
 
 	@Override
 	public String name() {
-		return "LCSS";
+		return "LCSS-FTSM";
 	}
 
 	@Override

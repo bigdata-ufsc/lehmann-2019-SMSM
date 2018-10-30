@@ -10,11 +10,15 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.csv.CSVFormat;
@@ -98,30 +102,58 @@ public class AISBrestDataReader implements IDataReader {
 			}
 			zipFile.close();
 		}
+		List<Integer> toRemove = records.asMap().entrySet().stream().filter(entry -> entry.getValue().size() == 1).map(entry -> entry.getKey()).collect(Collectors.toList());
+		toRemove.forEach(id -> records.removeAll(id));
+		
 		System.out.printf("Loaded %d points from dataset\n", records.size());
 		System.out.printf("Loaded %d trajectories from dataset\n", records.keySet().size());
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<Integer> keys = records.keySet();
-		DescriptiveStatistics stats = new DescriptiveStatistics();
+		DescriptiveStatistics trajLenghtStats = new DescriptiveStatistics();
+		DescriptiveStatistics trajSamplingStats = new DescriptiveStatistics();
+		DescriptiveStatistics trajPointStats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
 			SemanticTrajectory s = new SemanticTrajectory(trajId, semantics_count);
 			Collection<AISBrestRecord> collection = records.get(trajId);
+			collection = collection.stream().sorted(new Comparator<AISBrestRecord>() {
+
+				@Override
+				public int compare(AISBrestRecord o1, AISBrestRecord o2) {
+					return o1.getDate().compareTo(o2.getDate());
+				}
+			}).collect(Collectors.toList());
 			int i = 0;
+			DescriptiveStatistics samplingStats = new DescriptiveStatistics();
+			DescriptiveStatistics pointsStats = new DescriptiveStatistics();
+			Instant previousInstant = null;
+			TPoint previousPoint = null;
 			for (AISBrestRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.SPATIAL_LATLON, record.getLatlon());
-				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getDate().getTime()), Instant.ofEpochMilli(record.getDate().getTime())));
+				s.addData(i, Semantic.SPATIAL_EUCLIDEAN, record.getLatlon());
+				Instant instant = Instant.ofEpochMilli(record.getDate().getTime());
+				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(instant, instant));
 				s.addData(i, SHIPCODE, record.getShipcode());
 				s.addData(i, HEADING, record.getHeading());
 				s.addData(i, SPEED, record.getSpeed());
 				s.addData(i, COG, record.getCog());
 				s.addData(i, ROT, record.getRot());
 				i++;
+				if(previousInstant != null) {
+					samplingStats.addValue(previousInstant.until(instant, ChronoUnit.SECONDS) / 60.0);
+				}
+				if(previousPoint != null) {
+					pointsStats.addValue(Semantic.SPATIAL_EUCLIDEAN.distance(previousPoint, record.getLatlon()));
+				}
+				previousInstant = instant;
+				previousPoint = record.getLatlon();
 			}
-			stats.addValue(s.length());
+			trajLenghtStats.addValue(s.length());
+			trajSamplingStats.addValue(samplingStats.getMean());
+			trajPointStats.addValue(pointsStats.getMean());
 			ret.add(s);
 		}
-		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
+		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f, sampling rate - %.2f points per minute, mean distance between point - %.2f\n", 
+				trajLenghtStats.getMean(), trajLenghtStats.getMin(), trajLenghtStats.getMax(), trajLenghtStats.getStandardDeviation(), 1 / trajSamplingStats.getPercentile(50), trajPointStats.getPercentile(50));
 		return ret;
 	}
 

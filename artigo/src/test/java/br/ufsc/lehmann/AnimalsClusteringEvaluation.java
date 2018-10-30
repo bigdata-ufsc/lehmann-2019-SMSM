@@ -14,6 +14,10 @@ import com.google.gson.JsonSyntaxException;
 
 public class AnimalsClusteringEvaluation  extends AbstractClusteringEvaluation {
 
+	public AnimalsClusteringEvaluation(int... clusterSizes) {
+		super(clusterSizes);
+	}
+
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
 		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/animals/"));
 		files.filter(path -> path.toFile().isFile() && path.toString().contains("LCSS") && path.toString().endsWith(".test")).forEach(path -> {
@@ -27,7 +31,7 @@ public class AnimalsClusteringEvaluation  extends AbstractClusteringEvaluation {
 					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".clustering.out");
 				}
 				System.setOut(new PrintStream(new FileOutputStream(out)));
-				executeDescriptor(fileName);
+				new AnimalsClusteringEvaluation(2,3,4,5,6,7,10).executeDescriptor(fileName);
 			} catch (FileNotFoundException e) {
 				throw new RuntimeException(e);
 			} finally {

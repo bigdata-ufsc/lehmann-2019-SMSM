@@ -52,6 +52,7 @@ import br.ufsc.lehmann.msm.artigo.classifiers.EDRClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSFTSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.MSMFTSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSTPClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMExtendedClassifier;
@@ -341,9 +342,7 @@ public class Measures {
 				}
 			}
 			if(StringUtils.equals(measure.getOptimizer(), "FTSM")) {
-				ret.add(new MSMClassifier(//
-						stopDimensions.toArray(new MSMSemanticParameter[stopDimensions.size()])
-						));
+				ret.add(new MSMFTSMClassifier(stopDimensions.get(0)));
 			} else {
 				ret.add(new MSMClassifier(//
 						stopDimensions.toArray(new MSMSemanticParameter[stopDimensions.size()])

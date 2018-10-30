@@ -4,6 +4,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Queue;
 
+import org.apache.commons.lang3.StringUtils;
+
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
@@ -181,6 +183,11 @@ public class FTSMQLCSS extends TrajectorySimilarityCalculator<SemanticTrajectory
 		
 		return result / Math.min(T1.length(), T2.length());
 
+	}
+
+	@Override
+	public String parametrization() {
+		return StringUtils.join(param, "\n");
 	}
 }
 

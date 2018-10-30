@@ -28,8 +28,14 @@ import br.ufsc.lehmann.testexecution.Measure;
 import br.ufsc.lehmann.testexecution.Measures;
 
 public abstract class AbstractClusteringEvaluation {
+	
+	private int[] clusterSizes;
 
-	protected static void executeDescriptor(String fileName) {
+	public AbstractClusteringEvaluation(int[] clusterSizes) {
+		this.clusterSizes = clusterSizes;
+	}
+
+	protected void executeDescriptor(String fileName) {
 		ExecutionPOJO execution;
 		try {
 			execution = new Gson().fromJson(new FileReader(fileName), ExecutionPOJO.class);
@@ -61,7 +67,7 @@ public abstract class AbstractClusteringEvaluation {
 			}
 			w = w.stop();
 			System.out.printf("Elapsed time %d miliseconds\n", w.elapsed(TimeUnit.MILLISECONDS));
-			IntStream.of(50,100,200,500,750,1000,1250,1500).forEach(numberOfClusters -> {
+			IntStream.of(this.clusterSizes).forEach(numberOfClusters -> {
 				if(calculator instanceof ITrainable) {
 					((ITrainable) calculator).train(Arrays.asList(allData));
 				}
@@ -71,10 +77,6 @@ public abstract class AbstractClusteringEvaluation {
 				System.out.printf("F-Measure: %.8f\n", result.fMeasure());
 			});;
 		}
-	}
-
-	public AbstractClusteringEvaluation() {
-		super();
 	}
 
 }
