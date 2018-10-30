@@ -69,6 +69,9 @@ public class FoursquareDataReader implements IDataReader {
 			String lat_lon = data.get("lat_lon");
 			String[] latLon = lat_lon.split(" ");
 			int tid = Integer.parseInt(data.get("tid"));
+//			if(tid < 126 || tid > 128) {
+//				continue;
+//			}
 			FoursquareRecord record = new FoursquareRecord(
 					Integer.parseInt(data.get("checkin_id")),
 				tid,

@@ -13,6 +13,14 @@ public class Trajectory {
 	private final int tid;
 	private List<TPoint> points;
 	
+	public Trajectory(SemanticTrajectory st){
+		this.tid = (int) st.getTrajectoryId();
+		this.points=new ArrayList<TPoint>();
+		for (int i = 0; i < st.length(); i++) {
+			this.addPoint(Semantic.SPATIAL.getData(st, i));
+		}
+	}
+	
 	public Trajectory(int tid){
 		this.tid = tid;
 		this.points=new ArrayList<TPoint>();
@@ -75,6 +83,10 @@ public class Trajectory {
 			T.addPoint(p);
 		}
 		return T;
+	}
+
+	public SemanticTrajectory toSemanticTrajectory() {
+		return new SemanticTrajectory(this);
 	}
 
 }

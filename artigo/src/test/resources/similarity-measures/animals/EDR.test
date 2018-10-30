@@ -14,14 +14,6 @@
 			"index" : 1,
 			"distance": "euclidean",
 			"threshold": "[0, 1000, 2000, 5000]"
-		}, {
-			"type": "temporal",
-			"index" : 2,
-			"distance": "timestamp",
-			"threshold": "[0,1,2,3,4]",
-			"params": [{
-				"type": "days"
-			}]
 		}]
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Queue;
 
+import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.Trajectory;
 import br.ufsc.ftsm.base.ETrajectory;
@@ -17,11 +18,7 @@ import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.util.CreateEllipseMath;
 import br.ufsc.utils.Distance;
 
-public class FTSMBUMS3 extends TrajectorySimilarityCalculator<Trajectory> {
-
-	public FTSMBUMS3() {
-
-	}
+public class FTSMBUMS3 extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 
 	public double getDistance(ETrajectory E1, ETrajectory E2) {
 		Trajectory R = E1.getT();
@@ -391,9 +388,8 @@ public class FTSMBUMS3 extends TrajectorySimilarityCalculator<Trajectory> {
 	}
 
 	@Override
-	public double getSimilarity(Trajectory t1, Trajectory t2) {
-		
-		return getDistance(new CreateEllipseMath().createEllipticalTrajectoryFixed(t1),new CreateEllipseMath().createEllipticalTrajectoryFixed(t2));
+	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
+		return getDistance(new CreateEllipseMath().createEllipticalTrajectoryFixed(new Trajectory(t1)),new CreateEllipseMath().createEllipticalTrajectoryFixed(new Trajectory(t2)));
 	}
 
 }

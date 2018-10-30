@@ -67,8 +67,8 @@ public class LCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	}
 
 	public static class LCSSSemanticParameter<V, T> {
-		private Semantic<V, T> semantic;
-		private T threshold;
+		public final Semantic<V, T> semantic;
+		public final T threshold;
 
 		@Override
 		public String toString() {

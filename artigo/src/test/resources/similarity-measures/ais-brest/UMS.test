@@ -8,6 +8,7 @@
 		"index": 3
 	},
 	"measure": {
-		"name": "UMS"
+		"name": "UMS",
+		"optimizer" : "FTSM"
 	}
 }

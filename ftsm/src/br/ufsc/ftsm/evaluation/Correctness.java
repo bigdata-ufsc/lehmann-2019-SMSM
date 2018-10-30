@@ -58,7 +58,7 @@ public static void main(String[] args) throws InstantiationException, IllegalAcc
 	MSM msm = new MSM(new MSMSemanticParameter<TPoint, Number>(Semantic.SPATIAL, 100.0, 1));
 	FTSMBMSM ftsmbmsm = new FTSMBMSM(100);
 	FTSMBDMSM ftsmbdmsm = new FTSMBDMSM(100);
-	FTSMQMSM ftsmqmsm = new FTSMQMSM(100);
+	FTSMQMSM ftsmqmsm = new FTSMQMSM(new MSM.MSMSemanticParameter(Semantic.SPATIAL, 100, 1));
 	FTSMOMSM ftsmomsm = new FTSMOMSM(100);
 
 	
@@ -66,7 +66,7 @@ public static void main(String[] args) throws InstantiationException, IllegalAcc
 	LCSS lcss = new LCSS(new LCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL, 100.0));
 	LCSSL lcssl = new LCSSL(100);
 	FTSMBLCSS ftsmblcss = new FTSMBLCSS(100);
-	FTSMQLCSS ftsmqlcss = new FTSMQLCSS(100);
+	FTSMQLCSS ftsmqlcss = new FTSMQLCSS(new LCSS.LCSSSemanticParameter(Semantic.SPATIAL, 100));
 	FTSMOLCSS ftsmolcss = new FTSMOLCSS(100);
 	
 	//UMS
@@ -83,14 +83,14 @@ public static void main(String[] args) throws InstantiationException, IllegalAcc
 	System.out.println("MSM: "+msm.getDistance(t1, t2));
 	System.out.println("FTSMBMSM: "+ftsmbmsm.getSimilarity(t1, t2));
 	System.out.println("FTSMBDMSM: "+ftsmbdmsm.getSimilarity(t1, t2));
-	System.out.println("FTSMQMSM: "+ftsmqmsm.getSimilarity(t1, t2));
+	System.out.println("FTSMQMSM: "+ftsmqmsm.getSimilarity(t1.toSemanticTrajectory(), t2.toSemanticTrajectory()));
 	System.out.println("FTSMOMSM: "+ftsmomsm.getSimilarity(t1, t2));
 	
 	System.out.println("### LCSS-Based:");
 	System.out.println("LCSS: "+lcss.getDistance(t1, t2));
 	System.out.println("LCSSL: "+lcssl.getSimilarity(t1, t2));
 	System.out.println("FTSMBLCSS: "+ftsmblcss.getSimilarity(t1, t2));
-	System.out.println("FTSMQLCSS: "+ftsmqlcss.getSimilarity(t1, t2));
+	System.out.println("FTSMQLCSS: "+ftsmqlcss.getSimilarity(t1.toSemanticTrajectory(), t2.toSemanticTrajectory()));
 	System.out.println("FTSMOLCSS: "+ftsmolcss.getSimilarity(t1, t2));
 	
 	

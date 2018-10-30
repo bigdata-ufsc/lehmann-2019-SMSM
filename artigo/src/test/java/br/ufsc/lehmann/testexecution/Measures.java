@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.base.Strings;
 
 import br.ufsc.core.trajectory.EqualsDistanceFunction;
@@ -20,6 +22,7 @@ import br.ufsc.core.trajectory.semantic.AttributeType;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
+import br.ufsc.ftsm.method.ums.FTSMBUMS3;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 import br.ufsc.ftsm.related.UMS;
@@ -47,6 +50,7 @@ import br.ufsc.lehmann.msm.artigo.ComparableStopSemantic;
 import br.ufsc.lehmann.msm.artigo.classifiers.DTWaClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.EDRClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.LCSSFTSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSTPClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.SMSMClassifier;
@@ -107,7 +111,7 @@ public class Measures {
 			return createUMS(measure);
 		}
 		if(measure.getName().equalsIgnoreCase("EDwP")) {
-			return createUMS(measure);
+			return createEDwP(measure);
 		}
 		if(measure.getName().equalsIgnoreCase("DTWa")) {
 			return createDTWa(measure);
@@ -119,6 +123,9 @@ public class Measures {
 	}
 
 	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createUMS(Measure measure) {
+		if(StringUtils.equals(measure.getOptimizer(), "FTSM")) {
+			return Arrays.asList(new FTSMBUMS3());
+		}
 		return Arrays.asList(new UMS());
 	}
 
@@ -333,9 +340,15 @@ public class Measures {
 					stopDimensions.add(dimension);
 				}
 			}
-			ret.add(new MSMClassifier(//
-					stopDimensions.toArray(new MSMSemanticParameter[stopDimensions.size()])
-					));
+			if(StringUtils.equals(measure.getOptimizer(), "FTSM")) {
+				ret.add(new MSMClassifier(//
+						stopDimensions.toArray(new MSMSemanticParameter[stopDimensions.size()])
+						));
+			} else {
+				ret.add(new MSMClassifier(//
+						stopDimensions.toArray(new MSMSemanticParameter[stopDimensions.size()])
+						));
+			}
 		}
 		return ret;
 	}
@@ -436,9 +449,15 @@ public class Measures {
 				LCSSSemanticParameter dimension = new LCSSSemanticParameter(parameters.getFirst(), parameters.getLast());
 				stopDimensions.add(dimension);
 			}
-			ret.add(new LCSSClassifier(//
-					stopDimensions.toArray(new LCSSSemanticParameter[stopDimensions.size()])
-					));
+			if(StringUtils.equals(measure.getOptimizer(), "FTSM")) {
+				ret.add(new LCSSFTSMClassifier(//
+						stopDimensions.toArray(new LCSSSemanticParameter[stopDimensions.size()])
+						));
+			} else {
+				ret.add(new LCSSClassifier(//
+						stopDimensions.toArray(new LCSSSemanticParameter[stopDimensions.size()])
+						));
+			}
 		}
 		return ret;
 	}

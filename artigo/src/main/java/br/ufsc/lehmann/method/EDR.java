@@ -22,10 +22,15 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 	@Override
 	public double getSimilarity(SemanticTrajectory r, SemanticTrajectory s) {
 		double distance = distance(r, s);
-		return 1-(distance / (Math.max(r.length(), s.length()) * parameters.length));
+		return 1-(distance);
 	}
 
 	public double distance(SemanticTrajectory r, SemanticTrajectory s) {
+		double distance = edrDistance(r, s);
+		return distance / (Math.max(r.length(), s.length()));
+	}
+
+	private double edrDistance(SemanticTrajectory r, SemanticTrajectory s) {
 		double[][] edrMetric = new double[r.length() + 1][s.length() + 1];
 
 		for (int i = 0; i <= r.length(); i++) {

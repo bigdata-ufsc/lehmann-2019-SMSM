@@ -12,6 +12,9 @@ public class Measure {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("optimizer")
+    @Expose
+    private String optimizer;
     @SerializedName("params")
     @Expose
     private List<Param> params = null;
@@ -42,4 +45,10 @@ public class Measure {
     public void setName(String name) {
         this.name = name;
     }
+    public String getOptimizer() {
+		return optimizer;
+	}
+	public void setOptimizer(String optimizer) {
+		this.optimizer = optimizer;
+	}
 }
