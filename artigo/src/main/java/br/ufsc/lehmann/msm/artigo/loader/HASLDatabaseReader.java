@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,14 +17,13 @@ import java.util.Set;
 import org.apache.commons.math3.stat.descriptive.AggregateSummaryStatistics;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
-import org.apache.commons.math3.util.MathUtils;
-import org.locationtech.jts.math.MathUtil;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
 import br.ufsc.core.trajectory.ThreeDimensionalPoint;
 import br.ufsc.db.source.DataRetriever;
@@ -127,7 +127,8 @@ public class HASLDatabaseReader implements IDataReader {
 		System.out.printf("Loaded %d trajectories from database\n", records.keySet().size());
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<Integer> keys = records.keySet();
-		DescriptiveStatistics stats = new DescriptiveStatistics();
+		DescriptiveStatistics trajLenghtStats = new DescriptiveStatistics();
+		DescriptiveStatistics trajPointStats = new DescriptiveStatistics();
 		Map<Semantic, AggregateSummaryStatistics> semanticStats = new HashMap<>();
 		for (int k = 0; k < ALL_SEMANTICS.length; k++) {
 			semanticStats.put(ALL_SEMANTICS[k], new AggregateSummaryStatistics());
@@ -170,6 +171,9 @@ public class HASLDatabaseReader implements IDataReader {
 				shiftToOrigin(dimensionValues.get("ry"));
 				shiftToOrigin(dimensionValues.get("rz"));
 			}
+			DescriptiveStatistics pointsStats = new DescriptiveStatistics();
+			Instant previousInstant = null;
+			TPoint previousPoint = null;
 			j = 0;
 			for (Iterator iterator = collection.iterator(); iterator.hasNext();j++) {
 				HASLRecord record = (HASLRecord) iterator.next();
@@ -185,7 +189,8 @@ public class HASLDatabaseReader implements IDataReader {
 				Hand right = new Hand(rx, ry, rz, record.getRroll(), record.getRpitch(), record.getRyaw(), record.getRthumb(), record.getRfore(), record.getRmiddle(), record.getRring(), record.getRlittle());
 				s.addData(i, Semantic.GID, record.getGid());
 				s.addData(i, Semantic.SPATIAL, leftHand ? lpoint.to2D() : rpoint.to2D());
-				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(i), Instant.ofEpochMilli(i)));
+				Instant instant = Instant.ofEpochMilli(i);
+				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(instant, instant));
 				s.addData(i, WORD, record.getClazz());
 				s.addData(i, LEFT_SPATIAL, lpoint);
 				s.addData(i, LEFT_X, lx);
@@ -200,6 +205,11 @@ public class HASLDatabaseReader implements IDataReader {
 				s.addData(i, RIGHT_HAND, right);
 				s.addData(i, BOTH_HANDS, new Hands(left, right));
 				i++;
+				if(previousPoint != null) {
+					pointsStats.addValue(Semantic.SPATIAL_EUCLIDEAN.distance(previousPoint, leftHand ? lpoint.to2D() : rpoint.to2D()));
+				}
+				previousInstant = instant;
+				previousPoint = leftHand ? lpoint.to2D() : rpoint.to2D();
 			}
 			for (int k = 0; k < ALL_SEMANTICS.length; k++) {
 				SummaryStatistics trajStats = semanticStats.get(ALL_SEMANTICS[k]).createContributingStatistics();
@@ -215,7 +225,8 @@ public class HASLDatabaseReader implements IDataReader {
 					s.setLocalStats(ALL_SEMANTICS[k], trajStats);
 				}
 			}
-			stats.addValue(s.length());
+			trajLenghtStats.addValue(s.length());
+			trajPointStats.addValue(pointsStats.getMean());
 			ret.add(s);
 		}
 		for (SemanticTrajectory traj : ret) {
@@ -223,6 +234,7 @@ public class HASLDatabaseReader implements IDataReader {
 				traj.setGlobalStats(ALL_SEMANTICS[k], semanticStats.get(ALL_SEMANTICS[k]).getSummary());
 			}
 		}
+		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f, mean distance between point - %.2f\n", trajLenghtStats.getMean(), trajLenghtStats.getMin(), trajLenghtStats.getMax(), trajLenghtStats.getStandardDeviation(), trajPointStats.getPercentile(50));
 		return ret;
 	}
 
