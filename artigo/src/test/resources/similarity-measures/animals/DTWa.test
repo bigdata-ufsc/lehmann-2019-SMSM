@@ -1,6 +1,6 @@
 {
 	"dataset": {
-		"name" : "ais-brest",
+		"name" : "animals",
 		"raw": 'true'
 	},
 	"groundtruth": {
@@ -16,13 +16,6 @@
 			"type": "spatial",
 			"index" : 1,
 			"distance": "euclidean"
-		}, {
-			"type": "temporal",
-			"index" : 2,
-			"distance": "timestamp"
-			"params": [{
-				"type": "minutes"
-			}]
 		}]
 	}
 }

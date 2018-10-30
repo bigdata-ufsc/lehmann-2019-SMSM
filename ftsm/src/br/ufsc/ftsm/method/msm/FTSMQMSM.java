@@ -3,28 +3,28 @@ package br.ufsc.ftsm.method.msm;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-import br.ufsc.core.trajectory.Trajectory;
+import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
-import br.ufsc.utils.Distance;
+import br.ufsc.ftsm.related.MSM;
+import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 
-//FTSM with interval and 4W
-public class FTSMQMSM extends TrajectorySimilarityCalculator<Trajectory> {
+public class FTSMQMSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 
-	private double threshold;
+	private MSMSemanticParameter param;
 
-	public FTSMQMSM(double threshold) {
-		this.threshold = threshold;
+	public FTSMQMSM(MSM.MSMSemanticParameter param){
+		this.param = param;
 	}
 
-	public double getSimilarity(Trajectory R, Trajectory S) {
+	public double getSimilarity(SemanticTrajectory R, SemanticTrajectory S) {
 		double[] resultT1;
 		double[] resultT2;
 
 		int n = R.length();
 		int m = S.length();
 
-		Trajectory T1;
-		Trajectory T2;
+		SemanticTrajectory T1;
+		SemanticTrajectory T2;
 
 		if (n <= m) {
 			T1 = R;
@@ -44,7 +44,9 @@ public class FTSMQMSM extends TrajectorySimilarityCalculator<Trajectory> {
 
 		dist[0] = 0;
 		for (int i = 1; i < n; i++) {
-			dist[i] = dist[i - 1] + Distance.euclidean(T1.getPoint(i), T1.getPoint(i - 1));
+			Object iPoint = param.semantic.getData(T1, i);
+			Object iPreviousPoint = param.semantic.getData(T1, i - 1);
+			dist[i] = dist[i - 1] + param.semantic.distance(iPoint, iPreviousPoint);
 		}
 
 		Queue<NodeQMSM> queue = new ArrayDeque<>();
@@ -60,6 +62,7 @@ public class FTSMQMSM extends TrajectorySimilarityCalculator<Trajectory> {
 
 			if (!node.isLeaf) {
 				// prunning step
+				double threshold = ((Number) param.threshlod).doubleValue();
 				double radius = Math.max(dist[node.mid] - dist[node.begin], (dist[node.end] - dist[node.mid]))
 						+ threshold;
 
@@ -71,7 +74,9 @@ public class FTSMQMSM extends TrajectorySimilarityCalculator<Trajectory> {
 					//int end = -1;
 
 					while (k <= interval.end) {
-						if (Distance.euclidean(T2.getPoint(k), T1.getPoint(node.mid)) <= radius) {
+						Object kPoint = param.semantic.getData(T2, k);
+						Object midPoint = param.semantic.getData(T1, node.mid);
+						if (param.semantic.distance(kPoint, midPoint) <= radius) {
 							if (start == -1) {
 								start = k;
 							}
@@ -135,7 +140,10 @@ public class FTSMQMSM extends TrajectorySimilarityCalculator<Trajectory> {
 					int k = interval.begin;
 
 					while (k <= interval.end) {
-						if (Distance.euclidean(T2.getPoint(k), T1.getPoint(node.mid)) <= threshold) {
+						Object kPoint = param.semantic.getData(T2, k);
+						Object midPoint = param.semantic.getData(T1, node.mid);
+						double threshold = ((Number) param.threshlod).doubleValue();
+						if (param.semantic.distance(kPoint, midPoint) <= threshold) {
 							resultT1[node.mid] = 1;
 							resultT2[k] = 1;
 						}

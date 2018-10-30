@@ -22,10 +22,15 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 	@Override
 	public double getSimilarity(SemanticTrajectory r, SemanticTrajectory s) {
 		double distance = distance(r, s);
-		return 1-(distance / (Math.max(r.length(), s.length()) * parameters.length));
+		return 1-(distance);
 	}
 
 	public double distance(SemanticTrajectory r, SemanticTrajectory s) {
+		double distance = edrDistance(r, s);
+		return distance / (Math.max(r.length(), s.length()));
+	}
+
+	private double edrDistance(SemanticTrajectory r, SemanticTrajectory s) {
 		double[][] edrMetric = new double[r.length() + 1][s.length() + 1];
 
 		for (int i = 0; i <= r.length(); i++) {
@@ -45,13 +50,14 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 					Object rPoint = param.semantic.getData(r, i - 1);
 					Object sPoint = param.semantic.getData(s, j - 1);
 					if(!param.semantic.match(rPoint, sPoint, param.computeThreshold(rPoint, sPoint, r, s))) {
-						subcost += 1;
+						subcost = 1;
+						break;
 					}
 				}
 				edrMetric[i][j] = min(//
 						edrMetric[i - 1][j - 1] + subcost,//
-						edrMetric[i][j - 1] + parameters.length,//
-						edrMetric[i - 1][j] + parameters.length);
+						edrMetric[i][j - 1] + 1,//
+						edrMetric[i - 1][j] + 1);
 			}
 		}
 		double distance = edrMetric[r.length()][s.length()];

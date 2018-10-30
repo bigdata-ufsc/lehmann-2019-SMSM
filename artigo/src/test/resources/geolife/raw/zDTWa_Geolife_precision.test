@@ -17,11 +17,14 @@
 		"params": [{
 			"type": "discriminator",
 			"index" : 10
-		},{
+		},/*{
 			"type": "temporal",
 			"distance": "timestamp",
-			"index" : 2
-		}, {
+			"index" : 2,
+			"params" : [{
+				"type" : "MINUTES"
+			}]
+		},*/ {
 			"type": "spatial",
 			"distance": "euclidean",
 			"index" : 1

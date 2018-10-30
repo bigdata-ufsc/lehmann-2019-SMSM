@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +16,8 @@ import java.util.Set;
 import org.apache.commons.math3.stat.descriptive.AggregateSummaryStatistics;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
+import org.apache.commons.math3.util.MathUtils;
+import org.locationtech.jts.math.MathUtil;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
@@ -31,6 +34,7 @@ import br.ufsc.lehmann.msm.artigo.loader.HASLRecord.Hand;
 import br.ufsc.lehmann.msm.artigo.loader.HASLRecord.Hands;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
+import smile.math.Math;
 
 public class HASLDatabaseReader implements IDataReader {
 	
@@ -74,9 +78,11 @@ public class HASLDatabaseReader implements IDataReader {
 	private boolean normalized;
 	private Boolean leftHand;
 	private Boolean rightHand;
+	private boolean shifted;
 
-	public HASLDatabaseReader(boolean raw, boolean normalized, Boolean leftHand, Boolean rightHand) {
+	public HASLDatabaseReader(boolean raw, boolean shifted, boolean normalized, Boolean leftHand, Boolean rightHand) {
 		this.raw = raw;
+		this.shifted = shifted;
 		this.normalized = normalized;
 		this.leftHand = leftHand;
 		this.rightHand = rightHand;
@@ -100,7 +106,7 @@ public class HASLDatabaseReader implements IDataReader {
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT"
 				+ " \"gid\",\"tid\",\"author\",\"class\",\"lx\",\"ly\",\"lz\",\"lroll\",\"lpitch\",\"lyaw\",\"lthumb\",\"lfore\",\"lmiddle\",\"lring\",\"llittle\",\"rx\",\"ry\",\"rz\",\"rroll\",\"rpitch\",\"ryaw\",\"rthumb\",\"rfore\",\"rmiddle\",\"rring\",\"rlittle\""
-				+ " FROM \"asl\".\"high_quality_asl\" WHERE \"class\" in ('Norway', 'cold', 'crazy', 'eat', 'forget', 'happy','innocent', 'later', 'lose', 'spend')");
+				+ " FROM \"asl\".\"high_quality_asl\"");
 		PreparedStatement st = conn.prepareStatement(sb.toString());
 		st.setFetchSize(1000);
 
@@ -132,14 +138,48 @@ public class HASLDatabaseReader implements IDataReader {
 
 			int i = 0;
 			HASLRecord first = collection.iterator().next();
-			for (HASLRecord record : collection) {
-				double lx = record.getLx() - (normalized ? first.getLx() : 0);
-				double rx = record.getRx() - (normalized ? first.getRx() : 0);
-				double ly = record.getLy() - (normalized ? first.getLy() : 0);
-				double lz = record.getLz() - (normalized ? first.getLz() : 0);
-				double ry = record.getRy() - (normalized ? first.getRy() : 0);
-				double rz = record.getRz() - (normalized ? first.getRz() : 0);
+			Map<String, double[]> dimensionValues = new HashMap<>();
+			dimensionValues.put("lx", new double[collection.size()]);
+			dimensionValues.put("ly", new double[collection.size()]);
+			dimensionValues.put("lz", new double[collection.size()]);
+			dimensionValues.put("rx", new double[collection.size()]);
+			dimensionValues.put("ry", new double[collection.size()]);
+			dimensionValues.put("rz", new double[collection.size()]);
+			int j = 0;
+			for (Iterator iterator = collection.iterator(); iterator.hasNext();j++) {
+				HASLRecord record = (HASLRecord) iterator.next();
+				dimensionValues.get("lx")[j] = record.getLx();
+				dimensionValues.get("ly")[j] = record.getLy();
+				dimensionValues.get("lz")[j] = record.getLz();
+				dimensionValues.get("rx")[j] = record.getRx();
+				dimensionValues.get("ry")[j] = record.getRy();
+				dimensionValues.get("rz")[j] = record.getRz();
+			}
+			if(normalized) {
+				Math.standardize(dimensionValues.get("lx"));
+				Math.standardize(dimensionValues.get("ly"));
+				Math.standardize(dimensionValues.get("lz"));
+				Math.standardize(dimensionValues.get("rx"));
+				Math.standardize(dimensionValues.get("ry"));
+				Math.standardize(dimensionValues.get("rz"));
+			} else if (shifted) {
+				shiftToOrigin(dimensionValues.get("lx"));
+				shiftToOrigin(dimensionValues.get("ly"));
+				shiftToOrigin(dimensionValues.get("lz"));
+				shiftToOrigin(dimensionValues.get("rx"));
+				shiftToOrigin(dimensionValues.get("ry"));
+				shiftToOrigin(dimensionValues.get("rz"));
+			}
+			j = 0;
+			for (Iterator iterator = collection.iterator(); iterator.hasNext();j++) {
+				HASLRecord record = (HASLRecord) iterator.next();
+				double lx = dimensionValues.get("lx")[j];
+				double ly = dimensionValues.get("ly")[j];
+				double lz = dimensionValues.get("lz")[j];
 				ThreeDimensionalPoint lpoint = new ThreeDimensionalPoint(lx, ly, lz);
+				double rx = dimensionValues.get("rx")[j];;
+				double ry = dimensionValues.get("ry")[j];
+				double rz = dimensionValues.get("rz")[j];
 				ThreeDimensionalPoint rpoint = new ThreeDimensionalPoint(rx, ry, rz);
 				Hand left = new Hand(lx, ly, lz, record.getLroll(), record.getLpitch(), record.getLyaw(), record.getLthumb(), record.getLfore(), record.getLmiddle(), record.getLring(), record.getLlittle());
 				Hand right = new Hand(rx, ry, rz, record.getRroll(), record.getRpitch(), record.getRyaw(), record.getRthumb(), record.getRfore(), record.getRmiddle(), record.getRring(), record.getRlittle());
@@ -163,9 +203,9 @@ public class HASLDatabaseReader implements IDataReader {
 			}
 			for (int k = 0; k < ALL_SEMANTICS.length; k++) {
 				SummaryStatistics trajStats = semanticStats.get(ALL_SEMANTICS[k]).createContributingStatistics();
-				for (int j = 0; j < s.length() - 1; j++) {
-					Object p1 = ALL_SEMANTICS[k].getData(s, j);
-					Object p2 = ALL_SEMANTICS[k].getData(s, j + 1);
+				for (int m = 0; j < s.length() - 1; j++) {
+					Object p1 = ALL_SEMANTICS[k].getData(s, m);
+					Object p2 = ALL_SEMANTICS[k].getData(s, m + 1);
 					Object distance = ALL_SEMANTICS[k].distance(p1, p2);
 					if(distance instanceof Number) {
 						trajStats.addValue(((Number) distance).doubleValue());
@@ -184,5 +224,39 @@ public class HASLDatabaseReader implements IDataReader {
 			}
 		}
 		return ret;
+	}
+
+	private void shiftToOrigin(double[] column) {
+		if(column == null || column.length == 0) {
+			return;
+		}
+		double firstValue = column[0];
+		for (int i = 0; i < column.length; i++) {
+			column[i] -= firstValue;
+		}
+	}
+
+	private double getRz(HASLRecord first, HASLRecord record) {
+		return record.getRz() - (shifted ? first.getRz() : 0);
+	}
+
+	private double getRy(HASLRecord first, HASLRecord record) {
+		return record.getRy() - (shifted ? first.getRy() : 0);
+	}
+
+	private double getRx(HASLRecord first, HASLRecord record) {
+		return record.getRx() - (shifted ? first.getRx() : 0);
+	}
+
+	private double getLz(HASLRecord first, HASLRecord record) {
+		return record.getLz() - (shifted ? first.getLz() : 0);
+	}
+
+	private double getLy(HASLRecord first, HASLRecord record) {
+		return record.getLy() - (shifted ? first.getLy() : 0);
+	}
+
+	private double getLx(HASLRecord first, HASLRecord record) {
+		return record.getLx() - (shifted ? first.getLx() : 0);
 	}
 }

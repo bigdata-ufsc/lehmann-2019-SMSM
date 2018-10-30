@@ -55,14 +55,14 @@ public class PruningPower {
 		FTSMBDMSM ftsmbdmsm = new FTSMBDMSM(100);
 
 		FTSMBPMSM ftsmbpmsm = new FTSMBPMSM(100);
-		FTSMQMSM ftsmqmsm = new FTSMQMSM(100);
+		FTSMQMSM ftsmqmsm = new FTSMQMSM(new MSM.MSMSemanticParameter(Semantic.SPATIAL, 100, 1));
 		FTSMOMSM ftsmomsm = new FTSMOMSM(100);
 		
 		//LCSS-based measures
 		LCSS lcss = new LCSS(new LCSSSemanticParameter<TPoint, Number>(Semantic.SPATIAL, 100.0));
 		LCSSL lcssl = new LCSSL(100);
 		FTSMBLCSS ftsmblcss = new FTSMBLCSS(100);
-		FTSMQLCSS ftsmqlcss = new FTSMQLCSS(100);
+		FTSMQLCSS ftsmqlcss = new FTSMQLCSS(new LCSS.LCSSSemanticParameter(Semantic.SPATIAL, 100));
 		FTSMOLCSS ftsmolcss = new FTSMOLCSS(100);
 		
 		FTSELCSS ftselcss = new FTSELCSS(100);

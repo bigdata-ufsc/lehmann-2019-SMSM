@@ -55,7 +55,6 @@ public class FoursquareDataReader implements IDataReader {
 		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource("./datasets/foursquare_data.zip").getFile(), "UTF-8"));
 		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("foursquare_data.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
-				//poi	price	rating	weather	label
 				CSVFormat.EXCEL.withHeader("checkin_id", "tid", "lat_lon", "date_time", "time", "day", 
 						"poi","price","rating","weather", "label").withDelimiter(','));
 		Iterator<CSVRecord> pointsData = pointsParser.iterator();
@@ -70,6 +69,9 @@ public class FoursquareDataReader implements IDataReader {
 			String lat_lon = data.get("lat_lon");
 			String[] latLon = lat_lon.split(" ");
 			int tid = Integer.parseInt(data.get("tid"));
+//			if(tid < 126 || tid > 128) {
+//				continue;
+//			}
 			FoursquareRecord record = new FoursquareRecord(
 					Integer.parseInt(data.get("checkin_id")),
 				tid,

@@ -36,11 +36,15 @@ public class HierarchicalClusteringDistanceBetweenTrajectoriesExecutor implement
 				distances[j][finalI] = distances[finalI][j];
 			});
 		}
+		return cluster(data, discriminator, distances);
+	}
+
+	public <E, T> ClusteringResult cluster(List<SemanticTrajectory> data, Semantic<E, T> discriminator, double[][] distances) {
 		HierarchicalClustering clustering = new HierarchicalClustering(new CompleteLinkage(distances));
 		int[] clusterLabel = clustering.partition(classesCount);
 		Multimap<Integer, SemanticTrajectory> clusteres = MultimapBuilder.hashKeys().arrayListValues().build();
 		for (int i = 0; i < clusterLabel.length; i++) {
-			clusteres.put(clusterLabel[i], training.get(i));
+			clusteres.put(clusterLabel[i], data.get(i));
 		}
 		return new ClusteringResult(data, clusteres.asMap().values(), clusterLabel, new Comparator<SemanticTrajectory>() {
 

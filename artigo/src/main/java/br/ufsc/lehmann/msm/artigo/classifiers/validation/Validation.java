@@ -83,6 +83,11 @@ public class Validation {
 		return clustering.cluster(Arrays.asList(testData), measure, groundTruthSemantic);
 	}
 
+	public ClusteringResult cluster(SemanticTrajectory[] testData, double[][] distances, int numberOfClusters) {
+		HierarchicalClusteringDistanceBetweenTrajectoriesExecutor clustering = new HierarchicalClusteringDistanceBetweenTrajectoriesExecutor(numberOfClusters);
+		return clustering.cluster(Arrays.asList(testData), groundTruthSemantic, distances);
+	}
+
 	public double[] precisionAtRecall(TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance, SemanticTrajectory[] testData, int recallLevel) {
 		double[] ret = new double[recallLevel];
 		double[][] precisionRecall = new double[testData.length][];

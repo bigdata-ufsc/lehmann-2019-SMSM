@@ -1,0 +1,14 @@
+{
+	"dataset": {
+		"name" : "geolife_transportation_mode",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "Number",
+		"index": 3
+	},
+	"measure": {
+		"name": "UMS",
+		"optimizer" : "FTSM"
+	}
+}

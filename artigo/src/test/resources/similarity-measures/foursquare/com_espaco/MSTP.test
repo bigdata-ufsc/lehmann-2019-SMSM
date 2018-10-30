@@ -10,6 +10,10 @@
 	"measure": {
 		"name": "MSTP",
 		"params": [{
+			"type": "spatial",
+			"index" : 1,
+			"distance" : "euclidean"
+		}, {
 			"type": "Generic",
 			"index" : 5,
 			"params": [{

@@ -63,9 +63,9 @@ public class MSM extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 	}
 	
 	public static class MSMSemanticParameter<V, T> {
-		private double weight;
-		private Semantic<V, T> semantic;
-		private T threshlod;
+		public final double weight;
+		public final Semantic<V, T> semantic;
+		public final T threshlod;
 		public MSMSemanticParameter(Semantic<V, T> semantic, T threshlod, double weight) {
 			super();
 			this.semantic = semantic;
