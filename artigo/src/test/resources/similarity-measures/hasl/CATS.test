@@ -1,6 +1,6 @@
 {
 	"dataset": {
-		"name" : "foursquare",
+		"name" : "hasl",
 		"raw": 'true'
 	},
 	"groundtruth": {
