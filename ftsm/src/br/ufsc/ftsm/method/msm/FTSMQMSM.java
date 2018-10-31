@@ -166,7 +166,11 @@ public class FTSMQMSM extends TrajectorySimilarityCalculator<SemanticTrajectory>
 		double similarity = (parityAB + parityBA) / (n + m);
 
 		return similarity;
-
+	}
+	
+	@Override
+	public String parametrization() {
+		return param.toString();
 	}
 
 }
