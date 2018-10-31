@@ -15,9 +15,10 @@ public class AnimalRecord {
 	private Date grensunr;
 	private Date grensuns;
 	private double obswt;
+	private long starkeyTime;
 
 	public AnimalRecord(int gid, String tid, TPoint latlon, Timestamp timestamp, String specie, Date grensunr, Date grensuns,
-			double obswt) {
+			double obswt, long starkeyTime) {
 				this.gid = gid;
 				this.tid = tid;
 				this.latlon = latlon;
@@ -26,6 +27,7 @@ public class AnimalRecord {
 				this.grensunr = grensunr;
 				this.grensuns = grensuns;
 				this.obswt = obswt;
+				this.starkeyTime = starkeyTime;
 	}
 
 	public int getGid() {
@@ -90,5 +92,13 @@ public class AnimalRecord {
 
 	public void setObswt(double obswt) {
 		this.obswt = obswt;
+	}
+
+	public long getStarkeyTime() {
+		return starkeyTime;
+	}
+
+	public void setStarkeyTime(long starkeyTime) {
+		this.starkeyTime = starkeyTime;
 	}
 }

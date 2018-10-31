@@ -15,9 +15,10 @@ public class AISBrestRecord {
 	private double cog;
 	private double rot;
 	private TPoint latlon;
+	private String shipType;
 
 	public AISBrestRecord(int gid, int tid, int shipcode, Timestamp date, double heading, double speed, double cog,
-			double rot, TPoint latlon) {
+			double rot, TPoint latlon, String shipType) {
 		super();
 		this.gid = gid;
 		this.tid = tid;
@@ -28,6 +29,7 @@ public class AISBrestRecord {
 		this.cog = cog;
 		this.rot = rot;
 		this.latlon = latlon;
+		this.shipType = shipType;
 	}
 	public int getGid() {
 		return gid;
@@ -82,5 +84,11 @@ public class AISBrestRecord {
 	}
 	public void setLatlon(TPoint latlon) {
 		this.latlon = latlon;
+	}
+	public String getShipType() {
+		return shipType;
+	}
+	public void setShipType(String shipType) {
+		this.shipType = shipType;
 	}
 }

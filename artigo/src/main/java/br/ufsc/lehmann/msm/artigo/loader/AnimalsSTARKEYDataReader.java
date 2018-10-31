@@ -43,6 +43,7 @@ public class AnimalsSTARKEYDataReader implements IDataReader {
 	public static final BasicSemantic<Date> GRENSUNR = new BasicSemantic<>(semantics_count++);
 	public static final BasicSemantic<Date> GRENSUNS = new BasicSemantic<>(semantics_count++);
 	public static final BasicSemantic<Double> OBSWT = new BasicSemantic<>(semantics_count++);
+	public static final BasicSemantic<Long> STARKEY_TIME = new BasicSemantic<>(semantics_count++);
 
 	private static final DateFormat DF = new SimpleDateFormat("YYYYMMDD HH:mm:SS");
 	private static final DateFormat TF = new SimpleDateFormat("HH:mm:SS");
@@ -93,7 +94,8 @@ public class AnimalsSTARKEYDataReader implements IDataReader {
 					data.get("Species"),
 					grensunr,
 					grensuns,
-					Double.parseDouble(data.get("Obswt"))
+					Double.parseDouble(data.get("Obswt")),
+					Long.parseLong(data.get("StarkeyTime"))
 					);
 			records.put(record.getTid(), record);
 		}
@@ -112,7 +114,7 @@ public class AnimalsSTARKEYDataReader implements IDataReader {
 
 				@Override
 				public int compare(AnimalRecord o1, AnimalRecord o2) {
-					return o1.getTimestamp().compareTo(o2.getTimestamp());
+					return Long.compare(o1.getStarkeyTime(), o2.getStarkeyTime());
 				}
 			}).collect(Collectors.toList());
 			DescriptiveStatistics samplingStats = new DescriptiveStatistics();
@@ -121,30 +123,34 @@ public class AnimalsSTARKEYDataReader implements IDataReader {
 			TPoint previousPoint = null;
 			int i = 0;
 			for (AnimalRecord record : collection) {
-				Instant instant = Instant.ofEpochMilli(record.getTimestamp().getTime());
+				Instant instant = Instant.ofEpochMilli(Date.parse("12/31/1987") + record.getStarkeyTime() * 1000);
 				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, Semantic.SPATIAL_EUCLIDEAN, record.getLatlon());
+				TPoint point = record.getLatlon();
+				s.addData(i, Semantic.SPATIAL_EUCLIDEAN, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(instant, instant));
 				s.addData(i, SPECIES, record.getSpecie());
 				s.addData(i, GRENSUNR, record.getGrensunr());
 				s.addData(i, GRENSUNS, record.getGrensuns());
 				s.addData(i, OBSWT, record.getObswt());
+				s.addData(i, STARKEY_TIME, record.getStarkeyTime());
 				i++;
 				if(previousInstant != null) {
-					samplingStats.addValue(previousInstant.until(instant, ChronoUnit.SECONDS) / (60.0));
+					double v = previousInstant.until(instant, ChronoUnit.SECONDS) / (60.0);
+					samplingStats.addValue(v);
 				}
 				if(previousPoint != null) {
-					pointsStats.addValue(Semantic.SPATIAL_EUCLIDEAN.distance(previousPoint, record.getLatlon()));
+					double distance = Semantic.SPATIAL_EUCLIDEAN.distance(previousPoint, point);
+					pointsStats.addValue(distance);
 				}
 				previousInstant = instant;
-				previousPoint = record.getLatlon();
+				previousPoint = point;
 			}
 			trajLenghtStats.addValue(s.length());
-			trajSamplingStats.addValue(samplingStats.getMean());
-			trajPointStats.addValue(pointsStats.getMean());
+			trajSamplingStats.addValue(samplingStats.getPercentile(50));
+			trajPointStats.addValue(pointsStats.getPercentile(50));
 			ret.add(s);
 		}
-		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f, sampling rate - %.2f points per minute, mean distance between point - %.2f\n", trajLenghtStats.getMean(), trajLenghtStats.getMin(), trajLenghtStats.getMax(), trajLenghtStats.getStandardDeviation(), 1 / trajSamplingStats.getPercentile(50), trajPointStats.getPercentile(50));
+		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f, sampling rate - %.10f points per minute, mean distance between point - %.2f\n", trajLenghtStats.getMean(), trajLenghtStats.getMin(), trajLenghtStats.getMax(), trajLenghtStats.getStandardDeviation(), 1 / trajSamplingStats.getMean(), trajPointStats.getMean());
 		return ret;
 	}
 

@@ -56,12 +56,11 @@ public class GeolifeTransportationModeDataReader implements IDataReader {
 	private List<SemanticTrajectory> readRawFile() throws IOException, UnsupportedEncodingException {
 		System.out.println("Reading file...");
 		Multimap<Integer, GeolifeRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
-		String file = "./datasets/geolife_transportation_mode.zip";
+		String file = "./datasets/public.geolife_with_transportation.zip";
 		ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(this.getClass().getClassLoader().getResource(file).getFile(), "UTF-8"));
-		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("geolife_transportation_mode.csv")));
+		InputStreamReader rawPointsEntry = new InputStreamReader(zipFile.getInputStream(zipFile.getEntry("public.geolife_with_transportation.csv")));
 		CSVParser pointsParser = CSVParser.parse(IoUtils.contentsAsCharSequence(rawPointsEntry).toString(), 
-				
-				CSVFormat.EXCEL.withHeader("gid", "tid", "lat", "lon", "timestamp", "altitude", "user_id", "mode").withDelimiter(';'));
+				CSVFormat.EXCEL.withHeader("gid", "tid", "lat", "lon", "time", "user_id", "mode").withDelimiter(';'));
 		Iterator<CSVRecord> pointsData = pointsParser.iterator();
 		System.out.println("Fetching...");
 		while(pointsData.hasNext()) {
@@ -74,7 +73,7 @@ public class GeolifeTransportationModeDataReader implements IDataReader {
 			int gid = Integer.parseInt(data.get("gid"));
 			Timestamp date = null;
 			try {
-				date = new Timestamp(DF.parse(data.get("timestamp")).getTime());
+				date = new Timestamp(DF.parse(data.get("time")).getTime());
 			} catch (ParseException e) {
 				System.err.println(e.getMessage());
 			}
@@ -129,7 +128,7 @@ public class GeolifeTransportationModeDataReader implements IDataReader {
 					samplingStats.addValue(previousInstant.until(instant, ChronoUnit.SECONDS) / 60.0);
 				}
 				if(previousPoint != null) {
-					pointsStats.addValue(Semantic.SPATIAL_LATLON.distance(previousPoint, point));
+					pointsStats.addValue(Semantic.SPATIAL_EUCLIDEAN.distance(previousPoint, point));
 				}
 				previousInstant = instant;
 				previousPoint = point;
