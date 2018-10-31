@@ -5,7 +5,7 @@
 	},
 	"groundtruth": {
 		"type": "String",
-		"index": 3
+		"index": 4
 	},
 	"measure": {
 		"name": "EDR",
