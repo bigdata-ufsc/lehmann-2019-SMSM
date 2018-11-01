@@ -1,4 +1,4 @@
-Folder_id;Start Time;End Time;Transportation Mode
+Folder_id;start_time;end_time;mode
 11;2007/06/26 11:32:29;2007/06/26 11:40:29;bus
 11;2008/03/28 14:52:54;2008/03/28 15:59:59;train
 11;2008/03/28 16:00:00;2008/03/28 22:02:00;train
