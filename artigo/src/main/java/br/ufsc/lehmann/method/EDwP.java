@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.SpatialDistanceFunction;
@@ -14,7 +15,7 @@ import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.utils.Distance;
 import br.ufsc.utils.EuclideanDistanceFunction;
 
-public class EDwP extends TrajectorySimilarityCalculator<SemanticTrajectory> {
+public class EDwP extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 	double totalLength;
 	public Matrix matrix;
 	double time;
@@ -36,6 +37,11 @@ public class EDwP extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 
 	public EDwP() {
 		this(new EuclideanDistanceFunction(), true);
+	}
+	
+	@Override
+	public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+		return 1 - getSimilarity(t1, t2);
 	}
 
 	@Override
@@ -212,6 +218,11 @@ public class EDwP extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		}
 		return new TPoint(point1.getX() + t * (point2.getX() - point1.getX()),
 				point1.getY() + t * (point2.getY() - point1.getY()), point1.getTimestamp());
+	}
+	
+	@Override
+	public String name() {
+		return "EDwP";
 	}
 
 	public static class Matrix {
