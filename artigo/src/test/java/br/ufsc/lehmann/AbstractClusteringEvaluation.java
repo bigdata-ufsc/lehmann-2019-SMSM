@@ -55,6 +55,9 @@ public abstract class AbstractClusteringEvaluation {
 			Validation validation = new Validation(groundtruthSemantic, (IMeasureDistance<SemanticTrajectory>) calculator);
 	
 			Stopwatch w = Stopwatch.createStarted();
+			if(calculator instanceof ITrainable) {
+				((ITrainable) calculator).train(Arrays.asList(allData));
+			}
 			double[][] distances = new double[allData.length][allData.length];
 			IMeasureDistance<SemanticTrajectory> measurer = (IMeasureDistance<SemanticTrajectory>) calculator;
 			for (int i = 0; i < allData.length; i++) {
@@ -68,9 +71,6 @@ public abstract class AbstractClusteringEvaluation {
 			w = w.stop();
 			System.out.printf("Elapsed time %d miliseconds\n", w.elapsed(TimeUnit.MILLISECONDS));
 			IntStream.of(this.clusterSizes).forEach(numberOfClusters -> {
-				if(calculator instanceof ITrainable) {
-					((ITrainable) calculator).train(Arrays.asList(allData));
-				}
 				ClusteringResult result = validation.cluster(allData, distances, numberOfClusters);
 				System.out.printf("Number of clusters: %d\n", numberOfClusters);
 				System.out.printf("Parameters: '%s'\n", calculator.parametrization());

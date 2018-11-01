@@ -8,16 +8,20 @@
 		"index": 4
 	},
 	"measure": {
-		"name": "Swale",
-		"config": {
-			"penalty": "[0,1,2,3,4,5]",
-			"reward" : "[0,1,2,3,4,5]"
-		},
+		"name": "EDR",
 		"params": [{
 			"type": "spatial",
 			"index" : 1,
 			"distance": "euclidean",
-			"threshold": "[0, 50, 100, 200, 500]"
+			"threshold": "[0, 1000, 2000, 5000]"
+		}, {
+			"type": "temporal",
+			"index" : 2,
+			"distance": "timestamp",
+			"threshold": "[0,1,2,3,4]",
+			"params": [{
+				"type": "minutes"
+			}]
 		}]
 	}
 }

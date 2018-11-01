@@ -12,6 +12,7 @@
 		"optimizer" : "FTSM",
 		"params": [{
 			"type": "spatial",
+			"weight": 1,
 			"index" : 1,
 			"distance": "euclidean",
 			"threshold": "[0, 50, 100, 200, 500]"

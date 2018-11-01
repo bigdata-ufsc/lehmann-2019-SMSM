@@ -5,18 +5,20 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
@@ -49,6 +51,7 @@ public class AISBrestDataReader implements IDataReader {
 	public static final BasicSemantic<Double> SPEED = new BasicSemantic<>(semantics_count++);
 	public static final BasicSemantic<Double> COG = new BasicSemantic<>(semantics_count++);
 	public static final BasicSemantic<Double> ROT = new BasicSemantic<>(semantics_count++);
+	public static final BasicSemantic<String> SHIP_DESCRIPTION = new BasicSemantic<>(semantics_count++);
 
 	private static final DateFormat DF = new SimpleDateFormat("YYYY-MM-DD HH:mm:SS");
 
@@ -66,6 +69,14 @@ public class AISBrestDataReader implements IDataReader {
 		File file = new File("./src/main/resources/datasets/AIS/AIS_descriptor.json");
 		DatasetDescriptor descriptor = new Gson().fromJson(new FileReader(file), DatasetDescriptor.class);
 		Multimap<Integer, AISBrestRecord> records = MultimapBuilder.hashKeys().linkedListValues().build();
+		CSVParser shipCodeParser = CSVParser.parse(new File("./src/main/resources/datasets/AIS/AIS_ship_codes.csv"), Charset.forName("UTF-8"),  
+				CSVFormat.EXCEL.withHeader("code", "name", "description").withDelimiter(';'));
+		Iterator<CSVRecord> shipCodeData = shipCodeParser.iterator();
+		Map<String, String> shipToDescription = new HashMap<>();
+		while(shipCodeData.hasNext()) {
+			CSVRecord next = shipCodeData.next();
+			shipToDescription.put(next.get("code"), next.get("name"));
+		}
 		System.out.println("Fetching...");
 		for (String csvFile : descriptor.getData_files()) {
 			ZipFile zipFile = new ZipFile(java.net.URLDecoder.decode(new File(file.getParentFile(), csvFile).getAbsolutePath(), "UTF-8"));
@@ -96,7 +107,8 @@ public class AISBrestDataReader implements IDataReader {
 						Double.parseDouble(data.get("speed")),
 						Double.parseDouble(data.get("cog")),
 						Double.parseDouble(data.get("rot")),
-						latlon
+						latlon,
+						shipToDescription.get(data.get("shipcode"))
 						);
 				records.put(record.getTid(), record);
 			}
@@ -137,6 +149,7 @@ public class AISBrestDataReader implements IDataReader {
 				s.addData(i, SPEED, record.getSpeed());
 				s.addData(i, COG, record.getCog());
 				s.addData(i, ROT, record.getRot());
+				s.addData(i, SHIP_DESCRIPTION, record.getShipType());
 				i++;
 				if(previousInstant != null) {
 					samplingStats.addValue(previousInstant.until(instant, ChronoUnit.SECONDS) / 60.0);
@@ -148,26 +161,26 @@ public class AISBrestDataReader implements IDataReader {
 				previousPoint = record.getLatlon();
 			}
 			trajLenghtStats.addValue(s.length());
-			trajSamplingStats.addValue(samplingStats.getMean());
-			trajPointStats.addValue(pointsStats.getMean());
+			trajSamplingStats.addValue(samplingStats.getPercentile(50));
+			trajPointStats.addValue(pointsStats.getPercentile(50));
 			ret.add(s);
 		}
 		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f, sampling rate - %.2f points per minute, mean distance between point - %.2f\n", 
-				trajLenghtStats.getMean(), trajLenghtStats.getMin(), trajLenghtStats.getMax(), trajLenghtStats.getStandardDeviation(), 1 / trajSamplingStats.getPercentile(50), trajPointStats.getPercentile(50));
+				trajLenghtStats.getMean(), trajLenghtStats.getMin(), trajLenghtStats.getMax(), trajLenghtStats.getStandardDeviation(), 1 / trajSamplingStats.getMean(), trajPointStats.getMean());
 		return ret;
 	}
 
 	public static void main(String[] args) {
 		List<SemanticTrajectory> read = new AISBrestDataReader().read();
-		Multimap<Integer, SemanticTrajectory> classes = MultimapBuilder.hashKeys().arrayListValues().build();
+		Multimap<String, SemanticTrajectory> classes = MultimapBuilder.hashKeys().arrayListValues().build();
 		for (SemanticTrajectory t : read) {
-			classes.put(SHIPCODE.getData(t, 0), t);
+			classes.put(SHIP_DESCRIPTION.getData(t, 0), t);
 		}
 		read = null;
-		Set<Integer> keys = classes.keySet();
-		for (Integer k : keys) {
+		Set<String> keys = classes.keySet();
+		for (String k : keys) {
 			Collection<SemanticTrajectory> trajs = classes.get(k);
-			System.out.printf("\tSHIPCODE '%d' - %d trajectories\n", k, trajs.size());
+			System.out.printf("\tSHIP_DESCRIPTION '%s' - %d trajectories\n", k, trajs.size());
 		}
 	}
 }

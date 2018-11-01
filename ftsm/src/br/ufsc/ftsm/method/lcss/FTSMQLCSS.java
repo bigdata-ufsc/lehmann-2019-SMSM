@@ -187,7 +187,7 @@ public class FTSMQLCSS extends TrajectorySimilarityCalculator<SemanticTrajectory
 
 	@Override
 	public String parametrization() {
-		return StringUtils.join(param, "\n");
+		return param.toString();
 	}
 }
 

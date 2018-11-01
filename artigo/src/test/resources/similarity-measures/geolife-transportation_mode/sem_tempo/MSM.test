@@ -4,8 +4,8 @@
 		"raw": 'true'
 	},
 	"groundtruth": {
-		"type": "Number",
-		"index": 3
+		"type": "String",
+		"index": 4
 	},
 	"measure": {
 		"name": "MSM",
@@ -13,6 +13,7 @@
 		"params": [{
 			"type": "spatial",
 			"index" : 1,
+			"weight": 1,
 			"distance": "euclidean",
 			"threshold": "[0, 50, 100, 200, 500]"
 		}]

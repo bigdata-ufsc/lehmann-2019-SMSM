@@ -4,8 +4,8 @@
 		"raw": 'true'
 	},
 	"groundtruth": {
-		"type": "Number",
-		"index": 3
+		"type": "String",
+		"index": 4
 	},
 	"measure": {
 		"name": "LCSS",

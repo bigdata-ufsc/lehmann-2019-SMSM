@@ -19,8 +19,8 @@ public class GeolifeTransportationModeClusteringEvaluation  extends AbstractClus
 	}
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/geolife-transportation_mode/"));
-		files.filter(path -> path.toFile().isFile() && path.toString().contains("LCSS") && path.toString().endsWith(".test")).forEach(path -> {
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/geolife-transportation_mode/sem_tempo"));
+		files.filter(path -> path.toFile().isFile() && path.toString().contains("test") && path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
 			PrintStream bkp = System.out;

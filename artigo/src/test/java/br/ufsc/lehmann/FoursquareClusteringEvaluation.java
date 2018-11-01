@@ -19,7 +19,7 @@ public class FoursquareClusteringEvaluation extends AbstractClusteringEvaluation
 	}
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/foursquare/sem_espaco"));
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/foursquare/com_espaco"));
 		files.filter(path -> path.toFile().isFile() && path.toString().contains("MSM") && path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
