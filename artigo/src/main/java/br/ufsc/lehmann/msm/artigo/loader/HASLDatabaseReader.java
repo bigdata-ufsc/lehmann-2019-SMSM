@@ -213,7 +213,7 @@ public class HASLDatabaseReader implements IDataReader {
 			}
 			for (int k = 0; k < ALL_SEMANTICS.length; k++) {
 				SummaryStatistics trajStats = semanticStats.get(ALL_SEMANTICS[k]).createContributingStatistics();
-				for (int m = 0; j < s.length() - 1; j++) {
+				for (int m = 0; m < s.length() - 1; m++) {
 					Object p1 = ALL_SEMANTICS[k].getData(s, m);
 					Object p2 = ALL_SEMANTICS[k].getData(s, m + 1);
 					Object distance = ALL_SEMANTICS[k].distance(p1, p2);
