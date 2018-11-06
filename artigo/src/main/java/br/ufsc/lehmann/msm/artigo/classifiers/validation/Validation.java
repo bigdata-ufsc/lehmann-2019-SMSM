@@ -19,6 +19,7 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -31,6 +32,7 @@ import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -39,17 +41,16 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.ArrayTable;
-import com.google.common.collect.Streams;
 
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
+import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.classifier.Binarizer;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;
@@ -88,11 +89,29 @@ public class Validation {
 		return clustering.cluster(Arrays.asList(testData), groundTruthSemantic, distances);
 	}
 
+	public PrecisionAtRecallResults precisionAtRecallWithResult(TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance, SemanticTrajectory[] testData, int recallLevel) {
+		Map<Object, DescriptiveStatistics> stats = new HashMap<>();
+		double[] pAtRecall = precisionAtRecall(measureDistance, testData, recallLevel, stats);
+		return new PrecisionAtRecallResults(pAtRecall, stats);
+	}
+	
 	public double[] precisionAtRecall(TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance, SemanticTrajectory[] testData, int recallLevel) {
-		double[] ret = new double[recallLevel];
-		double[][] precisionRecall = new double[testData.length][];
+		Map<Object, DescriptiveStatistics> stats = new HashMap<>();
+		double[] ret = precisionAtRecall(measureDistance, testData, recallLevel, stats);
+		DescriptiveStatistics total = new DescriptiveStatistics();
+		for (Map.Entry<Object, DescriptiveStatistics> entry : stats.entrySet()) {
+			System.out.printf("%s = %.2f +/- %.2f\n", entry.getKey(), entry.getValue().getMean(), entry.getValue().getStandardDeviation());
+			total.addValue(entry.getValue().getMean());
+		}
+		System.out.printf("Mean intraclass similarity = %.2f\n", total.getMean());
+		return ret;
+	}
+
+	private double[] precisionAtRecall(TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance,
+			SemanticTrajectory[] testData, int recallLevel, Map<Object, DescriptiveStatistics> stats) {
+		double[] ret = new double[recallLevel + 1];
 		List<SemanticTrajectory> trajs = Arrays.asList(testData);
-		SemanticTrajectory[] trajsArray = trajs.toArray(new SemanticTrajectory[trajs.size()]);
+		SemanticTrajectory[] trajsArray = testData;
 		ArrayTable<SemanticTrajectory, SemanticTrajectory, Double> allDistances = ArrayTable.create(trajs, trajs);
 		Map<Object, LongAdder> occurrences = new HashMap<>();
 		Semantic semantic = groundTruthSemantic;
@@ -100,10 +119,10 @@ public class Validation {
 			Object classData = semantic.getData(trajsArray[i], 0);
 			occurrences.computeIfAbsent(classData, (t) -> new LongAdder()).increment();
 		}
-//		occurrences.forEach((key, qntd) -> System.out.println(key + ": " + qntd.intValue()));
 		
-		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 1.5),
-				(int) (Runtime.getRuntime().availableProcessors() / 1.5), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 2),
+				(int) (Runtime.getRuntime().availableProcessors() / 2), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+//		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		DelayQueue<DelayedDistanceMeasure> queueProcess = new DelayQueue<>();
 		for (int i = 0; i < trajsArray.length; i++) {
 			int finalI = i;
@@ -143,52 +162,217 @@ public class Validation {
 				}
 			}
 		}
-		Map<Object, DescriptiveStatistics> stats = new HashMap<>();
 		executorService.shutdown();
+
+		double[][] matrix = new double[trajsArray.length][trajsArray.length];
+		List<Object> classes = new ArrayList<>();
 		for (int i = 0; i < trajsArray.length; i++) {
-			List<Map.Entry<SemanticTrajectory, Double>> rows = allDistances.row(trajsArray[i]).entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
-			Object classData = semantic.getData(trajsArray[i], 0);
+			classes.add(semantic.getData(trajsArray[i], 0));
+			for (int j = 0; j < trajsArray.length; j++) {
+				Double d = allDistances.get(trajsArray[i], trajsArray[j]);
+//				if(d < 1.0 && d > 0.0) {
+					System.out.println(trajsArray[i].getTrajectoryId() + " x" + trajsArray[j].getTrajectoryId() + " - " + d);
+//				}
+				matrix[i][j] = d;
+			}
+		}
+
+		ret = computeFromClassNames(classes, matrix);
+
+//		ret[0] = 1.0;
+//		double[][] precisionRecall = new double[trajsArray.length][];
+//		for (int i = 0; i < trajsArray.length; i++) {
+//			List<Map.Entry<SemanticTrajectory, Double>> rows = allDistances.row(trajsArray[i]).entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
+//			Object classData = semantic.getData(trajsArray[i], 0);
+//			int groundTruthCounter = occurrences.get(classData).intValue();
+//			precisionRecall[i] = new double[groundTruthCounter];
+//			int correctClass = 0;
+//			for (int j = 0; correctClass < groundTruthCounter && j < testData.length; j++) {
+//				Entry<SemanticTrajectory, Double> entry = rows.get(j);
+//				Object otherClassData = semantic.getData(entry.getKey(), 0);
+//				if(Objects.equals(classData, otherClassData)) {
+//					double v = 1 - entry.getValue();
+//					DescriptiveStatistics s = stats.computeIfAbsent(classData, (t) -> new DescriptiveStatistics());
+//					s.addValue(v);
+//					precisionRecall[i][correctClass++] = correctClass / (j + 1.0);
+//				}
+//			}
+//		}
+//		for (int i = 1; i <= recallLevel; i++) {
+//			final int finalI = i;
+//			ret[i] = Arrays.stream(precisionRecall).mapToDouble(a -> a[Math.max(0, (int) ((a.length / (double) recallLevel) * finalI) - 1)]).sum() / trajsArray.length;
+//		}
+		return ret;
+	}
+	
+	public static double[][] trasposeMatrix(double[][] matrix) {
+		int m = matrix.length;
+		int n = matrix[0].length;
+
+		double[][] trasposedMatrix = new double[n][m];
+
+		for (int x = 0; x < n; x++) {
+			for (int y = 0; y < m; y++) {
+				trasposedMatrix[x][y] = matrix[y][x];
+			}
+		}
+		return trasposedMatrix;
+	}
+	
+	public static void main(String[] args) {
+		int count = 0;
+		Objeto[] trajsArray = new Objeto[] {
+				new Objeto("C", count++),
+				new Objeto("C", count++),
+				new Objeto("C", count++),
+				new Objeto("C", count++),
+				new Objeto("C", count++),
+				new Objeto("B", count++),
+				new Objeto("B", count++),
+				new Objeto("B", count++),
+				new Objeto("A", count++),
+				new Objeto("A", count++),
+		};
+		Map<Object, DescriptiveStatistics> stats = new HashMap<>();
+		ArrayTable<Objeto, Objeto, Integer> allDistances = ArrayTable.create(Arrays.asList(trajsArray), Arrays.asList(trajsArray));
+		Map<Object, LongAdder> occurrences = new HashMap<>();
+		for (int i = 0; i < trajsArray.length; i++) {
+			Object classData = trajsArray[i].clazz;
+			occurrences.computeIfAbsent(classData, (t) -> new LongAdder()).increment();
+		}
+		NumberDistance numberDistance = new NumberDistance();
+		double[][] matrix = new double[trajsArray.length][trajsArray.length];
+		List<Object> classes = new ArrayList<>();
+		for (int i = 0; i < trajsArray.length; i++) {
+			classes.add(trajsArray[i].clazz);
+			for (int j = 0; j < trajsArray.length; j++) {
+				allDistances.put(trajsArray[i], trajsArray[j], trajsArray[j].count);
+				matrix[i][j] = trajsArray[j].count;
+			}
+		}
+		int recallLevel = 5;
+		double[] ret = new double[recallLevel + 1];
+		ret[0] = 1.0;
+		double[][] precisionRecall = new double[trajsArray.length][];
+		for (int i = 0; i < trajsArray.length; i++) {
+			List<Map.Entry<Objeto, Integer>> rows = allDistances.row(trajsArray[i]).entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
+			Object classData = trajsArray[i].clazz;
 			int groundTruthCounter = occurrences.get(classData).intValue();
 			precisionRecall[i] = new double[groundTruthCounter];
 			int correctClass = 0;
-			boolean first = false;
-			Object lastTraj = null, lastClass = null;
-			for (int j = 0; correctClass < groundTruthCounter && j < testData.length; j++) {
-				Entry<SemanticTrajectory, Double> entry = rows.get(j);
-				Object otherClassData = semantic.getData(entry.getKey(), 0);
+			for (int j = 0; correctClass < groundTruthCounter && j < trajsArray.length; j++) {
+				Entry<Objeto, Integer> entry = rows.get(j);
+				Object otherClassData = entry.getKey().clazz;
+				int h = correctClass;
 				if(Objects.equals(classData, otherClassData)) {
-					double v = 1 - entry.getValue();
-					DescriptiveStatistics s = stats.computeIfAbsent(classData, (t) -> new DescriptiveStatistics());
-					s.addValue(v);
-					if(lastTraj !=null && first) {
-//						System.out.println("Traj[" + classData + "]: " + trajsArray[i].getTrajectoryId() + " - Others [" + lastClass + ", " + lastTraj + "][" + otherClassData + ", "+ entry.getKey().getTrajectoryId() +  "]");
-						first = false;
-					}
-					precisionRecall[i][correctClass++] = correctClass / (j + 1.0);
-				} else {
-					//if(first) {
-					//	System.out.println("Traj[" + classData + "]: " + trajsArray[i].getTrajectoryId() + " - Other traj[" + otherClassData + "]: " + entry.getKey().getTrajectoryId() + " = " + entry.getValue());
-						//	first = false;
-						//}
-					if(lastTraj == null && !first) {
-						first = true;
-						lastTraj = entry.getKey().getTrajectoryId();
-						lastClass = otherClassData;
-					}
+					correctClass++;
 				}
+				precisionRecall[i][h] = correctClass / (j + 1.0);
 			}
 		}
-		DescriptiveStatistics total = new DescriptiveStatistics();
-//		for (Map.Entry<Object, DescriptiveStatistics> entry : stats.entrySet()) {
-//			System.out.printf("%s = %.2f +/- %.2f\n", entry.getKey(), entry.getValue().getMean(), entry.getValue().getStandardDeviation());
-//			total.addValue(entry.getValue().getMean());
-//		}
-		System.out.printf("Mean intraclass similarity = %.2f\n", total.getMean());
-		for (int i = 0; i < recallLevel; i++) {
+		for (int i = 1; i <= recallLevel; i++) {
 			final int finalI = i;
-			ret[i] = Arrays.stream(precisionRecall).mapToDouble(a -> a[Math.min(finalI, (int) ((a.length / (double) recallLevel) * finalI))]).sum() / testData.length;
+			ret[i] = Arrays.stream(precisionRecall).mapToDouble(a -> a[Math.max(0, (int) ((a.length / (double) recallLevel) * finalI) - 1)]).sum() / trajsArray.length;
 		}
-		return ret;
+		System.out.println("P@R: " + Arrays.toString(ret));
+		System.out.println("AUC: " + AUC.precisionAtRecall(ret));
+		
+		System.out.println("P@R (lucas): " + Arrays.toString(computeFromClassNames(classes, matrix)));
+		System.out.println("AUC (lucas): " + AUC.precisionAtRecall(computeFromClassNames(classes, matrix)));
+	}
+
+	public static double[] computeFromClassNames(List<Object> classes, double[][] matrix) {
+		// Ranking of trajectories
+		List<ObjectIntPair> ranking = new ArrayList<>(classes.size());
+		for (int i = 0; i < classes.size(); i++) {
+			ranking.add(new ObjectIntPair(classes.get(i), i));
+		}
+		return compute(ranking, classes, matrix, 5.0);
+	}
+
+	private static double[] compute(List<ObjectIntPair> ranking, List<Object> classes, double[][] matrix, double recallLevel) {
+		double[][] fullMatrix = matrix;
+
+		// Complete the upper half of the full matrix
+		for (int i = 0; i < fullMatrix.length; i++)
+			for (int j = i + 1; j < fullMatrix[0].length; j++)
+				fullMatrix[i][j] = fullMatrix[j][i];
+
+		double[] precisionAtRecall = new double[(int) (recallLevel + 1)];
+		precisionAtRecall[0] = 1.0;
+
+		int idx = 0;
+		for (Object cls : classes) {
+			final int idxSort = idx;
+			Collections.sort(ranking,
+					(o1, o2) -> fullMatrix[idxSort][o1.getValue()] == fullMatrix[idxSort][o2.getValue()] ? 0
+							: fullMatrix[idxSort][o1.getValue()] > fullMatrix[idxSort][o2.getValue()] ? 1 : -1);
+
+			long classCount = 0;
+
+			for (Object cls2 : classes)
+				if (cls.equals(cls2))
+					classCount++;
+
+			for (int recall = 1; recall <= recallLevel; recall++) {
+				long meTarget = Math.max(Math.round((classCount) * recall / recallLevel), 1);
+				long meCount = meTarget;
+				long othersCount = 0;
+
+				for (ObjectIntPair t2 : ranking) {
+					if (meTarget == 0)
+						break;
+					if (t2.getKey().equals(cls))
+						meTarget--;
+					else
+						othersCount++;
+				}
+				precisionAtRecall[recall] += (double) meCount / (meCount + othersCount);
+			}
+			idx++;
+		}
+
+		for (int i = 1; i < precisionAtRecall.length; i++)
+			precisionAtRecall[i] /= classes.size();
+
+		return precisionAtRecall;
+	}
+	
+	public static class ObjectIntPair {
+
+		private Object key;
+		private int value;
+		public ObjectIntPair(Object key, int value) {
+			super();
+			this.key = key;
+			this.value = value;
+		}
+		public Object getKey() {
+			return key;
+		}
+		public void setKey(Object key) {
+			this.key = key;
+		}
+		public int getValue() {
+			return value;
+		}
+		public void setValue(int value) {
+			this.value = value;
+		}
+		
+	}
+
+	
+	private static class Objeto {
+
+		private String clazz;
+		private int count;
+
+		public Objeto(String clazz, int count) {
+			this.clazz = clazz;
+			this.count = count;
+		}
+		
 	}
 	
 	static class DelayedDistanceMeasure implements Delayed {
@@ -691,5 +875,24 @@ public class Validation {
 			}
 		}
 		return ret;
+	}
+	
+	public static class PrecisionAtRecallResults {
+
+		private double[] pAtRecall;
+		private Map<Object, DescriptiveStatistics> stats;
+
+		public PrecisionAtRecallResults(double[] pAtRecall, Map<Object, DescriptiveStatistics> stats) {
+			this.pAtRecall = pAtRecall;
+			this.stats = stats;
+		}
+
+		public double[] getpAtRecall() {
+			return pAtRecall;
+		}
+
+		public Map<Object, DescriptiveStatistics> getStats() {
+			return stats;
+		}
 	}
 }

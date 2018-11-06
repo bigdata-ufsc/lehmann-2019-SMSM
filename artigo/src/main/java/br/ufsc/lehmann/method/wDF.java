@@ -85,9 +85,9 @@ public class wDF extends TrajectorySimilarityCalculator<SemanticTrajectory> impl
 	@Override
 	public String parametrization() {
         if(w instanceof ComputableDouble) {
-    		return "Distance function: " + distanceFunction.getClass().getSimpleName() + "w: ComputableDouble";
+    		return "w: ComputableDouble";
         }
-		return "Distance function: " + distanceFunction.getClass().getSimpleName() + "w: " + w;
+		return "w: " + w;
 	}
 
 }

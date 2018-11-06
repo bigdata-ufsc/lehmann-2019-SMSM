@@ -140,4 +140,8 @@ public abstract class AbstractProblem implements Problem {
 	
 	protected abstract List<SemanticTrajectory> load();
 
+	public boolean isRawTrajectory() {
+		return false;
+	}
+
 }

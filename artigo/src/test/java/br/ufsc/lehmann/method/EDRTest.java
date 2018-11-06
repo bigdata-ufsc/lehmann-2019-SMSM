@@ -13,27 +13,23 @@ import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.SlackTemporalSemantic;
 import br.ufsc.lehmann.Thresholds;
 import br.ufsc.lehmann.method.EDR.EDRSemanticParameter;
+import br.ufsc.lehmann.msm.artigo.AbstractProblem;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.EDRClassifier;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
-import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDatabaseReader;
+import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
-import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
-import br.ufsc.lehmann.msm.artigo.problems.VehicleProblem;
-import br.ufsc.lehmann.prototype.PrototypeDataReader;
-import br.ufsc.lehmann.prototype.PrototypeProblem;
 
 public interface EDRTest {
 
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
+		AbstractProblem abstractProblem = (AbstractProblem) problem;
 		StopSemantic stopSemantic = null;
+		Semantic<Number, Number> xSemantic = null;
+		Semantic<Number, Number> ySemantic = null;
 		Semantic<TPoint, Number> geoSemantic = Semantic.SPATIAL_LATLON;
-		MutableInt geoThreshold = Thresholds.STOP_CENTROID_LATLON;
+		MutableInt geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
 		Semantic<?, Number> timeSemantic = Semantic.TEMPORAL;
 		Number timeThreshold = Thresholds.TEMPORAL;
 		if(problem instanceof NElementProblem) {
@@ -52,12 +48,15 @@ public interface EDRTest {
 			if(geolifeProblem.isRawTrajectory()) {
 				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
 				timeThreshold = Thresholds.SLACK_TEMPORAL;
+				geoThreshold = new MutableInt(8);
+				xSemantic = GeolifeUniversityDatabaseReader.SPATIAL_X;
+				ySemantic = GeolifeUniversityDatabaseReader.SPATIAL_Y;
 			} else {
 				timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
 				timeThreshold = Thresholds.SLACK_TEMPORAL;
+				geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
 			}
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
-			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
 //		} else if(problem instanceof PatelProblem) {
 //			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
@@ -72,9 +71,13 @@ public interface EDRTest {
 			if(sanFranciscoCabProblem.isRawTrajectory()) {
 				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
 				timeThreshold = Thresholds.SLACK_TEMPORAL;
+				geoThreshold = new MutableInt(100);
+				xSemantic = SanFranciscoCabDatabaseReader.SPATIAL_X;
+				ySemantic = SanFranciscoCabDatabaseReader.SPATIAL_Y;
 			} else {
 				timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
 				timeThreshold = Thresholds.SLACK_TEMPORAL;
+				geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
 			}
 			stopSemantic = sanFranciscoCabProblem.stopSemantic();
 //		} else if(problem instanceof SergipeTracksProblem) {
@@ -90,9 +93,13 @@ public interface EDRTest {
 //			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 //			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
 		}
+		if(abstractProblem.isRawTrajectory()) {
+			return new EDRClassifier(//
+					new EDRSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold)
+					);
+		}
 		return new EDRClassifier(//
 				new EDRSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
-//				new EDRSemanticParameter(timeSemantic, timeThreshold),
 				new EDRSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold)
 				);
 	}

@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,6 +46,7 @@ import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
 import br.ufsc.utils.EuclideanDistanceFunction;
+import smile.math.Math;
 
 public class GeolifeUniversityDatabaseReader implements IDataReader {
 	
@@ -78,12 +80,16 @@ public class GeolifeUniversityDatabaseReader implements IDataReader {
 			return DIRECTION.getData(p, i) + "/" + PATH.getData(p, i);
 		}
 	};
+	public static final BasicSemantic<Number> SPATIAL_X = new BasicSemantic<>(SEMANTICS_COUNTER++, new NumberDistance());
+	public static final BasicSemantic<Number> SPATIAL_Y = new BasicSemantic<>(SEMANTICS_COUNTER++, new NumberDistance());
 	
 	private boolean onlyStops;
 
 	private String pointsTable;
 	private String moveTable;
 	private String stopTable;
+
+	private Boolean normalized;
 
 	public GeolifeUniversityDatabaseReader(boolean onlyStops) {
 		this(onlyStops, false);
@@ -97,10 +103,15 @@ public class GeolifeUniversityDatabaseReader implements IDataReader {
 	}
 
 	public GeolifeUniversityDatabaseReader(boolean onlyStops, String stopTable, String moveTable, String pointsTable) {
+		this(onlyStops, stopTable, moveTable, pointsTable, Boolean.FALSE);
+	}
+
+	public GeolifeUniversityDatabaseReader(boolean onlyStops, String stopTable, String moveTable, String pointsTable, Boolean normalized) {
 		this.onlyStops = onlyStops;
 		this.stopTable = stopTable;
 		this.moveTable = moveTable;
 		this.pointsTable = pointsTable;
+		this.normalized = normalized;
 	}
 
 	public List<SemanticTrajectory> read() {
@@ -305,6 +316,8 @@ public class GeolifeUniversityDatabaseReader implements IDataReader {
 					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
 					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
 					s.addData(i, Semantic.GID, record.getGid());
+					s.addData(i, SPATIAL_X, stop.getCentroid().getX());
+					s.addData(i, SPATIAL_Y, stop.getCentroid().getY());
 					s.addData(i, Semantic.SPATIAL_LATLON, stop.getCentroid());
 					s.addData(i, USER_ID, record.getUserId());
 					s.addData(i, REGION_INTEREST, record.getPOI());
@@ -398,8 +411,23 @@ public class GeolifeUniversityDatabaseReader implements IDataReader {
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 12);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, SEMANTICS_COUNTER);
+
 			Collection<GeolifeRecord> collection = records.get(trajId);
+			
+			Map<String, double[]> dimensionValues = new HashMap<>();
+			dimensionValues.put("x", new double[collection.size()]);
+			dimensionValues.put("y", new double[collection.size()]);
+			int j = 0;
+			for (Iterator iterator = collection.iterator(); iterator.hasNext();j++) {
+				GeolifeRecord record = (GeolifeRecord) iterator.next();
+				dimensionValues.get("x")[j] = record.getLongitude();
+				dimensionValues.get("y")[j] = record.getLatitude();
+			}
+			if(normalized) {
+				Math.standardize(dimensionValues.get("x"));
+				Math.standardize(dimensionValues.get("y"));
+			}
 			int i = 0;
 			for (GeolifeRecord record : collection) {
 				if(i > 0) {
@@ -409,9 +437,13 @@ public class GeolifeUniversityDatabaseReader implements IDataReader {
 					}
 				}
 				s.addData(i, Semantic.GID, record.getGid());
-				TPoint point = new TPoint(record.getLatitude(), record.getLongitude(), record.getTime());
+				double x = dimensionValues.get("x")[i];
+				double y = dimensionValues.get("y")[i];
+				TPoint point = new TPoint(x, y, record.getTime());
 				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
+				s.addData(i, SPATIAL_X, point.getX());
+				s.addData(i, SPATIAL_Y, point.getY());
 				s.addData(i, USER_ID, record.getUserId());
 				s.addData(i, TRANSPORTATION_MODE, record.getTransportationMode());
 				s.addData(i, REGION_INTEREST, record.getPOI());

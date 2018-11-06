@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
@@ -97,6 +96,8 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 			return DIRECTION.getData(p, i) + "/" + ROAD.getData(p, i);
 		}
 	};
+	public static final BasicSemantic<Number> SPATIAL_X = new BasicSemantic<>(SEMANTIC_COUNTER++, new NumberDistance());
+	public static final BasicSemantic<Number> SPATIAL_Y = new BasicSemantic<>(SEMANTIC_COUNTER++, new NumberDistance());
 	
 	private String[] roads;
 	private boolean onlyStops;
@@ -133,8 +134,8 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 
 				ResultSet stopsData = st.executeQuery(
 						"SELECT stop_id, "
-						+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(start_lon, start_lat), 4326), 900913)) as start_lat, st_y(st_transform(ST_SetSRID(ST_MakePoint(start_lon, start_lat), 4326), 900913)) as start_lon, "
-						+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(end_lon, end_lat), 4326), 900913)) as end_lat, st_y(st_transform(ST_SetSRID(ST_MakePoint(end_lon, end_lat), 4326), 900913)) as end_lon, "
+						+ "st_y(st_transform(ST_SetSRID(ST_MakePoint(start_lon, start_lat), 4326), 900913)) as start_lat, st_x(st_transform(ST_SetSRID(ST_MakePoint(start_lon, start_lat), 4326), 900913)) as start_lon, "
+						+ "st_y(st_transform(ST_SetSRID(ST_MakePoint(end_lon, end_lat), 4326), 900913)) as end_lat, st_x(st_transform(ST_SetSRID(ST_MakePoint(end_lon, end_lat), 4326), 900913)) as end_lon, "
 						+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(centroid_lat, centroid_lon), 4326), 900913)) as centroid_lat, st_y(st_transform(ST_SetSRID(ST_MakePoint(centroid_lat, centroid_lon), 4326), 900913)) as centroid_lon, "
 						+ " begin, length, start_time, end_time, street, \"POI\" " + //
 								"FROM stops_moves.taxi_sanfrancisco_stop");
@@ -204,8 +205,8 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 	}
 
 	private List<SemanticTrajectory> readStopsTrajectories(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws SQLException {
-		String sql = "SELECT gid, tid, taxi_id, st_x(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lat, "
-				+ "st_y(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lon, "
+		String sql = "SELECT gid, tid, taxi_id, st_y(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lat, "
+				+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lon, "
 				+ "\"timestamp\", ocupation, airport, mall, road, direction, stop, semantic_stop_id, semantic_move_id, stop, route" + //
 				" FROM taxi.sanfrancisco_taxicab where 1=1 ";
 		if(!ArrayUtils.isEmpty(roads)) {
@@ -221,6 +222,7 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 		if(regions != null) {
 			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab r where r.stop in (SELECT * FROM unnest(?)))";
 		}
+//		sql += " and tid in (20274, 377165) ";
 		sql +=" order by tid, \"timestamp\"";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		int index = 1;
@@ -301,6 +303,8 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
 					s.addData(i, Semantic.SPATIAL, stop.getCentroid());
 					s.addData(i, Semantic.GID, record.getGid());
+					s.addData(i, SPATIAL_X, stop.getCentroid().getX());
+					s.addData(i, SPATIAL_Y, stop.getCentroid().getY());
 					s.addData(i, TID, record.getTid());
 					s.addData(i, OCUPATION, record.getOcupation());
 					s.addData(i, ROAD, record.getRoad());
@@ -413,6 +417,8 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
 				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
+				s.addData(i, SPATIAL_X, point.getX());
+				s.addData(i, SPATIAL_Y, point.getY());
 				s.addData(i, TID, record.getTid());
 				s.addData(i, OCUPATION, record.getOcupation());
 				s.addData(i, ROAD, record.getRoad());

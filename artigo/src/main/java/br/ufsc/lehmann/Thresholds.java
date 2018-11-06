@@ -11,7 +11,7 @@ import br.ufsc.core.trajectory.semantic.Move;
 public interface Thresholds {
 
 	public static final MutableInt SPATIAL_LATLON = new MutableInt(4);
-	public static final MutableInt SPATIAL_EUCLIDEAN = new MutableInt(200);
+	public static final MutableInt SPATIAL_EUCLIDEAN = new MutableInt(4);
 	public static final MutableInt SPATIAL_PROTOTYPE = new MutableInt(1);
 	public static final MutableDouble PROPORTION_TEMPORAL = new MutableDouble(.1);
 	public static final MutableLong SLACK_TEMPORAL = new MutableLong(0 * 60 * 60 * 1000);
@@ -26,7 +26,7 @@ public interface Thresholds {
 		}
 	};
 	public static final MutableInt MOVE_DURATION = new MutableInt(2 * 60 * 1000);//2 minutes
-	public static final MutableDouble MOVE_INNER_POINTS_PERC = new MutableDouble(.001);
+	public static final MutableDouble MOVE_INNER_POINTS_PERC = new MutableDouble(.9);
 	public static final MutableDouble STOP_MOVE = new MutableDouble(.5);
 
 	public static Double calculateThreshold(StopSemantic semantic) {

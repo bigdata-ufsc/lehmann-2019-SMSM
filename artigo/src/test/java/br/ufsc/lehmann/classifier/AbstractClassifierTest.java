@@ -28,7 +28,6 @@ import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.EnumProblem;
-import br.ufsc.lehmann.classifier.Binarizer;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.IClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.ITrainer;
@@ -39,6 +38,7 @@ import br.ufsc.lehmann.msm.artigo.classifiers.validation.ClassificationMeasure;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.FDR;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.FMeasure;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Fallout;
+import br.ufsc.lehmann.msm.artigo.classifiers.validation.MAP;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Precision;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Recall;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Specificity;
@@ -210,12 +210,16 @@ public abstract class AbstractClassifierTest {
 		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
 		Semantic discriminator = problem.discriminator();
 		TrajectorySimilarityCalculator<SemanticTrajectory> classifier = (TrajectorySimilarityCalculator<SemanticTrajectory>) measurer(problem);
+		System.out.printf("Classificer class: '%s'\n", classifier.getClass().getSimpleName());
+		System.out.printf("Parameters: '%s'\n", classifier.parametrization());
 		Validation validation = new Validation(discriminator, (IMeasureDistance<SemanticTrajectory>) classifier, random);
 
 		double[] precisionAtRecall = validation.precisionAtRecall(classifier, allData, /*data.size() / problemDescriptor.numClasses()*/10);
 		System.out.printf("Precision@recall(%d): %s\n", /*data.size() / problemDescriptor.numClasses()*/10, ArrayUtils.toString(precisionAtRecall, "0.0"));
 		double auc = AUC.precisionAtRecall(precisionAtRecall);
+		double map = MAP.precisionAtRecall(precisionAtRecall);
 		System.out.printf("AUC: %.2f\n", auc);
+		System.out.printf("MAP: %.2f\n", map);
 	}
 
 	public void assertMeasure(ClassificationMeasure measure, double expected, double actual, double delta) {

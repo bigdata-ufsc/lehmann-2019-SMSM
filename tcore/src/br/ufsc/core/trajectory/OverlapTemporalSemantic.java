@@ -22,10 +22,10 @@ public class OverlapTemporalSemantic extends TemporalSemantic<TemporalDuration, 
 	}
 
 	@Override
-	public Long distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
+	public Double distance(SemanticTrajectory a, int i, SemanticTrajectory b, int j) {
 		TemporalDuration a1 = (TemporalDuration) a.getDimensionData(index, i);
 		TemporalDuration b1 = (TemporalDuration) b.getDimensionData(index, j);
-		return (long) distance(a1, b1);
+		return (double) distance(a1, b1);
 	}
 
 	public double distance(TemporalDuration d1, TemporalDuration d2) {
@@ -45,7 +45,7 @@ public class OverlapTemporalSemantic extends TemporalSemantic<TemporalDuration, 
 			return 1;
 		}
 		double overlap = overlapAtoB.toDurationMillis();
-		Instant lastEnd = Instant.ofEpochSecond(aEnd > bEnd ? bEnd: aEnd);
+		Instant lastEnd = Instant.ofEpochSecond(aEnd > bEnd ? aEnd: bEnd);
 		Instant firstStart = Instant.ofEpochSecond(aStart < bStart ? aStart: bStart);
 		double maxDuration = new Interval(firstStart.toEpochMilli(), lastEnd.toEpochMilli()).toDurationMillis();
 		return (1 - overlap / maxDuration);

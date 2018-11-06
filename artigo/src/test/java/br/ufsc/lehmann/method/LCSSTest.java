@@ -13,26 +13,22 @@ import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.lehmann.NElementProblem;
 import br.ufsc.lehmann.SlackTemporalSemantic;
 import br.ufsc.lehmann.Thresholds;
+import br.ufsc.lehmann.msm.artigo.AbstractProblem;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
-import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
-import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
-import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
-import br.ufsc.lehmann.msm.artigo.problems.PisaProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDatabaseReader;
+import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
-import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksDataReader;
-import br.ufsc.lehmann.msm.artigo.problems.SergipeTracksProblem;
-import br.ufsc.lehmann.msm.artigo.problems.VehicleProblem;
-import br.ufsc.lehmann.prototype.PrototypeDataReader;
-import br.ufsc.lehmann.prototype.PrototypeProblem;
 
 public interface LCSSTest {
 
 	default IMeasureDistance<SemanticTrajectory> measurer(Problem problem) {
+		AbstractProblem abstractProblem = (AbstractProblem) problem;
 		StopSemantic stopSemantic = null;
 		Semantic<TPoint, Number> geoSemantic = Semantic.SPATIAL_LATLON;
+		Semantic<Number, Number> xSemantic = null;
+		Semantic<Number, Number> ySemantic = null;
 		MutableInt geoThreshold = Thresholds.STOP_CENTROID_LATLON;
 		Semantic<?, Number> timeSemantic = Semantic.TEMPORAL;
 		Number timeThreshold = Thresholds.TEMPORAL;
@@ -52,6 +48,9 @@ public interface LCSSTest {
 				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
 				timeThreshold = Thresholds.SLACK_TEMPORAL;
 				geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
+				geoThreshold = new MutableInt(4);
+				xSemantic = GeolifeUniversityDatabaseReader.SPATIAL_X;
+				ySemantic = GeolifeUniversityDatabaseReader.SPATIAL_Y;
 			} else {
 				timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
 				timeThreshold = Thresholds.PROPORTION_TEMPORAL;
@@ -72,9 +71,13 @@ public interface LCSSTest {
 			if(sanFranciscoCabProblem.isRawTrajectory()) {
 				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
 				timeThreshold = Thresholds.SLACK_TEMPORAL;
+				geoThreshold = new MutableInt(100);
+				xSemantic = SanFranciscoCabDatabaseReader.SPATIAL_X;
+				ySemantic = SanFranciscoCabDatabaseReader.SPATIAL_Y;
 			} else {
 				timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
 				timeThreshold = Thresholds.SLACK_TEMPORAL;
+				geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
 			}
 			stopSemantic = sanFranciscoCabProblem.stopSemantic();
 //		} else if(problem instanceof SergipeTracksProblem) {
@@ -90,10 +93,16 @@ public interface LCSSTest {
 //			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 //			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
 		}
+		if(abstractProblem.isRawTrajectory()) {
+			return new LCSSClassifier(//
+//				new LCSSSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
+//				new LCSSSemanticParameter(timeSemantic, timeThreshold),
+					new LCSSSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold)
+					);
+		}
 		return new LCSSClassifier(//
 				new LCSSSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic)),//
-//				new LCSSSemanticParameter(timeSemantic, timeThreshold),
-				new LCSSSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold)
-				);
+					new LCSSSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold)
+					);
 	}
 }

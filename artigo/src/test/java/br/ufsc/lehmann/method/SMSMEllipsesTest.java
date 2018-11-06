@@ -97,9 +97,9 @@ public interface SMSMEllipsesTest {
 						new SMSM.SMSM_DimensionParameters<>(moveSemantic, AttributeType.MOVE, Thresholds.MOVE_INNER_POINTS_PERC, 1)
 					}, 5.0/10.0),
 				new SMSM.SMSM_StopSemanticParameters(stopSemantic, new SMSM.SMSM_DimensionParameters[] {
-						new SMSM.SMSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_SPATIAL, geoThreshold.intValue(), 5.0/15.0, true),
-						new SMSM.SMSM_DimensionParameters<>(SlackTemporalSemantic.SLACK_TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
-						new SMSM.SMSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 5.0/15.0)
+						new SMSM.SMSM_DimensionParameters<>(geoSemantic, AttributeType.STOP_SPATIAL, geoThreshold.intValue(), 5.0/10.0, true),
+						//new SMSM.SMSM_DimensionParameters<>(SlackTemporalSemantic.SLACK_TEMPORAL, AttributeType.STOP_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
+						new SMSM.SMSM_DimensionParameters<>(stopSemantic, AttributeType.STOP, Thresholds.calculateThreshold(stopSemantic), 5.0/10.0)
 					}, 5.0/10.0)
 				);
 	}

@@ -8,10 +8,12 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
@@ -22,7 +24,6 @@ import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.ITrainable;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
-import br.ufsc.lehmann.classifier.SMSMEllipsesClassifierTest;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.AUC;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.MAP;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Validation;
@@ -40,8 +41,8 @@ public class PrecisionRecall {
 
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/geolife/raw"));
-		files.filter(path -> path.toFile().isFile() && path.toFile().toString().contains("EDR") && path.toFile().toString().endsWith(".test")).forEach(path -> {
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/geolife"));
+		files.filter(path -> path.toFile().isFile() && path.toString().contains("\\EDR_") && path.toFile().toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
 			
@@ -65,7 +66,6 @@ public class PrecisionRecall {
 		List<SemanticTrajectory> data = dataReader.read();
 		
 		Collections.shuffle(data, new java.util.Random() {
-			smile.math.Random rnd = new smile.math.Random();
 			@Override
 			public int nextInt(int bound) {
 				return random.nextInt(bound);
@@ -87,13 +87,21 @@ public class PrecisionRecall {
 				((ITrainable) similarityCalculator).train(Arrays.asList(allData));
 			}
 			
-			double[] precisionAtRecall = validation.precisionAtRecall(similarityCalculator, allData, /*data.size() / problemDescriptor.numClasses()*/10);
+			Validation.PrecisionAtRecallResults precisionAtRecall = validation.precisionAtRecallWithResult(similarityCalculator, allData, 10);
 			w = w.stop();
 			System.out.printf("Parameters: '%s'\n", similarityCalculator.parametrization());
 			System.out.printf("Elapsed time %d miliseconds\n", w.elapsed(TimeUnit.MILLISECONDS));
-			System.out.printf("Precision@recall(%d): %s\n", /*data.size() / problemDescriptor.numClasses()*/10, ArrayUtils.toString(precisionAtRecall, "0.0"));
-			double auc = AUC.precisionAtRecall(precisionAtRecall);
-			double map = MAP.precisionAtRecall(precisionAtRecall);
+			System.out.printf("Precision@recall(%d): %s\n", 10, ArrayUtils.toString(precisionAtRecall.getpAtRecall(), "0.0"));
+
+			DescriptiveStatistics total = new DescriptiveStatistics();
+			for (Map.Entry<Object, DescriptiveStatistics> entry : precisionAtRecall.getStats().entrySet()) {
+				System.out.printf("%s = %.2f +/- %.2f\n", entry.getKey(), entry.getValue().getMean(), entry.getValue().getStandardDeviation());
+				total.addValue(entry.getValue().getMean());
+			}
+			System.out.printf("Mean intraclass similarity = %.2f\n", total.getMean());
+			
+			double auc = AUC.precisionAtRecall(precisionAtRecall.getpAtRecall());
+			double map = MAP.precisionAtRecall(precisionAtRecall.getpAtRecall());
 			System.out.printf("AUC: %.2f\n", auc);
 			System.out.printf("MAP: %.2f\n", map);
 		}

@@ -8,7 +8,6 @@ import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
-import br.ufsc.core.trajectory.TimestampSemantic;
 import br.ufsc.core.trajectory.semantic.Stop;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 import br.ufsc.lehmann.NElementProblem;
@@ -18,7 +17,6 @@ import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.DublinBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
-import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversitySubProblem;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisProblem;
 import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusProblem;
 import br.ufsc.lehmann.msm.artigo.problems.PatelProblem;
@@ -54,18 +52,11 @@ public interface MSMTest {
 //			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 //			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
 		} else if(problem instanceof GeolifeProblem) {
-			GeolifeProblem geolifeProblem = (GeolifeProblem) problem;
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
 			stopSemantic = ((GeolifeProblem) problem).stopSemantic();
-			if(geolifeProblem.isRawTrajectory()) {
-				timeThreshold = Thresholds.SLACK_TEMPORAL;
-				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
-				geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
-			} else {
-				timeThreshold = Thresholds.PROPORTION_TEMPORAL;
-				timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
-				geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
-			}
+			timeThreshold = Thresholds.PROPORTION_TEMPORAL;
+			timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
+			geoThreshold = Thresholds.STOP_CENTROID_EUCLIDEAN;
 		} else if(problem instanceof PatelProblem) {
 			geoThreshold = Thresholds.SPATIAL_EUCLIDEAN;
 			geoSemantic = Semantic.SPATIAL_EUCLIDEAN;
@@ -76,13 +67,8 @@ public interface MSMTest {
 			stopSemantic = ((VehicleProblem) problem).stopSemantic();
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			SanFranciscoCabProblem sanFranciscoCabProblem = (SanFranciscoCabProblem) problem;
-			if(sanFranciscoCabProblem.isRawTrajectory()) {
-				timeSemantic = TimestampSemantic.TIMESTAMP_TEMPORAL;
-				timeThreshold = Thresholds.SLACK_TEMPORAL;
-			} else {
-				timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
-				timeThreshold = Thresholds.SLACK_TEMPORAL;
-			}
+			timeSemantic = SlackTemporalSemantic.SLACK_TEMPORAL;
+			timeThreshold = Thresholds.SLACK_TEMPORAL;
 			stopSemantic = sanFranciscoCabProblem.stopSemantic();
 		} else if(problem instanceof SergipeTracksProblem) {
 			stopSemantic = SergipeTracksDataReader.STOP_CENTROID_SEMANTIC;
@@ -98,8 +84,6 @@ public interface MSMTest {
 			stopSemantic = ((HermoupolisProblem) problem).stopSemantic();
 		}
 		return new MSMClassifier(//
-//					new MSMSemanticParameter<TemporalDuration, Number>(SlackTemporalSemantic.SLACK_TEMPORAL, Thresholds.TEMPORAL, 1.0/3.0),
-//					new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold.intValue(), 1.0/3.0),
 					new MSMSemanticParameter<Stop, Number>(stopSemantic, Thresholds.calculateThreshold(stopSemantic), 1.0/3.0),
 					new MSMSemanticParameter<>(timeSemantic, timeThreshold, 1.0/3.0),
 					new MSMSemanticParameter<TPoint, Number>(geoSemantic, geoThreshold, 1.0/3.0)

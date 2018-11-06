@@ -1,15 +1,11 @@
 package br.ufsc.lehmann.method;
 
-import java.util.Arrays;
-
 import org.apache.commons.lang3.StringUtils;
 
 import br.ufsc.core.ComputableThreshold;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
-import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
-import br.ufsc.lehmann.ComputableDouble;
 
 public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 

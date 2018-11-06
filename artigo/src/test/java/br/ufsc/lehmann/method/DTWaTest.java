@@ -9,6 +9,7 @@ import br.ufsc.lehmann.SlackTemporalSemantic;
 import br.ufsc.lehmann.msm.artigo.Problem;
 import br.ufsc.lehmann.msm.artigo.classifiers.DTWaClassifier;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeProblem;
+import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabProblem;
 
 public interface DTWaTest {
@@ -27,13 +28,13 @@ public interface DTWaTest {
 		} else if(problem instanceof GeolifeProblem) {
 			GeolifeProblem geolifeProblem = (GeolifeProblem) problem;
 			if(geolifeProblem.isRawTrajectory()) {
-				return new DTWaClassifier(problem, Semantic.SPATIAL, geolifeProblem.stopSemantic());
+				return new DTWaClassifier(problem, GeolifeUniversityDatabaseReader.SPATIAL_X, GeolifeUniversityDatabaseReader.SPATIAL_Y);
 			}
 			return new DTWaClassifier(problem, geolifeProblem.stopSemantic(), Semantic.SPATIAL);
 		} else if(problem instanceof SanFranciscoCabProblem) {
 			SanFranciscoCabProblem sanFranciscoCabProblem = (SanFranciscoCabProblem) problem;
 			if(sanFranciscoCabProblem.isRawTrajectory()) {
-				return new DTWaClassifier(problem, Semantic.SPATIAL_LATLON, TimestampSemantic.TIMESTAMP_TEMPORAL);
+				return new DTWaClassifier(problem, Semantic.SPATIAL_LATLON);
 			}
 			return new DTWaClassifier(problem, sanFranciscoCabProblem.stopSemantic(), Semantic.SPATIAL_LATLON, SlackTemporalSemantic.SLACK_TEMPORAL);
 //		} else if(problem instanceof SergipeTracksProblem) {

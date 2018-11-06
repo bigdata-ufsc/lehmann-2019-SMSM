@@ -55,16 +55,6 @@ public class GridSearchParams {
 		try {
 			return Double.parseDouble(threshold);
 		} catch (NumberFormatException e) {
-			if(threshold.equals("summed-distances")) {
-				List<Param> params = param.getParams();
-				Number weight = 1L;
-				Number DTWmultiplier = weight;
-				return new ComputableDouble<Move>() {
-					public Number compute(Move a, Move b) {
-						return (a.getTravelledDistance() + b.getTravelledDistance()) * DTWmultiplier.doubleValue();
-					}
-				};
-			}
 		}
 		
 		Value ret = registerValues(param, threshold);

@@ -36,10 +36,18 @@ public class Datasets {
 			return new GeolifeDatabaseReader(!dataset.getRaw(), withTransportation, stopTable, moveTable, pointsTable);
 		}
 		if(dataset.getName().equalsIgnoreCase("geolife_university")) {
+			Boolean normalized = Boolean.FALSE;
+			if(p != null) {
+				Gson gson = new Gson();
+				String json = p.get("normalized");
+				if(!StringUtils.isEmpty(json)) {
+					normalized = gson.fromJson(json, Boolean.class);
+				}
+			}
 			String pointsTable = p.get("pointsTable");
 			String moveTable = p.get("moveTable");
 			String stopTable = p.get("stopTable");
-			return new GeolifeUniversityDatabaseReader(!dataset.getRaw(), stopTable, moveTable, pointsTable);
+			return new GeolifeUniversityDatabaseReader(!dataset.getRaw(), stopTable, moveTable, pointsTable, normalized);
 		}
 		if(dataset.getName().equalsIgnoreCase("geolife2")) {
 			String pointsTable = p.get("pointsTable");
