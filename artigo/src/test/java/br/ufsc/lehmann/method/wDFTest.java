@@ -38,9 +38,9 @@ public interface wDFTest {
 		} else if(problem instanceof DublinBusProblem) {
 			return new wDF(3, DublinBusDataReader.DISTANCE_FUNCTION);
 		} else if(problem instanceof GeolifeProblem) {
-			return new wDF(3, GeolifeDataReader.GEO_DISTANCE_FUNCTION);
+			return new wDF(2, GeolifeDataReader.GEO_DISTANCE_FUNCTION);
 		} else if(problem instanceof SanFranciscoCabProblem) {
-			return new wDF(3, SanFranciscoCabDataReader.DISTANCE_FUNCTION);
+			return new wDF(0, SanFranciscoCabDataReader.DISTANCE_FUNCTION);
 		} else if(problem instanceof SergipeTracksProblem) {
 			return new wDF(3, SergipeTracksDataReader.DISTANCE_FUNCTION);
 		} else if(problem instanceof PrototypeProblem) {

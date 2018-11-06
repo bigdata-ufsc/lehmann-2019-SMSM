@@ -28,9 +28,8 @@
 				"index" : 8,
 				"weight": 0.5,
 				"params" : [{
-					"distance": "Proportion",
-					"threshold": "0.5",
-					"type" : "duration"
+					"distance": "Equal",
+					"type" : "NAME"
 				}]
 			}]
 		}]

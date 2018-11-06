@@ -19,10 +19,6 @@
 			"distance": "euclidean",
 			"threshold": "8",
 			"index" : 1
-		/*},{
-			"type": "temporal",
-			"distance": "timestamp",
-			"index" : 2*/
 		}]
 	}
 }

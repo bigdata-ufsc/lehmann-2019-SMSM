@@ -15,7 +15,7 @@
 	"measure": {
 		"name": "wDF",
 		"config": {
-			"w": 0,
+			"w": 6,
 			"distance": "euclidean"
 		}
 	}
