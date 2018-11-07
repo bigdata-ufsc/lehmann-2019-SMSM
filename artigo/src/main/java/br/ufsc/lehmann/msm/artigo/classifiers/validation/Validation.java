@@ -170,8 +170,8 @@ public class Validation {
 			classes.add(semantic.getData(trajsArray[i], 0));
 			for (int j = 0; j < trajsArray.length; j++) {
 				Double d = allDistances.get(trajsArray[i], trajsArray[j]);
-//				if(d < 1.0 && d > 0.0) {
-					System.out.println(trajsArray[i].getTrajectoryId() + " x" + trajsArray[j].getTrajectoryId() + " - " + d);
+//				if(d < 0.33 && d > 0.0) {
+//					System.out.println(trajsArray[i].getTrajectoryId() + "(" + semantic.getData(trajsArray[i], 0) +  ") X " + trajsArray[j].getTrajectoryId() + "(" + semantic.getData(trajsArray[j], 0) +  ") - " + d);
 //				}
 				matrix[i][j] = d;
 			}
@@ -302,7 +302,13 @@ public class Validation {
 		precisionAtRecall[0] = 1.0;
 
 		int idx = 0;
+		Map<Object, double[]> precisionRecallPerClass = new HashMap<>();
+		for (Object cls : new LinkedHashSet<>(classes)) {
+			double[] precisionArRecallClass = precisionRecallPerClass.computeIfAbsent(cls, (t) -> new double[(int) (recallLevel + 1)]);
+			precisionArRecallClass[0] = 1.0;
+		}
 		for (Object cls : classes) {
+			double[] precisionAtRecallClass = precisionRecallPerClass.get(cls);
 			final int idxSort = idx;
 			Collections.sort(ranking,
 					(o1, o2) -> fullMatrix[idxSort][o1.getValue()] == fullMatrix[idxSort][o2.getValue()] ? 0
@@ -328,12 +334,19 @@ public class Validation {
 						othersCount++;
 				}
 				precisionAtRecall[recall] += (double) meCount / (meCount + othersCount);
+				precisionAtRecallClass[recall] += (double) meCount / (meCount + othersCount);
 			}
 			idx++;
 		}
 
 		for (int i = 1; i < precisionAtRecall.length; i++)
 			precisionAtRecall[i] /= classes.size();
+		for (Map.Entry<Object, double[]> entry : precisionRecallPerClass.entrySet()) {
+			for (int i = 1; i < entry.getValue().length; i++) {
+				entry.getValue()[i] /= classes.stream().filter((o) -> o.equals(entry.getKey())).count();
+			}
+			System.out.println("MAP (" + entry.getKey() + ") = " + MAP.precisionAtRecall(entry.getValue()));
+		}
 
 		return precisionAtRecall;
 	}
