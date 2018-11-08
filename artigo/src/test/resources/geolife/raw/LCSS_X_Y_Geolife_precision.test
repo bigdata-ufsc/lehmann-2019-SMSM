@@ -13,14 +13,21 @@
 		"index": 10
 	},
 	"measure": {
-		"name": "DTWa",
+		"name": "LCSS",
 		"params": [{
-			"type": "discriminator",
-			"index" : 10
+			"type": "generic",
+			"params" : [{
+				"distance": "number",
+				"threshold": "8"
+			}],
+			"index" : 11
 		}, {
-			"type": "spatial",
-			"distance": "euclidean",
-			"index" : 1
+			"type": "generic",
+			"params" : [{
+				"distance": "number",
+				"threshold": "8"
+			}],
+			"index" : 12
 		}]
 	}
 }
