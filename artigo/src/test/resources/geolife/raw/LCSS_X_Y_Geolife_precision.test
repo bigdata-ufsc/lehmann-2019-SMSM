@@ -15,10 +15,19 @@
 	"measure": {
 		"name": "LCSS",
 		"params": [{
-			"type": "spatial",
-			"distance": "euclidean",
-			"threshold": "8",
-			"index" : 1
+			"type": "generic",
+			"params" : [{
+				"distance": "number",
+				"threshold": "8"
+			}],
+			"index" : 11
+		}, {
+			"type": "generic",
+			"params" : [{
+				"distance": "number",
+				"threshold": "8"
+			}],
+			"index" : 12
 		}]
 	}
 }
