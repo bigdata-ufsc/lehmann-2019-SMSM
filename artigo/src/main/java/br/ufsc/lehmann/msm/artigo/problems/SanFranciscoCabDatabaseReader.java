@@ -25,6 +25,7 @@ import com.google.common.collect.MultimapBuilder;
 import br.ufsc.core.trajectory.EqualsDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
@@ -44,11 +45,11 @@ import br.ufsc.lehmann.NumberDistance;
 import br.ufsc.lehmann.msm.artigo.StopMoveSemantic;
 import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
-import br.ufsc.utils.LatLongDistanceFunction;
+import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class SanFranciscoCabDatabaseReader implements IDataReader {
 	
-	private static final LatLongDistanceFunction DISTANCE_FUNCTION = new LatLongDistanceFunction();
+	private static final SpatialDistanceFunction DISTANCE_FUNCTION = new EuclideanDistanceFunction();
 	
 	private static int SEMANTIC_COUNTER = 3;
 	
@@ -222,7 +223,6 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 		if(regions != null) {
 			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab r where r.stop in (SELECT * FROM unnest(?)))";
 		}
-//		sql += " and tid in (20274, 377165) ";
 		sql +=" order by tid, \"timestamp\"";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		int index = 1;
@@ -342,7 +342,9 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 	}
 
 	private List<SemanticTrajectory> loadRawPoints(Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves) throws SQLException {
-		String sql = "SELECT gid, tid, taxi_id, lat, lon, \"timestamp\", ocupation, airport, mall, road, direction, semantic_stop_id, semantic_move_id, stop, route" + //
+		String sql = "SELECT gid, tid, taxi_id, "
+				+ "st_y(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lat, st_x(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lon, "
+				+ "\"timestamp\", ocupation, airport, mall, road, direction, semantic_stop_id, semantic_move_id, stop, route" + //
 				" FROM taxi.sanfrancisco_taxicab where 1=1";
 		if(!ArrayUtils.isEmpty(roads)) {
 			sql += " and road in (SELECT * FROM unnest(?))";

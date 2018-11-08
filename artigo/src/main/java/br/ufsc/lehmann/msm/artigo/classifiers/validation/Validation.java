@@ -32,7 +32,6 @@ import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -42,6 +41,7 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.ArrayTable;
@@ -170,14 +170,11 @@ public class Validation {
 			classes.add(semantic.getData(trajsArray[i], 0));
 			for (int j = 0; j < trajsArray.length; j++) {
 				Double d = allDistances.get(trajsArray[i], trajsArray[j]);
-//				if(d < 0.33 && d > 0.0) {
-//					System.out.println(trajsArray[i].getTrajectoryId() + "(" + semantic.getData(trajsArray[i], 0) +  ") X " + trajsArray[j].getTrajectoryId() + "(" + semantic.getData(trajsArray[j], 0) +  ") - " + d);
-//				}
 				matrix[i][j] = d;
 			}
 		}
 
-		ret = computeFromClassNames(classes, matrix);
+		ret = computeFromClassNames(classes, matrix, recallLevel);
 
 //		ret[0] = 1.0;
 //		double[][] precisionRecall = new double[trajsArray.length][];
@@ -250,7 +247,7 @@ public class Validation {
 				matrix[i][j] = trajsArray[j].count;
 			}
 		}
-		int recallLevel = 5;
+		int recallLevel = 10;
 		double[] ret = new double[recallLevel + 1];
 		ret[0] = 1.0;
 		double[][] precisionRecall = new double[trajsArray.length][];
@@ -277,17 +274,17 @@ public class Validation {
 		System.out.println("P@R: " + Arrays.toString(ret));
 		System.out.println("AUC: " + AUC.precisionAtRecall(ret));
 		
-		System.out.println("P@R (lucas): " + Arrays.toString(computeFromClassNames(classes, matrix)));
-		System.out.println("AUC (lucas): " + AUC.precisionAtRecall(computeFromClassNames(classes, matrix)));
+		System.out.println("P@R (lucas): " + Arrays.toString(computeFromClassNames(classes, matrix, recallLevel)));
+		System.out.println("AUC (lucas): " + AUC.precisionAtRecall(computeFromClassNames(classes, matrix, recallLevel)));
 	}
 
-	public static double[] computeFromClassNames(List<Object> classes, double[][] matrix) {
+	public static double[] computeFromClassNames(List<Object> classes, double[][] matrix, int recallLevel) {
 		// Ranking of trajectories
 		List<ObjectIntPair> ranking = new ArrayList<>(classes.size());
 		for (int i = 0; i < classes.size(); i++) {
 			ranking.add(new ObjectIntPair(classes.get(i), i));
 		}
-		return compute(ranking, classes, matrix, 5.0);
+		return compute(ranking, classes, matrix, recallLevel);
 	}
 
 	private static double[] compute(List<ObjectIntPair> ranking, List<Object> classes, double[][] matrix, double recallLevel) {
@@ -345,7 +342,8 @@ public class Validation {
 			for (int i = 1; i < entry.getValue().length; i++) {
 				entry.getValue()[i] /= classes.stream().filter((o) -> o.equals(entry.getKey())).count();
 			}
-			System.out.println("MAP (" + entry.getKey() + ") = " + MAP.precisionAtRecall(entry.getValue()));
+			System.out.printf("P@R(%s): %s\n", entry.getKey(), ArrayUtils.toString(entry.getValue(), "0.0"));
+			System.out.printf("MAP (%s) = %.4f\n", entry.getKey(), MAP.precisionAtRecall(entry.getValue()));
 		}
 
 		return precisionAtRecall;
