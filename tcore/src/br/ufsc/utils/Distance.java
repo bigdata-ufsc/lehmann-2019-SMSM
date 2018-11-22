@@ -95,6 +95,18 @@ public class Distance {
 		return Math.sqrt(2*(distXSquare+distYSquare));
 		//return (h*Math.sin(Math.toRadians(45)))*2;
 	}
+
+	public static double triangular(Point p1, Point p2, double pow, double multiplier){
+		//double h = euclidean(p1, p2);
+		double distX = Math.abs(p1.getX()-p2.getX());
+		double distXSquare = Math.pow(distX, pow);
+		
+		double distY = Math.abs(p1.getY()-p2.getY());
+		double distYSquare = Math.pow(distY, pow);
+		//return (h*1.41421356237);
+		return Math.pow(multiplier*(distXSquare+distYSquare), 1 / pow);
+		//return (h*Math.sin(Math.toRadians(45)))*2;
+	}
 	
 	public static double retangular(Point p1,Point p2){
 		double distX = Math.abs(p1.getX()-p2.getX());

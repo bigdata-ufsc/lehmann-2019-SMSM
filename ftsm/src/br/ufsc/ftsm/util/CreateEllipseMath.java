@@ -11,13 +11,24 @@ import br.ufsc.utils.EuclideanDistanceFunction;
 public class CreateEllipseMath {
 	
 	private SpatialDistanceFunction distanceFunction;
+	private boolean fixedMultiplier;
 
 	public CreateEllipseMath() {
 		this(new EuclideanDistanceFunction());
 	}
+
+	public CreateEllipseMath(boolean fixedMultiplier) {
+		this(new EuclideanDistanceFunction(), fixedMultiplier);
+	}
 	
 	public CreateEllipseMath(SpatialDistanceFunction distanceFunction) {
+		this(distanceFunction, true);
+	}
+	
+	public CreateEllipseMath(SpatialDistanceFunction distanceFunction, boolean fixedMultiplier) {
 		this.distanceFunction = distanceFunction;
+		this.fixedMultiplier = fixedMultiplier;
+		
 	}
 	
 	public ETrajectory createEllipticalTrajectoryFixed(Trajectory t) {
@@ -73,12 +84,14 @@ public class CreateEllipseMath {
 			double y = (p1.getY() + p2.getY()) / 2;
 
 			double fociDistance = distanceFunction.distance(p1, p2);
-			double majorAxis = Distance.triangular(p1, p2) + 1;
+			double multiplier = fixedMultiplier ? 2 : (i == 0 ? 2 : Math.sqrt(distanceFunction.distance(points[i - 1], p1) / fociDistance) + 1);
+			double pow = 2;
+			double majorAxis = Distance.triangular(p1, p2, pow, multiplier) + 1;
 
-			double fociDistanceSquare = fociDistance * fociDistance;
-			double majorAxisSquare = majorAxis * majorAxis;
+			double fociDistanceSquare = Math.pow(fociDistance, pow);
+			double majorAxisSquare = Math.pow(majorAxis, pow);
 
-			double minorAxis = Math.sqrt(majorAxisSquare - fociDistanceSquare);
+			double minorAxis = Math.pow(majorAxisSquare - fociDistanceSquare, 1/pow);
 
 			double angleO = Distance.angle(p1, p2);
 
@@ -93,8 +106,8 @@ public class CreateEllipseMath {
 			e.setMinorAxis(minorAxis);
 			e.setAngle(angleO);
 			e.setEccentricity(fociDistance);
-			e.setSemiMinorAxisSquare(e.getSemiMinorAxis() * e.getSemiMinorAxis());
-			e.setSemiMajorAxisSquare(e.getSemiMajorAxis() * e.getSemiMajorAxis());
+			e.setSemiMinorAxisSquare(Math.pow(e.getSemiMinorAxis(), pow));
+			e.setSemiMajorAxisSquare(Math.pow(e.getSemiMajorAxis(), pow));
 			e.setXi((e.getSemiMinorAxisSquare() + e.getSemiMajorAxisSquare()) / e.getMajorAxis());
 			T.addEllipse(e);
 			i++;

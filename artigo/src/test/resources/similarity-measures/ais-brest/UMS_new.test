@@ -1,6 +1,6 @@
 {
 	"dataset": {
-		"name" : "animals",
+		"name" : "ais-brest",
 		"raw": 'true'
 	},
 	"groundtruth": {
@@ -8,6 +8,6 @@
 		"index": 3
 	},
 	"measure": {
-		"name": "UMS"
+		"name": "UMS_new"
 	}
 }

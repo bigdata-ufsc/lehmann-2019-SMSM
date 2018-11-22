@@ -109,7 +109,10 @@ public class Measures {
 			return createMSM(measure);
 		}
 		if(measure.getName().equalsIgnoreCase("UMS")) {
-			return createUMS(measure);
+			return createUMS(measure, false);
+		}
+		if(measure.getName().equalsIgnoreCase("UMS_new")) {
+			return createUMS(measure, true);
 		}
 		if(measure.getName().equalsIgnoreCase("EDwP")) {
 			return createEDwP(measure);
@@ -123,11 +126,11 @@ public class Measures {
 		return null;
 	}
 
-	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createUMS(Measure measure) {
+	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createUMS(Measure measure, boolean umsNew) {
 		if(StringUtils.equals(measure.getOptimizer(), "FTSM")) {
 			return Arrays.asList(new FTSMBUMS3());
 		}
-		return Arrays.asList(new UMS());
+		return Arrays.asList(new UMS(!umsNew));
 	}
 
 	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createEDwP(Measure measure) {
@@ -250,6 +253,13 @@ public class Measures {
 							case "DURATION":
 								attr = AttributeType.MOVE_DURATION;
 								break;
+							case "TRAVELED_DISTANCE":
+							case "TRAVELLED_DISTANCE":
+								attr = AttributeType.MOVE_TRAVELLED_DISTANCE;
+								break;
+							case "AVERAGE_VELOCITY":
+								attr = AttributeType.MOVE_AVERAGE_VELOCITY;
+								break;
 							case "SEMANTIC":
 								List<Param> semanticParams = moveParam.getParams();
 								Param semParam = semanticParams.get(0);
@@ -260,9 +270,6 @@ public class Measures {
 										break;
 									case "STREET_NAME":
 										attr = AttributeType.MOVE_STREET_NAME;
-										break;
-									case "TRAVELLED_DISTANCE":
-										attr = AttributeType.MOVE_TRAVELLED_DISTANCE;
 										break;
 									case "TRANSPORTATION_MODE":
 										attr = AttributeType.MOVE_TRANSPORTATION_MODE;

@@ -18,13 +18,24 @@ import br.ufsc.utils.EuclideanDistanceFunction;
 public class UMS extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 
 	private SpatialDistanceFunction distanceFunc;
+	private boolean fixedMultiplier;
 
 	public UMS() {
-		this(new EuclideanDistanceFunction());
+		this(new EuclideanDistanceFunction(), true);
+	}
+
+	public UMS(boolean fixedMultiplier) {
+		this(new EuclideanDistanceFunction(), fixedMultiplier);
 	}
 
 	public UMS(SpatialDistanceFunction distanceFunc) {
+		this(distanceFunc, true);
+	}
+
+	public UMS(SpatialDistanceFunction distanceFunc, boolean fixedMultiplier) {
 		this.distanceFunc = distanceFunc;
+		this.fixedMultiplier = fixedMultiplier;
+		
 	}
 
 	@Override
@@ -39,7 +50,7 @@ public class UMS extends TrajectorySimilarityCalculator<SemanticTrajectory> impl
 		}
 		TPoint[] mercatorP = distanceFunc.convertToMercator(points1);
 		TPoint[] mercatorD = distanceFunc.convertToMercator(points2);
-		CreateEllipseMath ellipseMath = new CreateEllipseMath();
+		CreateEllipseMath ellipseMath = new CreateEllipseMath(fixedMultiplier);
 		ETrajectory T1 = ellipseMath.createEllipticalTrajectoryFixed(-1, mercatorP);
 		ETrajectory T2 = ellipseMath.createEllipticalTrajectoryFixed(1, mercatorD);
 		double ret = 1 - getSimilarity(T1, T2);
