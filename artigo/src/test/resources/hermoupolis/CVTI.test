@@ -1,0 +1,24 @@
+{
+	"dataset": {
+		"name" : "hermoupolis",
+		"raw": 'false',
+		"params": {
+			"file" : "1 Day - 6 Profiles - 2 Classes_900913.csv"
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 7
+	},
+	"measure": {
+		"name": "CVTI",
+		"params": [{
+			"type": "Semantic",
+			"index" : 8,
+			"params" : [{
+				"distance": "Equal",
+				"type" : "Name"
+			}]
+		}]
+	}
+}

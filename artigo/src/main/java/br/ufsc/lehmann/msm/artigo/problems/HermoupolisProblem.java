@@ -1,7 +1,5 @@
 package br.ufsc.lehmann.msm.artigo.problems;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +36,7 @@ public class HermoupolisProblem extends AbstractProblem {
 
 	@Override
 	public Semantic discriminator() {
-		return HermoupolisDataReader.USER_ID;
+		return HermoupolisDataReader.MPID;
 	}
 
 	@Override
@@ -47,11 +45,7 @@ public class HermoupolisProblem extends AbstractProblem {
 	}
 
 	protected List<SemanticTrajectory> load() {
-		try {
-			return new ArrayList<>(new HermoupolisDataReader(onlyStops, strategy).read(users));
-		} catch (NumberFormatException | ParseException | IOException e) {
-			throw new RuntimeException(e);
-		}
+		return new ArrayList<>(new HermoupolisDataReader(onlyStops, strategy).read());
 //		try {
 //			return new ArrayList<>(new PisaDatabaseReader(onlyStops).read(users));
 //		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {

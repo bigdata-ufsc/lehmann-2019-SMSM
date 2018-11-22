@@ -16,10 +16,13 @@ public class HermoupolisRecord {
 	private String activity;
 	private Integer stopId;
 	private Integer moveId;
+	private int gid;
+	private String sem_traj_tag;
 
-	public HermoupolisRecord(Timestamp time, int scenario, int moid, int mpid, int edgeId,
+	public HermoupolisRecord(int gid, Timestamp time, int scenario, int moid, int mpid, int edgeId,
 			double realX, double realY, double relativeTime, String transportationMode, String activity,
-			Integer stopId, Integer moveId) {
+			String sem_traj_tag, Integer stopId, Integer moveId) {
+				this.gid = gid;
 				this.time = time;
 				this.scenario = scenario;
 				this.moid = moid;
@@ -30,6 +33,7 @@ public class HermoupolisRecord {
 				this.relativeTime = relativeTime;
 				this.transportationMode = transportationMode;
 				this.activity = activity;
+				this.sem_traj_tag = sem_traj_tag;
 				this.stopId = stopId;
 				this.moveId = moveId;
 
@@ -83,5 +87,11 @@ public class HermoupolisRecord {
 		return moveId;
 	}
 
+	public int getGid() {
+		return gid;
+	}
 
+	public String getSem_traj_tag() {
+		return sem_traj_tag;
+	}
 }
