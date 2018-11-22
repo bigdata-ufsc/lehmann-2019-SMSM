@@ -13,8 +13,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-
 import com.google.gson.Gson;
 
 import br.ufsc.core.ComputableThreshold;
@@ -130,7 +128,15 @@ public class GridSearchParams {
 		try {
 			value = Double.parseDouble(t);
 		} catch (NumberFormatException e) {
-			if(t.startsWith("summed-distances")) {
+			if(t.startsWith("summed-duration")) {
+				String[] expression = t.split("\\*");
+				Number durationMultiplier = expression.length > 1 ? Double.parseDouble(expression[1]) : 1L;
+				value = new ComputableDouble<Move>() {
+					public Number compute(Move a, Move b) {
+						return (a.getDuration() + b.getDuration()) * durationMultiplier.doubleValue();
+					}
+				};
+			} else if(t.startsWith("summed-distances")) {
 				String[] expression = t.split("\\*");
 				Number DTWmultiplier = expression.length > 1 ? Double.parseDouble(expression[1]) : 1L;
 				value = new ComputableDouble<Move>() {

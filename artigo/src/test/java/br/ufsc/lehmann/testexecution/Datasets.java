@@ -14,6 +14,7 @@ import br.ufsc.lehmann.msm.artigo.loader.HASLDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.Geolife2DatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDatabaseReader;
+import br.ufsc.lehmann.msm.artigo.problems.HermoupolisDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.InvolvesDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDatabaseReader;
@@ -97,6 +98,13 @@ public class Datasets {
 		}
 		if(dataset.getName().equalsIgnoreCase("ais-brest")) {
 			return new AISBrestDataReader();
+		}
+		if(dataset.getName().equalsIgnoreCase("hermoupolis")) {
+			if(p != null) {
+				String file = p.get("file");
+				return new HermoupolisDataReader(!dataset.getRaw(), file);
+			}
+			return new HermoupolisDataReader(!dataset.getRaw());
 		}
 		if(dataset.getName().equalsIgnoreCase("animals")) {
 			return new AnimalsSTARKEYDataReader();
