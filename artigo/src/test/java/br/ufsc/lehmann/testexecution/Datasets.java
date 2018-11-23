@@ -11,6 +11,7 @@ import br.ufsc.lehmann.msm.artigo.loader.AnimalsSTARKEYDataReader;
 import br.ufsc.lehmann.msm.artigo.loader.FoursquareDataReader;
 import br.ufsc.lehmann.msm.artigo.loader.GeolifeTransportationModeDataReader;
 import br.ufsc.lehmann.msm.artigo.loader.HASLDatabaseReader;
+import br.ufsc.lehmann.msm.artigo.problems.CRAWDADDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.Geolife2DatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDatabaseReader;
@@ -59,6 +60,9 @@ public class Datasets {
 		}
 		if(dataset.getName().equalsIgnoreCase("geolife_transportation_mode")) {
 			return new GeolifeTransportationModeDataReader();
+		}
+		if(dataset.getName().equalsIgnoreCase("crawdad_ums")) {
+			return new CRAWDADDatabaseReader();
 		}
 		if(dataset.getName().equalsIgnoreCase("crawdad")) {
 			Gson gson = new Gson();
