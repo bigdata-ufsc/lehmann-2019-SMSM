@@ -1,0 +1,13 @@
+{
+	"dataset": {
+		"name" : "CRAWDAD_UMS",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 4
+	},
+	"measure": {
+		"name": "UMS"
+	}
+}

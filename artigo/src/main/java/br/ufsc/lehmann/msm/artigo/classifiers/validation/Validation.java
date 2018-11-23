@@ -117,7 +117,9 @@ public class Validation {
 		Semantic semantic = groundTruthSemantic;
 		for (int i = 0; i < trajsArray.length; i++) {
 			Object classData = semantic.getData(trajsArray[i], 0);
-			occurrences.computeIfAbsent(classData, (t) -> new LongAdder()).increment();
+			if(classData != null) {
+				occurrences.computeIfAbsent(classData, (t) -> new LongAdder()).increment();
+			}
 		}
 		
 		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 2),
@@ -167,7 +169,8 @@ public class Validation {
 		double[][] matrix = new double[trajsArray.length][trajsArray.length];
 		List<Object> classes = new ArrayList<>();
 		for (int i = 0; i < trajsArray.length; i++) {
-			classes.add(semantic.getData(trajsArray[i], 0));
+			Object data = semantic.getData(trajsArray[i], 0);
+			classes.add(data);
 			for (int j = 0; j < trajsArray.length; j++) {
 				Double d = allDistances.get(trajsArray[i], trajsArray[j]);
 				matrix[i][j] = d;
@@ -301,10 +304,15 @@ public class Validation {
 		int idx = 0;
 		Map<Object, double[]> precisionRecallPerClass = new HashMap<>();
 		for (Object cls : new LinkedHashSet<>(classes)) {
-			double[] precisionArRecallClass = precisionRecallPerClass.computeIfAbsent(cls, (t) -> new double[(int) (recallLevel + 1)]);
-			precisionArRecallClass[0] = 1.0;
+			if(cls != null) {
+				double[] precisionArRecallClass = precisionRecallPerClass.computeIfAbsent(cls, (t) -> new double[(int) (recallLevel + 1)]);
+				precisionArRecallClass[0] = 1.0;
+			}
 		}
 		for (Object cls : classes) {
+			if(cls == null) {
+				continue;
+			}
 			double[] precisionAtRecallClass = precisionRecallPerClass.get(cls);
 			final int idxSort = idx;
 			Collections.sort(ranking,
