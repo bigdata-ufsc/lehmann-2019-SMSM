@@ -26,6 +26,7 @@ import br.ufsc.ftsm.method.ums.FTSMBUMS3;
 import br.ufsc.ftsm.related.LCSS.LCSSSemanticParameter;
 import br.ufsc.ftsm.related.MSM.MSMSemanticParameter;
 import br.ufsc.ftsm.related.UMS;
+import br.ufsc.ftsm.related.UMS_Lehmann;
 import br.ufsc.lehmann.AngleDistance;
 import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
@@ -109,10 +110,10 @@ public class Measures {
 			return createMSM(measure);
 		}
 		if(measure.getName().equalsIgnoreCase("UMS")) {
-			return createUMS(measure, false);
+			return createUMS(measure);
 		}
 		if(measure.getName().equalsIgnoreCase("UMS_new")) {
-			return createUMS(measure, true);
+			return createUMSLehmann(measure, true);
 		}
 		if(measure.getName().equalsIgnoreCase("EDwP")) {
 			return createEDwP(measure);
@@ -126,11 +127,15 @@ public class Measures {
 		return null;
 	}
 
-	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createUMS(Measure measure, boolean umsNew) {
+	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createUMS(Measure measure) {
 		if(StringUtils.equals(measure.getOptimizer(), "FTSM")) {
 			return Arrays.asList(new FTSMBUMS3());
 		}
-		return Arrays.asList(new UMS(!umsNew));
+		return Arrays.asList(new UMS());
+	}
+
+	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createUMSLehmann(Measure measure, boolean umsNew) {
+		return Arrays.asList(new UMS_Lehmann(!umsNew));
 	}
 
 	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createEDwP(Measure measure) {

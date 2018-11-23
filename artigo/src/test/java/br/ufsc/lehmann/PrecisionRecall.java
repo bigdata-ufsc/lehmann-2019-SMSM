@@ -1,8 +1,11 @@
 package br.ufsc.lehmann;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -41,12 +44,25 @@ public class PrecisionRecall {
 
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/geolife"));
-		files.filter(path -> path.toFile().isFile() && path.toString().contains("\\EDR_") && path.toFile().toString().endsWith(".test")).forEach(path -> {
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/animals"));
+		files.filter(path -> path.toFile().isFile() && path.toString().contains(".") && path.toString().contains("UMS") && path.toFile().toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
-			
-			executeDescriptor(fileName);
+
+			PrintStream bkp = System.out;
+			try {
+				int i = 1;
+				File out = new File(path.toFile().getParentFile(), path.getFileName().toString() + ".p@r.out");
+				while(out.exists()) {
+					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".p@r.out");
+				}
+				System.setOut(new PrintStream(new FileOutputStream(out)));
+				executeDescriptor(fileName);
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException(e);
+			} finally {
+				System.setOut(bkp);
+			}
 		});
 		files.close();
 	}
@@ -100,10 +116,10 @@ public class PrecisionRecall {
 			}
 			System.out.printf("Mean intraclass similarity = %.2f\n", total.getMean());
 			
-			double auc = AUC.precisionAtRecall(precisionAtRecall.getpAtRecall());
 			double map = MAP.precisionAtRecall(precisionAtRecall.getpAtRecall());
-			System.out.printf("AUC: %.2f\n", auc);
+			double auc = AUC.precisionAtRecall(precisionAtRecall.getpAtRecall());
 			System.out.printf("MAP: %.2f\n", map);
+			System.out.printf("AUC: %.2f\n", auc);
 		}
 
 	}

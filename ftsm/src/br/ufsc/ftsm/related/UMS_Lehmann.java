@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+
 import br.ufsc.core.IMeasureDistance;
+import br.ufsc.core.ITrainable;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.SpatialDistanceFunction;
@@ -13,28 +16,45 @@ import br.ufsc.ftsm.base.ETrajectory;
 import br.ufsc.ftsm.base.Ellipse;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.ftsm.util.CreateEllipseMath;
+import br.ufsc.utils.Distance;
 import br.ufsc.utils.EuclideanDistanceFunction;
 
-public class UMS extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
+public class UMS_Lehmann extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory>, ITrainable<SemanticTrajectory> {
 
 	private SpatialDistanceFunction distanceFunc;
 	private boolean fixedMultiplier;
+	private double stdEllipseDistance = -1;
+	private double averageEllipseDistance = -1;
 
-	public UMS() {
+	public UMS_Lehmann() {
 		this(new EuclideanDistanceFunction(), true);
 	}
 
-	public UMS(boolean fixedMultiplier) {
+	public UMS_Lehmann(boolean fixedMultiplier) {
 		this(new EuclideanDistanceFunction(), fixedMultiplier);
 	}
 
-	public UMS(SpatialDistanceFunction distanceFunc) {
+	public UMS_Lehmann(SpatialDistanceFunction distanceFunc) {
 		this(distanceFunc, true);
 	}
 
-	public UMS(SpatialDistanceFunction distanceFunc, boolean fixedMultiplier) {
+	public UMS_Lehmann(SpatialDistanceFunction distanceFunc, boolean fixedMultiplier) {
 		this.distanceFunc = distanceFunc;
 		this.fixedMultiplier = fixedMultiplier;
+	}
+
+	@Override
+	public void train(List<SemanticTrajectory> train) {
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		for (SemanticTrajectory trajectory : train) {
+			TPoint[] points = new TPoint[trajectory.length()];
+			for (int i = 0; i < trajectory.length(); i++) {
+				points[i] = Semantic.SPATIAL.getData(trajectory, i);
+			}
+			stats.addValue(Distance.getDistance(points, distanceFunc));
+		}
+		this.averageEllipseDistance = stats.getMean();
+		this.stdEllipseDistance = stats.getStandardDeviation();
 	}
 
 	@Override
@@ -49,7 +69,7 @@ public class UMS extends TrajectorySimilarityCalculator<SemanticTrajectory> impl
 		}
 		TPoint[] mercatorP = distanceFunc.convertToMercator(points1);
 		TPoint[] mercatorD = distanceFunc.convertToMercator(points2);
-		CreateEllipseMath ellipseMath = new CreateEllipseMath(fixedMultiplier);
+		CreateEllipseMath ellipseMath = new CreateEllipseMath(distanceFunc, averageEllipseDistance, stdEllipseDistance, fixedMultiplier);
 		ETrajectory T1 = ellipseMath.createEllipticalTrajectory(-1, mercatorP);
 		ETrajectory T2 = ellipseMath.createEllipticalTrajectory(1, mercatorD);
 		double ret = 1 - getSimilarity(T1, T2);
@@ -264,8 +284,7 @@ public class UMS extends TrajectorySimilarityCalculator<SemanticTrajectory> impl
 		}
 		TPoint[] mercatorP = distanceFunc.convertToMercator(points1);
 		TPoint[] mercatorD = distanceFunc.convertToMercator(points2);
-		CreateEllipseMath ellipseMath = new CreateEllipseMath();
-		CreateEllipseMath createEllipseMath = new CreateEllipseMath(distanceFunc);
+		CreateEllipseMath ellipseMath = new CreateEllipseMath(distanceFunc, averageEllipseDistance, stdEllipseDistance, fixedMultiplier);
 		ETrajectory T1 = ellipseMath.createEllipticalTrajectory(-1, mercatorP);
 		ETrajectory T2 = ellipseMath.createEllipticalTrajectory(1, mercatorD);
 		return getSimilarity(T1,T2);

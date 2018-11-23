@@ -96,6 +96,32 @@ public class Distance {
 		//return (h*Math.sin(Math.toRadians(45)))*2;
 	}
 
+
+	public static double lawOfSines(Point p1, Point p2, double angle){
+		double distX = Math.abs(p1.getX()-p2.getX());
+		double distXSquare = distX*distX;
+		
+		double distY = Math.abs(p1.getY()-p2.getY());
+		double distYSquare = distY*distY;
+		double c = Math.sqrt(distXSquare+distYSquare);
+
+		double sinA = Math.sin(Math.toRadians((180 - angle) / 2));
+		double sinC = Math.sin(Math.toRadians(angle));
+		// Use law of sines to find sides
+		double ratio = c / sinC; 
+		return 2 * (ratio * sinA);
+	}
+
+	public static double pitagoras(Point p1, Point p2, double angle){
+		double distX = Math.abs(p1.getX()-p2.getX());
+		double distXSquare = Math.pow(distX, 2);
+		
+		double distY = Math.abs(p1.getY()-p2.getY());
+		double distYSquare = Math.pow(distY, 2);
+		
+		return Math.sqrt(distXSquare + distYSquare) * (2 * Math.sin(Math.toRadians(angle)));
+	}
+
 	public static double triangular(Point p1, Point p2, double pow, double multiplier){
 		//double h = euclidean(p1, p2);
 		double distX = Math.abs(p1.getX()-p2.getX());

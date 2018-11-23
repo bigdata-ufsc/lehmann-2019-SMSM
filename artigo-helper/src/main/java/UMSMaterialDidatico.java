@@ -7,8 +7,8 @@ public class UMSMaterialDidatico {
 
 	public static void main(String[] args) {
 		UMS ums = new UMS();
-		computePQ(ums);
-		computeRQ(ums);
+//		computePQ(ums);
+//		computeRQ(ums);
 		computeT1T2(ums);
 	}
 
