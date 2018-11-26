@@ -83,7 +83,7 @@ public class CreateEllipseMath {
 	}
 	
 	public ETrajectory createEllipticalTrajectory(int tid, TPoint[] points) {
-		if(!fixedMultiplier) {
+		if(fixedMultiplier) {
 			return createEllipticalTrajectoryFixed(tid, points);
 		}
 		return createEllipticalTrajectoryDynamic(tid, points);
