@@ -1,3 +1,12 @@
+Intersection_101_280 = POLYGON ((
+        -13626558.7554796 4542409.44703861, 
+        -13625745.0100019 4542409.44703861, 
+        -13625745.0100019 4541494.52066603, 
+        -13626558.7554796 4541494.52066603, 
+        -13626558.7554796 4542409.44703861
+    ))
+
+-----------------------------------------
 create table taxi.sanfrancisco_taxicab_airport_mall as (select * from taxi.sanfrancisco_taxicab_crawdad where tid in
 
 (select b.tid from
