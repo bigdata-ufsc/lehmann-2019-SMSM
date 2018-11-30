@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
@@ -188,6 +189,26 @@ public class GeolifeUniversityDatabaseReader implements IDataReader {
 			} finally {
 				conn.close();
 			}
+			if(false) {
+				Multimap<String, SemanticTrajectory> trajs = MultimapBuilder.hashKeys().arrayListValues().build();
+				for (SemanticTrajectory semanticTrajectory : ret) {
+					trajs.put(PATH_WITH_DIRECTION.getData(semanticTrajectory, 0), semanticTrajectory);
+				}
+				Map<String, Collection<SemanticTrajectory>> asMap = trajs.asMap();
+				List<String> toResize = asMap.entrySet().stream().filter(entry -> entry.getValue().size() > 100).map(Map.Entry::getKey).collect(Collectors.toList());
+				List<String> toRemove = asMap.entrySet().stream().filter(entry -> entry.getValue().size() < 1).map(Map.Entry::getKey).collect(Collectors.toList());
+				ret = new ArrayList<>();
+				for (Map.Entry<String, Collection<SemanticTrajectory>> entry : asMap.entrySet()) {
+					if(!toRemove.contains(entry.getKey())) {
+						List<SemanticTrajectory> t = new ArrayList<>(entry.getValue());
+						if(!toResize.contains(entry.getKey())) {
+							ret.addAll(t);
+						} else {
+							ret.addAll(t.stream().skip(100).collect(Collectors.toList()));
+						}
+					}
+				}
+			}
 			return ret;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -248,6 +269,14 @@ public class GeolifeUniversityDatabaseReader implements IDataReader {
 		} 
 		//
 		sql += "and (direction, path) in (select direction, path from "+ pointsTable + " group by direction, path having count(distinct tid) > 3) ";
+		//
+//		sql += " and tid in (16302," + 
+//				"15474," + 
+//				"13671," + 
+//				"13862," + 
+//				"12764," + 
+//				"21675" + 
+//				")";
 		//
 		sql += "order by tid, time, gid";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);

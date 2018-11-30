@@ -1,4 +1,4 @@
-package br.ufsc.lehmann;
+package br.ufsc.lehmann.survey;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,9 +12,9 @@ import java.util.stream.Stream;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
-public class ClusteringEvaluation  extends AbstractClusteringEvaluation {
+public class FMeasureClusteringEvaluation  extends AbstractFMeasureClusteringEvaluation {
 
-	public ClusteringEvaluation(int... clusterSizes) {
+	public FMeasureClusteringEvaluation(int... clusterSizes) {
 		super(clusterSizes);
 	}
 
@@ -31,7 +31,7 @@ public class ClusteringEvaluation  extends AbstractClusteringEvaluation {
 					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".clustering.out");
 				}
 				System.setOut(new PrintStream(new FileOutputStream(out)));
-				new ClusteringEvaluation(2,3,4,5,6,7,10).executeDescriptor(fileName);
+				new FMeasureClusteringEvaluation(2,3,4,5,6,7,10).executeDescriptor(fileName);
 			} catch (FileNotFoundException e) {
 				throw new RuntimeException(e);
 			} finally {

@@ -19,6 +19,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.semantic.Move;
 import br.ufsc.core.trajectory.semantic.Stop;
+import br.ufsc.lehmann.SphericalMercator;
 
 public class StopMoveCSVReader {
 	static final String TIMESTAMP_US = ("yyyy-MM-dd HH:mm:ss");

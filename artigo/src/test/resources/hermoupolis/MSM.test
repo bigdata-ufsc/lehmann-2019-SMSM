@@ -15,7 +15,7 @@
 		"params": [{
 			"type": "Semantic",
 			"index" : 8,
-			"weight": 0.3333,
+			"weight": 0.3334,
 			"params" : [{
 				"distance": "equal",
 				"type" : "Name"
@@ -24,6 +24,7 @@
 			"type": "spatial",
 			"distance": "euclidean",
 			"threshold": "[100,200,300,400,500]",
+			//"threshold": "300",
 			"weight": 0.3333,
 			"index" : 1
 		}, {
@@ -31,7 +32,7 @@
 			"distance": "proportion",
 			"weight": 0.3333,
 			"threshold": "[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]",
-			//"threshold": "0.5",
+			//"threshold": "0.2",
 			"index" : 2
 		}]
 	}

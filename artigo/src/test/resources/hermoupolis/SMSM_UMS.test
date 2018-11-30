@@ -20,14 +20,14 @@
 				"type": "spatial",
 				"distance": "euclidean",
 				//"threshold": "[100,200,300,400,500]",
-				"threshold": "100",
+				"threshold": "300",
 				"index" : 1,
 				"weight": 0.3333
 			}, {
 				"type": "temporal",
 				"distance": "proportion",
 				//"threshold": "[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]",
-				"threshold": "0.5",
+				"threshold": "0.2",
 				"weight": 0.3333,
 				"index" : 2
 			}, {
@@ -46,7 +46,7 @@
 			"params": [{
 				"type": "POINTS",
 				"distance": "UMS",
-				"threshold": "[0.5,0.6,0.7,0.8,0.9]",
+				"threshold": "[0.9]",
 				"weight": 1,
 				"params" : [{
 					"distance" : "euclidean"

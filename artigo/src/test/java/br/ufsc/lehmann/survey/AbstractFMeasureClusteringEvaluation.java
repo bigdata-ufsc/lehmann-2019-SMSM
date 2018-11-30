@@ -1,4 +1,4 @@
-package br.ufsc.lehmann;
+package br.ufsc.lehmann.survey;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,11 +27,11 @@ import br.ufsc.lehmann.testexecution.Groundtruth;
 import br.ufsc.lehmann.testexecution.Measure;
 import br.ufsc.lehmann.testexecution.Measures;
 
-public abstract class AbstractClusteringEvaluation {
+public abstract class AbstractFMeasureClusteringEvaluation {
 	
 	private int[] clusterSizes;
 
-	public AbstractClusteringEvaluation(int[] clusterSizes) {
+	public AbstractFMeasureClusteringEvaluation(int[] clusterSizes) {
 		this.clusterSizes = clusterSizes;
 	}
 

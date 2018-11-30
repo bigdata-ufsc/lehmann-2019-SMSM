@@ -1,4 +1,4 @@
-package br.ufsc.lehmann;
+package br.ufsc.lehmann.survey;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,8 +44,8 @@ public class PrecisionRecall {
 
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/animals"));
-		files.filter(path -> path.toFile().isFile() && path.toString().contains(".") && path.toString().contains("UMS") && path.toFile().toString().endsWith(".test")).forEach(path -> {
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/crawdad_ums"));
+		files.filter(path -> path.toFile().isFile() && !path.toString().contains("\\raw") && path.toFile().toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
 
@@ -109,12 +109,12 @@ public class PrecisionRecall {
 			System.out.printf("Elapsed time %d miliseconds\n", w.elapsed(TimeUnit.MILLISECONDS));
 			System.out.printf("Precision@recall(%d): %s\n", 10, ArrayUtils.toString(precisionAtRecall.getpAtRecall(), "0.0"));
 
-			DescriptiveStatistics total = new DescriptiveStatistics();
-			for (Map.Entry<Object, DescriptiveStatistics> entry : precisionAtRecall.getStats().entrySet()) {
-				System.out.printf("%s = %.2f +/- %.2f\n", entry.getKey(), entry.getValue().getMean(), entry.getValue().getStandardDeviation());
-				total.addValue(entry.getValue().getMean());
-			}
-			System.out.printf("Mean intraclass similarity = %.2f\n", total.getMean());
+//			DescriptiveStatistics total = new DescriptiveStatistics();
+//			for (Map.Entry<Object, DescriptiveStatistics> entry : precisionAtRecall.getStats().entrySet()) {
+//				System.out.printf("%s = %.2f +/- %.2f\n", entry.getKey(), entry.getValue().getMean(), entry.getValue().getStandardDeviation());
+//				total.addValue(entry.getValue().getMean());
+//			}
+//			System.out.printf("Mean intraclass similarity = %.2f\n", total.getMean());
 			
 			double map = MAP.precisionAtRecall(precisionAtRecall.getpAtRecall());
 			double auc = AUC.precisionAtRecall(precisionAtRecall.getpAtRecall());

@@ -107,6 +107,7 @@ public class HASLDatabaseReader implements IDataReader {
 		sb.append("SELECT"
 				+ " \"gid\",\"tid\",\"author\",\"class\",\"lx\",\"ly\",\"lz\",\"lroll\",\"lpitch\",\"lyaw\",\"lthumb\",\"lfore\",\"lmiddle\",\"lring\",\"llittle\",\"rx\",\"ry\",\"rz\",\"rroll\",\"rpitch\",\"ryaw\",\"rthumb\",\"rfore\",\"rmiddle\",\"rring\",\"rlittle\""
 				+ " FROM \"asl\".\"high_quality_asl\"");
+		sb.append(" where class in ( 'Norway', 'cold', 'crazy', 'eat', 'forget', 'happy','innocent', 'later', 'lose', 'spend')");
 		PreparedStatement st = conn.prepareStatement(sb.toString());
 		st.setFetchSize(1000);
 

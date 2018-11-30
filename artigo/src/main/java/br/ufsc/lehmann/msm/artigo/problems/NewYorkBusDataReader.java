@@ -34,6 +34,7 @@ import com.google.common.collect.MultimapBuilder;
 import br.ufsc.core.trajectory.EqualsDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.core.trajectory.SpatialDistanceFunction;
 import br.ufsc.core.trajectory.StopSemantic;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.core.trajectory.TemporalDuration;
@@ -46,34 +47,38 @@ import br.ufsc.lehmann.DTWDistance;
 import br.ufsc.lehmann.EllipsesDistance;
 import br.ufsc.lehmann.MoveSemantic;
 import br.ufsc.lehmann.NumberDistance;
+import br.ufsc.lehmann.SphericalMercator;
 import br.ufsc.utils.Angle;
 import br.ufsc.utils.Distance;
+import br.ufsc.utils.EuclideanDistanceFunction;
 import br.ufsc.utils.LatLongDistanceFunction;
 import cc.mallet.util.IoUtils;
 
-public class NewYorkBusDataReader {
+public class NewYorkBusDataReader implements IDataReader {
 	
-	public static final LatLongDistanceFunction GEO_DISTANCE_FUNCTION = new LatLongDistanceFunction();
-
-	public static final BasicSemantic<Double> DISTANCE = new BasicSemantic<>(3);
-	public static final BasicSemantic<String> ROUTE = new BasicSemantic<>(4);
-	public static final BasicSemantic<Integer> DIRECTION = new BasicSemantic<>(5);
-	public static final BasicSemantic<Integer> VEHICLE = new BasicSemantic<>(6);
-	public static final BasicSemantic<String> PHASE = new BasicSemantic<>(7);
-	public static final BasicSemantic<Double> NEXT_STOP_DISTANCE = new BasicSemantic<>(8);
-	public static final BasicSemantic<String> NEXT_STOP_ID = new BasicSemantic<>(9);
-	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(10);
-	public static final StopSemantic STOP_REGION_SEMANTIC = new StopSemantic(11, new AttributeDescriptor<Stop, String>(AttributeType.STOP_REGION, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(11, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, GEO_DISTANCE_FUNCTION));
-	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(11, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
+	public static final SpatialDistanceFunction GEO_DISTANCE_FUNCTION = new EuclideanDistanceFunction();
 	
-	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
-	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, Number>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
-	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, Number>(AttributeType.MOVE_DURATION, new NumberDistance()));
-	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(12, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
+	private static int SEMANTIC_COUNTER = 3;
 
-	public static final BasicSemantic<String> ROUTE_WITH_DIRECTION = new BasicSemantic<String>(10) {
+	public static final BasicSemantic<Double> DISTANCE = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final BasicSemantic<String> ROUTE = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final BasicSemantic<Integer> DIRECTION = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final BasicSemantic<Integer> VEHICLE = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final BasicSemantic<String> PHASE = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final BasicSemantic<Double> NEXT_STOP_DISTANCE = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final BasicSemantic<String> NEXT_STOP_ID = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(SEMANTIC_COUNTER++);
+	public static final StopSemantic STOP_REGION_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Stop, String>(AttributeType.STOP_REGION, new EqualsDistanceFunction<String>()));
+	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, GEO_DISTANCE_FUNCTION));
+	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(SEMANTIC_COUNTER++, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
+	
+	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, Number>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_TEMPORAL_DURATION_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, Number>(AttributeType.MOVE_DURATION, new NumberDistance()));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(SEMANTIC_COUNTER++, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
+
+	public static final BasicSemantic<String> ROUTE_WITH_DIRECTION = new BasicSemantic<String>(SEMANTIC_COUNTER++) {
 		@Override
 		public String getData(SemanticTrajectory p, int i) {
 			return ROUTE.getData(p, i) + "/" + DIRECTION.getData(p, i);
@@ -82,14 +87,30 @@ public class NewYorkBusDataReader {
 	private boolean onlyStops;
 
 	private StopMoveStrategy strategy;
+
+	private String[] lines;
 	
 	public NewYorkBusDataReader(boolean onlyStops) {
 		this(onlyStops, StopMoveStrategy.CBSMoT);
 	}
 
 	public NewYorkBusDataReader(boolean onlyStops, StopMoveStrategy strategy) {
+		this(onlyStops, null, strategy);
+	}
+
+	public NewYorkBusDataReader(boolean onlyStops, String[] lines, StopMoveStrategy strategy) {
 		this.onlyStops = onlyStops;
+		this.lines = lines;
 		this.strategy = strategy;
+	}
+	
+	@Override
+	public List<SemanticTrajectory> read() {
+		try {
+			return read(new CSVRegisterFilter("route", lines));
+		} catch (IOException | ParseException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public List<SemanticTrajectory> read(String[] lines) throws IOException, ParseException {
@@ -114,7 +135,7 @@ public class NewYorkBusDataReader {
 				stop.setRegion(data.get("POI"));
 				stop.setStopName((String) stop.getRegion());
 			}
-		}, StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS");
+		}, "dd/MM/yyyy HH:mm", StopMoveCSVReader.TIMESTAMP, "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss.SS", "yyyy-MM-dd HH:mm:ss.S");
 
 		ZipEntry trafficLightEntry = zipFile.getEntry("nyc.stop.traffic_light.csv");
 		if(trafficLightEntry != null) {
@@ -230,7 +251,7 @@ public class NewYorkBusDataReader {
 			}
 			int i = 0;
 			for (NewYorkBusRecord record : collection) {
-				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
+				TPoint point = new TPoint(SphericalMercator.lon2x(record.getLongitude()), SphericalMercator.lat2y(record.getLatitude()));
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.remove(record.getSemanticStop());
 					if(stop == null) {
@@ -313,7 +334,7 @@ public class NewYorkBusDataReader {
 			String move = data.get("semantic_move_id");
 			NewYorkBusRecord record = new NewYorkBusRecord(
 				Integer.parseInt(data.get("gid")),
-				new Timestamp(DateUtils.parseDate(data.get("time"), StopMoveCSVReader.TIMESTAMP).getTime()),
+				new Timestamp(DateUtils.parseDate(data.get("time"), "yyyy-MM-dd HH:mm:ss.SSS").getTime()),
 				Integer.parseInt(data.get("vehicle_id")),
 				data.get("route"),
 				data.get("trip_id"),
@@ -328,7 +349,7 @@ public class NewYorkBusDataReader {
 				StringUtils.isEmpty(stop) ? null : Integer.parseInt(stop),
 				StringUtils.isEmpty(move) ? null : Integer.parseInt(move)
 			);
-			records.put(record.getTripId(), record);
+			records.put(record.getTripId() + "_" + record.getDirection(), record);
 		}
 		System.out.printf("Loaded %d GPS points from dataset\n", records.size());
 		System.out.printf("Loaded %d trajectories from dataset\n", records.keySet().size());
@@ -338,13 +359,10 @@ public class NewYorkBusDataReader {
 		for (String trajId : keys) {
 			SemanticTrajectory s = new SemanticTrajectory(trajId, 13);
 			Collection<NewYorkBusRecord> collection = records.get(trajId);
-			if(!filter.accept(collection)) {
-				continue;
-			}
 			int i = 0;
 			for (NewYorkBusRecord record : collection) {
 				s.addData(i, Semantic.GID, record.getGid());
-				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
+				TPoint point = new TPoint(SphericalMercator.lon2x(record.getLongitude()), SphericalMercator.lat2y(record.getLatitude()), record.getTime());
 				s.addData(i, Semantic.SPATIAL, point);
 				s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(record.getTime().getTime()), Instant.ofEpochMilli(record.getTime().getTime())));
 				s.addData(i, DIRECTION, record.getDirection());

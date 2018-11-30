@@ -1,4 +1,4 @@
-package br.ufsc.lehmann;
+package br.ufsc.lehmann.survey;
 
 import java.io.File;
 import java.io.FileNotFoundException;

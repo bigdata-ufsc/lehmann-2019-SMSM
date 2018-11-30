@@ -18,7 +18,9 @@ import br.ufsc.lehmann.msm.artigo.problems.GeolifeUniversityDatabaseReader;
 import br.ufsc.lehmann.msm.artigo.problems.HermoupolisDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.InvolvesDatabaseReader;
+import br.ufsc.lehmann.msm.artigo.problems.NewYorkBusDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.SanFranciscoCabDatabaseReader;
+import br.ufsc.lehmann.msm.artigo.problems.StopMoveStrategy;
 
 public class Datasets {
 
@@ -102,6 +104,12 @@ public class Datasets {
 		}
 		if(dataset.getName().equalsIgnoreCase("ais-brest")) {
 			return new AISBrestDataReader();
+		}
+		if(dataset.getName().equalsIgnoreCase("new-york_bus")) {
+			Gson gson = new Gson();
+			String[] lines = !StringUtils.isEmpty(p.get("lines")) ? gson.fromJson(p.get("lines"), String[].class) : null;
+			String strategy = !StringUtils.isEmpty(p.get("strategy")) ? p.get("strategy").toUpperCase() : StopMoveStrategy.SMoT.toString();
+			return new NewYorkBusDataReader(!dataset.getRaw(), lines, StopMoveStrategy.valueOf(strategy));
 		}
 		if(dataset.getName().equalsIgnoreCase("hermoupolis")) {
 			if(p != null) {

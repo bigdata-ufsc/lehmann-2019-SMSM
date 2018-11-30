@@ -105,6 +105,16 @@ public class HermoupolisDataReader implements IDataReader {
 		List<CSVRecord> csvRecords = pointsParser.getRecords();
 		csvRecords = csvRecords.subList(1, csvRecords.size());
 		
+//		csvRecords = csvRecords
+//						.stream()
+//						.filter(rec -> rec.get("MOid").equals("64") || rec.get("MOid").equals("69") || rec.get("MOid").equals("96") || rec.get("MOid").equals("99"))
+//						.collect(Collectors.toList());
+		
+//		csvRecords = csvRecords
+//						.stream()
+//						.filter(rec -> rec.get("MPid").equals("3") || rec.get("MPid").equals("4"))
+//						.collect(Collectors.toList());
+		
 		Map<String, Stop> stops = readStops(csvRecords);
 		Map<String, Move> moves = readMoves(csvRecords, stops);
 		Iterator<CSVRecord> pointsData = csvRecords.iterator();

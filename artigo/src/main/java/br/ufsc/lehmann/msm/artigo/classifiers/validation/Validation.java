@@ -221,20 +221,16 @@ public class Validation {
 	
 	public static void main(String[] args) {
 		int count = 0;
-		Objeto[] trajsArray = new Objeto[] {
-				new Objeto("C", count++),
-				new Objeto("C", count++),
-				new Objeto("C", count++),
-				new Objeto("C", count++),
-				new Objeto("C", count++),
-				new Objeto("B", count++),
-				new Objeto("B", count++),
-				new Objeto("B", count++),
-				new Objeto("A", count++),
-				new Objeto("A", count++),
+		StringObjeto[] trajsArray = new StringObjeto[] {
+				new StringObjeto("A", "A"),
+				new StringObjeto("B", "B"),
+				new StringObjeto("B", "B"),
+				new StringObjeto(null, "C"),
+				new StringObjeto(null, "C"),
+				new StringObjeto("A", "D"),
 		};
 		Map<Object, DescriptiveStatistics> stats = new HashMap<>();
-		ArrayTable<Objeto, Objeto, Integer> allDistances = ArrayTable.create(Arrays.asList(trajsArray), Arrays.asList(trajsArray));
+		ArrayTable<StringObjeto, StringObjeto, Integer> allDistances = ArrayTable.create(Arrays.asList(trajsArray), Arrays.asList(trajsArray));
 		Map<Object, LongAdder> occurrences = new HashMap<>();
 		for (int i = 0; i < trajsArray.length; i++) {
 			Object classData = trajsArray[i].clazz;
@@ -246,39 +242,40 @@ public class Validation {
 		for (int i = 0; i < trajsArray.length; i++) {
 			classes.add(trajsArray[i].clazz);
 			for (int j = 0; j < trajsArray.length; j++) {
-				allDistances.put(trajsArray[i], trajsArray[j], trajsArray[j].count);
-				matrix[i][j] = trajsArray[j].count;
+				allDistances.put(trajsArray[i], trajsArray[j], Math.abs(trajsArray[i].count.compareTo(trajsArray[j].count)));
+				matrix[i][j] = Math.abs(trajsArray[i].count.compareTo(trajsArray[j].count));
 			}
 		}
 		int recallLevel = 10;
-		double[] ret = new double[recallLevel + 1];
-		ret[0] = 1.0;
-		double[][] precisionRecall = new double[trajsArray.length][];
-		for (int i = 0; i < trajsArray.length; i++) {
-			List<Map.Entry<Objeto, Integer>> rows = allDistances.row(trajsArray[i]).entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
-			Object classData = trajsArray[i].clazz;
-			int groundTruthCounter = occurrences.get(classData).intValue();
-			precisionRecall[i] = new double[groundTruthCounter];
-			int correctClass = 0;
-			for (int j = 0; correctClass < groundTruthCounter && j < trajsArray.length; j++) {
-				Entry<Objeto, Integer> entry = rows.get(j);
-				Object otherClassData = entry.getKey().clazz;
-				int h = correctClass;
-				if(Objects.equals(classData, otherClassData)) {
-					correctClass++;
-				}
-				precisionRecall[i][h] = correctClass / (j + 1.0);
-			}
-		}
-		for (int i = 1; i <= recallLevel; i++) {
-			final int finalI = i;
-			ret[i] = Arrays.stream(precisionRecall).mapToDouble(a -> a[Math.max(0, (int) ((a.length / (double) recallLevel) * finalI) - 1)]).sum() / trajsArray.length;
-		}
-		System.out.println("P@R: " + Arrays.toString(ret));
-		System.out.println("AUC: " + AUC.precisionAtRecall(ret));
+//		double[] ret = new double[recallLevel + 1];
+//		ret[0] = 1.0;
+//		double[][] precisionRecall = new double[trajsArray.length][];
+//		for (int i = 0; i < trajsArray.length; i++) {
+//			List<Map.Entry<StringObjeto, Integer>> rows = allDistances.row(trajsArray[i]).entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
+//			Object classData = trajsArray[i].clazz;
+//			int groundTruthCounter = occurrences.get(classData).intValue();
+//			precisionRecall[i] = new double[groundTruthCounter];
+//			int correctClass = 0;
+//			for (int j = 0; correctClass < groundTruthCounter && j < trajsArray.length; j++) {
+//				Entry<StringObjeto, Integer> entry = rows.get(j);
+//				Object otherClassData = entry.getKey().clazz;
+//				int h = correctClass;
+//				if(Objects.equals(classData, otherClassData)) {
+//					correctClass++;
+//				}
+//				precisionRecall[i][h] = correctClass / (j + 1.0);
+//			}
+//		}
+//		for (int i = 1; i <= recallLevel; i++) {
+//			final int finalI = i;
+//			ret[i] = Arrays.stream(precisionRecall).mapToDouble(a -> a[Math.max(0, (int) ((a.length / (double) recallLevel) * finalI) - 1)]).sum() / trajsArray.length;
+//		}
+//		System.out.println("P@R: " + Arrays.toString(ret));
+//		System.out.println("AUC: " + AUC.precisionAtRecall(ret));
 		
-		System.out.println("P@R (lucas): " + Arrays.toString(computeFromClassNames(classes, matrix, recallLevel)));
-		System.out.println("AUC (lucas): " + AUC.precisionAtRecall(computeFromClassNames(classes, matrix, recallLevel)));
+		double[] computeFromClassNames = computeFromClassNames(classes, matrix, recallLevel);
+		System.out.println("P@R (lucas): " + Arrays.toString(computeFromClassNames));
+		System.out.println("AUC (lucas): " + AUC.precisionAtRecall(computeFromClassNames));
 	}
 
 	public static double[] computeFromClassNames(List<Object> classes, double[][] matrix, int recallLevel) {
@@ -311,6 +308,7 @@ public class Validation {
 		}
 		for (Object cls : classes) {
 			if(cls == null) {
+				idx++;
 				continue;
 			}
 			double[] precisionAtRecallClass = precisionRecallPerClass.get(cls);
@@ -333,7 +331,7 @@ public class Validation {
 				for (ObjectIntPair t2 : ranking) {
 					if (meTarget == 0)
 						break;
-					if (t2.getKey().equals(cls))
+					if (cls.equals(t2.getKey()))
 						meTarget--;
 					else
 						othersCount++;
@@ -345,10 +343,10 @@ public class Validation {
 		}
 
 		for (int i = 1; i < precisionAtRecall.length; i++)
-			precisionAtRecall[i] /= classes.size();
+			precisionAtRecall[i] /= classes.stream().filter(t -> t != null).count();
 		for (Map.Entry<Object, double[]> entry : precisionRecallPerClass.entrySet()) {
 			for (int i = 1; i < entry.getValue().length; i++) {
-				entry.getValue()[i] /= classes.stream().filter((o) -> o.equals(entry.getKey())).count();
+				entry.getValue()[i] /= classes.stream().filter((o) -> entry.getKey().equals(o)).count();
 			}
 			System.out.printf("P@R(%s): %s\n", entry.getKey(), ArrayUtils.toString(entry.getValue(), "0.0"));
 			System.out.printf("MAP (%s) = %.4f\n", entry.getKey(), MAP.precisionAtRecall(entry.getValue()));
@@ -378,9 +376,12 @@ public class Validation {
 		public void setValue(int value) {
 			this.value = value;
 		}
+		@Override
+		public String toString() {
+			return "ObjectIntPair [key=" + key + ", value=" + value + "]";
+		}
 		
 	}
-
 	
 	private static class Objeto {
 
@@ -388,6 +389,18 @@ public class Validation {
 		private int count;
 
 		public Objeto(String clazz, int count) {
+			this.clazz = clazz;
+			this.count = count;
+		}
+		
+	}
+
+	private static class StringObjeto {
+
+		private String clazz;
+		private String count;
+
+		public StringObjeto(String clazz, String count) {
 			this.clazz = clazz;
 			this.count = count;
 		}

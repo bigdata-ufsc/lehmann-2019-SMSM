@@ -1,4 +1,4 @@
-package br.ufsc.lehmann;
+package br.ufsc.lehmann.survey;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
-public class AnimalsClusteringEvaluation  extends AbstractClusteringEvaluation {
+public class AnimalsClusteringEvaluation  extends AbstractFMeasureClusteringEvaluation {
 
 	public AnimalsClusteringEvaluation(int... clusterSizes) {
 		super(clusterSizes);

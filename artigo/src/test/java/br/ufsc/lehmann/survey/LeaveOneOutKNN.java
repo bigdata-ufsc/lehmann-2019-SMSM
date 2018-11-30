@@ -1,4 +1,4 @@
-package br.ufsc.lehmann;
+package br.ufsc.lehmann.survey;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -8,12 +8,8 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
-
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
@@ -25,8 +21,6 @@ import br.ufsc.core.ITrainable;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.msm.artigo.classifiers.algorithms.KNNSmileTrainer;
-import br.ufsc.lehmann.msm.artigo.classifiers.validation.AUC;
-import br.ufsc.lehmann.msm.artigo.classifiers.validation.MAP;
 import br.ufsc.lehmann.msm.artigo.classifiers.validation.Validation;
 import br.ufsc.lehmann.msm.artigo.problems.BasicSemantic;
 import br.ufsc.lehmann.msm.artigo.problems.IDataReader;

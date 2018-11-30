@@ -14,31 +14,13 @@
 	},
 	"measure": {
 		"name": "MSTP",
-		"params": [
-		{
+		"params": [{
 			"type": "Semantic",
 			"index" : 8,
 			"params" : [{
 				"distance": "equal",
 				"type" : "Region"
 			}]
-		}
-		, 
-		{
-			"type": "temporal",
-			"distance": "proportion",
-			"threshold": "0.1",
-			"params" : [{
-				"threshold": 2
-			}],
-			"index" : 2
-		},
-		{
-			"type": "spatial",
-			"distance": "euclidean",
-			"threshold": "200",
-			"index" : 1
-		}
-		]
+		}]
 	}
 }

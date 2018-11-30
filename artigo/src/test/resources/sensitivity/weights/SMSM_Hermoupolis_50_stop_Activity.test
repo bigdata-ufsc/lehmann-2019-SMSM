@@ -14,20 +14,18 @@
 		"name": "SMSM",
 		"params": [{
 			"type": "Stop",
-			"weight": 1,
+			"weight": 0.5,
 			"index" : 8,
 			"params": [{
 				"type": "spatial",
 				"distance": "euclidean",
-				//"threshold": "[100,200,300,400,500]",
 				"threshold": "300",
 				"index" : 1,
 				"weight": 0.3333
 			}, {
 				"type": "temporal",
 				"distance": "proportion",
-				//"threshold": "[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]",
-				"threshold": "0.5",
+				"threshold": "0.2",
 				"weight": 0.3333,
 				"index" : 2
 			}, {
@@ -37,6 +35,18 @@
 				"params" : [{
 					"distance": "Equal",
 					"type" : "NAME"
+				}]
+			}]
+		}, {
+			"type": "Move",
+			"weight": 0.5,
+			"index" : 9,
+			"params": [{
+				"type": "SEMANTIC",
+				"weight": 1,
+				"params" : [{
+					"distance": "Equal",
+					"type" : "ACTIVITY"
 				}]
 			}]
 		}]

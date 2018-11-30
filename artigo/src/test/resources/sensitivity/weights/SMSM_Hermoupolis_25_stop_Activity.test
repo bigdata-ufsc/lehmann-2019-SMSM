@@ -1,16 +1,14 @@
 {
 	"dataset": {
-		"name" : "geolife_university",
+		"name" : "hermoupolis",
 		"raw": 'false',
 		"params": {
-			"pointsTable" : "geolife.geolife_inside_university_5_pois",
-			"stopTable" : "stops_moves.geolife_inside_university_stop_5_pois",
-			"moveTable" : "stops_moves.geolife_inside_university_move_5_pois"
+			"file" : "1 Day - 6 Profiles - 2 Classes_900913.csv"
 		}
 	},
 	"groundtruth": {
 		"type": "String",
-		"index": 10
+		"index": 7
 	},
 	"measure": {
 		"name": "SMSM",
@@ -21,16 +19,22 @@
 			"params": [{
 				"type": "spatial",
 				"distance": "euclidean",
-				"threshold": "100",
+				"threshold": "300",
 				"index" : 1,
-				"weight": 0.5
+				"weight": 0.3333
+			}, {
+				"type": "temporal",
+				"distance": "proportion",
+				"threshold": "0.2",
+				"weight": 0.3333,
+				"index" : 2
 			}, {
 				"type": "Semantic",
-				"index" : 8,
-				"weight": 0.5,
+				"index" : 7,
+				"weight": 0.3334,
 				"params" : [{
 					"distance": "Equal",
-					"type" : "REGION"
+					"type" : "NAME"
 				}]
 			}]
 		}, {
@@ -38,12 +42,11 @@
 			"weight": 0.75,
 			"index" : 9,
 			"params": [{
-				"type": "POINTS",
-				"distance": "DTW",
-				"threshold": "[summed-distances*5]",
+				"type": "SEMANTIC",
 				"weight": 1,
 				"params" : [{
-					"distance" : "euclidean"
+					"distance": "Equal",
+					"type" : "ACTIVITY"
 				}]
 			}]
 		}]
