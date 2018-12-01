@@ -107,8 +107,12 @@ public class Datasets {
 		}
 		if(dataset.getName().equalsIgnoreCase("new-york_bus")) {
 			Gson gson = new Gson();
-			String[] lines = !StringUtils.isEmpty(p.get("lines")) ? gson.fromJson(p.get("lines"), String[].class) : null;
-			String strategy = !StringUtils.isEmpty(p.get("strategy")) ? p.get("strategy").toUpperCase() : StopMoveStrategy.SMoT.toString();
+			String[] lines = null;
+			String strategy = StopMoveStrategy.SMoT.toString();
+			if(p != null) {
+				lines = !StringUtils.isEmpty(p.get("lines")) ? gson.fromJson(p.get("lines"), String[].class) : null;
+				strategy = !StringUtils.isEmpty(p.get("strategy")) ? p.get("strategy").toUpperCase() : StopMoveStrategy.SMoT.toString();
+			}
 			return new NewYorkBusDataReader(!dataset.getRaw(), lines, StopMoveStrategy.valueOf(strategy));
 		}
 		if(dataset.getName().equalsIgnoreCase("hermoupolis")) {

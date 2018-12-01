@@ -1,0 +1,20 @@
+{
+	"dataset": {
+		"name" : "new-york_bus",
+		"strategy" : "SMoT",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 13
+	},
+	"measure": {
+		"name": "CATS",
+		"params": [{
+			"type": "spatial",
+			"index" : 1,
+			"distance": "euclidean",
+			"threshold": "['std-lcss(1/2)', 'std-lcss(1)', 'std-edr(1/2)', 'std-edr(1)']"
+		}]
+	}
+}

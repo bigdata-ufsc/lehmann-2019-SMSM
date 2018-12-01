@@ -27,19 +27,50 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 	}
 
 	private double edrDistance(SemanticTrajectory r, SemanticTrajectory s) {
-		double[][] edrMetric = new double[r.length() + 1][s.length() + 1];
+		int m = r.length();
+		int n = s.length();
 
-		for (int i = 0; i <= r.length(); i++) {
+//		double[][] edrMetric = new double[2][n + 1];
+//		for (int i = 0; i < edrMetric.length; i++) {
+//			for (int j = 0; j < edrMetric[i].length; j++) {
+//				edrMetric[i][j] = edrMetric[i].length - (j + (m&i));
+//			}
+//		}
+//		edrMetric[edrMetric.length - 1][n] = 0;
+//
+//		for (int i = m - 1; i >= 0; i--) {
+//			int ndx = i & 1;//odd or even
+//			semantic: for (int j = n - 1; j >= 0; j--) {
+//				int subcost = 0;
+//				for (int k = 0; k < parameters.length; k++) {
+//					EDRSemanticParameter param = parameters[k];
+//					Object rPoint = param.semantic.getData(r, i);
+//					Object sPoint = param.semantic.getData(s, j);
+//					if(!param.semantic.match(rPoint, sPoint, param.computeThreshold(rPoint, sPoint, r, s))) {
+//						subcost = 1;
+//						break;
+//					}
+//				}
+//				edrMetric[ndx][j] = min(//
+//						edrMetric[1 - ndx][j + 1] + subcost,//
+//						edrMetric[ndx][j + 1] + 1,//
+//						edrMetric[1 - ndx][j] + 1);
+//			}
+//		}
+//		double distance = edrMetric[0][0];
+
+		double[][] edrMetric = new double[m + 1][n + 1];
+
+		for (int i = 0; i <= m; i++) {
 			edrMetric[i][0] = i;
 		}
-		for (int i = 0; i <= s.length(); i++) {
+		for (int i = 0; i <= n; i++) {
 			edrMetric[0][i] = i;
 		}
 
 		edrMetric[0][0] = 0;
-
-		for (int i = 1; i <= r.length(); i++) {
-			for (int j = 1; j <= s.length(); j++) {
+		for (int i = 1; i <= m; i++) {
+			for (int j = 1; j <= n; j++) {
 				int subcost = 0;
 				for (int k = 0; k < parameters.length; k++) {
 					EDRSemanticParameter param = parameters[k];

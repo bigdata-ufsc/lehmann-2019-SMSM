@@ -244,7 +244,7 @@ public class NewYorkBusDataReader implements IDataReader {
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 13);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, SEMANTIC_COUNTER);
 			Collection<NewYorkBusRecord> collection = records.get(trajId);
 			if(!filter.accept(collection)) {
 				continue;
@@ -310,6 +310,7 @@ public class NewYorkBusDataReader implements IDataReader {
 				s.addData(i, NEXT_STOP_DISTANCE, record.getNextStopDistance());
 				s.addData(i, NEXT_STOP_ID, record.getNextStopId());
 				s.addData(i, PHASE, record.getPhase());
+				s.addData(i, ROUTE_WITH_DIRECTION, ROUTE_WITH_DIRECTION.getData(s, 0));
 				i++;
 			}
 			stats.addValue(s.length());
@@ -357,7 +358,7 @@ public class NewYorkBusDataReader implements IDataReader {
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (String trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 13);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, SEMANTIC_COUNTER);
 			Collection<NewYorkBusRecord> collection = records.get(trajId);
 			int i = 0;
 			for (NewYorkBusRecord record : collection) {
@@ -372,6 +373,7 @@ public class NewYorkBusDataReader implements IDataReader {
 				s.addData(i, NEXT_STOP_DISTANCE, record.getNextStopDistance());
 				s.addData(i, NEXT_STOP_ID, record.getNextStopId());
 				s.addData(i, PHASE, record.getPhase());
+				s.addData(i, ROUTE_WITH_DIRECTION, ROUTE_WITH_DIRECTION.getData(s, 0));
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
 					s.addData(i, STOP_CENTROID_SEMANTIC, stop);
@@ -428,6 +430,9 @@ public class NewYorkBusDataReader implements IDataReader {
 		}
 
 		public boolean accept(CSVRecord rec) {
+			if(values == null) {
+				return true;
+			}
 			if(rec.isMapped(field)) {
 				if(ArrayUtils.contains(values, rec.get(field))) {
 					return true;

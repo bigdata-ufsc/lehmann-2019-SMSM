@@ -1,0 +1,14 @@
+{
+	"dataset": {
+		"name" : "new-york_bus",
+		"strategy" : "SMoT",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 13
+	},
+	"measure": {
+		"name": "EDwP"
+	}
+}

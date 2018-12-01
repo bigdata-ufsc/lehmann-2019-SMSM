@@ -41,7 +41,7 @@ public class LCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
         int[][] LCSSMetric = new int[2][n + 1];
 
 		for (int i = m - 1; i >= 0; i--) {
-			int ndx = i & 1;//odd or even	
+			int ndx = i & 1;//odd or even
 			semantic: for (int j = n - 1; j >= 0; j--) {
 				for (int k = 0; k < parameters.length; k++) {
 					LCSSSemanticParameter p = parameters[k];
