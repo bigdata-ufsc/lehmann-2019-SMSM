@@ -34,7 +34,8 @@ public class StopToStopTrajectoryTransformer {
 //			fromCSV();
 //			return;
 //		}
-		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.geolife_enriched_move", null,
+		String pointsTable = "taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned";
+		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, pointsTable, null,
 				null);
 		DataRetriever retriever = source.getRetriever();
 		System.out.println("Executing SQL...");
@@ -43,8 +44,8 @@ public class StopToStopTrajectoryTransformer {
 		while(true) {
 			Statement statement = conn.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT tid, gid, semantic_stop_id, semantic_move_id "+
-					"from geolife.geolife_university "+
-					"order by tid,time,gid");
+					"from "+ pointsTable + 
+					" order by tid,timestamp,gid");
 			Integer currentTid = null;
 			Set<Long> gidsToRemove = new LinkedHashSet<>();
 			Long currentStopId = null, currentMoveId = null;
@@ -92,7 +93,8 @@ public class StopToStopTrajectoryTransformer {
 				List<Long> collect = gidsToRemove.stream().skip(i).limit(min).collect(Collectors.toList());
 				String string = collect.toString();
 				
-				conn.prepareStatement("delete from geolife.geolife_university where gid in (" + string.substring(1, string.length() - 1) + ")").execute();
+				String sql = "delete from "+pointsTable + " where gid in (" + string.substring(1, string.length() - 1) + ")";
+				conn.prepareStatement(sql).execute();
 				conn.commit();
 			}
 		}

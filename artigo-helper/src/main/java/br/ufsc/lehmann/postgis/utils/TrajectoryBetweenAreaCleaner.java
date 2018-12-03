@@ -21,11 +21,13 @@ public class TrajectoryBetweenAreaCleaner {
 		Connection conn = retriever.getConnection();
 		conn.setAutoCommit(false);
 		Statement statement = conn.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT tid, gid, ST_INTERSECTS(ST_GeomFromText('POLYGON((-122.40899 37.78196, -122.40395 37.78196, -122.40395 37.786, -122.40899 37.786, -122.40899 37.78196))'), st_makepoint(lon, lat)) as at_mall,"+
-				"ST_INTERSECTS(ST_GeomFromText('POLYGON((-122.39258 37.61372, -122.38404 37.61372, -122.38404 37.61812, -122.39258 37.61812, -122.39258 37.61372))'), st_makepoint(lon, lat)) as at_airport,"+
+		String pointsTable = "taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned";
+		ResultSet rs = statement.executeQuery("SELECT tid, gid, mall as at_mall,"+
+				"airport as at_airport,"+
+				"pier as at_pier,"+
 				"direction "+
-			  "FROM taxi.sanfrancisco_taxicab_cleaned "+
-			  "order by tid, \"timestamp\";");
+			  "FROM "+pointsTable+
+			  " order by tid, \"timestamp\";");
 		Long currentTid = null;
 		String direction = null;
 		boolean toAirport = false, initialTrajectoryReached = false, finalTrajectoryReached = false;
@@ -34,9 +36,9 @@ public class TrajectoryBetweenAreaCleaner {
 			if(currentTid == null || !currentTid.equals(rs.getLong("tid"))) {
 				currentTid = rs.getLong("tid");
 				direction = rs.getString("direction");
-				if(direction.equals("airport to mall")) {
+				if(direction.startsWith("airport to")) {
 					toAirport = false;
-				} else if(direction.equals("mall to airport")) {
+				} else if(direction.endsWith("to airport")) {
 					toAirport = true;
 				} else{
 					throw new RuntimeException("Unknown direction: " + direction);
@@ -46,7 +48,7 @@ public class TrajectoryBetweenAreaCleaner {
 			}
 			if(!initialTrajectoryReached) {
 				if(toAirport) {
-					if(!rs.getBoolean("at_mall")) {
+					if(!(rs.getBoolean("at_pier") || rs.getBoolean("at_mall"))) {
 						gidsToRemove.add(rs.getLong("gid"));
 					} else {
 						initialTrajectoryReached = true;
@@ -64,7 +66,7 @@ public class TrajectoryBetweenAreaCleaner {
 						finalTrajectoryReached = true;
 					}
 				} else {
-					if(rs.getBoolean("at_mall")) {
+					if(rs.getBoolean("at_mall") || rs.getBoolean("at_pier")) {
 						finalTrajectoryReached = true;
 					}
 				}
@@ -74,7 +76,7 @@ public class TrajectoryBetweenAreaCleaner {
 						gidsToRemove.add(rs.getLong("gid"));
 					}
 				} else {
-					if(!rs.getBoolean("at_mall")) {
+					if(!(rs.getBoolean("at_pier") || rs.getBoolean("at_mall"))) {
 						gidsToRemove.add(rs.getLong("gid"));
 					}
 				}
