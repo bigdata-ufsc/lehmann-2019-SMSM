@@ -1,13 +1,6 @@
-Intersection_101_280 = POLYGON ((
-        -13626558.7554796 4542409.44703861, 
-        -13625745.0100019 4542409.44703861, 
-        -13625745.0100019 4541494.52066603, 
-        -13626558.7554796 4541494.52066603, 
-        -13626558.7554796 4542409.44703861
-    ))
+drop table taxi.sanfrancisco_taxicab_airport_mall_pier
 
------------------------------------------
-create table taxi.sanfrancisco_taxicab_airport_mall as (select * from taxi.sanfrancisco_taxicab_crawdad where tid in
+create table taxi.sanfrancisco_taxicab_airport_mall_pier as (select * from taxi.sanfrancisco_taxicab_crawdad where tid in
 
 (select b.tid from
 (select a.tid, st_makeline(a.geom) as line from (select tid, geom from taxi.sanfrancisco_taxicab_crawdad order by tid, "timestamp") a
@@ -15,9 +8,169 @@ group by a.tid) b
 where 
 st_intersects(ST_Transform(b.line,26986), ST_Transform(ST_SetSRID(ST_GeomFromText('POLYGON((-122.39258 37.61372, -122.38404 37.61372, -122.38404 37.61812, -122.39258 37.61812, -122.39258 37.61372))'), 4326),26986)) --airport
 and
-st_intersects(ST_Transform(b.line,26986), ST_Transform(ST_SetSRID(ST_GeomFromText('POLYGON((-122.40899 37.78196, -122.40395 37.78196, -122.40395 37.786, -122.40899 37.786, -122.40899 37.78196))'), 4326),26986)) --mall
+	(st_intersects(ST_Transform(b.line,26986), ST_Transform(ST_SetSRID(ST_GeomFromText('POLYGON((-122.40899 37.78196, -122.40395 37.78196, -122.40395 37.786, -122.40899 37.786, -122.40899 37.78196))'), 4326),26986)) --mall
+		or
+	st_intersects(ST_Transform(b.line,26986), ST_Transform(ST_SetSRID(ST_GeomFromText('POLYGON((-13624607.041687667 4548581.778072609,  -13624607.041687667 4549414.764443452, -13623853.387352144 4549414.764443452, -13623853.387352144 4548581.778072609, -13624607.041687667 4548581.778072609))'), 900913),26986)) --pier
+	)
 )
 )
+----------------------------------------------------------
+delete
+  FROM taxi.sanfrancisco_taxicab_airport_mall_pier
+  where ocupation <> 1
+----------------------------------------------------------
+delete from taxi.sanfrancisco_taxicab_airport_mall_pier where tid in (select distinct b.tid from
+(select a.tid, st_makeline(a.geom) as line from (select tid, geom from taxi.sanfrancisco_taxicab_airport_mall_pier order by tid, "timestamp") a
+group by a.tid) b
+where 
+	(st_intersects(ST_Transform(b.line,26986), ST_Transform(ST_SetSRID(ST_GeomFromText('POLYGON ((
+		-13625262.522629488 4543020.602396788, 
+		-13625262.522629488 4546510.220300356, 
+		-13624167.740542093 4546510.220300356, 
+		-13624167.740542093 4543020.602396788, 
+		-13625262.522629488 4543020.602396788
+	    ))'), 900913),26986)) --280
+	    and
+	st_intersects(ST_Transform(b.line,26986), ST_Transform(ST_SetSRID(ST_GeomFromText('POLYGON ((
+		-13626585.384318423 4542974.98647648, 
+		-13626585.384318423 4546464.604380048, 
+		-13625695.873872414 4546464.604380048, 
+		-13625695.873872414 4542974.98647648, 
+		-13626585.384318423 4542974.98647648
+	    ))'), 900913),26986)) --101)
+	    ))
+
+	    
+delete from taxi.sanfrancisco_taxicab_airport_mall_pier where tid in (select distinct b.tid from
+(select a.tid, st_makeline(a.geom) as line from (select tid, geom from taxi.sanfrancisco_taxicab_airport_mall_pier order by tid, "timestamp") a
+group by a.tid) b
+where 
+	not (st_intersects(ST_Transform(b.line,26986), ST_Transform(ST_SetSRID(ST_GeomFromText('POLYGON ((
+		-13625262.522629488 4543020.602396788, 
+		-13625262.522629488 4546510.220300356, 
+		-13624167.740542093 4546510.220300356, 
+		-13624167.740542093 4543020.602396788, 
+		-13625262.522629488 4543020.602396788
+	    ))'), 900913),26986)) --280
+	    or
+	st_intersects(ST_Transform(b.line,26986), ST_Transform(ST_SetSRID(ST_GeomFromText('POLYGON ((
+		-13626585.384318423 4542974.98647648, 
+		-13626585.384318423 4546464.604380048, 
+		-13625695.873872414 4546464.604380048, 
+		-13625695.873872414 4542974.98647648, 
+		-13626585.384318423 4542974.98647648
+	    ))'), 900913),26986)) --101)
+	    ))
+----------------------------------------------------------
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set road = null
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set road = 101
+where tid in (select distinct b.tid from
+(select a.tid, st_makeline(a.geom) as line from (select tid, geom from taxi.sanfrancisco_taxicab_airport_mall_pier order by tid, "timestamp") a
+group by a.tid) b
+where 
+	(
+	st_intersects(ST_Transform(b.line,26986), ST_Transform(ST_SetSRID(ST_GeomFromText('POLYGON ((
+		-13626585.384318423 4542974.98647648, 
+		-13626585.384318423 4546464.604380048, 
+		-13625695.873872414 4546464.604380048, 
+		-13625695.873872414 4542974.98647648, 
+		-13626585.384318423 4542974.98647648
+	    ))'), 900913),26986)) --101
+	    ))
+
+	    
+update taxi.sanfrancisco_taxicab_airport_mall_pier set road = 280
+where tid in (select distinct b.tid from
+(select a.tid, st_makeline(a.geom) as line from (select tid, geom from taxi.sanfrancisco_taxicab_airport_mall_pier order by tid, "timestamp") a
+group by a.tid) b
+where 
+	(
+	st_intersects(ST_Transform(b.line,26986), ST_Transform(ST_SetSRID(ST_GeomFromText('POLYGON ((
+		-13625262.522629488 4543020.602396788, 
+		-13625262.522629488 4546510.220300356, 
+		-13624167.740542093 4546510.220300356, 
+		-13624167.740542093 4543020.602396788, 
+		-13625262.522629488 4543020.602396788
+	    ))'), 900913),26986)) --280
+	    ))
+----------------------------------------------------------
+update taxi.sanfrancisco_taxicab_airport_mall_pier set stop = null
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set stop = 'pier'
+  where ST_INTERSECTS(
+		ST_GeomFromText('POLYGON ((-13624607.041687667 4548581.778072609,  -13624607.041687667 4549414.764443452, -13623853.387352144 4549414.764443452, -13623853.387352144 4548581.778072609, -13624607.041687667 4548581.778072609))', 900913), 
+			geom)
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set stop = 'mall'
+  where ST_INTERSECTS(
+		st_transform(ST_GeomFromText('POLYGON ((-122.40899 37.78196, -122.40395 37.78196, -122.40395 37.786, -122.40899 37.786, -122.40899 37.78196))', 4326), 900913), 
+			geom)
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set stop = 'airport'
+  where ST_INTERSECTS(
+		st_transform(ST_GeomFromText('POLYGON ((-122.39258 37.61372, -122.38404 37.61372, -122.38404 37.61812, -122.39258 37.61812, -122.39258 37.61372))', 4326), 900913), 
+			geom)
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set stop = 'intersection_101_280'
+  where ST_INTERSECTS(
+		ST_GeomFromText('POLYGON ((-13626558.7554796 4542409.44703861, -13625745.0100019 4542409.44703861, -13625745.0100019 4541494.52066603, -13626558.7554796 4541494.52066603, -13626558.7554796 4542409.44703861))', 900913), 
+			geom)
+----------------------------------------------------------
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set intersection_101_280 = null, mall = null, airport=null, pier=null
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set pier = true
+	where tid in (SELECT distinct tid
+  FROM taxi.sanfrancisco_taxicab_airport_mall_pier 
+  where ST_INTERSECTS(
+		ST_GeomFromText('POLYGON ((-13624607.041687667 4548581.778072609,  -13624607.041687667 4549414.764443452, -13623853.387352144 4549414.764443452, -13623853.387352144 4548581.778072609, -13624607.041687667 4548581.778072609))', 900913), 
+			geom))
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set airport = true
+	where tid in (SELECT distinct tid
+  FROM taxi.sanfrancisco_taxicab_airport_mall_pier 
+  where ST_INTERSECTS(
+		st_transform(ST_GeomFromText('POLYGON ((-122.39258 37.61372, -122.38404 37.61372, -122.38404 37.61812, -122.39258 37.61812, -122.39258 37.61372))', 4326), 900913), 
+			geom))
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set mall = true
+	where tid in (SELECT distinct tid
+  FROM taxi.sanfrancisco_taxicab_airport_mall_pier 
+  where ST_INTERSECTS(
+		st_transform(ST_GeomFromText('POLYGON ((-122.40899 37.78196, -122.40395 37.78196, -122.40395 37.786, -122.40899 37.786, -122.40899 37.78196))', 4326), 900913), 
+			geom))
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set intersection_101_280 = true
+	where tid in (SELECT distinct tid
+  FROM taxi.sanfrancisco_taxicab_airport_mall_pier 
+  where ST_INTERSECTS(
+		ST_GeomFromText('POLYGON((-13626558.7554796 4542409.44703861, -13625745.0100019 4542409.44703861, -13625745.0100019 4541494.52066603, -13626558.7554796 4541494.52066603, -13626558.7554796 4542409.44703861))', 900913), 
+			geom))
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set bayshore_fwy = true
+	where tid in (SELECT distinct tid
+  FROM taxi.sanfrancisco_taxicab_airport_mall_pier 
+  where ST_INTERSECTS(
+		st_transform(ST_GeomFromText('POLYGON ((-122.391 37.688, -122.388 37.688, -122.388 37.679, -122.391 37.679, -122.391 37.688))', 4326), 900913), 
+			geom))
+
+----------------------------------------------------------
+
+select count(distinct tid) from taxi.sanfrancisco_taxicab_airport_mall_pier
+where not (airport is not null and bayshore_fwy is not null and intersection_101_280 is not null and (mall is not null or pier is not null))
+
+delete from taxi.sanfrancisco_taxicab_airport_mall_pier where tid in (select distinct tid from taxi.sanfrancisco_taxicab_airport_mall_pier
+where not (airport is not null and bayshore_fwy is not null and intersection_101_280 is not null and (mall is not null or pier is not null)))
+
+delete from taxi.sanfrancisco_taxicab_airport_mall_pier where tid in (select distinct tid from taxi.sanfrancisco_taxicab_airport_mall_pier
+where airport is not null and bayshore_fwy is not null and intersection_101_280 is not null and mall is not null and pier is not null)
+
+----------------------------------------------------------
+--Centróide do pier
+select st_y(st_centroid(st_transform(ST_GeomFromText('POLYGON ((-13624607.041687667 4548581.778072609,  -13624607.041687667 4549414.764443452, -13623853.387352144 4549414.764443452, -13623853.387352144 4548581.778072609, -13624607.041687667 4548581.778072609))', 900913), 4326))) as lat,
+	st_x(st_centroid(st_transform(ST_GeomFromText('POLYGON ((-13624607.041687667 4548581.778072609,  -13624607.041687667 4549414.764443452, -13623853.387352144 4549414.764443452, -13623853.387352144 4548581.778072609, -13624607.041687667 4548581.778072609))', 900913), 4326))) as lon
 
 -----------------------------------------
 SELECT infered_route_id, infered_direction_id, count(distinct infered_trip_id)
