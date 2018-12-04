@@ -171,6 +171,37 @@ where airport is not null and bayshore_fwy is not null and intersection_101_280 
 --Centróide do pier
 select st_y(st_centroid(st_transform(ST_GeomFromText('POLYGON ((-13624607.041687667 4548581.778072609,  -13624607.041687667 4549414.764443452, -13623853.387352144 4549414.764443452, -13623853.387352144 4548581.778072609, -13624607.041687667 4548581.778072609))', 900913), 4326))) as lat,
 	st_x(st_centroid(st_transform(ST_GeomFromText('POLYGON ((-13624607.041687667 4548581.778072609,  -13624607.041687667 4549414.764443452, -13623853.387352144 4549414.764443452, -13623853.387352144 4548581.778072609, -13624607.041687667 4548581.778072609))', 900913), 4326))) as lon
+----------------------------------------------------------
+--Criando a tabela para poder executar as rotinas StopToStop e TrajectoryBetweenArea
+create table taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned as (select * from taxi.sanfrancisco_taxicab_airport_mall_pier)
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned set semantic_stop_id = null,semantic_move_id = null
+
+----------------------------------------------------------
+--Definindo o sentido de cada trajectória
+create table taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned_aux as (select tid, ((select t.stop from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned t where t.tid = p.tid order by timestamp limit 1) || ' to ' || (select t.stop from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned t where t.tid = p.tid order by timestamp desc limit 1)) as direction
+										from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned p)
+										
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned p
+set direction=(select t.direction from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned_aux t where t.tid = p.tid limit 1)
+
+----------------------------------------------------------
+--Removendo as trajs que não conhecem/termine no airport ou mall ou pier
+delete
+  FROM taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
+  where not(direction like 'mall%' or direction like 'pier%' or direction like 'airport%')
+  or not(direction like '%mall' or direction like '%pier' or direction like '%airport')
+----------------------------------------------------------
+delete from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
+where direction = 'mall to mall' or direction = 'airport to airport'
+
+delete from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
+where tid=905582
+delete from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
+where tid=905746
+delete from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
+where tid=905574
 
 -----------------------------------------
 SELECT infered_route_id, infered_direction_id, count(distinct infered_trip_id)
