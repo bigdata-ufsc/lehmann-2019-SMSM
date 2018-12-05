@@ -19,7 +19,7 @@ public class SMoT_SanFrancisco_MallPierAirport {
 	private static DataSource source;
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		SanFranciscoCabDatabaseReader problem = new SanFranciscoCabDatabaseReader(false, new String[] {"101", "280"}, null, null, 
+		SanFranciscoCabDatabaseReader problem = new SanFranciscoCabDatabaseReader(false, new String[] {"101", "280"}, null, (String[]) null, 
 				"stops_moves.taxi_sanfrancisco_airport_mall_pier_stop", "stops_moves.taxi_sanfrancisco_airport_mall_pier_move", "taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned");
 		List<SemanticTrajectory> trajs = problem.read();
 		source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "stops_moves.taxi_sanfrancisco_airport_mall_pier_stop", null, "geom");
