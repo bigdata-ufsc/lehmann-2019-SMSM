@@ -14,6 +14,14 @@
 			"index" : 1,
 			"distance": "euclidean",
 			"threshold": "[0, 1000, 2000, 5000]"
+		}, {
+			"type": "time-units",
+			"index" : 2,
+			"distance": "time-unit",
+			"threshold": "[0,5,10,15,25]",
+			"params": [{
+				"type": "hours"
+			}]
 		}]
 	}
 }
