@@ -104,6 +104,10 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 	private boolean onlyStops;
 	private String[] directions;
 	private String[] regions;
+
+	private String stopsTable = "stops_moves.taxi_sanfrancisco_stop";
+	private String movesTable = "stops_moves.taxi_sanfrancisco_move";
+	private String pointsTable = "taxi.sanfrancisco_taxicab";
 	
 	public SanFranciscoCabDatabaseReader(boolean onlyStop) {
 		this.onlyStops = onlyStop;
@@ -120,9 +124,17 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 		this.regions = regions;
 	}
 
+	public SanFranciscoCabDatabaseReader(boolean onlyStop, String[] roads, String[] directions, String[] regions, String stopsTable, String movesTable, String pointsTable) {
+		this(onlyStop, roads, directions);
+		this.regions = regions;
+		this.stopsTable = stopsTable;
+		this.movesTable = movesTable;
+		this.pointsTable = pointsTable;
+	}
+
 	public List<SemanticTrajectory> read(){
 		try {
-			DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, "taxi.sanfrancisco_taxicab", null, null);
+			DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, pointsTable, null, null);
 			DataRetriever retriever = source.getRetriever();
 			System.out.println("Executing SQL...");
 			Connection conn = retriever.getConnection();
@@ -137,9 +149,9 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 						"SELECT stop_id, "
 						+ "st_y(st_transform(ST_SetSRID(ST_MakePoint(start_lon, start_lat), 4326), 900913)) as start_lat, st_x(st_transform(ST_SetSRID(ST_MakePoint(start_lon, start_lat), 4326), 900913)) as start_lon, "
 						+ "st_y(st_transform(ST_SetSRID(ST_MakePoint(end_lon, end_lat), 4326), 900913)) as end_lat, st_x(st_transform(ST_SetSRID(ST_MakePoint(end_lon, end_lat), 4326), 900913)) as end_lon, "
-						+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(centroid_lat, centroid_lon), 4326), 900913)) as centroid_lat, st_y(st_transform(ST_SetSRID(ST_MakePoint(centroid_lat, centroid_lon), 4326), 900913)) as centroid_lon, "
+						+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(centroid_lon, centroid_lat), 4326), 900913)) as centroid_lat, st_y(st_transform(ST_SetSRID(ST_MakePoint(centroid_lon, centroid_lat), 4326), 900913)) as centroid_lon, "
 						+ " begin, length, start_time, end_time, street, \"POI\" " + //
-								"FROM stops_moves.taxi_sanfrancisco_stop");
+								"FROM " + stopsTable);
 				Map<Integer, Stop> stops = new HashMap<>();
 				while (stopsData.next()) {
 					int stopId = stopsData.getInt("stop_id");
@@ -162,7 +174,7 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 				Map<Integer, Move> moves = new HashMap<>();
 				ResultSet movesData = st
 						.executeQuery("SELECT move_id, start_time, start_stop_id, begin, end_time, end_stop_id, length " + //
-								"FROM stops_moves.taxi_sanfrancisco_move");
+								"FROM " + this.movesTable);
 				while (movesData.next()) {
 					int moveId = movesData.getInt("move_id");
 					Move move = moves.get(moveId);
@@ -209,7 +221,7 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 		String sql = "SELECT gid, tid, taxi_id, st_y(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lat, "
 				+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lon, "
 				+ "\"timestamp\", ocupation, airport, mall, road, direction, stop, semantic_stop_id, semantic_move_id, stop, route" + //
-				" FROM taxi.sanfrancisco_taxicab where 1=1 ";
+				" FROM "+ this.pointsTable + " where 1=1 ";
 		if(!ArrayUtils.isEmpty(roads)) {
 			sql += " and road in (SELECT * FROM unnest(?))";
 		} else if(roads != null) {
@@ -221,7 +233,7 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 			sql += " and direction is not null";
 		}
 		if(regions != null) {
-			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab r where r.stop in (SELECT * FROM unnest(?)))";
+			sql += " and tid in (select distinct r.tid from " + this.pointsTable + " r where r.stop in (SELECT * FROM unnest(?)))";
 		}
 		sql +=" order by tid, \"timestamp\"";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -345,7 +357,7 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 		String sql = "SELECT gid, tid, taxi_id, "
 				+ "st_y(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lat, st_x(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lon, "
 				+ "\"timestamp\", ocupation, airport, mall, road, direction, semantic_stop_id, semantic_move_id, stop, route" + //
-				" FROM taxi.sanfrancisco_taxicab where 1=1";
+				" FROM " + this.pointsTable + " where 1=1";
 		if(!ArrayUtils.isEmpty(roads)) {
 			sql += " and road in (SELECT * FROM unnest(?))";
 		} else if(roads != null) {
@@ -357,7 +369,7 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 			sql += " and direction is not null";
 		}
 		if(regions != null) {
-			sql += " and tid in (select distinct r.tid from taxi.sanfrancisco_taxicab r where r.stop in (SELECT * FROM unnest(?)))";
+			sql += " and tid in (select distinct r.tid from " + this.pointsTable + " r where r.stop in (SELECT * FROM unnest(?)))";
 		}
 		sql +=" order by tid, \"timestamp\"";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
