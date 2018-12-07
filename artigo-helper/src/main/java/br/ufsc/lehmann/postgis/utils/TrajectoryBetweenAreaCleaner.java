@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import br.ufsc.db.source.DataRetriever;
 import br.ufsc.db.source.DataSource;
 import br.ufsc.db.source.DataSourceType;
@@ -21,7 +23,7 @@ public class TrajectoryBetweenAreaCleaner {
 		Connection conn = retriever.getConnection();
 		conn.setAutoCommit(false);
 		Statement statement = conn.createStatement();
-		String pointsTable = "taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned";
+		String pointsTable = "taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned";
 		ResultSet rs = statement.executeQuery("SELECT tid, gid, mall as at_mall,"+
 				"airport as at_airport,"+
 				"pier as at_pier,"+
@@ -36,9 +38,12 @@ public class TrajectoryBetweenAreaCleaner {
 			if(currentTid == null || !currentTid.equals(rs.getLong("tid"))) {
 				currentTid = rs.getLong("tid");
 				direction = rs.getString("direction");
-				if(direction.startsWith("airport to")) {
+				if(direction == null) {
+					continue;
+				}
+				if(StringUtils.startsWith(direction, "airport to")) {
 					toAirport = false;
-				} else if(direction.endsWith("to airport")) {
+				} else if(StringUtils.endsWith(direction, "to airport")) {
 					toAirport = true;
 				} else{
 					throw new RuntimeException("Unknown direction: " + direction);
