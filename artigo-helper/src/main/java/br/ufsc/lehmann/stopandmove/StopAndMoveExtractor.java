@@ -44,7 +44,7 @@ public class StopAndMoveExtractor {
 				registers++;
 //				System.out.println("From " + stop.getStartTime() + " to " + stop.getEndTime());
 				List<Long> gids = stopAndMove.getGids(stop);
-				Array array = conn.createArrayOf("integer", gids.toArray(new Integer[gids.size()]));
+				Array array = conn.createArrayOf("integer", gids.toArray(new Long[gids.size()]));
 				update.setInt(1, stop.getStopId());
 				update.setNull(2, Types.NUMERIC);
 				update.setObject(3, stopAndMove.getTrajectory().getTrajectoryId());
@@ -86,7 +86,7 @@ public class StopAndMoveExtractor {
 				registers++;
 //				System.out.println("From " + move.getStartTime() + " to " + move.getEndTime());
 				List<Long> gids = stopAndMove.getGids(move);
-				Array array = conn.createArrayOf("integer", gids.toArray(new Integer[gids.size()]));
+				Array array = conn.createArrayOf("integer", gids.toArray(new Long[gids.size()]));
 				update.setNull(1, Types.NUMERIC);
 				update.setInt(2, move.getMoveId());
 				update.setObject(3, stopAndMove.getTrajectory().getTrajectoryId());

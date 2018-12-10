@@ -63,15 +63,33 @@ public class Datasets {
 		if(dataset.getName().equalsIgnoreCase("geolife_transportation_mode")) {
 			return new GeolifeTransportationModeDataReader();
 		}
-		if(dataset.getName().equalsIgnoreCase("crawdad_ums")) {
+		if(dataset.getName().equalsIgnoreCase("crawdad_ums") || dataset.getName().equalsIgnoreCase("taxi_sf")) {
 			return new CRAWDADDatabaseReader();
 		}
 		if(dataset.getName().equalsIgnoreCase("crawdad")) {
 			Gson gson = new Gson();
-			String[] roads = gson.fromJson(p.get("roads"), String[].class);
-			String[] directions = gson.fromJson(p.get("directions"), String[].class);
-			String[] regions = gson.fromJson(p.get("regions"), String[].class);
-			return new SanFranciscoCabDatabaseReader(!dataset.getRaw(), roads, directions, regions);
+//			String[] roads = gson.fromJson(p.get("roads"), String[].class);
+//			String[] directions = gson.fromJson(p.get("directions"), String[].class);
+//			String[] regions = gson.fromJson(p.get("regions"), String[].class);
+//			return new SanFranciscoCabDatabaseReader(!dataset.getRaw(), roads, directions, regions);
+
+//			String[] roads = gson.fromJson(p.get("roads"), String[].class);
+//			String[] directions = /*gson.fromJson(p.get("directions"), String[].class)*/null;
+//			String[] regions = /*gson.fromJson(p.get("regions"), String[].class)*/null;
+//			String pointTable = "taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned";
+//			String stopTable = "stops_moves.taxi_sanfrancisco_airport_mall_pier_stop";
+//			String moveTable = "stops_moves.taxi_sanfrancisco_airport_mall_pier_move";
+
+			String[] roads = /*gson.fromJson(p.get("roads"), String[].class)*/null;
+			String[] directions = /*gson.fromJson(p.get("directions"), String[].class)*/null;
+			String[] regions = /*gson.fromJson(p.get("regions"), String[].class)*/null;
+			String pointTable = p.get("pointTable");
+			String stopTable = p.get("stopTable");
+			String moveTable = p.get("moveTable");
+//			String pointTable = "taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned";
+//			String stopTable = "stops_moves.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_stop";
+//			String moveTable = "stops_moves.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_move";
+			return new SanFranciscoCabDatabaseReader(!dataset.getRaw(), roads, directions, regions, stopTable, moveTable, pointTable);
 		}
 		if(dataset.getName().equalsIgnoreCase("foursquare")) {
 			return new FoursquareDataReader();

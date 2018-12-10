@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.Multimap;
@@ -105,7 +106,7 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 	private String[] directions;
 	private String[] regions;
 
-	private String stopsTable = "stops_moves.taxi_sanfrancisco_stop";
+	private String stopsTable = "stops_moves.taxi_sanfrancisco_900913_stop";
 	private String movesTable = "stops_moves.taxi_sanfrancisco_move";
 	private String pointsTable = "taxi.sanfrancisco_taxicab";
 	
@@ -147,9 +148,9 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 
 				ResultSet stopsData = st.executeQuery(
 						"SELECT stop_id, "
-						+ "st_y(st_transform(ST_SetSRID(ST_MakePoint(start_lon, start_lat), 4326), 900913)) as start_lat, st_x(st_transform(ST_SetSRID(ST_MakePoint(start_lon, start_lat), 4326), 900913)) as start_lon, "
-						+ "st_y(st_transform(ST_SetSRID(ST_MakePoint(end_lon, end_lat), 4326), 900913)) as end_lat, st_x(st_transform(ST_SetSRID(ST_MakePoint(end_lon, end_lat), 4326), 900913)) as end_lon, "
-						+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(centroid_lon, centroid_lat), 4326), 900913)) as centroid_lat, st_y(st_transform(ST_SetSRID(ST_MakePoint(centroid_lon, centroid_lat), 4326), 900913)) as centroid_lon, "
+						+ "start_lat, start_lon, "
+						+ "end_lat, end_lon, "
+						+ "centroid_lat, centroid_lon, "
 						+ " begin, length, start_time, end_time, street, \"POI\" " + //
 								"FROM " + stopsTable);
 				Map<Integer, Stop> stops = new HashMap<>();
@@ -221,7 +222,10 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 		String sql = "SELECT gid, tid, taxi_id, st_y(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lat, "
 				+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lon, "
 				+ "\"timestamp\", ocupation, airport, mall, road, direction, stop, semantic_stop_id, semantic_move_id, stop, route" + //
-				" FROM "+ this.pointsTable + " where 1=1 ";
+				" FROM "+ this.pointsTable + " where 1=1 "
+//				+ "and tid not in (select tid from "+ this.pointsTable +  
+//				" group by tid having count(distinct semantic_stop_id) <> 3)"
+				;
 		if(!ArrayUtils.isEmpty(roads)) {
 			sql += " and road in (SELECT * FROM unnest(?))";
 		} else if(roads != null) {
@@ -323,10 +327,12 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 					s.addData(i, DIRECTION, record.getDirection());
 					s.addData(i, REGION_INTEREST, record.getRegion());
 					s.addData(i, ROUTE, record.getRoute());
-					s.addData(i, ROUTE_WITH_DIRECTION, ROUTE_WITH_DIRECTION.getData(s, i));
-					s.addData(i, ROUTE_WITH_ROADS, ROUTE_WITH_ROADS.getData(s, i));
-					s.addData(i, ROADS_WITH_DIRECTION, ROADS_WITH_DIRECTION.getData(s, i));
-					s.addData(i, ROUTE_IN_ROADS_WITH_DIRECTION, ROUTE_IN_ROADS_WITH_DIRECTION.getData(s, i));
+					if(record.getDirection() != null) {
+						s.addData(i, ROUTE_WITH_DIRECTION, ROUTE_WITH_DIRECTION.getData(s, i));
+						s.addData(i, ROUTE_WITH_ROADS, ROUTE_WITH_ROADS.getData(s, i));
+						s.addData(i, ROADS_WITH_DIRECTION, ROADS_WITH_DIRECTION.getData(s, i));
+						s.addData(i, ROUTE_IN_ROADS_WITH_DIRECTION, ROUTE_IN_ROADS_WITH_DIRECTION.getData(s, i));
+					}
 					i++;
 				} else if(record.getSemanticMoveId() != null) {
 					Move move = moves.get(record.getSemanticMoveId());
@@ -439,10 +445,12 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 				s.addData(i, DIRECTION, record.getDirection());
 				s.addData(i, REGION_INTEREST, record.getRegion());
 				s.addData(i, ROUTE, record.getRoute());
-				s.addData(i, ROUTE_WITH_DIRECTION, ROUTE_WITH_DIRECTION.getData(s, i));
-				s.addData(i, ROUTE_WITH_ROADS, ROUTE_WITH_ROADS.getData(s, i));
-				s.addData(i, ROADS_WITH_DIRECTION, ROADS_WITH_DIRECTION.getData(s, i));
-				s.addData(i, ROUTE_IN_ROADS_WITH_DIRECTION, ROUTE_IN_ROADS_WITH_DIRECTION.getData(s, i));
+				if(record.getDirection() != null) {
+					s.addData(i, ROUTE_WITH_DIRECTION, ROUTE_WITH_DIRECTION.getData(s, i));
+					s.addData(i, ROUTE_WITH_ROADS, ROUTE_WITH_ROADS.getData(s, i));
+					s.addData(i, ROADS_WITH_DIRECTION, ROADS_WITH_DIRECTION.getData(s, i));
+					s.addData(i, ROUTE_IN_ROADS_WITH_DIRECTION, ROUTE_IN_ROADS_WITH_DIRECTION.getData(s, i));
+				}
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
 					s.addData(i, STOP_CENTROID_SEMANTIC, stop);

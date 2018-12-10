@@ -119,7 +119,7 @@ update taxi.sanfrancisco_taxicab_airport_mall_pier set stop = 'intersection_101_
 			geom)
 ----------------------------------------------------------
 
-update taxi.sanfrancisco_taxicab_airport_mall_pier set intersection_101_280 = null, mall = null, airport=null, pier=null
+update taxi.sanfrancisco_taxicab_airport_mall_pier set intersection_101_280 = null, mall = null, airport=null, pier=null, bayshore_fwy = null;
 
 update taxi.sanfrancisco_taxicab_airport_mall_pier set pier = true
 	where tid in (SELECT distinct tid
@@ -171,30 +171,59 @@ where airport is not null and bayshore_fwy is not null and intersection_101_280 
 --Centróide do pier
 select st_y(st_centroid(st_transform(ST_GeomFromText('POLYGON ((-13624607.041687667 4548581.778072609,  -13624607.041687667 4549414.764443452, -13623853.387352144 4549414.764443452, -13623853.387352144 4548581.778072609, -13624607.041687667 4548581.778072609))', 900913), 4326))) as lat,
 	st_x(st_centroid(st_transform(ST_GeomFromText('POLYGON ((-13624607.041687667 4548581.778072609,  -13624607.041687667 4549414.764443452, -13623853.387352144 4549414.764443452, -13623853.387352144 4548581.778072609, -13624607.041687667 4548581.778072609))', 900913), 4326))) as lon
-----------------------------------------------------------
---Criando a tabela para poder executar as rotinas StopToStop e TrajectoryBetweenArea
-create table taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned as (select * from taxi.sanfrancisco_taxicab_airport_mall_pier)
 
-update taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned set semantic_stop_id = null,semantic_move_id = null
+--Centróides dos stops	
+select st_y(st_transform(st_setsrid(st_makepoint(-122.405805, 37.73425), 4326), 900913)), st_x(st_transform(st_setsrid(st_makepoint(-122.405805, 37.73425), 4326), 900913)) --intersection
+
+select st_y(st_transform(st_setsrid(st_makepoint(-122.38854, 37.78429), 4326), 900913)), st_x(st_transform(st_setsrid(st_makepoint(-122.38854, 37.78429), 4326), 900913)) --pier
+
+select st_y(st_transform(st_setsrid(st_makepoint(-122.38831, 37.61592), 4326), 900913)), st_x(st_transform(st_setsrid(st_makepoint(-122.38831, 37.61592), 4326), 900913)) --airport
+
+select st_y(st_transform(st_setsrid(st_makepoint(-122.40647, 37.78398), 4326), 900913)), st_x(st_transform(st_setsrid(st_makepoint(-122.40647, 37.78398), 4326), 900913)) --mall
+
+select st_y(st_transform(st_setsrid(st_makepoint(-122.48115, 37.76916), 4326), 900913)), st_x(st_transform(st_setsrid(st_makepoint(-122.48115, 37.76916), 4326), 900913)) --Park
+
+select st_y(st_transform(st_setsrid(st_makepoint(-122.41807, 37.80694), 4326), 900913)), st_x(st_transform(st_setsrid(st_makepoint(-122.41807, 37.80694), 4326), 900913)) --Fisherman
+----------------------------------------------------------
+--Criando a tabela de stops e moves
+drop table if exists stops_moves.taxi_sanfrancisco_airport_mall_pier_stop;
+create table stops_moves.taxi_sanfrancisco_airport_mall_pier_stop as (select * from stops_moves.taxi_sanfrancisco_stop limit 1);
+delete from stops_moves.taxi_sanfrancisco_airport_mall_pier_stop;
+drop table if exists stops_moves.taxi_sanfrancisco_airport_mall_pier_move;
+create table stops_moves.taxi_sanfrancisco_airport_mall_pier_move as (select * from stops_moves.taxi_sanfrancisco_move limit 1);
+delete from stops_moves.taxi_sanfrancisco_airport_mall_pier_move;
+----------------------------------------------------------
+--Criando a tabela para poder executar as rotinas SMoT_SanFrancisco_MallPierAirport, StopToStop e TrajectoryBetweenArea
+drop table IF EXISTS taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned;
+create table taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned as (select * from taxi.sanfrancisco_taxicab_airport_mall_pier);
+drop index if exists idx_sanfrancisco_taxicab_airport_mall_pier_cleaned_tid_time;
+create index idx_sanfrancisco_taxicab_airport_mall_pier_cleaned_tid_time on "taxi"."sanfrancisco_taxicab_airport_mall_pier_cleaned"  USING btree ("tid", "timestamp");
+update taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned set semantic_stop_id = null,semantic_move_id = null;
 
 ----------------------------------------------------------
---Definindo o sentido de cada trajectória
+--Executar rotina SMoT_SanFrancisco_MallPierAirport
+----------------------------------------------------------
+--Executar rotina StopToStopTrajectoryTransformer
+----------------------------------------------------------
+
+--Definindo o sentido de cada trajetória
+drop table IF EXISTS taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned_aux;
 create table taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned_aux as (select tid, ((select t.stop from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned t where t.tid = p.tid order by timestamp limit 1) || ' to ' || (select t.stop from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned t where t.tid = p.tid order by timestamp desc limit 1)) as direction
-										from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned p)
-										
-
+										from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned p);
 update taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned p
-set direction=(select t.direction from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned_aux t where t.tid = p.tid limit 1)
-
+set direction=(select t.direction from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned_aux t where t.tid = p.tid limit 1);
 ----------------------------------------------------------
---Removendo as trajs que não conhecem/termine no airport ou mall ou pier
+--Removendo as trajs que não comecem/terminem no airport e (mall ou pier)
 delete
   FROM taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
   where not(direction like 'mall%' or direction like 'pier%' or direction like 'airport%')
-  or not(direction like '%mall' or direction like '%pier' or direction like '%airport')
+  or not(direction like '%mall' or direction like '%pier' or direction like '%airport');
 ----------------------------------------------------------
 delete from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
-where direction = 'mall to mall' or direction = 'airport to airport'
+where direction = 'mall to mall' or direction = 'airport to airport';
+----------------------------------------------------------
+--Executar rotina TrajectoryBetweenAreaCleaner
+----------------------------------------------------------
 
 delete from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
 where tid=905582

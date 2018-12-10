@@ -3,14 +3,14 @@
 		"name" : "CRAWDAD",
 		"raw": 'true',
 		"params": {
-			"roads" : '["101", "280"]',
-			"directions" : '["mall to airport", "airport to mall"]',
-			"regions" : '["mall", "intersection_101_280", "bayshore_fwy", "airport"]'
+			"stopTable": 'stops_moves.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_stop',
+			"moveTable": 'stops_moves.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_move',
+			"pointTable": 'taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned'
 		}
 	},
 	"groundtruth": {
 		"type": "String",
-		"index": 12
+		"index": 14
 	},
 	"measure": {
 		"name": "LCSS",
