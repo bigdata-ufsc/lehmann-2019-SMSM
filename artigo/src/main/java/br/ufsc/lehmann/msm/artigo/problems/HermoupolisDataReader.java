@@ -316,7 +316,9 @@ public class HermoupolisDataReader implements IDataReader {
 					s.addData(i, MOID, record.getMoid());
 					s.addData(i, MODE, record.getTransportationMode());
 					s.addData(i, ACTIVITY, record.getActivity());
-					s.addData(i, SEMANTIC_TRAJECTORY_TAG, record.getSem_traj_tag());
+					if(!record.getSem_traj_tag().equalsIgnoreCase("citizen")) {
+						s.addData(i, SEMANTIC_TRAJECTORY_TAG, record.getSem_traj_tag());
+					}
 					i++;
 				} else if(record.getMoveId() != null) {
 					Move move = moves.get(record.getScenario() + "_" + record.getMoid() + "_" +record.getMoveId());
@@ -362,7 +364,9 @@ public class HermoupolisDataReader implements IDataReader {
 				s.addData(i, MOID, record.getMoid());
 				s.addData(i, MODE, record.getTransportationMode());
 				s.addData(i, ACTIVITY, record.getActivity());
-				s.addData(i, SEMANTIC_TRAJECTORY_TAG, record.getSem_traj_tag());
+				if(!record.getSem_traj_tag().equalsIgnoreCase("citizen")) {
+					s.addData(i, SEMANTIC_TRAJECTORY_TAG, record.getSem_traj_tag());
+				}
 				i++;
 			}
 			stats.addValue(s.length());

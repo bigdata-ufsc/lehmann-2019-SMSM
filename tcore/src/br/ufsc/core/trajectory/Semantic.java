@@ -62,4 +62,8 @@ public abstract class Semantic<Element, Threshold> {
 	public String description() {
 		return String.valueOf(index);
 	}
+	
+	public int getIndex() {
+		return index;
+	}
 }

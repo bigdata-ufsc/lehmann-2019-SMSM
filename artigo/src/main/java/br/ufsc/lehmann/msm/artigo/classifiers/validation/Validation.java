@@ -32,6 +32,7 @@ import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -122,9 +123,9 @@ public class Validation {
 			}
 		}
 		
-		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 2),
-				(int) (Runtime.getRuntime().availableProcessors() / 2), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
-//		ExecutorService executorService = Executors.newSingleThreadExecutor();
+//		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 4),
+//				(int) (Runtime.getRuntime().availableProcessors() / 4), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		DelayQueue<DelayedDistanceMeasure> queueProcess = new DelayQueue<>();
 		for (int i = 0; i < trajsArray.length; i++) {
 			int finalI = i;
@@ -141,6 +142,8 @@ public class Validation {
 				queueProcess.add(new DelayedDistanceMeasure(trajsArray[i], i, trajsArray[j], j, future, 0));
 			}
 		}
+		double totalQueued = queueProcess.size();
+		boolean[] processed = new boolean[] {true, false, false, false, false, false, false, false, false, false, false};
 		while (!queueProcess.isEmpty()) {
 			DelayedDistanceMeasure toProcess = queueProcess.poll();
 			if (toProcess == null) {
@@ -150,6 +153,11 @@ public class Validation {
 					e.printStackTrace();
 				}
 				continue;
+			}
+			int done = (int) ((1 - ((queueProcess.size() / totalQueued))) * 10.0);
+			if(!processed[done]) {
+				System.out.printf("%d%% - ", done);
+				processed[done] = true;
 			}
 			Future<Double> fut = toProcess.distance;
 			if (!fut.isDone()) {
@@ -164,6 +172,7 @@ public class Validation {
 				}
 			}
 		}
+		System.out.println();
 		executorService.shutdown();
 
 		double[][] matrix = new double[trajsArray.length][trajsArray.length];

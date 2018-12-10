@@ -13,12 +13,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
@@ -42,10 +45,9 @@ import smile.math.Random;
 
 public class PrecisionRecall {
 
-
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/crawdad_ums"));
-		files.filter(path -> path.toFile().isFile() && !path.toString().contains("\\raw") && path.toFile().toString().endsWith(".test")).forEach(path -> {
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/hermoupolis"));
+		files.filter(path -> path.toFile().isFile() && path.toString().contains("\\raw") && path.toString().contains("\\UMS") && path.toFile().toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
 
@@ -93,8 +95,15 @@ public class PrecisionRecall {
 			}
 		});
 		List<TrajectorySimilarityCalculator<SemanticTrajectory>> similarityCalculators = Measures.createMeasures(measure);
+		final BasicSemantic<Object> groundtruthSemantic = new BasicSemantic<>(groundtruth.getIndex().intValue());
+		Multimap<Object, SemanticTrajectory> m = MultimapBuilder.hashKeys().arrayListValues().build();
+	    data.stream().forEach(item -> {
+	    	m.put(groundtruthSemantic.getData(item, 0), item);
+	    });
+		m.asMap().entrySet().stream().forEach(entry -> {
+			System.out.printf("Class size (%s): %d\n", String.valueOf(entry.getKey()), entry.getValue().size());
+		});
 		for (TrajectorySimilarityCalculator<SemanticTrajectory> similarityCalculator : similarityCalculators) {
-			BasicSemantic<Object> groundtruthSemantic = new BasicSemantic<>(groundtruth.getIndex().intValue());
 			SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
 			Validation validation = new Validation(groundtruthSemantic, (IMeasureDistance<SemanticTrajectory>) similarityCalculator);
 			
