@@ -1,0 +1,13 @@
+{
+	"dataset": {
+		"name" : "animals",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "Number",
+		"index": 3
+	},
+	"measure": {
+		"name": "UMS_new"
+	}
+}

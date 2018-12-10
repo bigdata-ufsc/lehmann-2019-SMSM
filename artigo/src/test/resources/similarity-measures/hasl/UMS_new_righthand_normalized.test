@@ -1,0 +1,18 @@
+{
+	"dataset": {
+		"name" : "hasl",
+		"raw": 'true',
+		"params" : {
+			"normalized" : true,
+			"left_hand": false,
+			"right_hand": true
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 15
+	},
+	"measure": {
+		"name": "UMS_new"
+	}
+}

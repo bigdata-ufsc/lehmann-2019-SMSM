@@ -1,0 +1,16 @@
+{
+	"dataset": {
+		"name" : "CRAWDAD",
+		"raw": 'true',
+		"params": {
+			"roads" : '["101", "280"]'
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 14
+	},
+	"measure": {
+		"name": "UMS_new"
+	}
+}
