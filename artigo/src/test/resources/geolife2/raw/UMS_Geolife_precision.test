@@ -1,0 +1,18 @@
+{
+	"dataset": {
+		"name" : "geolife2",
+		"raw": 'true',
+		"params": {
+			"pointsTable" : "geolife.geolife2_cleaned",
+			"stopTable" : "stops_moves.geolife2_stop",
+			"moveTable" : "stops_moves.geolife2_move"
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 10
+	},
+	"measure": {
+		"name": "UMS"
+	}
+}
