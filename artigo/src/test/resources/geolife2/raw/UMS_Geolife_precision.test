@@ -3,10 +3,9 @@
 		"name" : "geolife2",
 		"raw": 'true',
 		"params": {
-			"pointsTable" : "public.geolife2_cleared",
-			"stopTable" : "public.geolife2_stop",
-			"moveTable" : "public.geolife2_move",
-			"mappingTable" : "public.geolife2_stops_moves"
+			"pointsTable" : "geolife.geolife2_cleaned",
+			"stopTable" : "stops_moves.geolife2_stop",
+			"moveTable" : "stops_moves.geolife2_move"
 		}
 	},
 	"groundtruth": {

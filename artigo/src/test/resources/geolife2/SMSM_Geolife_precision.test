@@ -3,10 +3,9 @@
 		"name" : "geolife2",
 		"raw": 'false',
 		"params": {
-			"pointsTable" : "public.geolife2_cleared",
-			"stopTable" : "public.geolife2_stop",
-			"moveTable" : "public.geolife2_move",
-			"mappingTable" : "public.geolife2_stops_moves"
+			"pointsTable" : "geolife.geolife2_cleaned",
+			"stopTable" : "stops_moves.geolife2_stop",
+			"moveTable" : "stops_moves.geolife2_move"
 		}
 	},
 	"groundtruth": {
@@ -18,7 +17,7 @@
 		"params": [{
 			"type": "Stop",
 			"weight": 0.5,
-			"index" : 6,
+			"index" : 8,
 			"params": [{
 				"type": "spatial",
 				"distance": "euclidean",
@@ -27,7 +26,7 @@
 				"weight": 0.5
 			}, {
 				"type": "Semantic",
-				"index" : 6,
+				"index" : 8,
 				"weight": 0.5,
 				"params" : [{
 					"distance": "Equal",
@@ -37,11 +36,11 @@
 		}, {
 			"type": "Move",
 			"weight": 0.5,
-			"index" : 7,
+			"index" : 9,
 			"params": [{
 				"type": "POINTS",
-				"distance": "UMS",
-				"threshold": "0.05",
+				"distance": "DTW",
+				"threshold": "[summed-distances*0.25, summed-distances*0.5, summed-distances, summed-distances*2, summed-distances*3, summed-distances*4, summed-distances*5]",
 				"weight": 1,
 				"params" : [{
 					"distance" : "euclidean"

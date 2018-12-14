@@ -3,7 +3,7 @@
 		"name" : "hermoupolis",
 		"raw": 'false',
 		"params": {
-			"file" : "1 Day - 6 Profiles - 2 Classes_900913.csv"
+			"file" : "1 Day - 10 Profiles - 2 Classes_900913.csv"
 		}
 	},
 	"groundtruth": {
@@ -20,14 +20,14 @@
 				"type": "spatial",
 				"distance": "euclidean",
 				//"threshold": "[100,200,300,400,500]",
-				"threshold": "100",
+				"threshold": "300",
 				"index" : 1,
 				"weight": 0.3333
 			}, {
 				"type": "temporal",
 				"distance": "proportion",
 				//"threshold": "[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]",
-				"threshold": "0.5",
+				"threshold": "0.1",
 				"weight": 0.3333,
 				"index" : 2
 			}, {
@@ -45,19 +45,14 @@
 			"index" : 9,
 			"params": [{
 				"type" : "AVERAGE_VELOCITY",
-				"weight": 0.3334,
+				"weight": 0.5,
 				"distance": "Number",
 				"threshold": "['std-lcss(1/4)', 'std-lcss(1/2)', 'std-lcss(1)']"
 			}, {
-				"weight": 0.3333,
+				"weight": 0.5,
 				"distance": "Number",
 				"threshold": "[summed-duration*0.1, summed-duration*0.2, summed-duration*0.3, summed-duration*0.5, summed-duration*0.75, summed-duration]",
 				"type" : "DURATION"
-			}, {
-				"weight": 0.3333,
-				"distance": "Number",
-				"threshold": "[summed-distances*0.05, summed-distances*0.1, summed-distances*0.2, summed-distances*0.3, summed-distances*0.5]",
-				"type" : "TRAVELED_DISTANCE"
 			}]
 		}]
 	}

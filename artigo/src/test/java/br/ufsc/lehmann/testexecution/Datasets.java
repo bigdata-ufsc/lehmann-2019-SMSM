@@ -57,8 +57,7 @@ public class Datasets {
 			String pointsTable = p.get("pointsTable");
 			String moveTable = p.get("moveTable");
 			String stopTable = p.get("stopTable");
-			String mappingTable = p.get("mappingTable");
-			return new Geolife2DatabaseReader(!dataset.getRaw(), stopTable, moveTable, mappingTable, pointsTable);
+			return new Geolife2DatabaseReader(!dataset.getRaw(), stopTable, moveTable, pointsTable);
 		}
 		if(dataset.getName().equalsIgnoreCase("geolife_transportation_mode")) {
 			return new GeolifeTransportationModeDataReader();

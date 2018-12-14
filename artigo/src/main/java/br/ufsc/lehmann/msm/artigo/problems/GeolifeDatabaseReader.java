@@ -54,17 +54,19 @@ public class GeolifeDatabaseReader implements IDataReader {
 
 	private static final SpatialDistanceFunction DISTANCE_FUNCTION = GEO_DISTANCE_FUNCTION;
 	
-	public static final BasicSemantic<Integer> USER_ID = new BasicSemantic<>(3);
-	public static final BasicSemantic<String> TRANSPORTATION_MODE = new BasicSemantic<>(4);
-	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(5);
-	public static final StopSemantic STOP_REGION_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop, String>(AttributeType.STOP_REGION, new EqualsDistanceFunction<String>()));
-	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, GEO_DISTANCE_FUNCTION));
-	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(6, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
+	private static int semantic_counter = 3;
 	
-	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
-	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, Number>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
-	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION)));
-	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(7, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
+	public static final BasicSemantic<Integer> USER_ID = new BasicSemantic<>(semantic_counter++);
+	public static final BasicSemantic<String> TRANSPORTATION_MODE = new BasicSemantic<>(semantic_counter++);
+	public static final BasicSemantic<String> REGION_INTEREST = new BasicSemantic<>(semantic_counter++);
+	public static final StopSemantic STOP_REGION_SEMANTIC = new StopSemantic(semantic_counter, new AttributeDescriptor<Stop, String>(AttributeType.STOP_REGION, new EqualsDistanceFunction<String>()));
+	public static final StopSemantic STOP_CENTROID_SEMANTIC = new StopSemantic(semantic_counter, new AttributeDescriptor<Stop, TPoint>(AttributeType.STOP_CENTROID, GEO_DISTANCE_FUNCTION));
+	public static final StopSemantic STOP_STREET_NAME_SEMANTIC = new StopSemantic(semantic_counter++, new AttributeDescriptor<Stop, String>(AttributeType.STOP_STREET_NAME, new EqualsDistanceFunction<String>()));
+	
+	public static final MoveSemantic MOVE_ANGLE_SEMANTIC = new MoveSemantic(semantic_counter, new AttributeDescriptor<Move, Double>(AttributeType.MOVE_ANGLE, new AngleDistance()));
+	public static final MoveSemantic MOVE_DISTANCE_SEMANTIC = new MoveSemantic(semantic_counter, new AttributeDescriptor<Move, Number>(AttributeType.MOVE_TRAVELLED_DISTANCE, new NumberDistance()));
+	public static final MoveSemantic MOVE_POINTS_SEMANTIC = new MoveSemantic(semantic_counter, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new DTWDistance(GEO_DISTANCE_FUNCTION)));
+	public static final MoveSemantic MOVE_ELLIPSES_SEMANTIC = new MoveSemantic(semantic_counter++, new AttributeDescriptor<Move, TPoint[]>(AttributeType.MOVE_POINTS, new EllipsesDistance(GEO_DISTANCE_FUNCTION)));
 	
 	public static final StopMoveSemantic STOP_MOVE_COMBINED = new StopMoveSemantic(STOP_STREET_NAME_SEMANTIC, MOVE_ANGLE_SEMANTIC, new AttributeDescriptor<StopMove, Object>(AttributeType.STOP_STREET_NAME_MOVE_ANGLE, new EqualsDistanceFunction<Object>()));
 
@@ -119,7 +121,7 @@ public class GeolifeDatabaseReader implements IDataReader {
 		//
 		ResultSet stopsData = st.executeQuery(
 				"SELECT stop_id, start_lat, start_lon, begin, end_lat, end_lon, length, centroid_lat, " + //
-						"centroid_lon, start_time, end_time, street, \"POI\" " + //
+						"centroid_lon, start_time, end_time, \"POI\" " + //
 						"FROM "
 						+ stopTable);
 		Map<Integer, Stop> stops = new HashMap<>();
@@ -136,7 +138,7 @@ public class GeolifeDatabaseReader implements IDataReader {
 						stopsData.getInt("length"), //
 						new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")),//
 						stopsData.getString("POI"),//
-						stopsData.getString("street")//
+						null//stopsData.getString("street")//
 				);
 				stops.put(stopId, stop);
 			}
@@ -223,9 +225,7 @@ public class GeolifeDatabaseReader implements IDataReader {
 	}
 
 	private List<SemanticTrajectory> readStopsTrajectories(String[] zones, Connection conn, Map<Integer, Stop> stops, Map<Integer, Move> moves, List<Move> usedMoves) throws SQLException {
-		String transportationColumn = this.withTransportation ? "mode" : "transportation_mean";
-		//
-		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, " + transportationColumn + " as transporationMode, \"POI\", semantic_stop_id, semantic_move_id "
+		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, \"POI\", semantic_stop_id, semantic_move_id "
 		+ "from " + pointsTable//
 		+ " where 1=1 ";//
 		if(zones != null && zones.length > 0) {
@@ -256,7 +256,7 @@ public class GeolifeDatabaseReader implements IDataReader {
 				data.getDouble("lon"),
 				data.getDouble("lat"),
 				data.getInt("user_id"),
-				data.getString("transporationMode"),
+				null,//data.getString("transporationMode"),
 				data.getString("POI"),
 				stop,
 				move
@@ -269,7 +269,7 @@ public class GeolifeDatabaseReader implements IDataReader {
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 8);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, semantic_counter);
 			Collection<GeolifeRecord> collection = records.get(trajId);
 			int i = 0;
 			for (GeolifeRecord record : collection) {
@@ -343,9 +343,7 @@ public class GeolifeDatabaseReader implements IDataReader {
 
 	private List<SemanticTrajectory> readRawPoints(String[] zones, Connection conn, Map<Integer, Stop> stops,
 			Map<Integer, Move> moves) throws SQLException {
-		String transportationColumn = this.withTransportation ? "mode" : "transportation_mean";
-		//
-		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, " + transportationColumn  + " as transportationMode, \"POI\", semantic_stop_id, semantic_move_id "
+		String sql = "select tid, gid, time, lon, lat, folder_id as user_id, \"POI\", semantic_stop_id, semantic_move_id "
 				+ "from " + pointsTable//
 				+ " where 1=1 ";//
 		if(zones != null && zones.length > 0) {
@@ -376,7 +374,7 @@ public class GeolifeDatabaseReader implements IDataReader {
 				data.getDouble("lon"),
 				data.getDouble("lat"),
 				data.getInt("user_id"),
-				data.getString("transportationMode"),
+				null,//data.getString("transportationMode"),
 				data.getString("POI"),
 				stop,
 				move
@@ -390,7 +388,7 @@ public class GeolifeDatabaseReader implements IDataReader {
 		Set<Integer> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (Integer trajId : keys) {
-			SemanticTrajectory s = new SemanticTrajectory(trajId, 12);
+			SemanticTrajectory s = new SemanticTrajectory(trajId, semantic_counter);
 			Collection<GeolifeRecord> collection = records.get(trajId);
 			int i = 0;
 			for (GeolifeRecord record : collection) {

@@ -68,15 +68,20 @@ public class SemanticTrajectory implements Comparable<SemanticTrajectory> {
 	public String toString() {
 		return "SemanticTrajectory [elements=" + elements + ", trajectoryId=" + trajectoryId + ", semantics=" + semantics + "]";
 	}
+	
+	private Integer hashCodeCache = null;
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((elements == null) ? 0 : elements.hashCode());
-		result = prime * result + semantics;
-		result = prime * result + ((trajectoryId == null) ? 0 : trajectoryId.hashCode());
-		return result;
+		if(hashCodeCache == null) {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((elements == null) ? 0 : elements.hashCode());
+			result = prime * result + semantics;
+			result = prime * result + ((trajectoryId == null) ? 0 : trajectoryId.hashCode());
+			hashCodeCache = result;
+		}
+		return hashCodeCache;
 	}
 
 	@Override

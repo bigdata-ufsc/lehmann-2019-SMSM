@@ -25,8 +25,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
@@ -110,36 +108,26 @@ public class Validation {
 
 	private double[] precisionAtRecall(TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance,
 			SemanticTrajectory[] testData, int recallLevel, Map<Object, DescriptiveStatistics> stats) {
-		double[] ret = new double[recallLevel + 1];
 		List<SemanticTrajectory> trajs = Arrays.asList(testData);
-		SemanticTrajectory[] trajsArray = testData;
+		double[] ret = new double[recallLevel + 1];
 		ArrayTable<SemanticTrajectory, SemanticTrajectory, Double> allDistances = ArrayTable.create(trajs, trajs);
 		Map<Object, LongAdder> occurrences = new HashMap<>();
 		Semantic semantic = groundTruthSemantic;
-		for (int i = 0; i < trajsArray.length; i++) {
-			Object classData = semantic.getData(trajsArray[i], 0);
+		for (int i = 0; i < testData.length; i++) {
+			Object classData = semantic.getData(testData[i], 0);
 			if(classData != null) {
 				occurrences.computeIfAbsent(classData, (t) -> new LongAdder()).increment();
 			}
 		}
-		
-//		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 4),
-//				(int) (Runtime.getRuntime().availableProcessors() / 4), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+
+//		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 3),
+//				(int) (Runtime.getRuntime().availableProcessors() / 3), 60L, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>((int) (Math.pow(testData.length, 2) / 2)));
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		DelayQueue<DelayedDistanceMeasure> queueProcess = new DelayQueue<>();
-		for (int i = 0; i < trajsArray.length; i++) {
-			int finalI = i;
-			for (int j = i; j < trajsArray.length; j++) {
-				int finalJ = j;
-				Future<Double> future = executorService.submit(new Callable<Double>() {
-					
-					@Override
-					public Double call() throws Exception {
-						double distance = 1 - measureDistance.getSimilarity(trajsArray[finalI], trajsArray[finalJ]);
-						return distance;
-					}
-				});
-				queueProcess.add(new DelayedDistanceMeasure(trajsArray[i], i, trajsArray[j], j, future, 0));
+		for (int i = 0; i < testData.length; i++) {
+			for (int j = i; j < testData.length; j++) {
+				Future<Double> future = executorService.submit(new MeasureCallable(measureDistance, testData[i], testData[j]));
+				queueProcess.add(new DelayedDistanceMeasure(testData[i], i, testData[j], j, future, 0));
 			}
 		}
 		double totalQueued = queueProcess.size();
@@ -156,12 +144,12 @@ public class Validation {
 			}
 			int done = (int) ((1 - ((queueProcess.size() / totalQueued))) * 10.0);
 			if(!processed[done]) {
-				System.out.printf("%d%% - ", done);
+				System.out.printf("%d%% - ", done * 10);
 				processed[done] = true;
 			}
 			Future<Double> fut = toProcess.distance;
 			if (!fut.isDone()) {
-				queueProcess.add(new DelayedDistanceMeasure(toProcess.a, toProcess.aIndex, toProcess.b, toProcess.bIndex, toProcess.distance, 50/* ms */));
+				queueProcess.add(new DelayedDistanceMeasure(toProcess.a, toProcess.aIndex, toProcess.b, toProcess.bIndex, toProcess.distance, 500/* ms */));
 			} else {
 				try {
 					double distance = fut.get();
@@ -175,42 +163,19 @@ public class Validation {
 		System.out.println();
 		executorService.shutdown();
 
-		double[][] matrix = new double[trajsArray.length][trajsArray.length];
+		double[][] matrix = new double[testData.length][testData.length];
 		List<Object> classes = new ArrayList<>();
-		for (int i = 0; i < trajsArray.length; i++) {
-			Object data = semantic.getData(trajsArray[i], 0);
+		for (int i = 0; i < testData.length; i++) {
+			Object data = semantic.getData(testData[i], 0);
 			classes.add(data);
-			for (int j = 0; j < trajsArray.length; j++) {
-				Double d = allDistances.get(trajsArray[i], trajsArray[j]);
+			for (int j = 0; j < testData.length; j++) {
+				Double d = allDistances.get(testData[i], testData[j]);
 				matrix[i][j] = d;
 			}
 		}
 
 		ret = computeFromClassNames(classes, matrix, recallLevel);
 
-//		ret[0] = 1.0;
-//		double[][] precisionRecall = new double[trajsArray.length][];
-//		for (int i = 0; i < trajsArray.length; i++) {
-//			List<Map.Entry<SemanticTrajectory, Double>> rows = allDistances.row(trajsArray[i]).entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
-//			Object classData = semantic.getData(trajsArray[i], 0);
-//			int groundTruthCounter = occurrences.get(classData).intValue();
-//			precisionRecall[i] = new double[groundTruthCounter];
-//			int correctClass = 0;
-//			for (int j = 0; correctClass < groundTruthCounter && j < testData.length; j++) {
-//				Entry<SemanticTrajectory, Double> entry = rows.get(j);
-//				Object otherClassData = semantic.getData(entry.getKey(), 0);
-//				if(Objects.equals(classData, otherClassData)) {
-//					double v = 1 - entry.getValue();
-//					DescriptiveStatistics s = stats.computeIfAbsent(classData, (t) -> new DescriptiveStatistics());
-//					s.addValue(v);
-//					precisionRecall[i][correctClass++] = correctClass / (j + 1.0);
-//				}
-//			}
-//		}
-//		for (int i = 1; i <= recallLevel; i++) {
-//			final int finalI = i;
-//			ret[i] = Arrays.stream(precisionRecall).mapToDouble(a -> a[Math.max(0, (int) ((a.length / (double) recallLevel) * finalI) - 1)]).sum() / trajsArray.length;
-//		}
 		return ret;
 	}
 	
@@ -226,6 +191,26 @@ public class Validation {
 			}
 		}
 		return trasposedMatrix;
+	}
+
+	private static class MeasureCallable implements Callable<Double> {
+
+		private TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance;
+		private SemanticTrajectory t1;
+		private SemanticTrajectory t2;
+
+		MeasureCallable(TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance,
+				SemanticTrajectory t1, SemanticTrajectory t2) {
+			this.measureDistance = measureDistance;
+			this.t1 = t1;
+			this.t2 = t2;
+		}
+
+		@Override
+		public Double call() throws Exception {
+			double distance = 1 - this.measureDistance.getSimilarity(t1, t2);
+			return distance;
+		}
 	}
 	
 	public static void main(String[] args) {

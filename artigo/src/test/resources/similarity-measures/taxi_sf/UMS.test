@@ -1,0 +1,13 @@
+{
+	"dataset": {
+		"name" : "TAXI_SF",
+		"raw": 'true'
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 4
+	},
+	"measure": {
+		"name": "UMS"
+	}
+}

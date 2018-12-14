@@ -1,17 +1,19 @@
 {
 	"dataset": {
-		"name" : "hermoupolis",
+		"name" : "geolife2",
 		"raw": 'true',
 		"params": {
-			"file" : "1 Day - 10 Profiles - 2 Classes_900913.csv"
+			"pointsTable" : "geolife.geolife2_cleaned",
+			"stopTable" : "stops_moves.geolife2_stop",
+			"moveTable" : "stops_moves.geolife2_move"
 		}
 	},
 	"groundtruth": {
 		"type": "String",
-		"index": 7
+		"index": 10
 	},
 	"measure": {
-		"name": "EDR",
+		"name": "LCSS",
 		"params": [{
 			"type": "spatial",
 			"distance": "euclidean",

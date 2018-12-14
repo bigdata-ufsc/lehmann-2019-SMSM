@@ -3,7 +3,7 @@
 		"name" : "hermoupolis",
 		"raw": 'false',
 		"params": {
-			"file" : "1 Day - 6 Profiles - 2 Classes_900913.csv"
+			"file" : "1 Day - 10 Profiles - 2 Classes_900913.csv"
 		}
 	},
 	"groundtruth": {

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,9 @@ import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.math3.stat.descriptive.AggregateSummaryStatistics;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
@@ -83,6 +86,18 @@ public class NewYorkBusDataReader implements IDataReader {
 		public String getData(SemanticTrajectory p, int i) {
 			return ROUTE.getData(p, i) + "/" + DIRECTION.getData(p, i);
 		}
+	};
+
+	private static final Semantic[] ALL_SEMANTICS = new Semantic[] {
+			Semantic.GID,
+			Semantic.SPATIAL,
+			Semantic.TEMPORAL,
+			DISTANCE,
+			ROUTE,
+			DIRECTION,
+			VEHICLE,
+			PHASE,
+			ROUTE_WITH_DIRECTION,
 	};
 	private boolean onlyStops;
 
@@ -357,6 +372,10 @@ public class NewYorkBusDataReader implements IDataReader {
 		List<SemanticTrajectory> ret = new ArrayList<>();
 		Set<String> keys = records.keySet();
 		DescriptiveStatistics stats = new DescriptiveStatistics();
+		Map<Semantic, AggregateSummaryStatistics> semanticStats = new HashMap<>();
+		for (int k = 0; k < ALL_SEMANTICS.length; k++) {
+			semanticStats.put(ALL_SEMANTICS[k], new AggregateSummaryStatistics());
+		}
 		for (String trajId : keys) {
 			SemanticTrajectory s = new SemanticTrajectory(trajId, SEMANTIC_COUNTER);
 			Collection<NewYorkBusRecord> collection = records.get(trajId);
@@ -388,8 +407,28 @@ public class NewYorkBusDataReader implements IDataReader {
 				}
 				i++;
 			}
+
 			stats.addValue(s.length());
+			for (int k = 0; k < ALL_SEMANTICS.length; k++) {
+				SummaryStatistics trajStats = semanticStats.get(ALL_SEMANTICS[k]).createContributingStatistics();
+				for (int m = 0; m < s.length() - 1; m++) {
+					Object p1 = ALL_SEMANTICS[k].getData(s, m);
+					Object p2 = ALL_SEMANTICS[k].getData(s, m + 1);
+					Object distance = ALL_SEMANTICS[k].distance(p1, p2);
+					if(distance instanceof Number) {
+						trajStats.addValue(((Number) distance).doubleValue());
+					}
+				}
+				if(trajStats.getN() > 1) {
+					s.setLocalStats(ALL_SEMANTICS[k], trajStats);
+				}
+			}
 			ret.add(s);
+		}
+		for (SemanticTrajectory traj : ret) {
+			for (int k = 0; k < ALL_SEMANTICS.length; k++) {
+				traj.setGlobalStats(ALL_SEMANTICS[k], semanticStats.get(ALL_SEMANTICS[k]).getSummary());
+			}
 		}
 		System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
 		return ret;

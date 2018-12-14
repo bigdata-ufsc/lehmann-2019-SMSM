@@ -205,32 +205,28 @@ update taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned set semantic_stop_id 
 ----------------------------------------------------------
 --Executar rotina StopToStopTrajectoryTransformer
 ----------------------------------------------------------
-
 --Definindo o sentido de cada trajetória
-drop table IF EXISTS taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned_aux;
-create table taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned_aux as (select tid, ((select t.stop from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned t where t.tid = p.tid order by timestamp limit 1) || ' to ' || (select t.stop from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned t where t.tid = p.tid order by timestamp desc limit 1)) as direction
-										from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned p);
-update taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned p
-set direction=(select t.direction from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned_aux t where t.tid = p.tid limit 1);
+drop table IF EXISTS taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned_aux;
+create table taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned_aux as (select tid, ((select t.stop from taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned t where t.tid = p.tid order by timestamp limit 1) || ' to ' || (select t.stop from taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned t where t.tid = p.tid order by timestamp desc limit 1)) as direction
+										from taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned p);
+create index idx_sanfrancisco_taxicab_airport_mall_pier_cleaned_aux_tid on "taxi".sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned_aux  USING btree ("tid");
+update taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned p
+set direction=(select t.direction from taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned_aux t where t.tid = p.tid limit 1)
+where mall = true and intersection_101_280 = true and bayshore_fwy = true and airport = true and fisherman is null and pier is null;
 ----------------------------------------------------------
---Removendo as trajs que não comecem/terminem no airport e (mall ou pier)
-delete
-  FROM taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
-  where not(direction like 'mall%' or direction like 'pier%' or direction like 'airport%')
-  or not(direction like '%mall' or direction like '%pier' or direction like '%airport');
-----------------------------------------------------------
-delete from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
-where direction = 'mall to mall' or direction = 'airport to airport';
+--Ignorando as trajs que não comecem/terminem no airport ou mall
+update taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned set direction = null
+  where not(direction like 'mall to airport'
+  or direction like 'airport to mall');
+--Ignorando as trajs que não passem pelas rodovias 101 ou 280
+update taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned set direction = null
+  where direction is not null and road is null;
 ----------------------------------------------------------
 --Executar rotina TrajectoryBetweenAreaCleaner
 ----------------------------------------------------------
-
-delete from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
-where tid=905582
-delete from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
-where tid=905746
-delete from taxi.sanfrancisco_taxicab_airport_mall_pier_cleaned
-where tid=905574
+--Removendo trajetórias de um só stop
+delete from taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned where tid in (select tid from taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned
+group by tid having count(distinct stop)<2);
 
 -----------------------------------------
 SELECT infered_route_id, infered_direction_id, count(distinct infered_trip_id)
