@@ -1,6 +1,6 @@
 drop table taxi.sanfrancisco_taxicab_airport_mall_pier
 
-create table taxi.sanfrancisco_taxicab_airport_mall_pier as (select * from taxi.sanfrancisco_taxicab_crawdad where tid in
+create table taxi.sanfrancisco_taxicab_airport_mall_pier as (select *, null::boolean as bayshore_fwy_extended from taxi.sanfrancisco_taxicab_crawdad where tid in
 
 (select b.tid from
 (select a.tid, st_makeline(a.geom) as line from (select tid, geom from taxi.sanfrancisco_taxicab_crawdad order by tid, "timestamp") a
@@ -154,6 +154,14 @@ update taxi.sanfrancisco_taxicab_airport_mall_pier set bayshore_fwy = true
   FROM taxi.sanfrancisco_taxicab_airport_mall_pier 
   where ST_INTERSECTS(
 		st_transform(ST_GeomFromText('POLYGON ((-122.391 37.688, -122.388 37.688, -122.388 37.679, -122.391 37.679, -122.391 37.688))', 4326), 900913), 
+			geom))
+			
+
+update taxi.sanfrancisco_taxicab_airport_mall_pier set bayshore_fwy_extended = true
+	where tid in (SELECT distinct tid
+  FROM taxi.sanfrancisco_taxicab_airport_mall_pier 
+  where ST_INTERSECTS(
+		ST_GeomFromText('POLYGON ((-13628116.403303137 4528664.314801779, -13628116.403303137 4541174.261029721, -13622925.709196618 4541174.261029721, -13622925.709196618 4528664.314801779, -13628116.403303137 4528664.314801779))', 900913), 
 			geom))
 
 ----------------------------------------------------------
