@@ -6,12 +6,12 @@ import java.util.List;
 import br.ufsc.core.trajectory.Trajectory;
 
 public class ETrajectory {
-	private final int tid;
+	private final Object tid;
 	private List<Ellipse> ellipses;
 	private Trajectory T;
 	private int trajectoryLength;
 
-	public ETrajectory(int tid, int trajectoryLength) {
+	public ETrajectory(Object tid, int trajectoryLength) {
 		this.tid = tid;
 		this.trajectoryLength = trajectoryLength;
 		this.ellipses = new ArrayList<Ellipse>();
@@ -37,7 +37,7 @@ public class ETrajectory {
 		return this.ellipses.size();
 	}
 
-	public int getTid() {
+	public Object getTid() {
 		return this.tid;
 	}
 

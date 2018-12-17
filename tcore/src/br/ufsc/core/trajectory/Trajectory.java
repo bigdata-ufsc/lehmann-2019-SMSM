@@ -10,18 +10,18 @@ import java.util.List;
  */
 public class Trajectory {
 
-	private final int tid;
+	private final Object tid;
 	private List<TPoint> points;
 	
 	public Trajectory(SemanticTrajectory st){
-		this.tid = (int) st.getTrajectoryId();
+		this.tid = st.getTrajectoryId();
 		this.points=new ArrayList<TPoint>();
 		for (int i = 0; i < st.length(); i++) {
 			this.addPoint(Semantic.SPATIAL.getData(st, i));
 		}
 	}
 	
-	public Trajectory(int tid){
+	public Trajectory(Object tid){
 		this.tid = tid;
 		this.points=new ArrayList<TPoint>();
 	}
@@ -50,7 +50,7 @@ public class Trajectory {
 		return this.points.size();
 	}
 
-	public int getTid(){
+	public Object getTid(){
 		return this.tid;
 	}
 	
