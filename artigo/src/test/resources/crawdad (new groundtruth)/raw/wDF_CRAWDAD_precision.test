@@ -1,0 +1,22 @@
+{
+	"dataset": {
+		"name" : "CRAWDAD",
+		"raw": 'true',
+		"params": {
+			"stopTable": 'stops_moves.sanfrancisco_taxicab_airport_mall_extended_stop',
+			"moveTable": 'stops_moves.sanfrancisco_taxicab_airport_mall_extended_move',
+			"pointTable": 'taxi.sanfrancisco_taxicab_airport_mall_extended_cleaned'
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 14
+	},
+	"measure": {
+		"name": "wDF",
+		"config": {
+			"w": 6,
+			"distance": "euclidean"
+		}
+	}
+}
