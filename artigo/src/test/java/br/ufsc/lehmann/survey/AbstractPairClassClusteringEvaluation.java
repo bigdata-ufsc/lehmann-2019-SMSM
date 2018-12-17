@@ -77,13 +77,14 @@ public abstract class AbstractPairClassClusteringEvaluation {
 					//se o cluster contiver mais de uma classe este cluster está errado
 					if(classesInCluster.count() != 1) {
 						errorCount++;
+						break;
 					}
 				}
 			}
 			System.out.printf("Elapsed time %d miliseconds\n", w.elapsed(TimeUnit.MILLISECONDS));
 			System.out.printf("Parameters: '%s'\n", calculator.parametrization());
-			System.out.printf("Total clusters: '%s'\n", pairedClasses.size() * 2);
-			System.out.printf("Correct clusters: '%s'\n", (pairedClasses.size() * 2) - errorCount);
+			System.out.printf("Total pair-clusters: '%s'\n", pairedClasses.size());
+			System.out.printf("Correct pair-clusters: '%s'\n", pairedClasses.size() - errorCount);
 			w = w.stop();
 		}
 	}
