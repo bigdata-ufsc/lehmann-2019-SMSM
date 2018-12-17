@@ -14,6 +14,9 @@ public class Dataset {
     @SerializedName("raw")
     @Expose
     private Boolean raw;
+    @SerializedName("min-trajectories-per-class")
+    @Expose
+    private Long minTrajectoriesPerClass;
 	@SerializedName("params")
     @Expose
     private Map<String, String> params = null;
@@ -40,6 +43,14 @@ public class Dataset {
 
 	public void setRaw(Boolean raw) {
 		this.raw = raw;
+	}
+
+	public Long getMinTrajectoriesPerClass() {
+		return minTrajectoriesPerClass;
+	}
+
+	public void setMinTrajectoriesPerClass(Long minTrajectoriesPerClass) {
+		this.minTrajectoriesPerClass = minTrajectoriesPerClass;
 	}
 
 }

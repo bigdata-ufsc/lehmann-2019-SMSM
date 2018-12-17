@@ -221,23 +221,13 @@ public class Geolife2DatabaseReader implements IDataReader {
 			SemanticTrajectory s = new SemanticTrajectory(trajId, semantic_counter);
 			Collection<GeolifeRecord> collection = records.get(trajId);
 			int i = 0;
-			Move currentMove = null;
 			for (GeolifeRecord record : collection) {
-				if(record.getSemanticStop() == null && record.getSemanticMoveId() == null) {
-					continue;
-				}
-				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
+				TPoint point = new TPoint(record.getLongitude(), record.getLatitude());
 				if(record.getSemanticStop() != null) {
-					if(currentMove != null) {
-						if(currentMove.getEnd() != null) {
-							TPoint[] points = (TPoint[]) currentMove.getAttribute(AttributeType.MOVE_POINTS);
-							List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
-							a.add(currentMove.getEnd().getStartPoint());
-							currentMove.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
-						}
-						currentMove = null;
-					}
 					Stop stop = stops.get(record.getSemanticStop());
+					if(stop == null) {
+						throw new RuntimeException("Stop does not found");
+					}
 					stop.addPoint(point);
 					if(i > 0) {
 						if(STOP_CENTROID_SEMANTIC.getData(s, i - 1) == stop) {
@@ -256,41 +246,29 @@ public class Geolife2DatabaseReader implements IDataReader {
 					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(stop.getStartTime()), Instant.ofEpochMilli(stop.getEndTime())));
 					s.addData(i, Semantic.GID, record.getGid());
 					s.addData(i, Semantic.SPATIAL_LATLON, stop.getCentroid());
+					s.addData(i, USER_ID, record.getUserId());
+					s.addData(i, REGION_INTEREST, record.getPOI());
+					s.addData(i, PATH, record.getPath());
+					s.addData(i, DIRECTION, record.getDirection());
+					s.addData(i, PATH_WITH_DIRECTION, PATH_WITH_DIRECTION.getData(s, i));
+					stop.setRegion(record.getPOI());
+					i++;
 				} else if(record.getSemanticMoveId() != null) {
-					Move move = moves.remove(record.getSemanticMoveId());
+					Move move = moves.get(record.getSemanticMoveId());
 					if(move == null) {
-						for (int j = i - 1; j > -1; j--) {
-							move = MOVE_ANGLE_SEMANTIC.getData(s, j);
-							if(move != null) {
-								break;
-							}
-						}
-						if(move != null) {
-							TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
-							List<TPoint> a = new ArrayList<TPoint>(Arrays.asList(points));
-							a.add(point);
-							move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
-							continue;
-						}
-					} else {
+						throw new RuntimeException("Move does not found");
+					}
+					if(!usedMoves.contains(move)) {
 						usedMoves.add(move);
 					}
+					move.getStart().setNextMove(move);
+					move.getEnd().setPreviousMove(move);
 					TPoint[] points = (TPoint[]) move.getAttribute(AttributeType.MOVE_POINTS);
 					List<TPoint> a = new ArrayList<TPoint>(points == null ? Collections.emptyList() : Arrays.asList(points));
 					a.add(point);
 					move.setAttribute(AttributeType.MOVE_POINTS, a.toArray(new TPoint[a.size()]));
-					s.addData(i, MOVE_ANGLE_SEMANTIC, move);
-					s.addData(i, Semantic.TEMPORAL, new TemporalDuration(Instant.ofEpochMilli(move.getStartTime()), Instant.ofEpochMilli(move.getEndTime())));
-					s.addData(i, Semantic.SPATIAL, point);
+					move.setAttribute(AttributeType.TRAJECTORY, s);
 				}
-				s.addData(i, Semantic.GID, record.getGid());
-				s.addData(i, USER_ID, record.getUserId());
-				s.addData(i, TRANSPORTATION_MODE, record.getTransportationMode());
-				s.addData(i, REGION_INTEREST, record.getPOI());
-				s.addData(i, DIRECTION, record.getDirection());
-				s.addData(i, PATH, record.getPath());
-				s.addData(i, PATH_WITH_DIRECTION, PATH_WITH_DIRECTION.getData(s, i));
-				i++;
 			}
 			stats.addValue(s.length());
 			ret.add(s);
