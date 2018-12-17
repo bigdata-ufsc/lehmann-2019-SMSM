@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Strings;
 
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.EqualsDistanceFunction;
 import br.ufsc.core.trajectory.IDistanceFunction;
 import br.ufsc.core.trajectory.Semantic;
@@ -129,9 +130,29 @@ public class Measures {
 
 	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createUMS(Measure measure) {
 		if(StringUtils.equals(measure.getOptimizer(), "FTSM")) {
-			return Arrays.asList(new FTSMBUMS3());
+			return Arrays.asList(new FTSMBUMS());
 		}
 		return Arrays.asList(new UMS());
+	}
+	
+	private static class FTSMBUMS extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory>{
+		FTSMBUMS3 ums = new FTSMBUMS3();
+
+		@Override
+		public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
+			return ums.getSimilarity(t1, t2);
+		}
+
+		@Override
+		public double distance(SemanticTrajectory t1, SemanticTrajectory t2) {
+			return 1 - getSimilarity(t1, t2);
+		}
+
+		@Override
+		public String name() {
+			return "FTSMUMS";
+		}
+		
 	}
 
 	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createUMSLehmann(Measure measure, boolean umsNew) {
