@@ -144,6 +144,14 @@ public class GridSearchParams {
 						return (a.getTravelledDistance() + b.getTravelledDistance()) * DTWmultiplier.doubleValue();
 					}
 				};
+			} else if(t.startsWith("squared-summed-distances")) {
+				String[] expression = t.split("\\*");
+				Number DTWmultiplier = expression.length > 1 ? Double.parseDouble(expression[1]) : 1L;
+				value = new ComputableDouble<Move>() {
+					public Number compute(Move a, Move b) {
+						return Math.pow(a.getTravelledDistance() + b.getTravelledDistance(), 2) * DTWmultiplier.doubleValue();
+					}
+				};
 			} else if(t.startsWith("std-lcss")) {
 				Matcher m = Pattern.compile("std-lcss\\((.+)+\\)").matcher(t);
 				if(m.matches()) {

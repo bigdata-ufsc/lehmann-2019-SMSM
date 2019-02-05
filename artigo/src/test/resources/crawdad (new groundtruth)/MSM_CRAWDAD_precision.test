@@ -3,9 +3,9 @@
 		"name" : "CRAWDAD",
 		"raw": 'false',
 		"params": {
-			"stopTable": 'stops_moves.sanfrancisco_taxicab_airport_mall_extended_stop',
-			"moveTable": 'stops_moves.sanfrancisco_taxicab_airport_mall_extended_move',
-			"pointTable": 'taxi.sanfrancisco_taxicab_airport_mall_extended_cleaned'
+			"stopTable": 'stops_moves.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_stop',
+			"moveTable": 'stops_moves.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_move',
+			"pointTable": 'taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned'
 		}
 	},
 	"groundtruth": {

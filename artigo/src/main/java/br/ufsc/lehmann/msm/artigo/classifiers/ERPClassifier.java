@@ -7,18 +7,24 @@ import java.util.List;
 import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
+import br.ufsc.ftsm.base.TrajectorySimilarityCalculator;
 import br.ufsc.lehmann.method.ERP;
 import br.ufsc.lehmann.msm.artigo.classifiers.NearestNeighbour.DataEntry;
 import br.ufsc.lehmann.msm.artigo.problems.BikeDataReader;
 import br.ufsc.lehmann.msm.artigo.problems.Climate;
 import br.ufsc.lehmann.msm.artigo.problems.ClimateWeatherSemantic;
 
-public class ERPClassifier<V> implements IMeasureDistance<SemanticTrajectory> {
+public class ERPClassifier<V> extends TrajectorySimilarityCalculator<SemanticTrajectory> implements IMeasureDistance<SemanticTrajectory> {
 	
 	private ERP<V> erp;
 
 	public ERPClassifier(ERPSemanticParameter<V, Number> parameters) {
 		erp = new ERP<V>(parameters.threshlod, parameters.semantic);
+	}
+	
+	@Override
+	public double getSimilarity(SemanticTrajectory t1, SemanticTrajectory t2) {
+		return 0;
 	}
 
 	@Override

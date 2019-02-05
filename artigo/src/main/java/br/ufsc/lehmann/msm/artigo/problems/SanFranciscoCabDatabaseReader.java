@@ -146,13 +146,13 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 				Statement st = conn.createStatement();
 				st.setFetchSize(1000);
 
-				ResultSet stopsData = st.executeQuery(
-						"SELECT stop_id, "
-						+ "start_lat, start_lon, "
-						+ "end_lat, end_lon, "
-						+ "centroid_lat, centroid_lon, "
-						+ " begin, length, start_time, end_time, street, \"POI\" " + //
-								"FROM " + stopsTable);
+				String sql = "SELECT stop_id, "
+				+ "start_lat, start_lon, "
+				+ "end_lat, end_lon, "
+				+ "centroid_lat, centroid_lon, "
+				+ " begin, length, start_time, end_time, \"POI\" " + //
+						"FROM " + stopsTable;
+				ResultSet stopsData = st.executeQuery(sql);
 				Map<Integer, Stop> stops = new HashMap<>();
 				while (stopsData.next()) {
 					int stopId = stopsData.getInt("stop_id");
@@ -166,7 +166,7 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 								new TPoint(stopsData.getDouble("end_lat"), stopsData.getDouble("end_lon")), //
 								stopsData.getInt("length"), //
 								new TPoint(stopsData.getDouble("centroid_lat"), stopsData.getDouble("centroid_lon")), //
-								stopsData.getString("street"), //
+								null, //
 								stopsData.getString("POI")//
 						);
 						stops.put(stopId, stop);

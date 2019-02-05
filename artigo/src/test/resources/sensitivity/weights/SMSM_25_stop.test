@@ -1,11 +1,12 @@
 {
 	"dataset": {
-		"name" : "geolife_university",
+		"name" : "geolife2",
 		"raw": 'false',
+		"min-trajectories-per-class": 4,
 		"params": {
-			"pointsTable" : "geolife.geolife_inside_university_5_pois",
-			"stopTable" : "stops_moves.geolife_inside_university_stop_5_pois",
-			"moveTable" : "stops_moves.geolife_inside_university_move_5_pois"
+			"pointsTable" : "geolife.geolife_inside_university_5_pois_enhanced",
+			"stopTable" : "stops_moves.geolife_inside_enhanced_stop",
+			"moveTable" : "stops_moves.geolife_inside_enhanced_move"
 		}
 	},
 	"groundtruth": {

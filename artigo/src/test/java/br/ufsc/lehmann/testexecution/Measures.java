@@ -51,6 +51,8 @@ import br.ufsc.lehmann.method.wDF;
 import br.ufsc.lehmann.msm.artigo.ComparableStopSemantic;
 import br.ufsc.lehmann.msm.artigo.classifiers.DTWaClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.EDRClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.ERPClassifier;
+import br.ufsc.lehmann.msm.artigo.classifiers.ERPClassifier.ERPSemanticParameter;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.LCSSFTSMClassifier;
 import br.ufsc.lehmann.msm.artigo.classifiers.MSMClassifier;
@@ -93,6 +95,9 @@ public class Measures {
 			return createLCSS(measure);
 		}
 		if(measure.getName().equalsIgnoreCase("EDR")) {
+			return createEDR(measure);
+		}
+		if(measure.getName().equalsIgnoreCase("ERP")) {
 			return createEDR(measure);
 		}
 		if(measure.getName().equalsIgnoreCase("SWALE")) {
@@ -600,6 +605,25 @@ public class Measures {
 			}
 			ret.add(new EDRClassifier(//
 					stopDimensions.toArray(new EDRSemanticParameter[stopDimensions.size()])
+					));
+		}
+		return ret;
+	}
+
+	private static List<TrajectorySimilarityCalculator<SemanticTrajectory>> createERP(Measure measure) {
+		GridSearchParams grid = new GridSearchParams();
+		List<TrajectorySimilarityCalculator<SemanticTrajectory>> ret = new ArrayList<>();
+		while (grid.hasNextConfigurations()) {
+
+			List<Param> params = measure.getParams();
+			List<ERPSemanticParameter> stopDimensions = new ArrayList<>();
+			for (Param param : params) {
+				Tuple<Semantic, Number> p = constructParameters(grid, param);
+				ERPSemanticParameter dimension = new ERPSemanticParameter(p.getFirst(), p.getLast());
+				stopDimensions.add(dimension);
+			}
+			ret.add(new ERPClassifier(//
+					stopDimensions.get(0)
 					));
 		}
 		return ret;

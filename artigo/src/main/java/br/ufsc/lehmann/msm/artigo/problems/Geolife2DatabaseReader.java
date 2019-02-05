@@ -118,7 +118,7 @@ public class Geolife2DatabaseReader implements IDataReader {
 			int stopId = stopsData.getInt("stop_id");
 			Stop stop = stops.get(stopId);
 			if (stop == null) {
-				stop = new Stop(stopId, null, //
+				stop = new Stop(stopId, stopsData.getString("poi"), //
 						stopsData.getTimestamp("start_time").getTime(), //
 						stopsData.getTimestamp("end_time").getTime(), //
 						new TPoint(stopsData.getDouble("start_lat"), stopsData.getDouble("start_lon")), //
@@ -181,7 +181,9 @@ public class Geolife2DatabaseReader implements IDataReader {
 				"gps.semantic_stop_id, " + //
 				"gps.semantic_move_id " + //
 		"from " + pointsTable + " gps " + //
-		" ";//
+		"  ";//
+//		sql += " where tid in (22193, 21838, 24635, 35843) ";//
+//		" where path in ('B', 'C', 'D', 'F', 'E') ";//
 		sql += "order by gps.tid, gps.time, gps.gid";
 		PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		ResultSet data = preparedStatement.executeQuery();
@@ -222,7 +224,7 @@ public class Geolife2DatabaseReader implements IDataReader {
 			Collection<GeolifeRecord> collection = records.get(trajId);
 			int i = 0;
 			for (GeolifeRecord record : collection) {
-				TPoint point = new TPoint(record.getLongitude(), record.getLatitude());
+				TPoint point = new TPoint(record.getLatitude(), record.getLongitude());
 				if(record.getSemanticStop() != null) {
 					Stop stop = stops.get(record.getSemanticStop());
 					if(stop == null) {

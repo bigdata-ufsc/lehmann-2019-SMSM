@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
@@ -33,6 +34,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.LongAdder;
@@ -120,14 +122,25 @@ public class Validation {
 			}
 		}
 
-//		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 3),
-//				(int) (Runtime.getRuntime().availableProcessors() / 3), 60L, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>((int) (Math.pow(testData.length, 2) / 2)));
-		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		ExecutorService executorService = new ThreadPoolExecutor((int) (Runtime.getRuntime().availableProcessors() / 3),
+				(int) (Runtime.getRuntime().availableProcessors() / 3), 60L, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>((int) (Math.pow(testData.length, 2) / 2)));
+//		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		DelayQueue<DelayedDistanceMeasure> queueProcess = new DelayQueue<>();
 		for (int i = 0; i < testData.length; i++) {
 			for (int j = i; j < testData.length; j++) {
-				Future<Double> future = executorService.submit(new MeasureCallable(measureDistance, testData[i], testData[j]));
-				queueProcess.add(new DelayedDistanceMeasure(testData[i], i, testData[j], j, future, 0));
+				try {
+					Future<Double> future = executorService.submit(new MeasureCallable(measureDistance, testData[i], testData[j]));
+					queueProcess.add(new DelayedDistanceMeasure(testData[i], i, testData[j], j, future, i * testData.length + j));
+				} catch (RejectedExecutionException e) {
+					//wait 5 seconds and re-try submit the task
+					j--;
+					try {
+						Thread.sleep(5 * 1000);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+					continue;
+				}
 			}
 		}
 		double totalQueued = queueProcess.size();
@@ -135,11 +148,7 @@ public class Validation {
 		while (!queueProcess.isEmpty()) {
 			DelayedDistanceMeasure toProcess = queueProcess.poll();
 			if (toProcess == null) {
-				try {
-					Thread.sleep(5);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				Thread.yield();
 				continue;
 			}
 			int done = (int) ((1 - ((queueProcess.size() / totalQueued))) * 10.0);
@@ -149,12 +158,19 @@ public class Validation {
 			}
 			Future<Double> fut = toProcess.distance;
 			if (!fut.isDone()) {
-				queueProcess.add(new DelayedDistanceMeasure(toProcess.a, toProcess.aIndex, toProcess.b, toProcess.bIndex, toProcess.distance, 500/* ms */));
+				queueProcess.add(new DelayedDistanceMeasure(toProcess.a, toProcess.aIndex, toProcess.b, toProcess.bIndex, toProcess.distance, queueProcess.size()/* ms */));
+				Thread.yield();
 			} else {
 				try {
 					double distance = fut.get();
-					allDistances.put(toProcess.a, toProcess.b, distance);
-					allDistances.put(toProcess.b, toProcess.a, distance);
+					if (distance == -1) {
+						//re-execute task
+						Future<Double> future = executorService.submit(new MeasureCallable(measureDistance, toProcess.a, toProcess.b));
+						queueProcess.add(new DelayedDistanceMeasure(toProcess.a, toProcess.aIndex, toProcess.b, toProcess.bIndex, future, queueProcess.size() * 100));
+					} else {
+						allDistances.put(toProcess.a, toProcess.b, distance);
+						allDistances.put(toProcess.b, toProcess.a, distance);
+					}
 				} catch (InterruptedException | ExecutionException e) {
 					e.printStackTrace();
 				}
@@ -198,6 +214,7 @@ public class Validation {
 		private TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance;
 		private SemanticTrajectory t1;
 		private SemanticTrajectory t2;
+		boolean error = false;
 
 		MeasureCallable(TrajectorySimilarityCalculator<SemanticTrajectory> measureDistance,
 				SemanticTrajectory t1, SemanticTrajectory t2) {
@@ -208,8 +225,14 @@ public class Validation {
 
 		@Override
 		public Double call() throws Exception {
-			double distance = 1 - this.measureDistance.getSimilarity(t1, t2);
-			return distance;
+			try {
+				double distance = 1 - this.measureDistance.getSimilarity(t1, t2);
+				return distance;
+			} catch (Error e) {
+				System.err.println(e.getMessage());
+				this.error = true;
+				return -1.0;
+			}
 		}
 	}
 	
@@ -312,7 +335,15 @@ public class Validation {
 							: fullMatrix[idxSort][o1.getValue()] > fullMatrix[idxSort][o2.getValue()] ? 1 : -1);
 
 			long classCount = 0;
-
+			
+//			if(cls.equals("Microsoft-Dormitory via Market/C")) {
+//				System.out.print(cls + " - ");
+//				for (ObjectIntPair objectIntPair : ranking) {
+//					System.out.print(objectIntPair.getKey() + ", ");
+//				}
+//				System.out.println();
+//			}
+			
 			for (Object cls2 : classes)
 				if (cls.equals(cls2))
 					classCount++;
