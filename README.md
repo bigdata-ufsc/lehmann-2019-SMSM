@@ -1,1 +1,1 @@
-# ArtigoMSM_UFSC
+# SMSM - Stops and Moves Similarity Measure
