@@ -4,7 +4,7 @@
 		"raw": 'true',
 		"min-trajectories-per-class": 4,
 		"params": {
-			"pointsTable" : "geolife.geolife_inside_university_5_pois_enhanced",
+			"pointsTable" : "geolife.geolife_inside_university_5_pois_enhanced_copy",
 			"stopTable" : "stops_moves.geolife_inside_enhanced_stop",
 			"moveTable" : "stops_moves.geolife_inside_enhanced_move"
 		}

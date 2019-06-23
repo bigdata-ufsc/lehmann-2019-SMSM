@@ -1,0 +1,37 @@
+{
+	"dataset": {
+		"name" : "CRAWDAD",
+		"raw": 'false',
+		"params": {
+			"stopTable": 'stops_moves.sanfrancisco_taxicab_airport_mall_extended_stop',
+			"moveTable": 'stops_moves.sanfrancisco_taxicab_airport_mall_extended_move',
+			"pointTable": 'taxi.sanfrancisco_taxicab_airport_mall_extended_cleaned'
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 14
+	},
+	"measure": {
+		"name": "EDR",
+		"params": [{
+			"type": "spatial",
+			"distance": "euclidean",
+			"threshold": "100",
+			"index" : 1
+		}, {
+			"type": "temporal",
+			"distance": "proportion",
+			//"threshold": "[0.1,0.2,0.3,0.4,0.5]",
+			"threshold": "0.1",
+			"index" : 2
+		}, {
+			"type": "Semantic",
+			"index" : 7,
+			"params" : [{
+				"distance": "Equal",
+				"type" : "REGION"
+			}]
+		}]
+	}
+}

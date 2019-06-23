@@ -8,16 +8,11 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
@@ -36,73 +31,81 @@ import br.ufsc.lehmann.testexecution.Measures;
 
 public class PerformanceAllDataset {
 
+	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException,
+			IllegalAccessException, ClassNotFoundException, SQLException, IOException {
+		for (int j = 0; j < 1; j++) {
+			System.out.println((j + 1) + "º execution");
+			Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/performance/"));
 
-	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/performance/geolife/SMSM_Geolife_precision.test"));
-		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "6");
-		files.filter(path -> path.toFile().isFile() && 
-//				path.toFile().getParentFile().getName().equalsIgnoreCase("raw") && 
-				path.toString().endsWith(".test")).forEach(path -> {
-			String fileName = path.toString();
-			System.out.printf("Executing file %s\n", fileName);
-			PrintStream  bkp = System.out;
-			try {
-				ExecutionPOJO execution;
-				try {
-					execution = new Gson().fromJson(new FileReader(fileName), ExecutionPOJO.class);
-					System.setOut(new PrintStream(new FileOutputStream(new File(path.toFile().getParentFile(), path.getFileName().toString() + ".out"))));
-				} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
-					throw new RuntimeException(e);
-				}
-				Dataset dataset = execution.getDataset();
-				Measure measure = execution.getMeasure();
-				IDataReader dataReader = Datasets.createDataset(dataset);
-				List<SemanticTrajectory> originalData = dataReader.read();
-				
-				DescriptiveStatistics sizeStats = new DescriptiveStatistics();
-				originalData.stream().forEach(t -> sizeStats.addValue(t.length()));
-				List<SemanticTrajectory> data = originalData
-						.stream()
-						.filter(t -> (t.length() >= (sizeStats.getMean() - (3 * sizeStats.getStandardDeviation()))) && 
-								(t.length() <= (sizeStats.getMean() + (3 * sizeStats.getStandardDeviation()))))
-						.collect(Collectors.toList());
-				
-				System.out.println("New dataset size: " + data.size());
-				
-				DescriptiveStatistics stats = new DescriptiveStatistics();
-				data.stream().forEach(t -> stats.addValue(t.length()));
-				System.out.printf("Semantic Trajectories statistics: mean - %.2f, min - %.2f, max - %.2f, sd - %.2f\n", stats.getMean(), stats.getMin(), stats.getMax(), stats.getStandardDeviation());
-				
-				IntStream.of(data.size()).forEach(base -> executeDescriptor(measure, data, base));
-				} finally {
-					System.setOut(bkp);
-				}
-		});
-		files.close();
+			files.filter(path -> path.toFile().isFile() &&
+					path.toFile().getParentFile().getName().equalsIgnoreCase("raw") && 
+					path.toString().endsWith(".test")).forEach(path -> {
+						String fileName = path.toString();
+//						if(!(fileName.contains("EDR") || fileName.contains("LCSS"))) {
+//							return;
+//						}
+						File out = new File(fileName + ".out");
+						int i = 1;
+						while(out.exists()) {
+							out = new File(fileName + i++ + ".out");
+						}
+						if(out.exists()) {
+//							return;
+						}
+						System.out.printf("Executing file %s\n", fileName);
+						PrintStream bkp = System.out;
+						try {
+							ExecutionPOJO execution;
+							try {
+								execution = new Gson().fromJson(new FileReader(fileName), ExecutionPOJO.class);
+								System.setOut(new PrintStream(new FileOutputStream(out)));
+							} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+								throw new RuntimeException(e);
+							}
+							Dataset dataset = execution.getDataset();
+							Measure measure = execution.getMeasure();
+							IDataReader dataReader = Datasets.createDataset(dataset);
+							List<SemanticTrajectory> data = dataReader.read();
+
+							executeDescriptor(measure, data);
+						} finally {
+							System.setOut(bkp);
+						}
+					});
+			files.close();
+		}
 	}
 
-	private static void executeDescriptor(Measure measure, Collection<SemanticTrajectory> originalData, int base) {
-		List<SemanticTrajectory> data = new ArrayList<>(base);
-		List<SemanticTrajectory> d = originalData.stream().limit(base).collect(Collectors.toList());
-		float nextUp = Math.nextUp(base / d.size()) + 1;
-		IntStream.range(0, (int) nextUp).forEach(i -> data.addAll(d));
-		List<SemanticTrajectory> finalData = data.stream().limit(base).collect(Collectors.toList());
-		
+	private static void executeDescriptor(Measure measure, Collection<SemanticTrajectory> originalData) {
+
 		TrajectorySimilarityCalculator<SemanticTrajectory> similarityCalculator = Measures.createMeasure(measure);
 
-		SemanticTrajectory[] allData = finalData.toArray(new SemanticTrajectory[finalData.size()]);
-		
+		SemanticTrajectory[] allData = originalData.toArray(new SemanticTrajectory[originalData.size()]);
+
+		int count = 0, progress = 0;
+		int size = allData.length;
+		double centesimalPart = size / 100.0;
 		Stopwatch w = Stopwatch.createStarted();
-		if(similarityCalculator instanceof ITrainable) {
+		if (similarityCalculator instanceof ITrainable) {
 			((ITrainable) similarityCalculator).train(Arrays.asList(allData));
 		}
 
 		for (SemanticTrajectory t1 : allData) {
+			count++;
 			for (SemanticTrajectory t2 : allData) {
 				similarityCalculator.getSimilarity(t1, t2);
 			}
+			if(count % centesimalPart > centesimalPart - 1) {
+				System.out.print(++progress + "% - ");
+				if(progress == 5) {
+					break;
+				}
+				if(progress % 25 == 24) {
+					System.out.println();
+				}
+			}
 		}
 		w = w.stop();
-		System.out.printf("[%d] Elapsed time %d miliseconds\n", base, w.elapsed(TimeUnit.MILLISECONDS));
+		System.out.printf("\r\nElapsed time %d miliseconds\n", w.elapsed(TimeUnit.MILLISECONDS) * 20);
 	}
 }

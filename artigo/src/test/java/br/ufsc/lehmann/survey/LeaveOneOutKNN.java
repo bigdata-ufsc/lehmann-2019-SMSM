@@ -1,8 +1,11 @@
 package br.ufsc.lehmann.survey;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -34,14 +37,25 @@ import smile.math.Random;
 
 public class LeaveOneOutKNN {
 
-
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/geolife"));
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/animals"));
 		files.filter(path -> path.toFile().isFile() && path.toFile().toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
-			
-			executeDescriptor(fileName);
+			PrintStream bkp = System.out;
+			try {
+				int i = 1;
+				File out = new File(path.toFile().getParentFile(), path.getFileName().toString() + ".kNN.out");
+				while(out.exists()) {
+					out = new File(path.toFile().getParentFile(), path.getFileName().toString() + i++ + ".kNN.out");
+				}
+				System.setOut(new PrintStream(new FileOutputStream(out)));
+				executeDescriptor(fileName);
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException(e);
+			} finally {
+				System.setOut(bkp);
+			}
 		});
 		files.close();
 	}

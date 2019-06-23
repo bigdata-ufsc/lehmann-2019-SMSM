@@ -70,21 +70,20 @@ public class EDR extends TrajectorySimilarityCalculator<SemanticTrajectory>  {
 
 		edrMetric[0][0] = 0;
 		for (int i = 1; i <= m; i++) {
-			for (int j = 1; j <= n; j++) {
-				int subcost = 0;
+			semantic: for (int j = 1; j <= n; j++) {
 				for (int k = 0; k < parameters.length; k++) {
 					EDRSemanticParameter param = parameters[k];
 					Object rPoint = param.semantic.getData(r, i - 1);
 					Object sPoint = param.semantic.getData(s, j - 1);
+					int subcost = 0;
 					if(!param.semantic.match(rPoint, sPoint, param.computeThreshold(rPoint, sPoint, r, s))) {
 						subcost = 1;
-						break;
 					}
+					edrMetric[i][j] = min(//
+							edrMetric[i - 1][j - 1] + subcost,//
+							edrMetric[i][j - 1] + 1,//
+							edrMetric[i - 1][j] + 1);
 				}
-				edrMetric[i][j] = min(//
-						edrMetric[i - 1][j - 1] + subcost,//
-						edrMetric[i][j - 1] + 1,//
-						edrMetric[i - 1][j] + 1);
 			}
 		}
 		double distance = edrMetric[r.length()][s.length()];

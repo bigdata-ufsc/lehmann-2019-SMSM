@@ -1,6 +1,7 @@
 {
 	"dataset": {
 		"name" : "geolife_university",
+		"min-trajectories-per-class": 50,
 		"raw": 'false',
 		"params": {
 			"pointsTable" : "geolife.geolife_inside_university_5_pois",

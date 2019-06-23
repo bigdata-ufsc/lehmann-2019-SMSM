@@ -1,0 +1,54 @@
+{
+	"dataset": {
+		"name" : "hermoupolis",
+		"raw": 'false',
+		"params": {
+			"file" : "1 Day - 10 Profiles - 2 Classes_900913.csv"
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 7
+	},
+	"measure": {
+		"name": "SMSM",
+		"params": [{
+			"type": "Stop",
+			"weight": 0.5,
+			"index" : 8,
+			"params": [{
+				"type": "spatial",
+				"distance": "euclidean",
+				"threshold": "[50,100,300,500,1000,2000]",
+				"index" : 1,
+				"weight": 0.3333
+			}, {
+				"type": "temporal",
+				"distance": "proportion",
+				"threshold": "0.2",
+				"weight": 0.3333,
+				"index" : 2
+			}, {
+				"type": "Semantic",
+				"index" : 7,
+				"weight": 0.3334,
+				"params" : [{
+					"distance": "Equal",
+					"type" : "NAME"
+				}]
+			}]
+		}, {
+			"type": "Move",
+			"weight": 0.5,
+			"index" : 9,
+			"params": [{
+				"type": "SEMANTIC",
+				"weight": 1,
+				"params" : [{
+					"distance": "Equal",
+					"type" : "TRANSPORTATION_MODE"
+				}]
+			}]
+		}]
+	}
+}

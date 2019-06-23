@@ -23,7 +23,7 @@ public class TrajectoryBetweenAreaCleaner {
 		Connection conn = retriever.getConnection();
 		conn.setAutoCommit(false);
 		Statement statement = conn.createStatement();
-		String pointsTable = "taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned";
+		String pointsTable = "taxi.sanfrancisco_taxicab_airport_mall_extended_cleaned";
 		ResultSet rs = statement.executeQuery("SELECT tid, gid, mall as at_mall,"+
 				"airport as at_airport,"+
 				"pier as at_pier,"+
@@ -87,7 +87,13 @@ public class TrajectoryBetweenAreaCleaner {
 				}
 			}
 		}
-		System.out.println("gid in (" + gidsToRemove + ")");
+		System.out.println("Gids to remove: " + gidsToRemove.size());
+		for (int i = 0; i < gidsToRemove.size(); i+=10000) {
+			String string = gidsToRemove.subList(i, i + Math.min(10000, gidsToRemove.size() - i)).toString();
+			String sql = "delete from "+pointsTable + " where gid in (" + string.substring(1, string.length() - 1) + ")";
+			conn.prepareStatement(sql).execute();
+			conn.commit();
+		}
 		conn.commit();
 	}
 }

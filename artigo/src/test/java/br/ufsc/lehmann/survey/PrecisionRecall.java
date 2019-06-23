@@ -38,6 +38,7 @@ import br.ufsc.lehmann.msm.artigo.problems.IDataReader;
 import br.ufsc.lehmann.testexecution.Dataset;
 import br.ufsc.lehmann.testexecution.Datasets;
 import br.ufsc.lehmann.testexecution.ExecutionPOJO;
+import br.ufsc.lehmann.testexecution.FilteredDataReader;
 import br.ufsc.lehmann.testexecution.Groundtruth;
 import br.ufsc.lehmann.testexecution.Measure;
 import br.ufsc.lehmann.testexecution.Measures;
@@ -46,8 +47,8 @@ import smile.math.Random;
 public class PrecisionRecall {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
-		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/hermoupolis"));
-		files.filter(path -> path.toFile().isFile() && path.toString().contains("\\raw") && path.toString().contains("\\UMS") && path.toFile().toString().endsWith(".test")).forEach(path -> {
+		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/crawdad (new groundtruth)/raw/DTWa_CRAWDAD_precision.test"));
+		files.filter(path -> path.toFile().isFile() && path.toFile().toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
 
@@ -81,6 +82,10 @@ public class PrecisionRecall {
 		Measure measure = execution.getMeasure();
 		Groundtruth groundtruth = execution.getGroundtruth();
 		IDataReader dataReader = Datasets.createDataset(dataset);
+		final BasicSemantic<Object> groundtruthSemantic = new BasicSemantic<>(groundtruth.getIndex().intValue());
+		if(dataset.getMinTrajectoriesPerClass() != null) {
+			dataReader = new FilteredDataReader(dataReader, groundtruthSemantic, dataset.getMinTrajectoriesPerClass().intValue());
+		}
 		List<SemanticTrajectory> data = dataReader.read();
 		
 		Collections.shuffle(data, new java.util.Random() {
@@ -95,7 +100,6 @@ public class PrecisionRecall {
 			}
 		});
 		List<TrajectorySimilarityCalculator<SemanticTrajectory>> similarityCalculators = Measures.createMeasures(measure);
-		final BasicSemantic<Object> groundtruthSemantic = new BasicSemantic<>(groundtruth.getIndex().intValue());
 		Multimap<Object, SemanticTrajectory> m = MultimapBuilder.hashKeys().arrayListValues().build();
 	    data.stream().forEach(item -> {
 	    	m.put(groundtruthSemantic.getData(item, 0), item);
@@ -103,8 +107,8 @@ public class PrecisionRecall {
 		m.asMap().entrySet().stream().forEach(entry -> {
 			System.out.printf("Class size (%s): %d\n", String.valueOf(entry.getKey()), entry.getValue().size());
 		});
+		SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
 		for (TrajectorySimilarityCalculator<SemanticTrajectory> similarityCalculator : similarityCalculators) {
-			SemanticTrajectory[] allData = data.toArray(new SemanticTrajectory[data.size()]);
 			Validation validation = new Validation(groundtruthSemantic, (IMeasureDistance<SemanticTrajectory>) similarityCalculator);
 			
 			Stopwatch w = Stopwatch.createStarted();

@@ -1,7 +1,10 @@
+import br.ufsc.core.IMeasureDistance;
 import br.ufsc.core.trajectory.Semantic;
 import br.ufsc.core.trajectory.SemanticTrajectory;
 import br.ufsc.core.trajectory.TPoint;
 import br.ufsc.ftsm.related.UMS;
+import br.ufsc.lehmann.method.wDF;
+import br.ufsc.utils.EuclideanDistanceFunction;
 
 public class UMSMaterialDidatico {
 
@@ -9,10 +12,10 @@ public class UMSMaterialDidatico {
 		UMS ums = new UMS();
 //		computePQ(ums);
 //		computeRQ(ums);
-		computeT1T2(ums);
+		computeT1T2(new wDF(2, new EuclideanDistanceFunction()));
 	}
 
-	private static void computeT1T2(UMS ums) {
+	private static void computeT1T2(IMeasureDistance<SemanticTrajectory> ums) {
 		SemanticTrajectory T1 = new SemanticTrajectory(null, 2);
 		T1.addData(0, Semantic.SPATIAL_EUCLIDEAN, new TPoint(6,39));
 		T1.addData(1, Semantic.SPATIAL_EUCLIDEAN, new TPoint(21,39));
@@ -31,8 +34,8 @@ public class UMSMaterialDidatico {
 		T2.addData(5, Semantic.SPATIAL_EUCLIDEAN, new TPoint(79,66));
 		T2.addData(6, Semantic.SPATIAL_EUCLIDEAN, new TPoint(111,6));
 		
-		double similarity = ums.getSimilarity(T1, T2);
-		System.out.println("UMS(T1, T2) = " + similarity);
+		double similarity = ums.distance(T1, T2);
+		System.out.println(ums.getClass().getSimpleName() + "(T1, T2) = " + similarity);
 	}
 
 	private static void computePQ(UMS ums) {

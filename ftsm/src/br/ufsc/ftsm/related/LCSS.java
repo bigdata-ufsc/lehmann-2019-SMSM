@@ -34,29 +34,60 @@ public class LCSS extends TrajectorySimilarityCalculator<SemanticTrajectory> {
 		double similarity = score(R, S);
 		return similarity / Math.min(R.length(), S.length());
 	}
+//
+//	public double score(SemanticTrajectory R, SemanticTrajectory S) {
+//        int m = R.length();
+//        int n = S.length();
+//        int[][] LCSSMetric = new int[2][n + 1];
+//
+//		for (int i = m - 1; i >= 0; i--) {
+//			int ndx = i & 1;//odd or even
+//			semantic: for (int j = n - 1; j >= 0; j--) {
+//				for (int k = 0; k < parameters.length; k++) {
+//					LCSSSemanticParameter p = parameters[k];
+//					Object rPoint = p.semantic.getData(R, i);
+//					Object sPoint = p.semantic.getData(S, j);
+//					if (!p.semantic.match(rPoint, sPoint, p.computeThreshold(rPoint, sPoint, R, S))) {
+//						LCSSMetric[ndx][j] = Math.max(LCSSMetric[ndx][j + 1], LCSSMetric[1 - ndx][j]);
+//						continue semantic;
+//					}
+//				}
+//				LCSSMetric[ndx][j] = LCSSMetric[1 - ndx][j + 1] + 1;
+//			}
+//		}
+//
+//		double similarity = LCSSMetric[0][0];
+//		return similarity;
+//	}
 
 	public double score(SemanticTrajectory R, SemanticTrajectory S) {
-        int m = R.length();
-        int n = S.length();
-        int[][] LCSSMetric = new int[2][n + 1];
+		int[][] LCSSMetric = new int[R.length() + 1][S.length() + 1];
 
-		for (int i = m - 1; i >= 0; i--) {
-			int ndx = i & 1;//odd or even
-			semantic: for (int j = n - 1; j >= 0; j--) {
+		for (int i = 0; i <= R.length(); i++) {
+			LCSSMetric[i][0] = 0;
+		}
+		for (int i = 0; i <= S.length(); i++) {
+			LCSSMetric[0][i] = 0;
+		}
+
+		LCSSMetric[0][0] = 0;
+
+		for (int i = 1; i <= R.length(); i++) {
+			semantic: for (int j = 1; j <= S.length(); j++) {
 				for (int k = 0; k < parameters.length; k++) {
-					LCSSSemanticParameter p = parameters[k];
-					Object rPoint = p.semantic.getData(R, i);
-					Object sPoint = p.semantic.getData(S, j);
-					if (!p.semantic.match(rPoint, sPoint, p.computeThreshold(rPoint, sPoint, R, S))) {
-						LCSSMetric[ndx][j] = Math.max(LCSSMetric[ndx][j + 1], LCSSMetric[1 - ndx][j]);
+					LCSSSemanticParameter param = parameters[k];
+					Object rPoint = param.semantic.getData(R, i - 1);
+					Object sPoint = param.semantic.getData(S, j - 1);
+					if(!param.semantic.match(rPoint, sPoint, param.computeThreshold(rPoint, sPoint, R, S))) {
+						LCSSMetric[i][j] = Math.max(LCSSMetric[i][j - 1], LCSSMetric[i - 1][j]);
 						continue semantic;
 					}
 				}
-				LCSSMetric[ndx][j] = LCSSMetric[1 - ndx][j + 1] + 1;
+				LCSSMetric[i][j] = LCSSMetric[i - 1][j - 1] + 1;
 			}
 		}
 
-		double similarity = LCSSMetric[0][0];
+		double similarity = LCSSMetric[R.length()][S.length()];
 		return similarity;
 	}
 

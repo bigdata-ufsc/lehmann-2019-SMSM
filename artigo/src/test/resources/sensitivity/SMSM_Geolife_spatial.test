@@ -1,0 +1,52 @@
+{
+	"dataset": {
+		"name" : "geolife2",
+		"raw": 'false',
+		"min-trajectories-per-class": 4,
+		"params": {
+			"pointsTable" : "geolife.geolife_inside_university_5_pois_enhanced",
+			"stopTable" : "stops_moves.geolife_inside_enhanced_stop",
+			"moveTable" : "stops_moves.geolife_inside_enhanced_move"
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 10
+	},
+	"measure": {
+		"name": "SMSM",
+		"params": [{
+			"type": "Stop",
+			"weight": 0.5,
+			"index" : 8,
+			"params": [{
+				"type": "spatial",
+				"distance": "euclidean",
+				"threshold": "[50,100,300,500,1000,2000]",
+				"index" : 1,
+				"weight": 0.5
+			}, {
+				"type": "Semantic",
+				"index" : 8,
+				"weight": 0.5,
+				"params" : [{
+					"distance": "Equal",
+					"type" : "REGION"
+				}]
+			}]
+		}, {
+			"type": "Move",
+			"weight": 0.5,
+			"index" : 9,
+			"params": [{
+				"type": "POINTS",
+				"distance": "DTW",
+				"threshold": "[summed-distances*5]",
+				"weight": 1,
+				"params" : [{
+					"distance" : "euclidean"
+				}]
+			}]
+		}]
+	}
+}

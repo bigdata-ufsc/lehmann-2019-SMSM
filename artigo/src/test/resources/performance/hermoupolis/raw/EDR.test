@@ -1,0 +1,22 @@
+{
+	"dataset": {
+		"name" : "hermoupolis",
+		"raw": 'true',
+		"params": {
+			"file" : "1 Day - 10 Profiles - 2 Classes_900913.csv"
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 7
+	},
+	"measure": {
+		"name": "EDR",
+		"params": [{
+			"type": "spatial",
+			"distance": "euclidean",
+			"threshold": "8",
+			"index" : 1
+		}]
+	}
+}

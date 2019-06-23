@@ -1,0 +1,24 @@
+{
+	"dataset": {
+		"name" : "hermoupolis",
+		"raw": 'true',
+		"params": {
+			"file" : "1 Day - 10 Profiles - 2 Classes_900913.csv"
+		}
+	},
+	"groundtruth": {
+		"type": "String",
+		"index": 7
+	},
+	"measure": {
+		"name": "DTWa",
+		"params": [{
+			"type": "discriminator",
+			"index" : 7
+		},{
+			"type": "spatial",
+			"distance": "euclidean",
+			"index" : 1
+		}]
+	}
+}

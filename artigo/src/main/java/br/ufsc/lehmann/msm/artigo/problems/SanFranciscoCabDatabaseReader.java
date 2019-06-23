@@ -223,8 +223,7 @@ public class SanFranciscoCabDatabaseReader implements IDataReader {
 				+ "st_x(st_transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 900913)) as lon, "
 				+ "\"timestamp\", ocupation, airport, mall, road, direction, stop, semantic_stop_id, semantic_move_id, stop, route" + //
 				" FROM "+ this.pointsTable + " where 1=1 "
-//				+ "and tid not in (select tid from "+ this.pointsTable +  
-//				" group by tid having count(distinct semantic_stop_id) <> 3)"
+//				+ "and direction = 'mall to airport' "  
 				;
 		if(!ArrayUtils.isEmpty(roads)) {
 			sql += " and road in (SELECT * FROM unnest(?))";

@@ -34,7 +34,7 @@ public class StopToStopTrajectoryTransformer {
 //			fromCSV();
 //			return;
 //		}
-		String pointsTable = "taxi.sanfrancisco_taxicab_airport_mall_pier_park_fisherman_cleaned";
+		String pointsTable = "taxi.sanfrancisco_taxicab_airport_mall_extended_cleaned";
 		DataSource source = new DataSource("postgres", "postgres", "localhost", 5432, "postgis", DataSourceType.PGSQL, pointsTable, null,
 				null);
 		DataRetriever retriever = source.getRetriever();
@@ -82,7 +82,6 @@ public class StopToStopTrajectoryTransformer {
 			if(!lastGids.isEmpty()) {
 				gidsToRemove.addAll(lastGids);
 			}
-			System.out.println(gidsToRemove.size());
 			if(gidsToRemove.isEmpty()) {
 				return;
 			}

@@ -4,7 +4,7 @@
 		"raw": 'false',
 		"min-trajectories-per-class": 4,
 		"params": {
-			"pointsTable" : "geolife.geolife_inside_university_5_pois_enhanced",
+			"pointsTable" : "geolife.geolife_inside_university_5_pois_enhanced_copy",
 			"stopTable" : "stops_moves.geolife_inside_enhanced_stop",
 			"moveTable" : "stops_moves.geolife_inside_enhanced_move"
 		}
@@ -15,31 +15,18 @@
 	},
 	"measure": {
 		"name": "LCSS",
-		"params": [
-		{
+		"params": [{
 			"type": "Semantic",
 			"index" : 8,
 			"params" : [{
 				"distance": "equal",
 				"type" : "Region"
 			}]
-		}
-		, 
-		/*{
-			"type": "temporal",
-			"distance": "slack-proportion",
-			"threshold": "0.1",
-			"params" : [{
-				"threshold": 2
-			}],
-			"index" : 2
-		},*/
-		{
+		},{
 			"type": "spatial",
 			"distance": "euclidean",
 			"threshold": "200",
 			"index" : 1
-		}
-		]
+		}]
 	}
 }

@@ -16,7 +16,7 @@ public class PairClassClusteringEvaluation  extends AbstractPairClassClusteringE
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException {
 		Stream<java.nio.file.Path> files = java.nio.file.Files.walk(Paths.get("./src/test/resources/similarity-measures/hasl"));
-		files.filter(path -> path.toFile().isFile() && (path.toString().contains("UMS") || path.toString().contains("LCSS.")) && path.toString().endsWith(".test")).forEach(path -> {
+		files.filter(path -> path.toFile().isFile() && path.toString().endsWith(".test")).forEach(path -> {
 			String fileName = path.toString();
 			System.out.printf("Executing file %s\n", fileName);
 			PrintStream bkp = System.out;

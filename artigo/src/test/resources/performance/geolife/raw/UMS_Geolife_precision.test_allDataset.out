@@ -1,8 +1,0 @@
-Executing SQL...
-Fetching...
-Loaded 102314 GPS points from database
-Loaded 337 trajectories from database
-Semantic Trajectories statistics: mean - 298,10, min - 15,00, max - 887,00, sd - 154,83
-New dataset size: 331
-Semantic Trajectories statistics: mean - 288,92, min - 15,00, max - 732,00, sd - 140,12
-[331] Elapsed time 83202 miliseconds

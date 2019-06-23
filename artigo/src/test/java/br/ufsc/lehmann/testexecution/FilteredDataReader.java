@@ -42,6 +42,10 @@ public class FilteredDataReader implements IDataReader {
 			}
 		});
 		return m.asMap().entrySet().stream().flatMap(e -> e.getValue().stream()).collect(Collectors.toList());
+//		List<SemanticTrajectory> ret = m.asMap().entrySet().stream().filter(e -> {
+//			return e.getValue().size() >= minTrajPerClass;
+//		}).flatMap(e -> e.getValue().stream()).collect(Collectors.toList());
+//		return ret;
 	}
 
 }
